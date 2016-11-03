@@ -1,0 +1,18 @@
+SIS ID,School SIS ID,First Name,Last Name,Username,Password,State ID,Secondary Email,Student Number,Middle Name,Grade,Status,Mailing Address,Mailing City,Mailing State,Mailing Zip,Mailing Latitude,Mailing Longitude,Mailing Country,Residence Address,Residence City,Residence State,Residence Zip,Residence Latitude,Residence Longitude,Residence Country,Gender,Birthdate,ELL Status,FederalRace,Graduation Year
+13001,10001,John,Smith,Jsmith,P@ssword,WA,,13001,Christopher,9,Active,4 Fieldchat Road,Redmond,WA,98052,,,US,4 Fieldchat Road,Redmond,WA,98052,,,US,M,4/2/2000,,,2019
+13002,10001,Jane,Doe,Jdoe,P@ssword,WA,,13002,Lynn,10,Active,2 Carlisle Ave,Redmond,WA,98052,,,US,2 Carlisle Ave,Redmond,WA,98052,,,US,F,11/12/1999,,,2018
+13003,10001,Bob,Jones,Bjones,P@ssword,WA,,13003,Brian,12,Active,17 Ebenezer Road,Redmond,WA,98052,,,US,17 Ebenezer Road,Redmond,WA,98052,,,US,M,12/19/1997,,,2016
+13004,10001,David,Johnson,Djohnson,P@ssword,WA,,13004,Daniel,9,Active,1994 Kendi Road,Redmond,WA,98052,,,US,1994 Kendi Road,Redmond,WA,98052,,,US,M,6/20/2000,,,2019
+13005,10001,Tim,Williams,Twilliams,P@ssword,WA,,13005,Troy,11,Active,29 Kilbride Road,Redmond,WA,98052,,,US,29 Kilbride Road,Redmond,WA,98052,,,US,M,5/17/1998,,,2017
+13006,10001,Bill,Brown,Bbrown,P@ssword,WA,,13006,Thomas,10,Active,16 Joppa Road,Redmond,WA,98052,,,US,16 Joppa Road,Redmond,WA,98052,,,US,M,8/22/1999,,,2018
+13007,10002,Jill,Davis,Jdavis,P@ssword,WA,,13007,Grace,9,Active,2 Vale Drive,Redmond,WA,98052,,,US,2 Vale Drive,Redmond,WA,98052,,,US,F,7/27/2000,,,2019
+13008,10002,Jack,Miller,Jmiller,P@ssword,WA,,13008,Christopher,12,Active,22 Hannon Court,Redmond,WA,98052,,,US,22 Hannon Court,Redmond,WA,98052,,,US,M,3/25/1997,,,2016
+13009,10002,Amy,Wilson,Awilson,P@ssword,WA,,13009,Lynn,11,Active,19 Vermont Avenue,Redmond,WA,98052,,,US,19 Vermont Avenue,Redmond,WA,98052,,,US,F,4/29/1998,,,2017
+13010,10002,Mike,Moore,Mmoore,P@ssword,WA,,13010,Francis,9,Active,6 Santa Rita Road,Redmond,WA,98052,,,US,6 Santa Rita Road,Redmond,WA,98052,,,US,M,6/5/2000,,,2019
+13011,10002,James,Jackson,Jjackson,P@ssword,WA,,13011,Robert,10,Active,3 Cross Road,Redmond,WA,98052,,,US,3 Cross Road,Redmond,WA,98052,,,US,M,10/13/1999,,,2018
+13012,10001,Tom,Jones,Tjones,P@ssword,WA,,13012,Grace,9,Active,19124 Kendi Road,Redmond,WA,98052,,,US,19124 Kendi Road,Redmond,WA,98052,,,US,M,5/11/1998,,,2019
+13013,10001,Mike,Snyder,Msnyder,P@ssword,WA,,13013,Christopher,11,Active,78 Kilbride Road,Redmond,WA,98052,,,US,78 Kilbride Road,Redmond,WA,98052,,,US,M,8/13/1999,,,2016
+13014,10001,Brian,Glazer,Bglazer,P@ssword,WA,,13014,Lynn,10,Active,89 Joppa Road,Redmond,WA,98052,,,US,89 Joppa Road,Redmond,WA,98052,,,US,M,7/6/2000,,,2017
+13015,10001,Madison,Hanks,Mhanks,P@ssword,WA,,13015,Francis,9,Active,7 Vale Drive,Redmond,WA,98052,,,US,7 Vale Drive,Redmond,WA,98052,,,US,F,3/19/1997,,,2019
+13016,10001,Mila,Odonnel,Modonnel,P@ssword,WA,,13016,Robert,12,Active,90 Hannon Court,Redmond,WA,98052,,,US,90 Hannon Court,Redmond,WA,98052,,,US,F,4/10/1998,,,2017
+13017,10001,Jim,Jones,Jjones,P@ssword,WA,,13017,James,10,Active,19 Haydes Road,Redmond,WA,98052,,,US,19 Haydes Road,Redmond,WA,98052,,,US,M,5/17/1999,,,2017
