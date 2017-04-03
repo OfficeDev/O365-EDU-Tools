@@ -1,0 +1,29 @@
+ID,School Dfe Number,Section Name,Section Number,Term SIS ID,Term Name,Term StartDate,Term EndDate,Course SIS ID,Course Name,Course Number,Course Description,Course Subject,Periods,Status
+11001,10001,Math - Algebra 1,11001,12000,SY1516,9/1/2016,6/15/2017,11001,Math 101,101,Algebra Level 1,Math,1,Active
+11002,10001,Math - Algebra 2,11002,12000,SY1516,9/1/2016,6/15/2017,11002,Math 102,102,Algebra Level 2,Math,1,Active
+11003,10001,English - Language 1,11003,12000,SY1516,9/1/2016,6/15/2017,11003,English 201,201,English Level 1,English,2,Active
+11004,10001,English - Language 2,11004,12000,SY1516,9/1/2016,6/15/2017,11004,English 202,202,English Level 2,English,2,Active
+11005,10001,History - World History 1,11005,12000,SY1516,9/1/2016,6/15/2017,11005,History 301,301,World History Level 1,History,3,Active
+11006,10001,History - World History 2,11006,12000,SY1516,9/1/2016,6/15/2017,11006,History 302,302,World history Level 2,History,3,Active
+11007,10001,Science - Biology 1,11007,12000,SY1516,9/1/2016,6/15/2017,11007,Science 401,401,Biology Level 1,Science,4,Active
+11008,10001,Science - Biology 2,11008,12000,SY1516,9/1/2016,6/15/2017,11008,Science 402,402,Biology Level 2,Science,4,Active
+11009,10001,Health 1,11009,12000,SY1516,9/1/2016,6/15/2017,11009,Health 501,501,Health Level 1,Health,5,Active
+11010,10001,Health 2,11010,12000,SY1516,9/1/2016,6/15/2017,11010,Health 502,502,Health Level 2,Health,5,Active
+11011,10001,Technology - Programming  1,11011,12000,SY1516,9/1/2016,6/15/2017,11011,Technology 601,601,Programming Level 1,Technology,6,Active
+11012,10001,Technology - Programming  2,11012,12000,SY1516,9/1/2016,6/15/2017,11012,Technology 602,602,Programming Level 2,Technology,6,Active
+11013,10001,Physical Education 1,11013,12000,SY1516,9/1/2016,6/15/2017,11013,Gym 701,701,Phyical Education 1,Gym,7,Active
+11014,10001,Physical Education 2,11014,12000,SY1516,9/1/2016,6/15/2017,11014,Gym 702,702,Physical Education 2,Gym,7,Active
+11015,10002,Math - Algebra 1,11015,12000,SY1516,9/1/2016,6/15/2017,11015,Math 101,101,Algebra Level 1,Math,1,Active
+11016,10002,English - Language 1,11016,12000,SY1516,9/1/2016,6/15/2017,11016,English 201,201,English Level 1,English,2,Active
+11017,10002,History - World History 1,11017,12000,SY1516,9/1/2016,6/15/2017,11017,History 301,301,World History Level 1,History,3,Active
+11018,10002,Science - Biology 1,11018,12000,SY1516,9/1/2016,6/15/2017,11018,Science 401,401,Biology Level 1,Science,4,Active
+11019,10002,Health 1,11019,12000,SY1516,9/1/2016,6/15/2017,11019,Health 501,501,Health Level 1,Health,5,Active
+11020,10002,Technology - Programming  1,11020,12000,SY1516,9/1/2016,6/15/2017,11020,Technology 601,601,Programming Level 1,Technology,6,Active
+11021,10002,Physical Education 1,11021,12000,SY1516,9/1/2016,6/15/2017,11021,Gym 701,701,Phyical Education 1,Gym,7,Active
+11022,10002,Math - Algebra 2,11022,12000,SY1516,9/1/2016,6/15/2017,11022,Math 102,102,Algebra Level 2,Math,1,Active
+11023,10002,English - Language 2,11023,12000,SY1516,9/1/2016,6/15/2017,11023,English 202,202,English Level 2,English,2,Active
+11024,10002,History - World History 2,11024,12000,SY1516,9/1/2016,6/15/2017,11024,History 302,302,World History Level 2,History,3,Active
+11025,10002,Science - Biology 2,11025,12000,SY1516,9/1/2016,6/15/2017,11025,Science 402,402,Biology Level 2,Science,4,Active
+11026,10002,Health 2,11026,12000,SY1516,9/1/2016,6/15/2017,11026,Health 502,502,Health Level 2,Health,5,Active
+11027,10002,Technology - Programming  2,11027,12000,SY1516,9/1/2016,6/15/2017,11027,Technology 602,602,Programming Level 2,Technology,6,Active
+11028,10002,Physical Education 2,11028,12000,SY1516,9/1/2016,6/15/2017,11028,Gym 702,702,Phyical Education 2,Gym,7,Active

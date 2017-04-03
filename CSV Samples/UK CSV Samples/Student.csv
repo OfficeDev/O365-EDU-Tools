@@ -1,0 +1,111 @@
+ID,School Dfe Number,First Name,Last Name,Username,Password,State ID,Secondary Email,Student Number,Middle Name,Grade,Status,Mailing Address,Mailing City,Mailing State,Mailing Zip,Mailing Latitude,Mailing Longitude,Mailing Country,Residence Address,Residence City,Residence State,Residence Zip,Residence Latitude,Residence Longitude,Residence Country,Gender,Birthdate,ELL Status,FederalRace,Graduation Year
+13001,10001,Ora,Klein,OKlein,P@ssword,WA,,13001,Christopher,9,Active,4 Fieldchat Road,Redmond,WA,98052,,,US,4 Fieldchat Road,Redmond,WA,98052,,,US,M,4/2/2000,,,2019
+13002,10001,Beulah,McMillan,BMcMillan,P@ssword,WA,,13002,Lynn,10,Active,2 Carlisle Ave,Redmond,WA,98052,,,US,2 Carlisle Ave,Redmond,WA,98052,,,US,F,11/12/1999,,,2018
+13003,10001,Florence,Stark,FStark,P@ssword,WA,,13003,Brian,12,Active,17 Ebenezer Road,Redmond,WA,98052,,,US,17 Ebenezer Road,Redmond,WA,98052,,,US,M,12/19/1997,,,2016
+13004,10001,Noah,Gilbertson,NGilbertson,P@ssword,WA,,13004,Daniel,9,Active,1994 Kendi Road,Redmond,WA,98052,,,US,1994 Kendi Road,Redmond,WA,98052,,,US,M,6/20/2000,,,2019
+13005,10001,Erna,Parker,EParker,P@ssword,WA,,13005,Troy,11,Active,29 Kilbride Road,Redmond,WA,98052,,,US,29 Kilbride Road,Redmond,WA,98052,,,US,M,5/17/1998,,,2017
+13006,10001,Sherry,Santana,SSantana,P@ssword,WA,,13006,Thomas,10,Active,16 Joppa Road,Redmond,WA,98052,,,US,16 Joppa Road,Redmond,WA,98052,,,US,M,8/22/1999,,,2018
+13007,10001,Ronald,Lees,RLees,P@ssword,WA,,13012,Grace,9,Active,19124 Kendi Road,Redmond,WA,98052,,,US,19124 Kendi Road,Redmond,WA,98052,,,US,M,5/11/1998,,,2019
+13008,10001,Latasha,Pratt,LPratt,P@ssword,WA,,13013,Christopher,11,Active,78 Kilbride Road,Redmond,WA,98052,,,US,78 Kilbride Road,Redmond,WA,98052,,,US,M,8/13/1999,,,2016
+13009,10001,Misty,Thomas,MThomas,P@ssword,WA,,13014,Lynn,10,Active,89 Joppa Road,Redmond,WA,98052,,,US,89 Joppa Road,Redmond,WA,98052,,,US,M,7/6/2000,,,2017
+13010,10001,Petra,Barlow,PBarlow,P@ssword,WA,,13015,Francis,9,Active,7 Vale Drive,Redmond,WA,98052,,,US,7 Vale Drive,Redmond,WA,98052,,,US,F,3/19/1997,,,2019
+13011,10001,Bonnie,Hampton,PHampton,P@ssword,WA,,13016,Robert,12,Active,90 Hannon Court,Redmond,WA,98052,,,US,90 Hannon Court,Redmond,WA,98052,,,US,F,4/10/1998,,,2017
+13012,10001,Dion,Matheson,DMatheson,P@ssword,WA,,13017,James,10,Active,19 Haydes Road,Redmond,WA,98052,,,US,19 Haydes Road,Redmond,WA,98052,,,US,M,5/17/1999,,,2017
+13013,10001,Cesar,McCray,CMcCray,P@ssword,WA,,13018,Wilma,9,Active,19 Ebenezer Road,Redmond,WA,98052,,,US,19 Ebenezer Road,Redmond,WA,98052,,,US,M,2/17/2001,,,2020
+13014,10001,Rickey,Cottle,Rcottle,P@ssword,WA,,13019,Forrest,10,Active,4 Carlisle Ave,Redmond,WA,98052,,,US,4 Carlisle Ave,Redmond,WA,98052,,,US,F,8/9/2000,,,2019
+13015,10001,Fredrick,Markley,Fmarkley,P@ssword,WA,,13020,Noah,11,Active,6 Fieldchat Road,Redmond,WA,98052,,,US,6 Fieldchat Road,Redmond,WA,98052,,,US,M,6/17/1999,,,2018
+13016,10001,Joshua,Bartels,Jbartels,P@ssword,WA,,13021,Tracy,9,Active,1997 Kendi Road,Redmond,WA,98052,,,US,1997 Kendi Road,Redmond,WA,98052,,,US,F,3/19/2001,,,2020
+13017,10001,Maribel,Parsons,Mparsons,P@ssword,WA,,13022,Delmar,10,Active,31 Kilbride Road,Redmond,WA,98052,,,US,31 Kilbride Road,Redmond,WA,98052,,,US,M,3/10/2000,,,2019
+13018,10001,Erma,Ballard,Eballard,P@ssword,WA,,13023,Maya,12,Active,12 Joppa Road,Redmond,WA,98052,,,US,12 Joppa Road,Redmond,WA,98052,,,US,F,4/3/1998,,,2017
+13019,10001,Wilfred,Bevins,Wbevins,P@ssword,WA,,13024,Casey,9,Active,6 Vale Court,Redmond,WA,98052,,,US,6 Vale Court,Redmond,WA,98052,,,US,M,4/13/2001,,,2020
+13020,10001,Rogelio,Cazares,Rcazares,P@ssword,WA,,13025,Hal,10,Active,21 Vermont Avenue,Redmond,WA,98052,,,US,21 Vermont Avenue,Redmond,WA,98052,,,US,F,2/1/2000,,,2019
+13021,10001,Dixie,Morrison,Dmorrison,P@ssword,WA,,13026,Chris,11,Active,5 Cross Road,Redmond,WA,98052,,,US,5 Cross Road,Redmond,WA,98052,,,US,M,8/12/1999,,,2018
+13022,10001,Williams,Bisson,Wbisson,P@ssword,WA,,13027,Roxanne,9,Active,21 Haydes Road,Redmond,WA,98052,,,US,21 Haydes Road,Redmond,WA,98052,,,US,F,3/6/2001,,,2020
+13023,10001,Christie,Clayton,Cclayton,P@ssword,WA,,13028,Sherman,10,Active,24 Hannon Court,Redmond,WA,98052,,,US,24 Hannon Court,Redmond,WA,98052,,,US,M,7/2/2000,,,2019
+13024,10001,Angelina,Craig,Acraig,P@ssword,WA,,13029,Daniel,11,Active,7 Santa Rita Road,Redmond,WA,98052,,,US,7 Santa Rita Road,Redmond,WA,98052,,,US,F,6/2/1999,,,2018
+13025,10001,Earnest,Rome,Erome,P@ssword,WA,,13030,Troy,9,Active,18 Fieldchat Road,Redmond,WA,98052,,,US,18 Fieldchat Road,Redmond,WA,98052,,,US,M,7/6/2001,,,2020
+13026,10001,Madeline,Sargent,Msargent,P@ssword,WA,,13031,Grace,10,Active,64 Carlisle Ave,Redmond,WA,98052,,,US,64 Carlisle Ave,Redmond,WA,98052,,,US,F,9/19/2000,,,2019
+13027,10001,Gene,Angulo,Gangulo,P@ssword,WA,,13032,Francis,9,Active,92 Hannon Court,Redmond,WA,98052,,,US,92 Hannon Court,Redmond,WA,98052,,,US,M,3/27/1997,,,2019
+13028,10001,Daphne,Bentley,Dbentley,P@ssword,WA,,13033,Robert,11,Active,25 Haydes Road,Redmond,WA,98052,,,US,25 Haydes Road,Redmond,WA,98052,,,US,F,4/15/1998,,,2017
+13029,10001,Dora,Montgomery,Dmontgomery,P@ssword,WA,,13034,Grace,10,Active,11 Ebenezer Road,Redmond,WA,98052,,,US,11 Ebenezer Road,Redmond,WA,98052,,,US,M,5/7/1999,,,2017
+13030,10001,Bertha,Nolan,Bnolan,P@ssword,WA,,13035,Christopher,9,Active,8 Carlisle Ave,Redmond,WA,98052,,,US,8 Carlisle Ave,Redmond,WA,98052,,,US,F,2/27/2001,,,2020
+13031,10001,Stacey,Foltz,Sfoltz,P@ssword,WA,,13036,Lynn,12,Active,18 Fieldchat Road,Redmond,WA,98052,,,US,18 Fieldchat Road,Redmond,WA,98052,,,US,M,8/29/2000,,,2019
+13032,10001,Wilma,Aguirre,Waguirre,P@ssword,WA,,13037,Francis,10,Active,1987 Kendi Road,Redmond,WA,98052,,,US,1987 Kendi Road,Redmond,WA,98052,,,US,F,6/16/1999,,,2018
+13033,10001,Forrest,Downes,Fdownes,P@ssword,WA,,13038,Robert,9,Active,37 Kilbride Road,Redmond,WA,98052,,,US,37 Kilbride Road,Redmond,WA,98052,,,US,M,3/13/2001,,,2020
+13034,10001,Noah,Roger,Nroger,P@ssword,WA,,13039,James,12,Active,18 Joppa Road,Redmond,WA,98052,,,US,18 Joppa Road,Redmond,WA,98052,,,US,F,3/11/2000,,,2019
+13035,10001,Tracy,Baxley,Tbaxley,P@ssword,WA,,13040,Wilma,10,Active,10 Vale Court,Redmond,WA,98052,,,US,10 Vale Court,Redmond,WA,98052,,,US,M,4/22/1998,,,2017
+13036,10001,Federico,Fiore,FFiore,P@ssword,WA,,13041,Pat,9,Active,103 Shore Drive,Redmond,WA,98052,,,US,103 Shore Drive,Redmond,WA,98052,,,US,M,4/2/2000,,,2020
+13037,10001,Nancy,Mendoza,NMendoza,P@ssword,WA,,13042,Corey,10,Active,201 View Ridge,Seattle,WA,98105,,,US,201 View Ridge,Seattle,WA,98105,,,US,Female,11/12/1999,,,2019
+13038,10001,Luther,Briley,LBriley,P@ssword,WA,,13043,Kelly,12,Active,1441 Pine Lane,Sammamish ,WA,98342,,,US,1441 Pine Lane,Sammamish ,WA,98342,,,US,M,12/19/1997,,,2017
+13039,10001,Norbert,Lunn,NLunn,P@ssword,WA,,13044,Taylor,9,Active,7234 Lake Way,Bellevue ,WA,98050,,,US,7234 Lake Way,Bellevue ,WA,98050,,,US,M,6/20/2000,,,2020
+13040,10001,Fidel,Obryan,FObryan,P@ssword,WA,,13045,Kiley,11,Active,1214 112th Ave,Edmonds,WA,98112,,,US,1214 112th Ave,Edmonds,WA,98112,,,US,M,5/17/1998,,,2018
+13041,10001,Byron,Montenegro,BMontenegro,P@ssword,WA,,13046,Terry,10,Active,5437 32nd St,Redmond,WA,98052,,,US,5437 32nd St,Redmond,WA,98052,,,US,M,8/22/1999,,,2019
+13042,10001,Blaine,Dulaney,BDulaney,P@ssword,WA,,13047,Kris,9,Active,104 Shore Drive,Seattle,WA,98105,,,US,104 Shore Drive,Seattle,WA,98105,,,US,M,7/27/2000,,,2020
+13043,10001,Dennis,Word,DWord,P@ssword,WA,,13048,Pat,12,Active,202 View Ridge,Sammamish ,WA,98342,,,US,202 View Ridge,Sammamish ,WA,98342,,,US,M,3/25/1997,,,2017
+13044,10001,Coy,Whiteman,CWhiteman,P@ssword,WA,,13049,Corey,11,Active,1442 Pine Lane,Bellevue ,WA,98050,,,US,1442 Pine Lane,Bellevue ,WA,98050,,,US,M,4/29/1998,,,2018
+13045,10001,Rosie,Ingram,RIngram,P@ssword,WA,,13050,Kelly,9,Active,7235 Lake Way,Edmonds,WA,98112,,,US,7235 Lake Way,Edmonds,WA,98112,,,US,F,6/5/2000,,,2020
+13046,10001,Anita,Miranda,AMiranda,P@ssword,WA,,13051,Taylor,10,Active,1215 112th Ave,Redmond,WA,98052,,,US,1215 112th Ave,Redmond,WA,98052,,,US,F,10/13/1999,,,2019
+13047,10001,Jerri,Noel,JNoel,P@ssword,WA,,13052,Kiley,9,Active,5438 32nd St,Seattle,WA,98105,,,US,5438 32nd St,Seattle,WA,98105,,,US,F,5/11/1998,,,2020
+13048,10001,Dona,Small,DSmall,P@ssword,WA,,13053,Terry,11,Active,105 Shore Drive,Sammamish ,WA,98342,,,US,105 Shore Drive,Sammamish ,WA,98342,,,US,F,8/13/1999,,,2018
+13049,10001,Erik,Theriault,ETheriault,P@ssword,WA,,13054,Kris,10,Active,203 View Ridge,Bellevue ,WA,98050,,,US,203 View Ridge,Bellevue ,WA,98050,,,US,M,7/6/2000,,,2019
+13050,10001,Earnestine,Mosley,Emosley,P@ssword,WA,,13055,Pat,9,Active,1443 Pine Lane,Edmonds,WA,98112,,,US,1443 Pine Lane,Edmonds,WA,98112,,,US,F,3/19/1997,,,2020
+13051,10001,Jimmie,Petty,JPetty,P@ssword,WA,,13056,Corey,12,Active,7236 Lake Way,Redmond,WA,98052,,,US,7236 Lake Way,Redmond,WA,98052,,,US,F,4/10/1998,,,2017
+13052,10001,Burton,Saul,BSaul,P@ssword,WA,,13057,Kelly,10,Active,1216 112th Ave,Seattle,WA,98105,,,US,1216 112th Ave,Seattle,WA,98105,,,US,M,5/17/1999,,,2019
+13053,10001,Juanita,Hardy,JHardy,P@ssword,WA,,13058,Taylor,9,Active,5439 32nd St,Sammamish ,WA,98342,,,US,5439 32nd St,Sammamish ,WA,98342,,,US,F,2/17/2001,,,2020
+13054,10001,Benny,Vanover,BVanover,P@ssword,WA,,13059,Kiley,10,Active,106 Shore Drive,Bellevue ,WA,98050,,,US,106 Shore Drive,Bellevue ,WA,98050,,,US,M,8/9/2000,,,2019
+13055,10001,Harrison,Badillo,HBadillo,P@ssword,WA,,13060,Terry,11,Active,204 View Ridge,Edmonds,WA,98112,,,US,204 View Ridge,Edmonds,WA,98112,,,US,M,6/17/1999,,,2018
+13056,10001,Jorge,Bevins,JBevins,P@ssword,WA,,13061,Kris,9,Active,1444 Pine Lane,Redmond,WA,98052,,,US,1444 Pine Lane,Redmond,WA,98052,,,US,M,3/19/2001,,,2020
+13057,10001,Briana,Tyson,BTyson,P@ssword,WA,,13062,Pat,10,Active,7237 Lake Way,Seattle,WA,98105,,,US,7237 Lake Way,Seattle,WA,98105,,,US,F,3/10/2000,,,2019
+13058,10001,Shelby,Abbott,SAbbott,P@ssword,WA,,13063,Corey,12,Active,1217 112th Ave,Sammamish ,WA,98342,,,US,1217 112th Ave,Sammamish ,WA,98342,,,US,F,4/3/1998,,,2017
+13059,10001,Carlos,Lauer,CLauer,P@ssword,WA,,13064,Kelly,9,Active,5440 32nd St,Bellevue ,WA,98050,,,US,5440 32nd St,Bellevue ,WA,98050,,,US,M,4/13/2001,,,2020
+13060,10001,Kristi,Kaufman,KKaufman,P@ssword,WA,,13065,Taylor,10,Active,107 Shore Drive,Edmonds,WA,98112,,,US,107 Shore Drive,Edmonds,WA,98112,,,US,F,2/1/2000,,,2019
+13061,10002,Sophia,Wilder,SWilder,P@ssword,WA,,13066,Kiley,11,Active,205 View Ridge,Redmond,WA,98052,,,US,205 View Ridge,Redmond,WA,98052,,,US,F,8/12/1999,,,2018
+13062,10002,Angelita,Valentine,AValentine,P@ssword,WA,,13067,Terry,9,Active,1445 Pine Lane,Seattle,WA,98105,,,US,1445 Pine Lane,Seattle,WA,98105,,,US,F,3/6/2001,,,2020
+13063,10002,Dexter,Wyant,DWyant,P@ssword,WA,,13068,Kris,10,Active,7238 Lake Way,Sammamish ,WA,98342,,,US,7238 Lake Way,Sammamish ,WA,98342,,,US,M,7/2/2000,,,2019
+13064,10002,Monique,McMillan,MMcMillan,P@ssword,WA,,13069,Pat,11,Active,1218 112th Ave,Bellevue ,WA,98050,,,US,1218 112th Ave,Bellevue ,WA,98050,,,US,F,6/2/1999,,,2018
+13065,10002,Miles,Runyan,MRunyan,P@ssword,WA,,13070,Corey,9,Active,5441 32nd St,Edmonds,WA,98112,,,US,5441 32nd St,Edmonds,WA,98112,,,US,M,7/6/2001,,,2020
+13066,10002,Liza,Grimes,LGrimes,P@ssword,WA,,13071,Kelly,10,Active,108 Shore Drive,Redmond,WA,98052,,,US,108 Shore Drive,Redmond,WA,98052,,,US,F,9/19/2000,,,2019
+13067,10002,Mara,Alford,MAlford,P@ssword,WA,,13072,Taylor,9,Active,206 View Ridge,Seattle,WA,98105,,,US,206 View Ridge,Seattle,WA,98105,,,US,F,3/27/1997,,,2020
+13068,10002,Alison,Ochoa,AOchoa,P@ssword,WA,,13073,Kiley,11,Active,1446 Pine Lane,Sammamish ,WA,98342,,,US,1446 Pine Lane,Sammamish ,WA,98342,,,US,F,4/15/1998,,,2018
+13069,10002,Leslie,Navarro,LNavarro,P@ssword,WA,,13074,Terry,10,Active,7239 Lake Way,Bellevue ,WA,98050,,,US,7239 Lake Way,Bellevue ,WA,98050,,,US,F,5/7/1999,,,2019
+13070,10002,Jo,Ochoa,JOchoa,P@ssword,WA,,13075,Kris,9,Active,1219 112th Ave,Edmonds,WA,98112,,,US,1219 112th Ave,Edmonds,WA,98112,,,US,F,2/27/2001,,,2020
+13071,10002,Jacklyn,Steele,JSteele,P@ssword,WA,,13076,Pat,12,Active,5442 32nd St,Redmond,WA,98052,,,US,5442 32nd St,Redmond,WA,98052,,,US,F,8/29/2000,,,2017
+13072,10002,Karyn,Dale,KDale,P@ssword,WA,,13077,Corey,10,Active,109 Shore Drive,Seattle,WA,98105,,,US,109 Shore Drive,Seattle,WA,98105,,,US,F,6/16/1999,,,2019
+13073,10002,Ines,Meyers,IMeyers,P@ssword,WA,,13078,Kelly,9,Active,207 View Ridge,Sammamish ,WA,98342,,,US,207 View Ridge,Sammamish ,WA,98342,,,US,F,3/13/2001,,,2020
+13074,10002,Vincent,Doucette,VDoucette,P@ssword,WA,,13079,Taylor,12,Active,1447 Pine Lane,Bellevue ,WA,98050,,,US,1447 Pine Lane,Bellevue ,WA,98050,,,US,M,3/11/2000,,,2017
+13075,10002,Noemi,Chase,NChase,P@ssword,WA,,13080,Kiley,10,Active,7240 Lake Way,Edmonds,WA,98112,,,US,7240 Lake Way,Edmonds,WA,98112,,,US,F,4/22/1998,,,2019
+13076,10002,Daryl,Flemming,DFlemming,P@ssword,WA,,13081,Terry,9,Active,1220 112th Ave,Redmond,WA,98052,,,US,1220 112th Ave,Redmond,WA,98052,,,US,M,4/2/2000,,,2020
+13077,10002,Winnie,Carson,WCarson,P@ssword,WA,,13082,Kris,10,Active,5443 32nd St,Seattle,WA,98105,,,US,5443 32nd St,Seattle,WA,98105,,,US,F,11/12/1999,,,2019
+13078,10002,Ilene,Valentine,IValentine,P@ssword,WA,,13083,Pat,12,Active,110 Shore Drive,Sammamish ,WA,98342,,,US,110 Shore Drive,Sammamish ,WA,98342,,,US,F,12/19/1997,,,2017
+13079,10002,Alton,Wooley,AWooley,P@ssword,WA,,13084,Corey,9,Active,208 View Ridge,Bellevue ,WA,98050,,,US,208 View Ridge,Bellevue ,WA,98050,,,US,M,6/20/2000,,,2020
+13080,10002,Lizzie,Stokes,LStokes,P@ssword,WA,,13085,Kelly,11,Active,1448 Pine Lane,Edmonds,WA,98112,,,US,1448 Pine Lane,Edmonds,WA,98112,,,US,F,5/17/1998,,,2018
+13081,10002,Amos,Crumpton,ACrumpton,P@ssword,WA,,13086,Taylor,10,Active,7241 Lake Way,Redmond,WA,98052,,,US,7241 Lake Way,Redmond,WA,98052,,,US,M,8/22/1999,,,2019
+13082,10002,Belinda,Orr,BOrr,P@ssword,WA,,13087,Kiley,9,Active,1221 112th Ave,Seattle,WA,98105,,,US,1221 112th Ave,Seattle,WA,98105,,,US,F,7/27/2000,,,2020
+13083,10002,Desiree,Hawkins,DHawkins,P@ssword,WA,,13088,Terry,12,Active,5444 32nd St,Sammamish ,WA,98342,,,US,5444 32nd St,Sammamish ,WA,98342,,,US,F,3/25/1997,,,2017
+13084,10002,Dane,McCullough,DMcCullough,P@ssword,WA,,13089,Kris,11,Active,111 Shore Drive,Bellevue ,WA,98050,,,US,111 Shore Drive,Bellevue ,WA,98050,,,US,M,4/29/1998,,,2018
+13085,10002,Genevieve,Cole,GCole,P@ssword,WA,,13090,Pat,9,Active,209 View Ridge,Edmonds,WA,98112,,,US,209 View Ridge,Edmonds,WA,98112,,,US,F,6/5/2000,,,2020
+13086,10002,Ramiro,Skeen,RSkeen,P@ssword,WA,,13091,Corey,10,Active,1449 Pine Lane,Redmond,WA,98052,,,US,1449 Pine Lane,Redmond,WA,98052,,,US,M,10/13/1999,,,2019
+13087,10002,Mary,Gallegos,MGallegos,P@ssword,WA,,13092,Kelly,9,Active,7242 Lake Way,Seattle,WA,98105,,,US,7242 Lake Way,Seattle,WA,98105,,,US,F,5/11/1998,,,2020
+13088,10002,Rex,Lunn,RLunn,P@ssword,WA,,13093,Taylor,11,Active,1222 112th Ave,Sammamish ,WA,98342,,,US,1222 112th Ave,Sammamish ,WA,98342,,,US,M,8/13/1999,,,2018
+13089,10002,Katie,Sandoval,KSandoval,P@ssword,WA,,13094,Kiley,10,Active,5445 32nd St,Bellevue ,WA,98050,,,US,5445 32nd St,Bellevue ,WA,98050,,,US,F,7/6/2000,,,2019
+13090,10002,Gonzalo,Marble,GMarble,P@ssword,WA,,13095,Terry,9,Active,112 Shore Drive,Edmonds,WA,98112,,,US,112 Shore Drive,Edmonds,WA,98112,,,US,M,3/19/1997,,,2020
+13091,10002,Gerry,Fogg,GFogg,P@ssword,WA,,13096,Kris,12,Active,210 View Ridge,Redmond,WA,98052,,,US,210 View Ridge,Redmond,WA,98052,,,US,M,4/10/1998,,,2017
+13092,10002,Anastasia,Frost,AFrost,P@ssword,WA,,13097,Pat,10,Active,1450 Pine Lane,Seattle,WA,98105,,,US,1450 Pine Lane,Seattle,WA,98105,,,US,F,5/17/1999,,,2019
+13093,10002,Karen,Brady,KBrady,P@ssword,WA,,13098,Corey,9,Active,7243 Lake Way,Sammamish ,WA,98342,,,US,7243 Lake Way,Sammamish ,WA,98342,,,US,F,2/17/2001,,,2020
+13094,10002,Julius,Clegg,JClegg,P@ssword,WA,,13099,Kelly,10,Active,1223 112th Ave,Bellevue ,WA,98050,,,US,1223 112th Ave,Bellevue ,WA,98050,,,US,M,8/9/2000,,,2019
+13095,10002,Elaine,Hayes,EHayes,P@ssword,WA,,13100,Taylor,11,Active,5446 32nd St,Edmonds,WA,98112,,,US,5446 32nd St,Edmonds,WA,98112,,,US,F,6/17/1999,,,2018
+13096,10002,Penelope,Wiggins,PWiggins,P@ssword,WA,,13101,Kiley,9,Active,113 Shore Drive,Redmond,WA,98052,,,US,113 Shore Drive,Redmond,WA,98052,,,US,F,3/19/2001,,,2020
+13097,10002,Jimmie,Lawson,JLawson,P@ssword,WA,,13102,Terry,10,Active,211 View Ridge,Seattle,WA,98105,,,US,211 View Ridge,Seattle,WA,98105,,,US,F,3/10/2000,,,2019
+13098,10002,Malinda,Kirk,MKirk,P@ssword,WA,,13103,Kris,12,Active,1451 Pine Lane,Sammamish ,WA,98342,,,US,1451 Pine Lane,Sammamish ,WA,98342,,,US,F,4/3/1998,,,2017
+13099,10002,Marisa,Townsend,MTownsend,P@ssword,WA,,13104,Pat,9,Active,7244 Lake Way,Bellevue ,WA,98050,,,US,7244 Lake Way,Bellevue ,WA,98050,,,US,F,4/13/2001,,,2020
+13100,10002,Reva,Holland,RHolland,P@ssword,WA,,13105,Corey,10,Active,1224 112th Ave,Edmonds,WA,98112,,,US,1224 112th Ave,Edmonds,WA,98112,,,US,F,2/1/2000,,,2019
+13101,10002,Casandra,Conway,CConway,P@ssword,WA,,13106,Kelly,11,Active,5447 32nd St,Redmond,WA,98052,,,US,5447 32nd St,Redmond,WA,98052,,,US,F,8/12/1999,,,2018
+13102,10002,Vernon,Mallard,VMallard,P@ssword,WA,,13107,Taylor,9,Active,114 Shore Drive,Seattle,WA,98105,,,US,114 Shore Drive,Seattle,WA,98105,,,US,M,3/6/2001,,,2020
+13103,10002,Sherrie,Buck,SBuck,P@ssword,WA,,13108,Kiley,10,Active,212 View Ridge,Sammamish ,WA,98342,,,US,212 View Ridge,Sammamish ,WA,98342,,,US,F,7/2/2000,,,2019
+13104,10002,George,Overby,GOverby,P@ssword,WA,,13109,Terry,11,Active,1452 Pine Lane,Bellevue ,WA,98050,,,US,1452 Pine Lane,Bellevue ,WA,98050,,,US,M,6/2/1999,,,2018
+13105,10002,Iris,Estes,IEstes,P@ssword,WA,,13110,Kris,9,Active,7245 Lake Way,Edmonds,WA,98112,,,US,7245 Lake Way,Edmonds,WA,98112,,,US,F,7/6/2001,,,2020
+13106,10002,Ramona,McFadden,RMcFadden,P@ssword,WA,,13007,Grace,9,Active,2 Vale Drive,Redmond,WA,98052,,,US,2 Vale Drive,Redmond,WA,98052,,,US,F,7/27/2000,,,2019
+13107,10002,Therese,West,TWest,P@ssword,WA,,13008,Christopher,12,Active,22 Hannon Court,Redmond,WA,98052,,,US,22 Hannon Court,Redmond,WA,98052,,,US,M,3/25/1997,,,2016
+13108,10002,Kristen,York,KYork,P@ssword,WA,,13009,Lynn,11,Active,19 Vermont Avenue,Redmond,WA,98052,,,US,19 Vermont Avenue,Redmond,WA,98052,,,US,F,4/29/1998,,,2017
+13109,10002,Jamie,Peterson,JPeterson,P@ssword,WA,,13010,Francis,9,Active,6 Santa Rita Road,Redmond,WA,98052,,,US,6 Santa Rita Road,Redmond,WA,98052,,,US,M,6/5/2000,,,2019
+13110,10002,Cassandra,Owen,COwen,P@ssword,WA,,13011,Robert,10,Active,3 Cross Road,Redmond,WA,98052,,,US,3 Cross Road,Redmond,WA,98052,,,US,M,10/13/1999,,,2018
