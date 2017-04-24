@@ -1,4 +1,4 @@
-ID,School Dfe Number,Section Name,Section Number,Term SIS ID,Term Name,Term StartDate,Term EndDate,Course SIS ID,Course Name,Course Number,Course Description,Course Subject,Periods,Status
+ID,School DfE Number,Section Name,Section Number,Term SIS ID,Term Name,Term StartDate,Term EndDate,Course SIS ID,Course Name,Course Number,Course Description,Course Subject,Periods,Status
 11001,10001,Math - Algebra 1,11001,12000,SY1516,9/1/2016,6/15/2017,11001,Math 101,101,Algebra Level 1,Math,1,Active
 11002,10001,Math - Algebra 2,11002,12000,SY1516,9/1/2016,6/15/2017,11002,Math 102,102,Algebra Level 2,Math,1,Active
 11003,10001,English - Language 1,11003,12000,SY1516,9/1/2016,6/15/2017,11003,English 201,201,English Level 1,English,2,Active
