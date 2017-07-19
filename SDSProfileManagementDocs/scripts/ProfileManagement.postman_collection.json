@@ -1,0 +1,1182 @@
+{
+	"variables": [],
+	"info": {
+		"name": "ProfileManagement",
+		"_postman_id": "864b5ffb-1b0e-d1dd-9c56-fd3141a0a5a8",
+		"description": "SDS Profile management APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create profile",
+			"description": "",
+			"item": [
+				{
+					"name": "Get AccessToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Successful Request\"] = responseCode.code === 200;",
+									"var data = JSON.parse(responseBody);",
+									"if(responseCode.code === 200)",
+									"{",
+									"    postman.setGlobalVariable(\"GraphAuth\", \"Bearer \" + data.access_token);",
+									"    postman.setGlobalVariable(\"GraphRefresh\", data.refresh_token);",
+									"    tests[\"New tokens written to global\"] = true;",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{login_authority}}/{{domain}}/oauth2/token",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{readwrite_client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "resource",
+									"value": "{{resource}}",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{admin_password}}",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "openid",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{readwrite_secret}}",
+									"type": "text"
+								}
+							]
+						},
+						"description": "Use client id/secret and user credentials to get an access token and refresh token."
+					},
+					"response": []
+				},
+				{
+					"name": "Create SynchronizationProfile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Successful Request\"] = responseCode.code === 200;",
+									"",
+									"if (responseCode.code === 200)",
+									"{",
+									"    // find a profile with displayname api",
+									"    var data = JSON.parse(responseBody);",
+									"",
+									"    postman.setGlobalVariable(\"ProfileId\", data.id);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{host}}/{{version}}/synchronizationProfiles",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{GraphAuth}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"displayName\": \"API Profile 0703\",\n    \"dataSource\": {\n        \"@odata.type\": \"#microsoft.graph.csvDataProvider\",\n        \"customizations\": {\n            \"student\": {\n                \"optionalPropertiesToSync\": [\n                    \"State ID\"\n                ],\n                \"synchronizationStartDate\": \"0001-01-01T00:00:00Z\",\n                \"isSyncDeferred\": false,\n                \"allowDisplayNameUpdate\": false\n            }\n        }\n    },\n    \"identitySyncConfiguration\": {\n        \"@odata.type\": \"#microsoft.graph.identityMatchingConfiguration\",\n        \"matchingOptions\": [\n            {\n                \"appliesTo\": \"student\",\n                \"options\": {\n                \t\"sourcePropertyName\":\"Username\",\n                \t\"targetPropertyName\":\"userPrincipalName\",\n                \t\"targetDomain\":\"zsdtest30.ccsctp.net\"\n                }\n            },\n            {\n                \"appliesTo\": \"teacher\",\n                \"options\": {\n                \t\"sourcePropertyName\":\"Username\",\n                \t\"targetPropertyName\":\"userPrincipalName\",\n                \t\"targetDomain\":\"zsdtest30.ccsctp.net\"\n                }\n            }\n        ]\n    }\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete profile",
+			"description": "",
+			"item": [
+				{
+					"name": "Get AccessToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Successful Request\"] = responseCode.code === 200;",
+									"var data = JSON.parse(responseBody);",
+									"if(responseCode.code === 200)",
+									"{",
+									"    postman.setGlobalVariable(\"GraphAuth\", \"Bearer \" + data.access_token);",
+									"    postman.setGlobalVariable(\"GraphRefresh\", data.refresh_token);",
+									"    tests[\"New tokens written to global\"] = true;",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{login_authority}}/{{domain}}/oauth2/token",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{readwrite_client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "resource",
+									"value": "{{resource}}",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{admin_password}}",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "openid",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{readwrite_secret}}",
+									"type": "text"
+								}
+							]
+						},
+						"description": "Use client id/secret and user credentials to get an access token and refresh token."
+					},
+					"response": []
+				},
+				{
+					"name": "Get SynchronizationProfiles",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var loDash = require('lodash');",
+									"tests[\"Successful Request\"] = responseCode.code === 200;",
+									"",
+									"if (responseCode.code === 200)",
+									"{",
+									"    // find a profile with displayname api",
+									"    var data = JSON.parse(responseBody);",
+									"",
+									"    var apiProfile = loDash.find(data.value, function(profile) {return profile.displayName.startsWith(\"API\");})",
+									"    if (apiProfile) ",
+									"    {",
+									"        postman.setGlobalVariable(\"ProfileId\", apiProfile.id);",
+									"    }",
+									"}",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{host}}/{{version}}/synchronizationProfiles",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{GraphAuth}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "Get all the synchronization profiles in a tenant"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete SynchronizationProfile",
+					"request": {
+						"url": "https://{{host}}/{{version}}/synchronizationProfiles/{{ProfileId}}",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{GraphAuth}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"displayName\": \"API Profile 0703\",\n    \"dataSource\": {\n        \"@odata.type\": \"#microsoft.graph.csvDataProvider\",\n        \"customizations\": {\n            \"student\": {\n                \"optionalPropertiesToSync\": [\n                    \"State ID\",\n                    \"Middle Name\"\n                ],\n                \"synchronizationStartDate\": \"0001-01-01T00:00:00Z\",\n                \"isSyncDeferred\": false,\n                \"allowDisplayNameUpdate\": false\n            }\n        }\n    },\n    \"identitySyncConfiguration\": {\n        \"@odata.type\": \"#microsoft.graph.identityCreationConfiguration\",\n        \"userDomains\": [\n            {\n                \"appliesTo\": \"student\",\n                \"name\": \"zsdtest30.ccsctp.net\"\n            },\n            {\n                \"appliesTo\": \"teacher\",\n                \"name\": \"zsdtest30.ccsctp.net\"\n            }\n        ]\n    },\n    \"licensesToAssign\": [\n        {\n            \"appliesTo\": \"teacher\",\n            \"skuIds\": [\n                \"6fd2c87f-b296-42f0-b197-1e91e994b900\"\n            ]\n        },\n        {\n            \"appliesTo\": \"student\",\n            \"skuIds\": [\n                \"6fd2c87f-b296-42f0-b197-1e91e994b900\"\n            ]\n        }\n    ]\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get Profiles",
+			"description": "",
+			"item": [
+				{
+					"name": "Get AccessToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Successful Request\"] = responseCode.code === 200;",
+									"var data = JSON.parse(responseBody);",
+									"if(responseCode.code === 200)",
+									"{",
+									"    postman.setGlobalVariable(\"GraphAuth\", \"Bearer \" + data.access_token);",
+									"    postman.setGlobalVariable(\"GraphRefresh\", data.refresh_token);",
+									"    tests[\"New tokens written to global\"] = true;",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{login_authority}}/{{domain}}/oauth2/token",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{readwrite_client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "resource",
+									"value": "{{resource}}",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{admin_password}}",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "openid",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{readwrite_secret}}",
+									"type": "text"
+								}
+							]
+						},
+						"description": "Use client id/secret and user credentials to get an access token and refresh token."
+					},
+					"response": []
+				},
+				{
+					"name": "Get SynchronizationProfiles",
+					"request": {
+						"url": "https://{{host}}/{{version}}/synchronizationProfiles",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{GraphAuth}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "Get all the synchronization profiles in a tenant"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get a profile",
+			"description": "",
+			"item": [
+				{
+					"name": "Get AccessToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Successful Request\"] = responseCode.code === 200;",
+									"var data = JSON.parse(responseBody);",
+									"if(responseCode.code === 200)",
+									"{",
+									"    postman.setGlobalVariable(\"GraphAuth\", \"Bearer \" + data.access_token);",
+									"    postman.setGlobalVariable(\"GraphRefresh\", data.refresh_token);",
+									"    tests[\"New tokens written to global\"] = true;",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{login_authority}}/{{domain}}/oauth2/token",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{readwrite_client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "resource",
+									"value": "{{resource}}",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{admin_password}}",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "openid",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{readwrite_secret}}",
+									"type": "text"
+								}
+							]
+						},
+						"description": "Use client id/secret and user credentials to get an access token and refresh token."
+					},
+					"response": []
+				},
+				{
+					"name": "Get SynchronizationProfiles",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var loDash = require('lodash');",
+									"tests[\"Successful Request\"] = responseCode.code === 200;",
+									"",
+									"if (responseCode.code === 200)",
+									"{",
+									"    // find a profile with displayname api",
+									"    var data = JSON.parse(responseBody);",
+									"",
+									"    var apiProfile = loDash.find(data.value, function(profile) {return profile.displayName.startsWith(\"API\");})",
+									"    if (apiProfile) ",
+									"    {",
+									"        postman.setGlobalVariable(\"ProfileId\", apiProfile.id);",
+									"    }",
+									"}",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{host}}/{{version}}/synchronizationProfiles",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{GraphAuth}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "Get all the synchronization profiles in a tenant"
+					},
+					"response": []
+				},
+				{
+					"name": "Get a SynchronizationProfile",
+					"request": {
+						"url": "https://{{host}}/{{version}}/synchronizationProfiles/{{ProfileId}}",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{GraphAuth}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"displayName\": \"API Profile 0703\",\n    \"dataSource\": {\n        \"@odata.type\": \"#microsoft.graph.csvDataProvider\",\n        \"customizations\": {\n            \"student\": {\n                \"optionalPropertiesToSync\": [\n                    \"State ID\",\n                    \"Middle Name\"\n                ],\n                \"synchronizationStartDate\": \"0001-01-01T00:00:00Z\",\n                \"isSyncDeferred\": false,\n                \"allowDisplayNameUpdate\": false\n            }\n        }\n    },\n    \"identitySyncConfiguration\": {\n        \"@odata.type\": \"#microsoft.graph.identityCreationConfiguration\",\n        \"userDomains\": [\n            {\n                \"appliesTo\": \"student\",\n                \"name\": \"zsdtest30.ccsctp.net\"\n            },\n            {\n                \"appliesTo\": \"teacher\",\n                \"name\": \"zsdtest30.ccsctp.net\"\n            }\n        ]\n    },\n    \"licensesToAssign\": [\n        {\n            \"appliesTo\": \"teacher\",\n            \"skuIds\": [\n                \"6fd2c87f-b296-42f0-b197-1e91e994b900\"\n            ]\n        },\n        {\n            \"appliesTo\": \"student\",\n            \"skuIds\": [\n                \"6fd2c87f-b296-42f0-b197-1e91e994b900\"\n            ]\n        }\n    ]\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get an upload URL",
+					"request": {
+						"url": "https://{{host}}/{{version}}/synchronizationProfiles/{{ProfileId}}/uploadUrl",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{GraphAuth}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"displayName\": \"API Profile 0703\",\n    \"dataSource\": {\n        \"@odata.type\": \"#microsoft.graph.csvDataProvider\",\n        \"customizations\": {\n            \"student\": {\n                \"optionalPropertiesToSync\": [\n                    \"State ID\",\n                    \"Middle Name\"\n                ],\n                \"synchronizationStartDate\": \"0001-01-01T00:00:00Z\",\n                \"isSyncDeferred\": false,\n                \"allowDisplayNameUpdate\": false\n            }\n        }\n    },\n    \"identitySyncConfiguration\": {\n        \"@odata.type\": \"#microsoft.graph.identityCreationConfiguration\",\n        \"userDomains\": [\n            {\n                \"appliesTo\": \"student\",\n                \"name\": \"zsdtest30.ccsctp.net\"\n            },\n            {\n                \"appliesTo\": \"teacher\",\n                \"name\": \"zsdtest30.ccsctp.net\"\n            }\n        ]\n    },\n    \"licensesToAssign\": [\n        {\n            \"appliesTo\": \"teacher\",\n            \"skuIds\": [\n                \"6fd2c87f-b296-42f0-b197-1e91e994b900\"\n            ]\n        },\n        {\n            \"appliesTo\": \"student\",\n            \"skuIds\": [\n                \"6fd2c87f-b296-42f0-b197-1e91e994b900\"\n            ]\n        }\n    ]\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Verify files",
+					"request": {
+						"url": "https://{{host}}/{{version}}/synchronizationProfiles/{{ProfileId}}/verifyFiles",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{GraphAuth}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get status",
+					"request": {
+						"url": "https://{{host}}/{{version}}/synchronizationProfiles/{{ProfileId}}/status",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{GraphAuth}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"displayName\": \"API Profile 0703\",\n    \"dataSource\": {\n        \"@odata.type\": \"#microsoft.graph.csvDataProvider\",\n        \"customizations\": {\n            \"student\": {\n                \"optionalPropertiesToSync\": [\n                    \"State ID\",\n                    \"Middle Name\"\n                ],\n                \"synchronizationStartDate\": \"0001-01-01T00:00:00Z\",\n                \"isSyncDeferred\": false,\n                \"allowDisplayNameUpdate\": false\n            }\n        }\n    },\n    \"identitySyncConfiguration\": {\n        \"@odata.type\": \"#microsoft.graph.identityCreationConfiguration\",\n        \"userDomains\": [\n            {\n                \"appliesTo\": \"student\",\n                \"name\": \"zsdtest30.ccsctp.net\"\n            },\n            {\n                \"appliesTo\": \"teacher\",\n                \"name\": \"zsdtest30.ccsctp.net\"\n            }\n        ]\n    },\n    \"licensesToAssign\": [\n        {\n            \"appliesTo\": \"teacher\",\n            \"skuIds\": [\n                \"6fd2c87f-b296-42f0-b197-1e91e994b900\"\n            ]\n        },\n        {\n            \"appliesTo\": \"student\",\n            \"skuIds\": [\n                \"6fd2c87f-b296-42f0-b197-1e91e994b900\"\n            ]\n        }\n    ]\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Pause sync",
+					"request": {
+						"url": "https://{{host}}/{{version}}/synchronizationProfiles/{{ProfileId}}/pause",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{GraphAuth}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get errors",
+					"request": {
+						"url": "https://{{host}}/{{version}}/synchronizationProfiles/{{ProfileId}}/errors",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{GraphAuth}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"displayName\": \"API Profile 0703\",\n    \"dataSource\": {\n        \"@odata.type\": \"#microsoft.graph.csvDataProvider\",\n        \"customizations\": {\n            \"student\": {\n                \"optionalPropertiesToSync\": [\n                    \"State ID\",\n                    \"Middle Name\"\n                ],\n                \"synchronizationStartDate\": \"0001-01-01T00:00:00Z\",\n                \"isSyncDeferred\": false,\n                \"allowDisplayNameUpdate\": false\n            }\n        }\n    },\n    \"identitySyncConfiguration\": {\n        \"@odata.type\": \"#microsoft.graph.identityCreationConfiguration\",\n        \"userDomains\": [\n            {\n                \"appliesTo\": \"student\",\n                \"name\": \"zsdtest30.ccsctp.net\"\n            },\n            {\n                \"appliesTo\": \"teacher\",\n                \"name\": \"zsdtest30.ccsctp.net\"\n            }\n        ]\n    },\n    \"licensesToAssign\": [\n        {\n            \"appliesTo\": \"teacher\",\n            \"skuIds\": [\n                \"6fd2c87f-b296-42f0-b197-1e91e994b900\"\n            ]\n        },\n        {\n            \"appliesTo\": \"student\",\n            \"skuIds\": [\n                \"6fd2c87f-b296-42f0-b197-1e91e994b900\"\n            ]\n        }\n    ]\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Resume sync",
+					"request": {
+						"url": "https://{{host}}/{{version}}/synchronizationProfiles/{{ProfileId}}/resume",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{GraphAuth}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Reset sync",
+					"request": {
+						"url": "https://{{host}}/{{version}}/synchronizationProfiles/{{ProfileId}}/reset",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{GraphAuth}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get a profile copy",
+			"description": "",
+			"item": [
+				{
+					"name": "Get AccessToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Successful Request\"] = responseCode.code === 200;",
+									"var data = JSON.parse(responseBody);",
+									"if(responseCode.code === 200)",
+									"{",
+									"    postman.setGlobalVariable(\"GraphAuth\", \"Bearer \" + data.access_token);",
+									"    postman.setGlobalVariable(\"GraphRefresh\", data.refresh_token);",
+									"    tests[\"New tokens written to global\"] = true;",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{login_authority}}/{{domain}}/oauth2/token",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{readwrite_client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "resource",
+									"value": "{{resource}}",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{admin_password}}",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "openid",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{readwrite_secret}}",
+									"type": "text"
+								}
+							]
+						},
+						"description": "Use client id/secret and user credentials to get an access token and refresh token."
+					},
+					"response": []
+				},
+				{
+					"name": "Get SynchronizationProfiles",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Successful Request\"] = responseCode.code === 200;",
+									"",
+									"if (responseCode.code === 200)",
+									"{",
+									"    // find a profile with displayname api",
+									"    var data = JSON.parse(responseBody);",
+									"",
+									"    var apiProfile = loDash.find(data.value, function(profile) {return profile.displayName.startsWith(\"API\");})",
+									"    if (apiProfile) ",
+									"    {",
+									"        postman.setGlobalVariable(\"ProfileId\", apiProfile.id);",
+									"    }",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{host}}/{{version}}/synchronizationProfiles",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{GraphAuth}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "Get all the synchronization profiles in a tenant"
+					},
+					"response": []
+				},
+				{
+					"name": "Get a SynchronizationProfile",
+					"request": {
+						"url": "https://{{host}}/{{version}}/synchronizationProfiles/{{ProfileId}}",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{GraphAuth}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"displayName\": \"API Profile 0703\",\n    \"dataSource\": {\n        \"@odata.type\": \"#microsoft.graph.csvDataProvider\",\n        \"customizations\": {\n            \"student\": {\n                \"optionalPropertiesToSync\": [\n                    \"State ID\",\n                    \"Middle Name\"\n                ],\n                \"synchronizationStartDate\": \"0001-01-01T00:00:00Z\",\n                \"isSyncDeferred\": false,\n                \"allowDisplayNameUpdate\": false\n            }\n        }\n    },\n    \"identitySyncConfiguration\": {\n        \"@odata.type\": \"#microsoft.graph.identityCreationConfiguration\",\n        \"userDomains\": [\n            {\n                \"appliesTo\": \"student\",\n                \"name\": \"zsdtest30.ccsctp.net\"\n            },\n            {\n                \"appliesTo\": \"teacher\",\n                \"name\": \"zsdtest30.ccsctp.net\"\n            }\n        ]\n    },\n    \"licensesToAssign\": [\n        {\n            \"appliesTo\": \"teacher\",\n            \"skuIds\": [\n                \"6fd2c87f-b296-42f0-b197-1e91e994b900\"\n            ]\n        },\n        {\n            \"appliesTo\": \"student\",\n            \"skuIds\": [\n                \"6fd2c87f-b296-42f0-b197-1e91e994b900\"\n            ]\n        }\n    ]\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update profile",
+					"request": {
+						"url": "https://{{host}}/{{version}}/synchronizationProfiles/{{ProfileId}}",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{GraphAuth}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"@odata.context\": \"https://graph.microsoft-ppe.com/testsds/$metadata#synchronizationProfiles/$entity\",\n    \"displayName\": \"API Profile 0703 Updated\",\n    \"servicesToSetup\": [],\n    \"id\": \"86904b1e-c7d0-4ead-b13a-98f11fc400ee\",\n    \"dataSource\": {\n        \"@odata.type\": \"#microsoft.graph.csvDataProvider\",\n        \"customizations\": {\n            \"school\": {\n                \"optionalPropertiesToSync\": [\n                    \"School Number\",\n                    \"School NCES_ID\",\n                    \"State ID\",\n                    \"Grade Low\",\n                    \"Grade High\",\n                    \"Principal SIS ID\",\n                    \"Principal Name\",\n                    \"Principal Secondary Email\",\n                    \"Address\",\n                    \"City\",\n                    \"State\",\n                    \"Country\",\n                    \"Zip\",\n                    \"Phone\",\n                    \"Zone\"\n                ],\n                \"synchronizationStartDate\": \"0001-01-01T00:00:00Z\",\n                \"isSyncDeferred\": false,\n                \"allowDisplayNameUpdate\": false\n            },\n            \"section\": {\n                \"optionalPropertiesToSync\": [\n                    \"Section Number\",\n                    \"Term SIS ID\",\n                    \"Term Name\",\n                    \"Term StartDate\",\n                    \"Term EndDate\",\n                    \"Course SIS ID\",\n                    \"Course Name\",\n                    \"Course Description\",\n                    \"Course Number\",\n                    \"Course Subject\",\n                    \"Periods\",\n                    \"Status\"\n                ],\n                \"synchronizationStartDate\": \"0001-01-01T00:00:00Z\",\n                \"isSyncDeferred\": false,\n                \"allowDisplayNameUpdate\": false\n            },\n            \"student\": {\n                \"optionalPropertiesToSync\": [\n                    \"State ID\",\n                    \"Middle Name\"\n                ],\n                \"synchronizationStartDate\": \"0001-01-01T00:00:00Z\",\n                \"isSyncDeferred\": false,\n                \"allowDisplayNameUpdate\": false\n            },\n            \"teacher\": {\n                \"optionalPropertiesToSync\": [\n                    \"State ID\",\n                    \"Teacher Number\",\n                    \"Status\",\n                    \"Middle Name\",\n                    \"Secondary Email\",\n                    \"Title\",\n                    \"Qualification\"\n                ],\n                \"synchronizationStartDate\": \"0001-01-01T00:00:00Z\",\n                \"isSyncDeferred\": false,\n                \"allowDisplayNameUpdate\": false\n            },\n            \"studentEnrollment\": {\n                \"optionalPropertiesToSync\": [],\n                \"synchronizationStartDate\": \"0001-01-01T00:00:00Z\",\n                \"isSyncDeferred\": false,\n                \"allowDisplayNameUpdate\": false\n            },\n            \"teacherRoster\": {\n                \"optionalPropertiesToSync\": [],\n                \"synchronizationStartDate\": \"0001-01-01T00:00:00Z\",\n                \"isSyncDeferred\": false,\n                \"allowDisplayNameUpdate\": false\n            }\n        }\n    },\n    \"identitySyncConfiguration\": {\n        \"@odata.type\": \"#microsoft.graph.identityCreationConfiguration\",\n        \"userDomains\": [\n            {\n                \"appliesTo\": \"student\",\n                \"name\": \"zsdtest30.ccsctp.net\"\n            },\n            {\n                \"appliesTo\": \"teacher\",\n                \"name\": \"zsdtest30.ccsctp.net\"\n            }\n        ]\n    },\n    \"licensesToAssign\": [\n        {\n            \"appliesTo\": \"teacher\",\n            \"skuIds\": [\n                \"6fd2c87f-b296-42f0-b197-1e91e994b900\"\n            ]\n        },\n        {\n            \"appliesTo\": \"student\",\n            \"skuIds\": [\n                \"6fd2c87f-b296-42f0-b197-1e91e994b900\"\n            ]\n        }\n    ]\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "FirstTime_Graph_Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Successful Request\"] = responseCode.code === 200;",
+							"var data = JSON.parse(responseBody);",
+							"if(responseCode.code === 200)",
+							"{",
+							"    postman.setGlobalVariable(\"GraphAuth\", \"Bearer \" + data.access_token);",
+							"    postman.setGlobalVariable(\"GraphRefresh\", data.refresh_token);",
+							"    tests[\"New tokens written to global\"] = true;",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://login.windows-ppe.net/zsdtest15.ccsctp.net/oauth2/token",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{readwrite_client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "resource",
+							"value": "https://graph.microsoft-ppe.com",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "portaladmin@zsdtest15.ccsctp.net",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "!!abc123",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "openid",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{readwrite_secret}}",
+							"type": "text"
+						}
+					]
+				},
+				"description": "Use client id/secret and user credentials to get an access token and refresh token."
+			},
+			"response": []
+		},
+		{
+			"name": "AccessToken_Using_RefreshToken",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Successful Request\"] = responseCode.code === 200;",
+							"var data = JSON.parse(responseBody);",
+							"if(responseCode.code === 200)",
+							"{",
+							"    postman.setGlobalVariable(\"GraphAuth\", \"Bearer \" + data.access_token);",
+							"    postman.setGlobalVariable(\"GraphRefresh\", data.refresh_token);",
+							"    tests[\"New tokens written to global\"] = true;",
+							"}"
+						]
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"GlobalFunctions = {\r",
+							"setupMetadataLevel: function(iteration, postman) {\r",
+							"if (iteration % 3 === 0)\r",
+							"{\r",
+							"  postman.setGlobalVariable(\"MetadataLevel\", \"none\");\r",
+							"  console.log(\"Metadata = none\");\r",
+							"}\r",
+							"else if ( iteration % 3 === 1)\r",
+							"{\r",
+							"  postman.setGlobalVariable(\"MetadataLevel\", \"minimal\");\r",
+							"  console.log(\"Metadata = minimal\");\r",
+							"}\r",
+							"else if ( iteration % 3 === 2)\r",
+							"{\r",
+							"  postman.setGlobalVariable(\"MetadataLevel\", \"full\");\r",
+							"  console.log(\"Metadata = full\");\r",
+							"}\r",
+							"\r",
+							"}\r",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://login.windows-ppe.net/common/oauth2/token",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "refresh_token",
+							"type": "text"
+						},
+						{
+							"key": "refresh_token",
+							"value": "{{GraphRefresh}}",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "<add client id>",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "<add secret>",
+							"type": "text"
+						}
+					]
+				},
+				"description": "Use refreshToken variable to request a new access token for the user in PPE environment."
+			},
+			"response": []
+		},
+		{
+			"name": "FirstTime_ReadOnly_Graph_Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Successful Request\"] = responseCode.code === 200;",
+							"var data = JSON.parse(responseBody);",
+							"if(responseCode.code === 200)",
+							"{",
+							"    postman.setGlobalVariable(\"GraphAuth\", \"Bearer \" + data.access_token);",
+							"    postman.setGlobalVariable(\"GraphRefresh\", data.refresh_token);",
+							"    tests[\"New tokens written to global\"] = true;",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://login.windows-ppe.net/zsdtest15.ccsctp.net/oauth2/token",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{read_client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "resource",
+							"value": "https://graph.microsoft-ppe.com",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "portaladmin@zsdtest15.ccsctp.net",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "!!abc123",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "openid",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{read_secret}}",
+							"type": "text"
+						}
+					]
+				},
+				"description": "Use client id/secret and user credentials to get an access token and refresh token for a read only app."
+			},
+			"response": []
+		},
+		{
+			"name": "Create a SynchronizationProfile",
+			"request": {
+				"url": "https://{{host}}/{{version}}/synchronizationProfiles/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{GraphAuth}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"displayName\": \"CSV Test profile 0531\",\n  \"servicesToSetup\": [],\n  \"dataSource\": {\n    \"@odata.type\": \"#microsoft.graph.csvDataProvider\"\n  },\n  \"identitySyncConfiguration\": {\n    \"@odata.type\": \"#microsoft.graph.identityCreationConfiguration\",\n    \"userDomains\": [\n      {\n        \"appliesTo\": \"student\",\n        \"name\": \"zsdtest15.ccsctp.net\"\n      },\n      {\n        \"appliesTo\": \"teacher\",\n        \"name\": \"zsdtest15.ccsctp.net\"\n      }\n    ]\n  },\n  \"licensesToAssign\": [\n    {\n      \"appliesTo\": \"teacher\",\n      \"skuIds\": [\n        \"6fd2c87f-b296-42f0-b197-1e91e994b900\"\n      ]\n    },\n    {\n      \"appliesTo\": \"student\",\n      \"skuIds\": [\n        \"6fd2c87f-b296-42f0-b197-1e91e994b900\"\n      ]\n    }\n  ]\n}"
+				},
+				"description": "Create a single synchronization profile"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a SynchronizationProfile",
+			"request": {
+				"url": "https://{{host}}/{{version}}/synchronizationProfiles/19c097a9-ea10-49bb-9242-2cc657549032",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{GraphAuth}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": "Delete a single synchronization profile based on the id"
+			},
+			"response": []
+		}
+	]
+}
