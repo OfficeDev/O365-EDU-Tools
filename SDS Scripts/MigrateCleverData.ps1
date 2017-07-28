@@ -15,7 +15,7 @@ Param (
 
     [string] $OutFolder = ".",
 
-    [string] $ArchivedSectionsPrefix = "SDSArchived",
+    [string] $RetiredSectionsPrefix = "SDSRetired",
     
     [ValidateSet('AzureCloud', 'AzurePPE')]
     [string] $AzureEnvironment = "AzureCloud"
@@ -511,23 +511,23 @@ function Update-Groups ($groupListFileName, $schoolId)
             Write-Progress -Activity $global:activityName -Status "Updating Section Groups [$index/$groupCount]" -PercentComplete $complete
             Write-Message "[$index/$groupCount] Updating Group `"$($group.DisplayName)`" [$($group.ObjectId)] from directory" Cyan
             
-            if($ArchivedSectionsPrefix.EndsWith(' '))
+            if($RetiredSectionsPrefix.EndsWith(' '))
             {
-                $archivedSectionName = $ArchivedSectionsPrefix + $group.DisplayName
+                $retiredSectionName = $RetiredSectionsPrefix + $group.DisplayName
             }
             else
             {
-                $archivedSectionName = $ArchivedSectionsPrefix + " "  +  $group.DisplayName
+                $retiredSectionName = $RetiredSectionsPrefix + " "  +  $group.DisplayName
             }
 
             $updateUrl = [string]::Format("/groups/{0}", $group.ObjectId)
             Write-Log ([string]::Format("{0} :{1}",$index, $updateUrl))
             $updatePayload = @{}
             $updatePayload.Add("extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId", $schoolId)
-            $updatePayload.Add("extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId", "SDSArchived_"  + $group.AnchorId)
-            $updatePayload.Add("displayName", $archivedSectionName)
+            $updatePayload.Add("extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId", "SDSRetired_"  + $group.AnchorId)
+            $updatePayload.Add("displayName", $retiredSectionName)
             $updatePayload.Add("extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource", "SIS")
-            $updatePayload.Add("extension_fe2174665583431c953114ff7268b7b3_Education_Status", "Archived")
+            $updatePayload.Add("extension_fe2174665583431c953114ff7268b7b3_Education_Status", "Retired")
             
             $request = Generate-BatchRequestContent $index "PATCH" $updateUrl $updatePayload
             $updateRequests = $updateRequests + $request
@@ -713,15 +713,15 @@ try
         $folder = mkdir $OutFolder;
     }
 
-    if ($ArchivedSectionsPrefix.Length -lt 2)
+    if ($RetiredSectionsPrefix.Length -lt 2)
     {
-        Write-Message "`nThe archived sections prefix cannot be less than 2 characters.`n`n" Red
+        Write-Message "`nThe retired sections prefix cannot be less than 2 characters.`n`n" Red
         exit -1
     }
 
-    if ($ArchivedSectionsPrefix.Length -gt 15)
+    if ($RetiredSectionsPrefix.Length -gt 15)
     {
-        Write-Message "`nThe archived sections prefix cannot be more than 15 characters.`n`n" Red
+        Write-Message "`nThe retired sections prefix cannot be more than 15 characters.`n`n" Red
         exit -1
     }
 
