@@ -469,7 +469,7 @@ function Filter-Sections ($sections)
     $filteredSections = @()
     foreach ($section in $sections) 
     {
-        $isNotRetired = ($section.extension_fe2174665583431c953114ff7268b7b3_Education_Status -ne $null) -and $($section.extension_fe2174665583431c953114ff7268b7b3_Education_Status) -notmatch $StatusPrefix
+        $isNotRetired = $($section.extension_fe2174665583431c953114ff7268b7b3_Education_Status) -notmatch $StatusPrefix
         $isPreviewCreationOptions = ($section.creationOptions -ne $null) -and ($($section.creationOptions) -contains "SharePointReadOnlyMembers") -and ($($section.creationOptions) -contains "ExchangeProvisioningOption1")
         if ($isNotRetired -and $isPreviewCreationOptions)
         {
