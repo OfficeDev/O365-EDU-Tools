@@ -47,7 +47,6 @@ Here is an example of the response. Note: The response object shown here may be 
     "@odata.count": 14,
     "value": [
         {
-            "id": "Student:UnsynchronizableChange:richard.2wilson",
             "entryType": "Student",
             "errorCode": "UnsynchronizableChange",
             "errorMessage": "Student cannot be updated as no matching entry in Active Directory was found for Student.  Verify the identity matching criteria for the profile.",
@@ -56,7 +55,6 @@ Here is an example of the response. Note: The response object shown here may be 
             "reportableIdentifier": "richard.2wilson"
         },
         {
-            "id": "Teacher:UnsynchronizableChange:alberto2.dorsey",
             "entryType": "Teacher",
             "errorCode": "UnsynchronizableChange",
             "errorMessage": "Teacher cannot be updated as no matching entry in Active Directory was found for Teacher.  Verify the identity matching criteria for the profile.",
@@ -65,7 +63,6 @@ Here is an example of the response. Note: The response object shown here may be 
             "reportableIdentifier": "alberto2.dorsey"
         },
         {
-            "id": "Teacher:UnsynchronizableChange:madeline2.bullock",
             "entryType": "Teacher",
             "errorCode": "UnsynchronizableChange",
             "errorMessage": "Teacher cannot be updated as no matching entry in Active Directory was found for Teacher.  Verify the identity matching criteria for the profile.",

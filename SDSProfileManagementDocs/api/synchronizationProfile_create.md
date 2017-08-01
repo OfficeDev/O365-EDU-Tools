@@ -3,7 +3,7 @@
 Creates a request for a new [synchronization profile](../resources/synchronizationProfile.md) in the tenant. [Query the status](synchronizationProfile_get_status.md) to know the state of the profile. 
 
 ## Prerequisites
-The following **scopes** are required to execute this API: **EduAdministration.ReadWrite** or **EduAdministration.Read**
+The following **scopes** are required to execute this API: **EduAdministration.ReadWrite**
 
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
@@ -43,10 +43,7 @@ Content-type: application/json
                 "optionalPropertiesToSync": [
                     "State ID",
                     "Middle Name"
-                ],
-                "synchronizationStartDate": "0001-01-01T00:00:00Z",
-                "isSyncDeferred": false,
-                "allowDisplayNameUpdate": false
+                ]
             }
         }
     },

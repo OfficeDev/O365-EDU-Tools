@@ -2,7 +2,7 @@
 
 Represents the synchronization status of a [synchronization profile](synchronizationProfile.md). 
 
-> **Note:** Update to the synchronizationStatus might be delayed due to the asynchronous nature of background sync processing.
+> **Note:** Updates to the synchronizationStatus might be delayed due to the asynchronous nature of background sync processing.
 
 ### Methods
 
@@ -14,5 +14,5 @@ Represents the synchronization status of a [synchronization profile](synchroniza
 
 | Property | Type | Description |
 |-|-|-|
-| **syncStatus** | string | Enumeration representing the status of a sync. Possible values are: `paused`, `inProgress`, `success`, `error`, `quarantined` |
+| **syncStatus** | string | Enumeration representing the status of a sync. Possible values are: `paused`, `inProgress`, `success`, `error`, `quarantined`, `validationError` |
 | **lastSynchronizationTime** | DateTimeOffset | Represents the time when most recent changes have been observed in the directory.  |

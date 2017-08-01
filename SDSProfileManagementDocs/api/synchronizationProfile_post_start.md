@@ -1,8 +1,8 @@
-# Verify the files uploaded to a synchronization profile
+# Start sync after uploading files to a synchronization profile
 
-Verify the files uploaded to a specific [synchronization profile](..\resources\synchronizationProfile.md) in the tenant. If verification is successful, then synchronization will start on the profile. 
+Verify the files uploaded to a specific [synchronization profile](..\resources\synchronizationProfile.md) in the tenant. If verification is successful, then synchronization will start on the profile. Else, the response will contain errors and warnings due to which sync was not started. If the response contains only warnings, synchronization will still be started.
 
-> **Note:** This API is available only when data provider is of type [csvDataProvider](../resources/csvDataProvider.md)
+> **Note:** This API is applicable only when data provider is of type [csvDataProvider](../resources/csvDataProvider.md)
 
 ## Prerequisites
 The following **scopes** are required to execute this API: **EduAdministration.ReadWrite**
@@ -10,7 +10,7 @@ The following **scopes** are required to execute this API: **EduAdministration.R
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-POST /synchronizationProfiles/{id}/verifyFiles
+POST /synchronizationProfiles/{id}/start
 ```
 
 ## Request headers
@@ -21,17 +21,17 @@ POST /synchronizationProfiles/{id}/verifyFiles
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and a collection of [verification message](../resources/verificationMessage.md) as part of the response body
+If successful, this method returns a `200 OK` response code. If unsuccessful it returns a `400 Bad Request`. Response contains a collection of [verification message](../resources/verificationMessage.md) as part of the response body if any errors or warnings were found.
 
 ## Example
 ##### Request
 Here is an example of the request.
 <!-- {
   "blockType": "request",
-  "name": "post_synchronizationProfile_verifyfiles"
+  "name": "post_synchronizationProfile_start"
 }-->
 ```http
-POST https://graph.microsoft.com/testsds/synchronizationProfiles/{id}/verifyFiles
+POST https://graph.microsoft.com/testsds/synchronizationProfiles/{id}/start
 ```
 
 ##### Response
