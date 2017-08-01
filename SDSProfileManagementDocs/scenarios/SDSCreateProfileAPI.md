@@ -5,32 +5,32 @@ SDSProfileAPIIntroduction.md).
 
 
 ## Create a Profile for automated sync:
-The School Data Sync profile APIs enable automated profile and Roster sync management. Setting up a profile for sync using an API connector is a two step process:
+The School Data Sync APIs enable automated profile and Roster sync management. Setting up a profile for sync using an API connector is a two step process:
 
 |   Operation	                            |  REST Verb 	|   Description                             	|   	
 |------	                                    |---	        |---	                                        |
-|[Create Profile](./api/synchronizationProfile_create.md) (Mandatory)	                        |   POST	    |   Setup a profile for SDS Sync	            |   	
-| [Get Status](./api/synchronizationProfile_get_status.md) (Optional)         	                    |   GET	        |   Gets the status of the ongoing sync	        |   	
+|[Create Profile](../api/synchronizationProfile_create.md) (Mandatory)	                        |   POST	    |   Setup a profile for SDS Sync	            |   	
+| [Get Status](../api/synchronizationProfile_get_status.md) (Optional)         	                    |   GET	        |   Gets the status of the ongoing sync	        |   	
 
 
 ## Step 1 : Create Profile
 
-Create Profile: Create Profile API with API adapter option allows you to setup a school data sync profile for syncing. Once a profile has a been created it can reused for all future syncs.
+Create Profile: Create Profile API with API provider option allows you to setup a school data sync profile for syncing. Once a profile has a been created it can reused for all future syncs.
 
 **Note : Before calling these APIs, please review the permissions required for each of these in the corresponding API documentation.**
 
-Please refer to the [Create Profile API documentation](./api/synchronizationProfile_create.md) to look at the API reference and a sample request
+Please refer to the [Create Profile API documentation](../api/synchronizationProfile_create.md) to look at the API reference and a sample request
 
-Most of the options for CreateProfile with API format are similar with one key difference - sync format type which is API instead of CSV.
+Most of the options for CreateProfile with API format are similar to CSV format with one key difference - sync format type which is API instead of CSV.
 
 #### Sync format:
 
-  To use Create Profile support with the API format specify the corresponding Data provider. SDS currently supports PowerSchool Data Provider. In future the support will expand to other data provider.
+  To use Create Profile support with the API format specify the corresponding Data provider. SDS currently supports PowerSchool Data Provider. In future the support will expand to more data providers.
 
      Here is the sample code snippet:
 
-           @odata.type":"#microsoft.graph.powerSchoolDataProvider",
-          "connectionUrl":"http://contoso.cloudapp.net",
+         @odata.type":"#microsoft.graph.powerSchoolDataProvider",
+         "connectionUrl":"http://contoso.cloudapp.net",
          "clientId":"37e81c3f-73a2-4ecd-a314-xxxxxxxxx",
          "clientSecret":"secret",
          "schoolsIds":[  
@@ -45,7 +45,7 @@ Create Profile returns the following:
 Once the profile with API provider is created successfully, sync is started automatically.
 
 #### Create Profile with Powerschool API Provider:
-Powerschool is one of the custom API provider that's currently supported, to integrate with that specify #microsoft.graph.powerSchoolDataProvider" as the data type.
+Powerschool is one of the custom API provider that's currently supported, to integrate with that specify #microsoft.graph.powerSchoolDataProvider" as the data type. Once profile is created, it starts syncing automatically.
 
       "dataProvider":{  
            "@odata.type":"#microsoft.graph.powerSchoolDataProvider",
@@ -57,7 +57,7 @@ Powerschool is one of the custom API provider that's currently supported, to int
       }
 
 ### Step 2 : Get Sync Status
-Once roster sync is started in the background you can query the sync status using the GetSyncStatus API
+Once sync is started in the background you can query the sync status using the GetSyncStatus API
 
 
 |  Method    |  Request URI                                                              |   
@@ -67,9 +67,12 @@ Once roster sync is started in the background you can query the sync status usin
 
 Profile Management provides the  following upload status:
 
-      <EnumType Name="synchronizationStatus">
-        <Member Name="paused" Value="0"/>
-        <Member Name="inProgress" Value="1"/>
-        <Member Name="success" Value="2"/>
-        <Member Name="error" Value="3"/>
-        <Member Name="quarantined" Value="4"/>
+      <EnumType Name="status">
+        <Member Name="paused" Value="0" />
+        <Member Name="inProgress" Value="1" />
+        <Member Name="success" Value="2" />
+        <Member Name="error" Value="3" />
+        <Member Name="validationError" Value="4" />
+        <Member Name="quarantined" Value="5" />
+
+A status of 'validationError' indicates that sync was automatically paused as potential errors were detected. To ignore and continue, [Resume Sync](../api/synchronizationProfile_post_resume.md) on the profile.

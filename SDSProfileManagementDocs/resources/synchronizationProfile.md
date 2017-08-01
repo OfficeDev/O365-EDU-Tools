@@ -13,7 +13,7 @@ This resource represents a set of configurations used to synchronize education e
 | [Pause an ongoing sync](..\api\synchronizationProfile_post_pause.md) | none | Pauses an ongoing synchronization |
 | [Resume a paused sync](..\api\synchronizationProfile_post_resume.md) | none | Resumes a paused synchronization |
 | [Reset a sync](..\api\synchronizationProfile_post_reset.md) | none | Resets the state of the profile and causes synchronization to restart |
-| [Verify files](..\api\synchronizationProfile_post_verifyfiles.md) | collection of [verificationMessage](verificationMessage.md) | Verifies the uploaded source files. _Applies only when the dataProvider is [csvDataProvider](csvDataProvider.md)_ |
+| [Start sync for uploaded files](..\api\synchronizationProfile_post_start.md) | collection of [verificationMessage](verificationMessage.md) | Verifies the uploaded source files and starts sync. _Applies only when the dataProvider is [csvDataProvider](csvDataProvider.md)_ |
 | [Get an upload URL](..\api\synchronizationProfile_get_uploadurl.md) | string | Returns the short-lived URL to upload CSV data files. _Applies only when the dataProvider is [csvDataProvider](csvDataProvider.md)_ |
 | [Get status of a sync](../api/synchronizationProfile_get_status.md) | [status](status.md) | Returns the status of a specific synchronization profile |
 | [Get synchronization errors](../api/synchronizationProfile_get_errors.md) | collection of [synchronizationError](synchronizationError.md) | Gets all the errors generated during sync |
