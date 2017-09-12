@@ -1,6 +1,8 @@
 # educationAssignmentGradeType resource type
 
+Represents how a assignmnet will be graded.  This is used within the assignments.grading property.
 
+This superclass can not be used directly in the assignment property.  This exists simply to allow multiple different ways of grading.
 
 
 ## Properties

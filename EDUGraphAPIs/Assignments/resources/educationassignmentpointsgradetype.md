@@ -1,12 +1,13 @@
 # educationAssignmentPointsGradeType resource type
 
+Used with assignmnets.grading property.  This is a subclass of  [educationAssignmentGradeType](educationassignmentgradetype.md)
 
-
+This tells the assignment that it will be graded and stores the maximum number of points each student can achieve on this work item.
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|maxPoints|Single||
+|maxPoints|Single| Max points possible for this assignment.  |
 
 ## JSON representation
 
