@@ -10,10 +10,11 @@
 |[Get educationClass](../api/educationclass_get.md) | [educationClass](educationclass.md) |Read properties and relationships of educationClass object.|
 |[Create educationUser](../api/educationclass_post_members.md) |[educationUser](educationuser.md)| Create a new educationUser by posting to the members collection.|
 |[List members](../api/educationclass_list_members.md) |[educationUser](educationuser.md) collection| Get a educationUser object collection.|
-|[Create educationSchool](../api/educationclass_post_schools.md) |[educationSchool](educationschool.md)| Create a new educationSchool by posting to the schools collection.|
 |[List schools](../api/educationclass_list_schools.md) |[educationSchool](educationschool.md) collection| Get a educationSchool object collection.|
 |[Create educationUser](../api/educationclass_post_teachers.md) |[educationUser](educationuser.md)| Create a new educationUser by posting to the teachers collection.|
 |[List teachers](../api/educationclass_list_teachers.md) |[educationUser](educationuser.md) collection| Get a educationUser object collection.|
+|[Create educationAssignment](../../Assignments/api/educationclass_post_assignments.md) |[educationAssignment](../../Assignments/resources/educationassignment.md)| Create a new educationAssignment by posting to the assignments collection.|
+|[List assignments](../../Assignments/api/educationclass_list_assignments.md) |[educationAssignment](../../Assignments/resources/educationassignment.md) collection| Get a educationAssignment object collection.|
 |[Update](../api/educationclass_update.md) | [educationClass](educationclass.md)	|Update educationClass object. |
 |[Delete](../api/educationclass_delete.md) | None |Delete educationClass object. |
 

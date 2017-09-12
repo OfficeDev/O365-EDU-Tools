@@ -1,6 +1,8 @@
 # educationAssignmentRecipient resource type
 
-
+Used within assignments.assignTo property.  This super class is abstract and you cannot
+set the property in assignments to this value.  This super class represents who should this
+assignment be assigned to once the assignment is published.
 
 
 ## Properties
