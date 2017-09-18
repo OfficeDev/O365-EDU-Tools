@@ -1,12 +1,12 @@
 # educationSubmissionIndividualRecipient resource type
 
-
+Subclass of [educationSubmissionRecipient](educationsubmissionrecipient.md) which indicates that a submission is assigned to an individual in the class.  
 
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|userId|String||
+|userId|String|User Id of the user to whom the submission is assigned to.|
 
 ## JSON representation
 

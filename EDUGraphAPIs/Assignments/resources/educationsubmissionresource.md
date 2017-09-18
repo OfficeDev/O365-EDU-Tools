@@ -1,6 +1,6 @@
 # educationSubmissionResource resource type
 
-
+Wrapper around resource for used on a submission.  The wrapper adds a pointer to the assignment resource if this was copied from the assignment.  
 
 
 ## Methods
@@ -8,15 +8,14 @@
 | Method		   | Return Type	|Description|
 |:---------------|:--------|:----------|
 |[Get educationSubmissionResource](../api/educationsubmissionresource_get.md) | [educationSubmissionResource](educationsubmissionresource.md) |Read properties and relationships of educationSubmissionResource object.|
-|[Update](../api/educationsubmissionresource_update.md) | [educationSubmissionResource](educationsubmissionresource.md)	|Update educationSubmissionResource object. |
 |[Delete](../api/educationsubmissionresource_delete.md) | None |Delete educationSubmissionResource object. |
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|assignmentResource|[educationODataRef](educationodataref.md)||
+|assignmentResource|[educationODataRef](educationodataref.md)|Pointer to the assignment from which this resource was copied.  If this is null, the student uploaded the resource.|
 |id|String| Read-only.|
-|resource|[educationResource](educationresource.md)||
+|resource|[educationResource](educationresource.md)|Resource object.|
 
 ## Relationships
 None

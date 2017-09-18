@@ -1,6 +1,6 @@
 # educationSubmissionRecipient resource type
 
-
+Abstract class which represents the different sets of users who a submission can be assigned to.  Possible values include individuals or groups.  This is used within the submission.recipient property.
 
 
 ## Properties
