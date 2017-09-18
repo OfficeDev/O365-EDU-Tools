@@ -1,29 +1,29 @@
 # List classes
 
-Retrieve a list of educationclass objects.
+Retrieve a list of class objects.  Delegated tokens can only see information on themselves.
+
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
 
 |Permission type      | Permissions (from least to most privileged)              |
 |:--------------------|:---------------------------------------------------------|
-|Delegated (work or school account) |    |
-|Delegated (personal Microsoft account) |    |
-|Application |  | 
+|Delegated (work or school account) |  ReaEduRoster.ReadBasic, EduRoster.Read, EduRosterdWrite  |
+|Delegated (personal Microsoft account) |  Not supported.  |
+|Application | EduRoster.Read.All, EduRoster.ReadWrite.All | 
 
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
 GET /education/me/classes
-GET /education/users/classes
-GET /education/schools/users/classes
+GET /education/users/<id>/classes
 ```
 ## Optional query parameters
 This method supports the [OData Query Parameters](http://graph.microsoft.io/docs/overview/query_parameters) to help customize the response.
 
 ## Request headers
-| Name      |Description|
-|:----------|:----------|
-| Authorization  | Bearer {code}|
+| Header       | Value |
+|:---------------|:--------|
+| Authorization  | Bearer {token}. Required.  |
 
 ## Request body
 Do not supply a request body for this method.

@@ -6,22 +6,20 @@ One of the following permissions is required to call this API. To learn more, in
 
 |Permission type      | Permissions (from least to most privileged)              |
 |:--------------------|:---------------------------------------------------------|
-|Delegated (work or school account) |    |
-|Delegated (personal Microsoft account) |    |
-|Application |  | 
+|Delegated (work or school account) |  Not supported.  |
+|Delegated (personal Microsoft account) |  Not supported.  |
+|Application | EduRoster.ReadWrite.All |
 
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-POST /education/me/schools
-POST /education/users/schools
-POST /education/schools/users/schools
-
+POST /education/users/<id>/schools
 ```
 ## Request headers
-| Name       | Description|
-|:---------------|:----------|
-| Authorization  | Bearer {code}|
+| Header       | Value |
+|:---------------|:--------|
+| Authorization  | Bearer {token}. Required.  |
+| Content-Type  | application/json  |
 
 ## Request body
 In the request body, supply a JSON representation of [educationSchool](../resources/educationschool.md) object.
@@ -38,7 +36,7 @@ Here is an example of the request.
   "name": "create_educationschool_from_educationuser"
 }-->
 ```http
-POST https://graph.microsoft.com/beta/education/me/schools
+POST https://graph.microsoft.com/beta/education/users/<id>/schools
 Content-type: application/json
 Content-length: 292
 

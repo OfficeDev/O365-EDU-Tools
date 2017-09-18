@@ -1,26 +1,26 @@
 # Update educationschool
 
-Update the properties of educationschool object.
+Update the properties of a school object.
+
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
 
 |Permission type      | Permissions (from least to most privileged)              |
 |:--------------------|:---------------------------------------------------------|
-|Delegated (work or school account) |    |
-|Delegated (personal Microsoft account) |    |
-|Application |  | 
+|Delegated (work or school account) |  Not supported.  |
+|Delegated (personal Microsoft account) |  Not supported.  |
+|Application | EduRoster.ReadWrite.All |
 
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-PATCH /education/schools
-PATCH /education/me/schools
-PATCH /education/users/schools
+PATCH /education/schools/<id>
 ```
-## Optional request headers
-| Name       | Description|
-|:-----------|:-----------|
-| Authorization  | Bearer {code}|
+## Request headers
+| Header       | Value |
+|:---------------|:--------|
+| Authorization  | Bearer {token}. Required.  |
+| Content-Type  | application/json  |
 
 ## Request body
 In the request body, supply the values for relevant fields that should be updated. Existing properties that are not included in the request body will maintain their previous values or be recalculated based on changes to other property values. For best performance you shouldn't include existing values that haven't changed.
@@ -59,7 +59,7 @@ Here is an example of the request.
   "name": "update_educationschool"
 }-->
 ```http
-PATCH https://graph.microsoft.com/beta/education/schools
+PATCH https://graph.microsoft.com/beta/education/schools/<id>
 Content-type: application/json
 Content-length: 292
 

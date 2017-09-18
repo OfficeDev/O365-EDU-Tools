@@ -1,6 +1,7 @@
 # List schools
 
-Retrieve a list of educationschool objects.
+Retrieve a list of schools which teach the class.
+
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
 
@@ -13,16 +14,16 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-GET /education/classes/schools
-GET /education/me/classes/schools
+GET /education/classes/<id>/schools
 ```
 ## Optional query parameters
 This method supports the [OData Query Parameters](http://graph.microsoft.io/docs/overview/query_parameters) to help customize the response.
 
 ## Request headers
-| Name      |Description|
-|:----------|:----------|
-| Authorization  | Bearer {code}|
+| Header       | Value |
+|:---------------|:--------|
+| Authorization  | Bearer {token}. Required.  |
+
 
 ## Request body
 Do not supply a request body for this method.
@@ -36,7 +37,7 @@ Here is an example of the request.
   "name": "get_schools"
 }-->
 ```http
-GET https://graph.microsoft.com/beta/educationClasses/schools
+GET https://graph.microsoft.com/beta/education/classes/<id>/schools
 ```
 ##### Response
 Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
