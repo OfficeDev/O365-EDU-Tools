@@ -1,12 +1,13 @@
 # educationWordResource resource type
 
-
+Subclass of [educationResource](educationresource.md).  This is a word resource.  The word file must be uploaded in the fileResource directory associated with the 
+assignment or submission.
 
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|file|[educationODataRef](educationodataref.md)||
+|file|[educationODataRef](educationodataref.md)|Location of the file on disk.|
 
 ## JSON representation
 

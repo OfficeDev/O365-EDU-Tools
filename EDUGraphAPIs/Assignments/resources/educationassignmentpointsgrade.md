@@ -1,12 +1,13 @@
 # educationAssignmentPointsGrade resource type
 
-
+When an assignment is set to points grade type, each submission will have this object associated with the submission.grade property.  This subclasses from [educationAssignmentGrade](educationAssignmentGrade.md)
+which will add the who data to this property.  The max points is stored in the assignments.grading property.
 
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|points|Single||
+|points|Single|Number of points a teacher is giving this submission object.|
 
 ## JSON representation
 

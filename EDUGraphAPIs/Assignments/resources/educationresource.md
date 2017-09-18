@@ -1,16 +1,19 @@
 # educationResource resource type
 
+Super class for all resource objects in the sytem.  A resource is something that is associated with an Assignment and/or Submission which represents the learning object that is being
+handed-out or handed-in.  You cannot instantiate a resource directly, you must make a subclass which will represent which type of resource is being used.
 
+This resource stores the common properties across all resource types.
 
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|createdBy|[identitySet](identityset.md)||
-|createdDateTime|DateTimeOffset|The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
-|displayName|String||
-|lastModifiedBy|[identitySet](identityset.md)||
-|lastModifiedDateTime|DateTimeOffset|The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
+|createdBy|[identitySet](identityset.md)|Who created the resource.|
+|createdDateTime|Moment in time when the resource was created.  DateTimeOffset|The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
+|displayName|String|Display name of resource.|
+|lastModifiedBy|[identitySet](identityset.md)|Who was the last user to modify the resource.|
+|lastModifiedDateTime|DateTimeOffset|Moment in time when the resource was last modified.  The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
 
 ## JSON representation
 

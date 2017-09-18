@@ -1,12 +1,13 @@
 # educationODataRef resource type
 
-
+Files are represented by odata.id strings in the Graph.  A single string will represent the location of a file inside the graph.  Today this string is stored in this object.
+Going forward, this representation will be replaced by a real Odata.ref object.  Please note that this will change slightly as this API is moved to Public Preview.
 
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|odataid|String||
+|odataid|String|String representation of the file object stored in OneDrive.|
 
 ## JSON representation
 

@@ -1,12 +1,13 @@
 # educationExcelResource resource type
 
-
+Subclass of [educationResource](educationresource.md).  This resource type represents an excel document.  Note that the excel file itself must be in the resourcefolder associated with the assignment
+or submission object to which this resource belongs.
 
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|file|[educationODataRef](educationodataref.md)||
+|file|[educationODataRef](educationodataref.md)|Pointer to the excel file object.|
 
 ## JSON representation
 

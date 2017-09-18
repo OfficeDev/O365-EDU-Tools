@@ -1,6 +1,9 @@
 # educationAssignmentResource resource type
 
-
+Wrapper object which stores the resources associated with an assignment.  The wrapper adds the distributeForStudentWork property which represents whether this resource is meant to
+be copied to the student submission.  If the object is not copied, then each student will simply see a link to the resource on the assignment.  There will be no ability for the student
+to update the resource.  This should be thought of as a hand-out from the teacher to the student with nothing needed to be returned.  If the resource is distributed, each student 
+will recieve a copy of this resource in the resource list of their assignment.  Each student will be able to modify their copy and submit it for grading.
 
 
 ## Methods
@@ -14,9 +17,9 @@
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|distributeForStudentWork|Boolean||
-|id|String| Read-only.|
-|resource|[educationResource](educationresource.md)||
+|distributeForStudentWork|Boolean|Indicates whether this resource should be copied to each student submission for modification and submission.|
+|id|String| ID of this resource.  Read-only.|
+|resource|[educationResource](educationresource.md)|Resource object that has been assoicated with this assignment.|
 
 ## Relationships
 None
