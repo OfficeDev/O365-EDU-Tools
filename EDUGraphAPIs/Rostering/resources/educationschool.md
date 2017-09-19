@@ -1,6 +1,6 @@
 # educationSchool resource type
 
-
+A school.  Schools are Administrative Units underneath and can be found as them in the graph.  
 
 
 ## Methods
@@ -18,33 +18,29 @@
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|address|[physicalAddress](physicaladdress.md)||
-|address.city|String||
-|address.countryOrRegion|String||
-|address.postalCode|String||
-|address.state|String||
-|address.street|String||
-|createdBy|[identitySet](identityset.md)||
-|createdBy.application.displayName|String||
-|createdBy.application.id|String||
-|createdBy.user.displayName|String||
-|createdBy.user.id|String||
-|externalId|String||
-|externalSchoolPrincipalId|String||
-|fax|String||
-|highestGrade|String||
-|lowestGrade|String||
-|phone|String||
-|schoolNumber|String||
-|schoolPrincipalEmail|String||
-|schoolPrincipalName|String||
-|schoolZone|String||
+|id|String|GUID of this school.|
+|displayName| String| Display name of the school| 
+|description| String | Description of the school| 
+|status| string| Read-Only.  Possible values are: `inactive`, `active`, `expired`, `deleteable`.|
+|externalSource| string| Read-Only.  Possible values are: `sis`, `manual`, `enum_sentinel`.|
+|principalEmail| String| Email address of the principal|
+|principalName| String | Name of the principal|
+|externalPrincipalId| String | Id of principal in syncing system. |
+|highestGrade|String| Highest grade taught. |
+|lowestGrade|String| Lowest grade taught. |
+|schoolNumber|String| School Number.|
+|externalId|String| Id of school in syncing system. |
+|phone|String| Phone number of school. |
+|fax|String| Fax number of school. |
+|address|[physicalAddress](physicaladdress.md)| Address of the School.|
+|createdBy|[identitySet](identityset.md)|Entity who created the school.|
+
 
 ## Relationships
 | Relationship | Type	|Description|
 |:---------------|:--------|:----------|
-|classes|[educationClass](educationclass.md) collection| Read-only. Nullable.|
-|users|[educationUser](educationuser.md) collection| Read-only. Nullable.|
+|classes|[educationClass](educationclass.md) collection| Classes taught at the school. Nullable.|
+|users|[educationUser](educationuser.md) collection| Users of the school. Nullable.|
 
 ## JSON representation
 
@@ -60,27 +56,22 @@ Here is a JSON representation of the resource.
 
 ```json
 {
-  "address": {"@odata.type": "microsoft.graph.physicalAddress"},
-  "address.city": "String",
-  "address.countryOrRegion": "String",
-  "address.postalCode": "String",
-  "address.state": "String",
-  "address.street": "String",
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "createdBy.application.displayName": "String",
-  "createdBy.application.id": "String",
-  "createdBy.user.displayName": "String",
-  "createdBy.user.id": "String",
-  "externalId": "String",
-  "externalSchoolPrincipalId": "String",
-  "fax": "String",
+  "id": "String",
+  "displayName": "String",
+  "description": "String",
+  "status": "String",
+  "externalSource": "String",
+  "principalEmail": "String",
+  "principalName": "String",
+  "externalPrincipalId": "String",
   "highestGrade": "String",
   "lowestGrade": "String",
-  "phone": "String",
   "schoolNumber": "String",
-  "schoolPrincipalEmail": "String",
-  "schoolPrincipalName": "String",
-  "schoolZone": "String"
+  "address": {"@odata.type": "microsoft.graph.physicalAddress"},
+  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
+  "externalId": "String",
+  "fax": "String",
+  "phone": "String",
 }
 
 ```

@@ -19,25 +19,11 @@
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
 |createdBy|[identitySet](identityset.md)||
-|createdBy.application.displayName|String||
-|createdBy.application.id|String||
-|createdBy.user.displayName|String||
-|createdBy.user.id|String||
 |externalSource|string| Possible values are: `sis`, `manual`, `enum_sentinel`.|
 |mailingAddress|[physicalAddress](physicaladdress.md)||
-|mailingAddress.city|String||
-|mailingAddress.countryOrRegion|String||
-|mailingAddress.postalCode|String||
-|mailingAddress.state|String||
-|mailingAddress.street|String||
 |middleName|String||
 |primaryRole|string| Possible values are: `student`, `teacher`, `enum_sentinel`.|
 |residenceAddress|[physicalAddress](physicaladdress.md)||
-|residenceAddress.city|String||
-|residenceAddress.countryOrRegion|String||
-|residenceAddress.postalCode|String||
-|residenceAddress.state|String||
-|residenceAddress.street|String||
 |student|[educationStudent](educationstudent.md)||
 |teacher|[educationTeacher](educationteacher.md)||
 
@@ -62,25 +48,11 @@ Here is a JSON representation of the resource.
 ```json
 {
   "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "createdBy.application.displayName": "String",
-  "createdBy.application.id": "String",
-  "createdBy.user.displayName": "String",
-  "createdBy.user.id": "String",
   "externalSource": "string",
   "mailingAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
-  "mailingAddress.city": "String",
-  "mailingAddress.countryOrRegion": "String",
-  "mailingAddress.postalCode": "String",
-  "mailingAddress.state": "String",
-  "mailingAddress.street": "String",
   "middleName": "String",
   "primaryRole": "string",
   "residenceAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
-  "residenceAddress.city": "String",
-  "residenceAddress.countryOrRegion": "String",
-  "residenceAddress.postalCode": "String",
-  "residenceAddress.state": "String",
-  "residenceAddress.street": "String",
   "student": {"@odata.type": "microsoft.graph.educationStudent"},
   "teacher": {"@odata.type": "microsoft.graph.educationTeacher"}
 }

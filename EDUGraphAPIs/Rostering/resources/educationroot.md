@@ -1,7 +1,8 @@
 # educationRoot resource type
 
 
-
+Education namespace exposes special edu specific functionality directly in the Microsoft Graph.  Some of these objects can be found in other parts of the graph (users for instance),
+but the education namespace will give education specific properties and features as extensions to these objects.
 
 ## Methods
 
@@ -13,7 +14,6 @@
 |[List schools](../api/educationroot_list_schools.md) |[educationSchool](educationschool.md) collection| Get a educationSchool object collection.|
 |[Create educationUser](../api/educationroot_post_users.md) |[educationUser](educationuser.md)| Create a new educationUser by posting to the users collection.|
 |[List users](../api/educationroot_list_users.md) |[educationUser](educationuser.md) collection| Get a educationUser object collection.|
-|[Delete](../api/educationroot_delete.md) | None |Delete educationRoot object. |
 
 ## Properties
 None
