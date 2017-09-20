@@ -55,13 +55,16 @@ Content-length: 277
 {
   "value": [
     {
-      "displayName": "displayName-value",
-      "description": "description-value",
-      "mailNickname": "mailNickname-value",
-      "period": "period-value",
-      "classNumber": "classNumber-value",
-      "externalName": "externalName-value"
-    }
+      "id": "String",
+      "description": "String",
+      "classCode": "String",
+      "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
+      "displayName": "String",
+      "externalId": "String",
+      "externalName": "String",
+      "externalSource": "string",
+      "mailNickname": "String"
+    }  
   ]
 }
 ```

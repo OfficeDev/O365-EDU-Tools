@@ -27,19 +27,13 @@ In the request body, supply the values for relevant fields that should be update
 
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|classNumber|String||
-|createdBy|identitySet||
-|createdBy.application.displayName|String||
-|createdBy.application.id|String||
-|createdBy.user.displayName|String||
-|createdBy.user.id|String||
-|description|String||
-|displayName|String||
-|externalId|String||
-|externalName|String||
-|externalSource|string| Possible values are: `sis`, `manual`, `enum_sentinel`.|
-|mailNickname|String||
-|period|String||
+|description|String| Description of the class|
+|displayName|String| Name of the Class|
+|mailNickname|String| Mail name for sending email to all users if this is enabled. |
+|classCode|String| Class Code used by the school.|
+|externalId|String| ID of the class from the syncing system. |
+|externalName|String|Name of the class in the syncing system.|
+|externalSource|string| How this class was creaeted.  Possible values are: `sis`, `manual`, `enum_sentinel`.|
 
 ## Response
 If successful, this method returns a `200 OK` response code and updated [educationClass](../resources/educationclass.md) object in the response body.
@@ -56,12 +50,8 @@ Content-type: application/json
 Content-length: 224
 
 {
-  "displayName": "displayName-value",
-  "description": "description-value",
-  "mailNickname": "mailNickname-value",
-  "period": "period-value",
-  "classNumber": "classNumber-value",
-  "externalName": "externalName-value"
+  "description": "String",
+  "displayName": "String",
 }
 ```
 ##### Response
@@ -77,12 +67,15 @@ Content-type: application/json
 Content-length: 224
 
 {
-  "displayName": "displayName-value",
-  "description": "description-value",
-  "mailNickname": "mailNickname-value",
-  "period": "period-value",
-  "classNumber": "classNumber-value",
-  "externalName": "externalName-value"
+  "id": "String",
+  "description": "String",
+  "classCode": "String",
+  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
+  "displayName": "String",
+  "externalId": "String",
+  "externalName": "String",
+  "externalSource": "string",
+  "mailNickname": "String"
 }
 ```
 

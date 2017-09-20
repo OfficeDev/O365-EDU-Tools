@@ -55,9 +55,9 @@ Here is a JSON representation of the resource.
 ```json
 {
   "id": "String",
+  "description": "String",
   "classCode": "String",
   "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "description": "String",
   "displayName": "String",
   "externalId": "String",
   "externalName": "String",
