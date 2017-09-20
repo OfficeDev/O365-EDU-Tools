@@ -26,7 +26,7 @@ A class.  Class is a cover on top of a Universal Group.  Students are modeled as
 |displayName|String| Name of the Class|
 |mailNickname|String| Mail name for sending email to all users if this is enabled. |
 |createdBy|[identitySet](identityset.md)| Entity who created the group |
-|classNumber|String| Class Number used by the school.|
+|classCode|String| Class Code used by the school.|
 |externalId|String| ID of the class from the syncing system. |
 |externalName|String|Name of the class in the syncing system.|
 |externalSource|string| How this class was creaeted.  Possible values are: `sis`, `manual`, `enum_sentinel`.|
@@ -55,7 +55,7 @@ Here is a JSON representation of the resource.
 ```json
 {
   "id": "String",
-  "classNumber": "String",
+  "classCode": "String",
   "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
   "description": "String",
   "displayName": "String",
