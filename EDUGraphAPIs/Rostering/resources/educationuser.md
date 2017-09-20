@@ -1,6 +1,7 @@
 # educationUser resource type
 
-
+A user in the system.  This is the same user that graph will return to /users endpoints not in the education namespace.  This object adds to the existing user a set of education
+properties such as role, student and teacher data.
 
 
 ## Methods
@@ -18,20 +19,27 @@
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|createdBy|[identitySet](identityset.md)||
-|externalSource|string| Possible values are: `sis`, `manual`, `enum_sentinel`.|
-|mailingAddress|[physicalAddress](physicaladdress.md)||
-|middleName|String||
-|primaryRole|string| Possible values are: `student`, `teacher`, `enum_sentinel`.|
-|residenceAddress|[physicalAddress](physicaladdress.md)||
-|student|[educationStudent](educationstudent.md)||
-|teacher|[educationTeacher](educationteacher.md)||
+|id| String| GUID for User|
+|displayName| String| Display Name of User|
+|givenName| String | First Name |
+|middleName| String | Middle Name of user|
+|surname| String | Surname of user|
+|mail| String| email address|
+|mobilePhone| String | Mobile number of user |
+|createdBy|[identitySet](identityset.md)| Entity who created the user. |
+|externalSource|string| Where this user was created from.  Possible values are: `sis`, `manual`, `enum_sentinel`.|
+|mailingAddress|[physicalAddress](physicaladdress.md)| Mail address of user.|
+|residenceAddress|[physicalAddress](physicaladdress.md)| Address where user lives.|
+|primaryRole|string| Default Role for a user.  The user's role might be different in an individual class. Possible values are: `student`, `teacher`, `enum_sentinel`.|
+|student|[educationStudent](educationstudent.md)| If the primary role is student, this block will contain student specific data.|
+|teacher|[educationTeacher](educationteacher.md)| If the primary role is teacher, this block will conatin teacher specific data.|
 
 ## Relationships
 | Relationship | Type	|Description|
 |:---------------|:--------|:----------|
-|classes|[educationClass](educationclass.md) collection| Read-only. Nullable.|
-|schools|[educationSchool](educationschool.md) collection| Read-only. Nullable.|
+|classes|[educationClass](educationclass.md) collection| Classes to which the user belongs. Nullable.|
+|schools|[educationSchool](educationschool.md) collection| Schools to which the user belongs. Nullable.|
+|assignments| [educationAssignment](../../Assignments/resources/educationAssignment.md)| List of assignments for hte user.  Nullable.|
 
 ## JSON representation
 
@@ -47,10 +55,16 @@ Here is a JSON representation of the resource.
 
 ```json
 {
+  "id": "string",
+  "displayName": "string",
+  "givenName": "string",
+  "middleName": "string",
+  "surname": "string",
+  "mail": "string",
+  "mobilePhone": "string",
   "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
   "externalSource": "string",
   "mailingAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
-  "middleName": "String",
   "primaryRole": "string",
   "residenceAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
   "student": {"@odata.type": "microsoft.graph.educationStudent"},

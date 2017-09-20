@@ -51,20 +51,19 @@ Content-type: application/json
 Content-length: 508
 
 {
-  "primaryRole": "primaryRole-value",
-  "middleName": "middleName-value",
-  "externalSource": "externalSource-value",
-  "residenceAddress": {
-    "type": "type-value",
-    "postOfficeBox": "postOfficeBox-value",
-    "street": "street-value",
-    "city": "city-value",
-    "state": "state-value",
-    "countryOrRegion": "countryOrRegion-value",
-    "postalCode": "postalCode-value"
-  },
-  "residenceAddress.street": "residenceAddress.street-value",
-  "residenceAddress.city": "residenceAddress.city-value"
+  "id": "string",
+  "displayName": "string",
+  "givenName": "string",
+  "middleName": "string",
+  "surname": "string",
+  "mail": "string",
+  "mobilePhone": "string",
+  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
+  "externalSource": "string",
+  "mailingAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
+  "primaryRole": "string",
+  "residenceAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
+  "teacher": {"@odata.type": "microsoft.graph.educationTeacher"}
 }
 ```
 
