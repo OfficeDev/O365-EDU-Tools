@@ -30,6 +30,7 @@ A class.  Class is a cover on top of a Universal Group.  Students are modeled as
 |externalId|String| ID of the class from the syncing system. |
 |externalName|String|Name of the class in the syncing system.|
 |externalSource|string| How this class was creaeted.  Possible values are: `sis`, `manual`, `enum_sentinel`.|
+|term|[educationTerm](educationterm.md)|Term for this class.|
 
 
 ## Relationships
@@ -62,7 +63,8 @@ Here is a JSON representation of the resource.
   "externalId": "String",
   "externalName": "String",
   "externalSource": "string",
-  "mailNickname": "String"
+  "mailNickname": "String",
+  "term": {"@odata.type": "microsoft.graph.education.term"}
 }
 
 ```
