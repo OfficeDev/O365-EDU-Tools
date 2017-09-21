@@ -1,6 +1,6 @@
 # educationSchool resource type
 
-A school.  Schools are Administrative Units underneath and can be found as them in the graph.  
+A school.  Schools are Administrative Units underneath and can be found as them in the graph.  This is a subtype of [educationOrganization](educationorganization.md).
 
 
 ## Methods

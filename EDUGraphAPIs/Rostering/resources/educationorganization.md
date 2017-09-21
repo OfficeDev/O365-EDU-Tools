@@ -1,7 +1,7 @@
 # educationOrganization resource type
 
 
-
+Abstract Class used to model different organizations found on a school.
 
 ## Methods
 
@@ -14,9 +14,9 @@
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|description|String||
-|displayName|String||
-|externalSource|string| Possible values are: `sis`, `manual`, `enum_sentinel`.|
+|description|String| Organization description|
+|displayName|String| Organization display name|
+|externalSource|string| Source where this organization was created from.  Possible values are: `sis`, `manual`, `enum_sentinel`.|
 
 ## Relationships
 None
