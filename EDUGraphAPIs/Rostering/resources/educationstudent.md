@@ -1,17 +1,17 @@
 # educationStudent resource type
 
 
-
+Additional information added to an [educationUser](educationuser.md) which is present when the primaryRole of a user is a student.
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|birthDate|Date||
-|externalId|String||
+|birthDate|Date| Birthdate of the student|
+|externalId|String| ID of the student in the source system.|
 |gender|String| Possible values are: `female`, `male`, `other`, `enum_sentinel`.|
-|grade|String||
-|graduationYear|String||
-|studentNumber|String||
+|grade|String|Current grade level of the student.|
+|graduationYear|String| Year the child is graduating from the school|
+|studentNumber|String| Student Number|
 
 ## JSON representation
 
@@ -34,7 +34,6 @@ Here is a JSON representation of the resource.
   "graduationYear": "String",
   "studentNumber": "String"
 }
-
 ```
 
 <!-- uuid: 8fcb5dbc-d5aa-4681-8e31-b001d5168d79
