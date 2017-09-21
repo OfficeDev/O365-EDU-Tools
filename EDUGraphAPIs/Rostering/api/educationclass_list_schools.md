@@ -55,12 +55,22 @@ Content-length: 345
 {
   "value": [
     {
-      "schoolZone": "schoolZone-value",
-      "schoolPrincipalEmail": "schoolPrincipalEmail-value",
-      "schoolPrincipalName": "schoolPrincipalName-value",
-      "externalSchoolPrincipalId": "externalSchoolPrincipalId-value",
-      "lowestGrade": "lowestGrade-value",
-      "highestGrade": "highestGrade-value"
+      "id": "String",
+      "displayName": "String",
+      "description": "String",
+      "status": "String",
+      "externalSource": "String",
+      "principalEmail": "String",
+      "principalName": "String",
+      "externalPrincipalId": "String",
+      "highestGrade": "String",
+      "lowestGrade": "String",
+      "schoolNumber": "String",
+      "address": {"@odata.type": "microsoft.graph.physicalAddress"},
+      "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
+      "externalId": "String",
+      "fax": "String",
+      "phone": "String",
     }
   ]
 }

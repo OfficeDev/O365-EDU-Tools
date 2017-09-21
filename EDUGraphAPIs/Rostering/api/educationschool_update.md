@@ -27,27 +27,19 @@ In the request body, supply the values for relevant fields that should be update
 
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|address|physicalAddress||
-|address.city|String||
-|address.countryOrRegion|String||
-|address.postalCode|String||
-|address.state|String||
-|address.street|String||
-|createdBy|identitySet||
-|createdBy.application.displayName|String||
-|createdBy.application.id|String||
-|createdBy.user.displayName|String||
-|createdBy.user.id|String||
-|externalId|String||
-|externalSchoolPrincipalId|String||
-|fax|String||
-|highestGrade|String||
-|lowestGrade|String||
-|phone|String||
-|schoolNumber|String||
-|schoolPrincipalEmail|String||
-|schoolPrincipalName|String||
-|schoolZone|String||
+|displayName| String| Display name of the school| 
+|description| String | Description of the school| 
+|principalEmail| String| Email address of the principal|
+|principalName| String | Name of the principal|
+|externalPrincipalId| String | Id of principal in syncing system. |
+|highestGrade|String| Highest grade taught. |
+|lowestGrade|String| Lowest grade taught. |
+|schoolNumber|String| School Number.|
+|externalId|String| Id of school in syncing system. |
+|phone|String| Phone number of school. |
+|fax|String| Fax number of school. |
+|address|[physicalAddress](physicaladdress.md)| Address of the School.|
+|createdBy|[identitySet](identityset.md)|Entity who created the school.|
 
 ## Response
 If successful, this method returns a `200 OK` response code and updated [educationSchool](../resources/educationschool.md) object in the response body.
@@ -64,12 +56,8 @@ Content-type: application/json
 Content-length: 292
 
 {
-  "schoolZone": "schoolZone-value",
-  "schoolPrincipalEmail": "schoolPrincipalEmail-value",
-  "schoolPrincipalName": "schoolPrincipalName-value",
-  "externalSchoolPrincipalId": "externalSchoolPrincipalId-value",
-  "lowestGrade": "lowestGrade-value",
-  "highestGrade": "highestGrade-value"
+  "displayName": "String",
+  "description": "String",
 }
 ```
 ##### Response
@@ -85,12 +73,22 @@ Content-type: application/json
 Content-length: 292
 
 {
-  "schoolZone": "schoolZone-value",
-  "schoolPrincipalEmail": "schoolPrincipalEmail-value",
-  "schoolPrincipalName": "schoolPrincipalName-value",
-  "externalSchoolPrincipalId": "externalSchoolPrincipalId-value",
-  "lowestGrade": "lowestGrade-value",
-  "highestGrade": "highestGrade-value"
+  "id": "String",
+  "displayName": "String",
+  "description": "String",
+  "status": "String",
+  "externalSource": "String",
+  "principalEmail": "String",
+  "principalName": "String",
+  "externalPrincipalId": "String",
+  "highestGrade": "String",
+  "lowestGrade": "String",
+  "schoolNumber": "String",
+  "address": {"@odata.type": "microsoft.graph.physicalAddress"},
+  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
+  "externalId": "String",
+  "fax": "String",
+  "phone": "String"
 }
 ```
 

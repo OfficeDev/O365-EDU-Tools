@@ -73,7 +73,6 @@ Here is a JSON representation of the resource.
   "fax": "String",
   "phone": "String",
 }
-
 ```
 
 <!-- uuid: 8fcb5dbc-d5aa-4681-8e31-b001d5168d79
