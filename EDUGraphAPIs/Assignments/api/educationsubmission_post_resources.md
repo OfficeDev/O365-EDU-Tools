@@ -43,42 +43,7 @@ Content-type: application/json
 Content-length: 848
 
 {
-  "resource": {
-    "displayName": "displayName-value",
-    "createdDateTime": "datetime-value",
-    "createdBy": {
-      "application": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "device": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "user": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      }
-    },
-    "lastModifiedDateTime": "datetime-value",
-    "lastModifiedBy": {
-      "application": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "device": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "user": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      }
-    }
-  },
-  "assignmentResource": {
-    "odataid": "odataid-value"
-  }
+  "resource": {"@odata.type": "microsoft.graph.educationResource"}
 }
 ```
 In the request body, supply a JSON representation of [educationSubmissionResource](../resources/educationsubmissionresource.md) object.
@@ -95,43 +60,9 @@ Content-type: application/json
 Content-length: 868
 
 {
-  "resource": {
-    "displayName": "displayName-value",
-    "createdDateTime": "datetime-value",
-    "createdBy": {
-      "application": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "device": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "user": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      }
-    },
-    "lastModifiedDateTime": "datetime-value",
-    "lastModifiedBy": {
-      "application": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "device": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "user": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      }
-    }
-  },
-  "assignmentResource": {
-    "odataid": "odataid-value"
-  },
-  "id": "id-value"
+  "assignmentResource": null,
+  "id": "String (identifier)",
+  "resource": {"@odata.type": "microsoft.graph.educationResource"}
 }
 ```
 

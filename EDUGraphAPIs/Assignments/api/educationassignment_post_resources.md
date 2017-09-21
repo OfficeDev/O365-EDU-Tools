@@ -15,7 +15,6 @@ One of the following permissions is required to call this API. To learn more, in
 <!-- { "blockType": "ignored" } -->
 ```http
 POST /education/classes/<id>/assignments/<id>/resources
-
 ```
 ## Request headers
 | Header       | Value |
@@ -44,40 +43,7 @@ Content-length: 822
 
 {
   "distributeForStudentWork": true,
-  "resource": {
-    "@odata.type": "odataType-value",
-    "displayName": "displayName-value",
-    "createdDateTime": "datetime-value",
-    "createdBy": {
-      "application": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "device": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "user": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      }
-    },
-    "lastModifiedDateTime": "datetime-value",
-    "lastModifiedBy": {
-      "application": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "device": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "user": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      }
-    }
-  }
+  "resource": {"@odata.type": "microsoft.graph.educationResource"}
 }
 ```
 In the request body, supply a JSON representation of [educationAssignmentResource](../resources/educationassignmentresource.md) object.
@@ -95,41 +61,8 @@ Content-length: 842
 
 {
   "distributeForStudentWork": true,
-  "resource": {
-    "@odata.type": "odata.type-value",
-    "displayName": "displayName-value",
-    "createdDateTime": "datetime-value",
-    "createdBy": {
-      "application": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "device": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "user": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      }
-    },
-    "lastModifiedDateTime": "datetime-value",
-    "lastModifiedBy": {
-      "application": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "device": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "user": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      }
-    }
-  },
-  "id": "id-value"
+  "id": "String (identifier)",
+  "resource": {"@odata.type": "microsoft.graph.educationResource"}
 }
 ```
 

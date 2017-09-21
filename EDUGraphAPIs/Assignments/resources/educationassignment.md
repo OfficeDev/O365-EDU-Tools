@@ -22,6 +22,7 @@ The status on an assignment cannot be changed via PATCH, the status is changed b
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
+|id|String| Read-only.|
 |allowLateSubmissions|Boolean| Identifies whether students can submit after the due date. |
 |allowStudentsToAddResourcesToSubmission|Boolean| Identifies whether students can add their own resources to a submission or if they can only modify resources added by the teacher. |
 |assignDateTime|DateTimeOffset|The date when the assignment should become active.  If in the future, the assignment is not shown to the student until this date.  The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
@@ -33,7 +34,6 @@ The status on an assignment cannot be changed via PATCH, the status is changed b
 |displayName|String|Name of the assignment.|
 |dueDateTime|DateTimeOffset|Date when the students assignment is due.  The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
 |grading|[educationAssignmentGradeType](educationassignmentgradetype.md)|How the assignment will be graded. |
-|id|String| Read-only.|
 |instructions|[itemBody](itembody.md)| Instructions for the assignment.  This along with the display name tell the student what to do. |
 |lastModifiedBy|[identitySet](identityset.md)| Who last modified the assignment. |
 |lastModifiedDateTime|DateTimeOffset|Moment when the assignment was last modified.  The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
@@ -60,6 +60,7 @@ Here is a JSON representation of the resource.
 
 ```json
 {
+  "id": "String (identifier)",
   "allowLateSubmissions": true,
   "allowStudentsToAddResourcesToSubmission": true,
   "assignDateTime": "String (timestamp)",
@@ -71,14 +72,12 @@ Here is a JSON representation of the resource.
   "displayName": "String",
   "dueDateTime": "String (timestamp)",
   "grading": {"@odata.type": "microsoft.graph.educationAssignmentGradeType"},
-  "id": "String (identifier)",
   "instructions": {"@odata.type": "microsoft.graph.itemBody"},
   "lastModifiedBy": {"@odata.type": "microsoft.graph.identitySet"},
   "lastModifiedDateTime": "String (timestamp)",
   "resourcesFolder": {"@odata.type": "microsoft.graph.educationODataRef"},
   "status": "string"
 }
-
 ```
 
 <!-- uuid: 8fcb5dbc-d5aa-4681-8e31-b001d5168d79

@@ -51,40 +51,8 @@ Content-length: 842
 
 {
   "distributeForStudentWork": true,
-  "resource": {
-    "displayName": "displayName-value",
-    "createdDateTime": "datetime-value",
-    "createdBy": {
-      "application": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "device": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "user": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      }
-    },
-    "lastModifiedDateTime": "datetime-value",
-    "lastModifiedBy": {
-      "application": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "device": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      },
-      "user": {
-        "displayName": "displayName-value",
-        "id": "id-value"
-      }
-    }
-  },
-  "id": "id-value"
+  "id": "String (identifier)",
+  "resource": {"@odata.type": "microsoft.graph.educationResource"}
 }
 ```
 

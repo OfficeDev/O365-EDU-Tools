@@ -14,7 +14,8 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-GET /education/me/classes/
+GET /education/me/assignments/
+GET /education/users/<id>/assignments
 ```
 ## Optional query parameters
 This method supports the [OData Query Parameters](http://graph.microsoft.io/docs/overview/query_parameters) to help customize the response.
@@ -37,7 +38,7 @@ Here is an example of the request.
 }-->
 ```http
 GET
-https://graph.microsoft.com/beta/education/me/classes
+https://graph.microsoft.com/beta/education/me/assignments
 ```
 ##### Response
 Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
@@ -55,15 +56,23 @@ Content-length: 344
 {
   "value": [
     {
-      "classId": "classId-value",
-      "displayName": "displayName-value",
-      "instructions": {
-        "contentType": "contentType-value",
-        "content": "content-value"
-      },
-      "dueDateTime": "datetime-value",
-      "assignDateTime": "datetime-value",
-      "assignedDateTime": "datetime-value"
+      "id": "String (identifier)",
+      "allowLateSubmissions": true,
+      "allowStudentsToAddResourcesToSubmission": true,
+      "assignDateTime": "String (timestamp)",
+      "assignTo": {"@odata.type": "microsoft.graph.educationAssignmentRecipient"},
+      "assignedDateTime": "String (timestamp)",
+      "classId": "String",
+      "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
+      "createdDateTime": "String (timestamp)",
+      "displayName": "String",
+      "dueDateTime": "String (timestamp)",
+      "grading": {"@odata.type": "microsoft.graph.educationAssignmentGradeType"},
+      "instructions": {"@odata.type": "microsoft.graph.itemBody"},
+      "lastModifiedBy": {"@odata.type": "microsoft.graph.identitySet"},
+      "lastModifiedDateTime": "String (timestamp)",
+      "resourcesFolder": {"@odata.type": "microsoft.graph.educationODataRef"},
+      "status": "string"
     }
   ]
 }

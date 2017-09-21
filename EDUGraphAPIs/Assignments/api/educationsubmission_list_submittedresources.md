@@ -54,43 +54,9 @@ Content-length: 1045
 {
   "value": [
     {
-      "resource": {
-        "displayName": "displayName-value",
-        "createdDateTime": "datetime-value",
-        "createdBy": {
-          "application": {
-            "displayName": "displayName-value",
-            "id": "id-value"
-          },
-          "device": {
-            "displayName": "displayName-value",
-            "id": "id-value"
-          },
-          "user": {
-            "displayName": "displayName-value",
-            "id": "id-value"
-          }
-        },
-        "lastModifiedDateTime": "datetime-value",
-        "lastModifiedBy": {
-          "application": {
-            "displayName": "displayName-value",
-            "id": "id-value"
-          },
-          "device": {
-            "displayName": "displayName-value",
-            "id": "id-value"
-          },
-          "user": {
-            "displayName": "displayName-value",
-            "id": "id-value"
-          }
-        }
-      },
-      "assignmentResource": {
-        "odataid": "odataid-value"
-      },
-      "id": "id-value"
+      "assignmentResource": {"@odata.type": "microsoft.graph.educationODataRef"},
+      "id": "String (identifier)",
+      "resource": {"@odata.type": "microsoft.graph.educationResource"}
     }
   ]
 }

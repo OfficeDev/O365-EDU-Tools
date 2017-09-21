@@ -43,14 +43,22 @@ Content-type: application/json
 Content-length: 279
 
 {
-  "displayName": "displayName-value",
-  "instructions": {
-    "contentType": "contentType-value",
-    "content": "content-value"
-  },
-  "dueDateTime": "datetime-value",
-  "assignDateTime": "datetime-value",
-  "assignedDateTime": "datetime-value"
+  "allowLateSubmissions": true,
+  "allowStudentsToAddResourcesToSubmission": true,
+  "assignDateTime": "String (timestamp)",
+  "assignTo": {"@odata.type": "microsoft.graph.educationAssignmentRecipient"},
+  "assignedDateTime": "String (timestamp)",
+  "classId": "String",
+  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
+  "createdDateTime": "String (timestamp)",
+  "displayName": "String",
+  "dueDateTime": "String (timestamp)",
+  "grading": {"@odata.type": "microsoft.graph.educationAssignmentGradeType"},
+  "instructions": {"@odata.type": "microsoft.graph.itemBody"},
+  "lastModifiedBy": {"@odata.type": "microsoft.graph.identitySet"},
+  "lastModifiedDateTime": "String (timestamp)",
+  "resourcesFolder": {"@odata.type": "microsoft.graph.educationODataRef"},
+  "status": "string"
 }
 ```
 In the request body, supply a JSON representation of [educationAssignment](../resources/educationassignment.md) object.
@@ -67,15 +75,23 @@ Content-type: application/json
 Content-length: 279
 
 {
-  "classId": "classId-value",
-  "displayName": "displayName-value",
-  "instructions": {
-    "contentType": "contentType-value",
-    "content": "content-value"
-  },
-  "dueDateTime": "datetime-value",
-  "assignDateTime": "datetime-value",
-  "assignedDateTime": "datetime-value"
+  "id": "String (identifier)",
+  "allowLateSubmissions": true,
+  "allowStudentsToAddResourcesToSubmission": true,
+  "assignDateTime": "String (timestamp)",
+  "assignTo": {"@odata.type": "microsoft.graph.educationAssignmentRecipient"},
+  "assignedDateTime": "String (timestamp)",
+  "classId": "String",
+  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
+  "createdDateTime": "String (timestamp)",
+  "displayName": "String",
+  "dueDateTime": "String (timestamp)",
+  "grading": {"@odata.type": "microsoft.graph.educationAssignmentGradeType"},
+  "instructions": {"@odata.type": "microsoft.graph.itemBody"},
+  "lastModifiedBy": {"@odata.type": "microsoft.graph.identitySet"},
+  "lastModifiedDateTime": "String (timestamp)",
+  "resourcesFolder": {"@odata.type": "microsoft.graph.educationODataRef"},
+  "status": "string"
 }
 ```
 

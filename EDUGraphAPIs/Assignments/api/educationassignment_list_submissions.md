@@ -54,39 +54,16 @@ Content-length: 873
 {
   "value": [
     {
-      "recipient": {
-      },
-      "status": "status-value",
-      "submittedBy": {
-        "application": {
-          "displayName": "displayName-value",
-          "id": "id-value"
-        },
-        "device": {
-          "displayName": "displayName-value",
-          "id": "id-value"
-        },
-        "user": {
-          "displayName": "displayName-value",
-          "id": "id-value"
-        }
-      },
-      "submittedDateTime": "datetime-value",
-      "releasedBy": {
-        "application": {
-          "displayName": "displayName-value",
-          "id": "id-value"
-        },
-        "device": {
-          "displayName": "displayName-value",
-          "id": "id-value"
-        },
-        "user": {
-          "displayName": "displayName-value",
-          "id": "id-value"
-        }
-      },
-      "releasedDateTime": "datetime-value"
+      "feedback": {"@odata.type": "microsoft.graph.educationFeedback"},
+      "grade": {"@odata.type": "microsoft.graph.educationAssignmentGrade"},
+      "id": "String (identifier)",
+      "recipient": {"@odata.type": "microsoft.graph.educationSubmissionRecipient"},
+      "releasedBy": {"@odata.type": "microsoft.graph.identitySet"},
+      "releasedDateTime": "String (timestamp)",
+      "resourcesFolder": {"@odata.type": "microsoft.graph.educationODataRef"},
+      "status": "string",
+      "submittedBy": {"@odata.type": "microsoft.graph.identitySet"},
+      "submittedDateTime": "String (timestamp)"
     }
   ]
 }
