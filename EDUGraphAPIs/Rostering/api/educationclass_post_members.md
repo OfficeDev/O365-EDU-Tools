@@ -14,7 +14,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-POST /education/classes/<id>/members
+POST /education/classes/<id>/members/$ref
 ```
 ## Request headers
 | Header       | Value |
@@ -27,7 +27,7 @@ In the request body, supply a JSON representation of [educationUser](../resource
 
 
 ## Response
-If successful, this method returns `201, Created` response code and [educationUser](../resources/educationuser.md) object in the response body.
+If successful, this method returns `204, No Content` response code and [educationClass](../resources/educationclass.md) object in the response body.
 
 ## Example
 ##### Request
@@ -37,25 +37,12 @@ Here is an example of the request.
   "name": "create_educationuser_from_educationclass"
 }-->
 ```http
-POST https://graph.microsoft.com/beta/education/classes/<id>/members
+POST https://graph.microsoft.com/beta/education/classes/<id>/members/$ref
 Content-type: application/json
-Content-length: 508
+Content-length: 56
 
 {
-  "primaryRole": "primaryRole-value",
-  "middleName": "middleName-value",
-  "externalSource": "externalSource-value",
-  "residenceAddress": {
-    "type": "type-value",
-    "postOfficeBox": "postOfficeBox-value",
-    "street": "street-value",
-    "city": "city-value",
-    "state": "state-value",
-    "countryOrRegion": "countryOrRegion-value",
-    "postalCode": "postalCode-value"
-  },
-  "residenceAddress.street": "residenceAddress.street-value",
-  "residenceAddress.city": "residenceAddress.city-value"
+  "@odata.id":"https://graph.microsoft.com/beta/education/users/{userId}" 
 }
 ```
 In the request body, supply a JSON representation of [educationUser](../resources/educationuser.md) object.
@@ -67,26 +54,7 @@ Here is an example of the response. Note: The response object shown here may be 
   "@odata.type": "microsoft.graph.educationUser"
 } -->
 ```http
-HTTP/1.1 201 Created
-Content-type: application/json
-Content-length: 508
-
-{
-  "primaryRole": "primaryRole-value",
-  "middleName": "middleName-value",
-  "externalSource": "externalSource-value",
-  "residenceAddress": {
-    "type": "type-value",
-    "postOfficeBox": "postOfficeBox-value",
-    "street": "street-value",
-    "city": "city-value",
-    "state": "state-value",
-    "countryOrRegion": "countryOrRegion-value",
-    "postalCode": "postalCode-value"
-  },
-  "residenceAddress.street": "residenceAddress.street-value",
-  "residenceAddress.city": "residenceAddress.city-value"
-}
+HTTP/1.1 204 No Content
 ```
 
 <!-- uuid: 8fcb5dbc-d5aa-4681-8e31-b001d5168d79

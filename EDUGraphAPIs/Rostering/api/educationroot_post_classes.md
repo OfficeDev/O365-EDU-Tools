@@ -1,6 +1,7 @@
 # Create educationClass
 
-Create a class.
+Create a new class.  This will also create a universal group as well.  Use this api to create a class as it will add special properties to indicate the special group which will
+have extra features such as assignments and special handling within Microsoft Teams.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).

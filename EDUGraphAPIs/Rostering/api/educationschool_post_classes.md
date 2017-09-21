@@ -1,6 +1,7 @@
 # Create educationClass
 
-Use this API to create a new educationClass.
+Add a class to a school.
+
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
 
@@ -13,7 +14,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-POST /education/schools/<id>/classes
+POST /education/schools/<id>/classes/$ref
 ```
 ## Request headers
 | Header       | Value |
@@ -26,7 +27,7 @@ In the request body, supply a JSON representation of [educationClass](../resourc
 
 
 ## Response
-If successful, this method returns `201, Created` response code and [educationClass](../resources/educationclass.md) object in the response body.
+If successful, this method returns `204, No Content` response code and [educationClass](../resources/educationclass.md) object in the response body.
 
 ## Example
 ##### Request
@@ -36,17 +37,12 @@ Here is an example of the request.
   "name": "create_educationclass_from_educationschool"
 }-->
 ```http
-POST https://graph.microsoft.com/beta/education/schools/<id>/classes
+POST https://graph.microsoft.com/beta/education/schools/<id>/classes/$ref
 Content-type: application/json
 Content-length: 224
 
 {
-  "displayName": "displayName-value",
-  "description": "description-value",
-  "mailNickname": "mailNickname-value",
-  "period": "period-value",
-  "classNumber": "classNumber-value",
-  "externalName": "externalName-value"
+  "@odata.id":"https://graph.microsoft.com/beta/education/classes/{classId}" 
 }
 ```
 In the request body, supply a JSON representation of [educationClass](../resources/educationclass.md) object.
@@ -58,18 +54,7 @@ Here is an example of the response. Note: The response object shown here may be 
   "@odata.type": "microsoft.graph.educationClass"
 } -->
 ```http
-HTTP/1.1 201 Created
-Content-type: application/json
-Content-length: 224
-
-{
-  "displayName": "displayName-value",
-  "description": "description-value",
-  "mailNickname": "mailNickname-value",
-  "period": "period-value",
-  "classNumber": "classNumber-value",
-  "externalName": "externalName-value"
-}
+HTTP/1.1 204 No Content
 ```
 
 <!-- uuid: 8fcb5dbc-d5aa-4681-8e31-b001d5168d79
