@@ -7,7 +7,7 @@ One of the following permissions is required to call this API. To learn more, in
 
 |Permission type      | Permissions (from least to most privileged)              |
 |:--------------------|:---------------------------------------------------------|
-|Delegated (work or school account) |  ReaEduRoster.ReadBasic, EduRoster.Read, EduRosterdWrite  |
+|Delegated (work or school account) |  EduRoster.ReadBasic, EduRoster.Read, EduRoster.Write  |
 |Delegated (personal Microsoft account) |   Not supported.  |
 |Application | EduRoster.Read.All, EduRoster.ReadWrite.All | 
 
