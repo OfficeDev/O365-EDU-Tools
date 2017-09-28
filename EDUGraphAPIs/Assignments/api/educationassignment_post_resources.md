@@ -43,7 +43,11 @@ Content-length: 822
 
 {
   "distributeForStudentWork": true,
-  "resource": {"@odata.type": "microsoft.graph.educationResource"}
+  "resource": {
+    "displayName": "Bing",
+    "link": "https://www.bing.com",
+    "@odata.type": "#microsoft.education.assignments.api.educationLinkResource"
+  }
 }
 ```
 In the request body, supply a JSON representation of [educationAssignmentResource](../resources/educationassignmentresource.md) object.
@@ -60,9 +64,13 @@ Content-type: application/json
 Content-length: 842
 
 {
-  "distributeForStudentWork": true,
   "id": "String (identifier)",
-  "resource": {"@odata.type": "microsoft.graph.educationResource"}
+  "distributeForStudentWork": true,
+  "resource": {
+    "displayName": "Bing",
+    "link": "https://www.bing.com",
+    "@odata.type": "#microsoft.education.assignments.api.educationLinkResource"
+  }
 }
 ```
 
