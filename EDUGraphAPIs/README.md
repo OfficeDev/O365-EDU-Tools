@@ -3,7 +3,7 @@
 ## Introduction
 
 **Microsoft Graph Education Endpoint is available for private preview :
-https://graph.microsoft.com/<version>/education/**
+https://graph.microsoft.com/beta/education/**
 
 The Microsoft Graph is an amazing resource where developers can access all the Office constructs through a single Rest API.  This can be done by access the graph through a series of URLs:
 
@@ -19,9 +19,9 @@ The Microsoft graph education namespace allows developers access to schools, stu
 
 In this documentation we'll learn about two core scenarios:
 
-### Assignments (./Assignments/ReadMe.md)
+### [Assignments](./Assignments/ReadMe.md)
 
-### Rostering (./Rostering/ReadMe.md)
+### [Rostering](./Rostering/ReadMe.md)
 
 
 ## Contribute
