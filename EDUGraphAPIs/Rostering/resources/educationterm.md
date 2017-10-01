@@ -1,12 +1,12 @@
-# educationSchool resource type
+# educationTerm resource type
 
-A Term. This is used within [educationClass](educationclass.md).
+A Term. This represents a designated portion of the academic year. It is used within [educationClass](educationclass.md).
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|displayName| String| Display name of the school| 
-|externalId|String| Id of school in syncing system. |
+|displayName| String| Display name of the term| 
+|externalId|String| Id of term in syncing system. |
 |startDate|Date|Start of a Term.|
 |endDate|Date|End of a Term.
 
@@ -19,7 +19,7 @@ Here is a JSON representation of the resource.
   "optionalProperties": [
 
   ],
-  "@odata.type": "microsoft.graph.educationSchool"
+  "@odata.type": "microsoft.graph.educationTerm"
 }-->
 
 ```json
