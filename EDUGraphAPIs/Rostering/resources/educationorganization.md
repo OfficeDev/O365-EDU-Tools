@@ -1,22 +1,14 @@
 # educationOrganization resource type
 
 
-Abstract Class used to model different organizations found on a school.
-
-## Methods
-
-| Method		   | Return Type	|Description|
-|:---------------|:--------|:----------|
-|[Get educationOrganization](../api/educationorganization_get.md) | [educationOrganization](educationorganization.md) |Read properties and relationships of educationOrganization object.|
-|[Update](../api/educationorganization_update.md) | [educationOrganization](educationorganization.md)	|Update educationOrganization object. |
-|[Delete](../api/educationorganization_delete.md) | None |Delete educationOrganization object. |
+Abstract entity used to model the commonality between different organization types within the education sector.  
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|description|String| Organization description|
-|displayName|String| Organization display name|
-|externalSource|string| Source where this organization was created from.  Possible values are: `sis`, `manual`, `enum_sentinel`.|
+|description|String| Organization description.|
+|displayName|String| Organization display name.|
+|externalSource|string| Source where this organization was created from.  Possible values are: `sis`, `manual`, `unknownFutureValue`.|
 
 ## Relationships
 None

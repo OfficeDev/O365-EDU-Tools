@@ -5,10 +5,10 @@ A Term. This represents a designated portion of the academic year. It is used wi
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|displayName| String| Display name of the term| 
-|externalId|String| Id of term in syncing system. |
-|startDate|Date|Start of a Term.|
-|endDate|Date|End of a Term.
+|displayName| String| Display name of the term.| 
+|externalId|String| Id of term in syncing system.|
+|startDate|Date|Start of the Term.|
+|endDate|Date|End of the Term.|
 
 ## JSON representation
 
@@ -31,11 +31,11 @@ Here is a JSON representation of the resource.
 }
 ```
 
-<!-- uuid: 8fcb5dbc-d5aa-4681-8e31-b001d5168d79
+<!-- uuid: 4e9d671f-3068-4e09-aba2-b39e81a0e452
 2015-10-25 14:57:30 UTC -->
 <!-- {
   "type": "#page.annotation",
-  "description": "educationSchool resource",
+  "description": "educationTerm resource",
   "keywords": "",
   "section": "documentation",
   "tocPath": ""

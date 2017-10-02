@@ -1,8 +1,9 @@
 # educationRoot resource type
 
 
-Education namespace exposes special edu specific functionality directly in the Microsoft Graph.  Some of these objects can be found in other parts of the graph (users for instance),
-but the education namespace will give education specific properties and features as extensions to these objects.
+The `/education` namespace exposes special functionality specific to the education sector. 
+Some of these objects can be found in other parts of the Graph (users for instance),
+but the education namespace will provide education-specific properties and features as extensions to these objects.
 
 ## Methods
 
