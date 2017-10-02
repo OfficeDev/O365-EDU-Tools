@@ -1,7 +1,7 @@
 # educationTeacher resource type
 
 
-Additional information added to an [educationUser](educationuser.md) which is present when the primaryRole of a user is a teacher.
+Additional information added to an [educationUser](educationuser.md) which is present when the primaryRole of a user is `teacher`.
 
 
 ## Properties

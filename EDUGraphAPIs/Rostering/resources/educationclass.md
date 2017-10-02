@@ -1,6 +1,8 @@
 # educationClass resource type
 
-A class.  Class is a cover on top of a Universal Group.  Students are modeled as regular users while teachers are modeled as admins for the group.  
+Represents a class within a school.  educationClass corresponds one-to-one with Office Group and shares the same id.
+Students are modeled as regular members of the class, while teachers are modeled as owners and have appropriate rights.  
+For correct operation of Office experiences, teachers must be members of both the teachers and members collections.  
 
 
 ## Methods
@@ -8,11 +10,13 @@ A class.  Class is a cover on top of a Universal Group.  Students are modeled as
 | Method		   | Return Type	|Description|
 |:---------------|:--------|:----------|
 |[Get educationClass](../api/educationclass_get.md) | [educationClass](educationclass.md) |Read properties and relationships of educationClass object.|
-|[Create educationUser](../api/educationclass_post_members.md) |[educationUser](educationuser.md)| Add a new educationUser to the class.|
+|[Add member](../api/educationclass_post_members.md) |[educationUser](educationuser.md)| Add a new educationUser for the class by posting to the members navigation property.|
 |[List members](../api/educationclass_list_members.md) |[educationUser](educationuser.md) collection| Get a educationUser object collection.|
+|[Remove member](../api/educationclass_delete_members.md) |[educationUser](educationuser.md)| Remove an educationUser from the class through the members navigation property.|
 |[List schools](../api/educationclass_list_schools.md) |[educationSchool](educationschool.md) collection| Get a educationSchool object collection.|
-|[Create educationUser](../api/educationclass_post_teachers.md) |[educationUser](educationuser.md)| Add a new educationUser by posting to the teachers collection.|
+|[Add teacher](../api/educationclass_post_teachers.md) |[educationUser](educationuser.md)| Add a new educationUser for the class by posting to the teachers navigation property.|
 |[List teachers](../api/educationclass_list_teachers.md) |[educationUser](educationuser.md) collection| Get a list of teachers for the class.|
+|[Remove teacher](../api/educationclass_delete_teachers.md) |[educationUser](educationuser.md)| Remove an educationUser from the class through the teachers navigation property.|
 |[Create educationAssignment](../../Assignments/api/educationclass_post_assignments.md) |[educationAssignment](../../Assignments/resources/educationassignment.md)| Create a new educationAssignment by posting to the assignments collection.|
 |[List assignments](../../Assignments/api/educationclass_list_assignments.md) |[educationAssignment](../../Assignments/resources/educationassignment.md) collection| Get a educationAssignment object collection.|
 |[Update](../api/educationclass_update.md) | [educationClass](educationclass.md)	|Update educationClass object. |
@@ -21,15 +25,15 @@ A class.  Class is a cover on top of a Universal Group.  Students are modeled as
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|id| String| GUID for the class|
+|id| String| Unique identifier for the class|
 |description|String| Description of the class|
-|displayName|String| Name of the Class|
-|mailNickname|String| Mail name for sending email to all users if this is enabled. |
-|createdBy|[identitySet](identityset.md)| Entity who created the group |
-|classCode|String| Class Code used by the school.|
+|displayName|String| Name of the class|
+|mailNickname|String| Mail name for sending email to all members, if this is enabled. |
+|createdBy|[identitySet](identityset.md)| Entity who created the class |
+|classCode|String| Class Code used by the school to identify the class.|
 |externalId|String| ID of the class from the syncing system. |
 |externalName|String|Name of the class in the syncing system.|
-|externalSource|string| How this class was creaeted.  Possible values are: `sis`, `manual`, `enum_sentinel`.|
+|externalSource|string| How this class was created.  Possible values are: `sis`, `manual`, `unknownFutureValue`.|
 |term|[educationTerm](educationterm.md)|Term for this class.|
 
 
