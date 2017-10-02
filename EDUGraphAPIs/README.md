@@ -19,9 +19,9 @@ The Microsoft graph education namespace allows developers access to schools, stu
 
 In this documentation we'll learn about two core scenarios:
 
-### [Assignments](./Assignments/ReadMe.md)
+### [Assignments APIs](./Assignments/README.md)
 
-### [Rostering](./Rostering/ReadMe.md)
+### [Rostering APIs](./Rostering/README.md)
 
 
 ## Contribute
