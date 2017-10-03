@@ -53,5 +53,5 @@ Check out the complete set of APIs [here](./api).
 
 Follow the Microsoft Graph documentation [here](https://developer.microsoft.com/en-us/graph/docs/concepts/get-started) for building your first app using Assigment APIs.
  
-Getting Started Sample : Browse [here](coming soon) to checkout the end to end sample built on Assignments APIs.
+Getting Started Sample : Browse [here](https://github.com/OfficeDev/O365-EDU-AspNetMVC-Samples) to checkout the end to end sample built on Assignments APIs.
 
