@@ -14,8 +14,12 @@ The Rostering APIs support this by providing APIs to support the following scena
 
 - get Roster
 - get Schools
+- get Classes
+- get Teachers/Students
+- get My Schools/Classes
 
 
+### Getting started with Rostering API
 [Click here](./GettingStarted.md)  to get started with  Rostering API including learning about Scopes, Roster Resources , APIs, Samples and Building your first sample.
 
 
