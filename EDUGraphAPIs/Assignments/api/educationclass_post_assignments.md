@@ -45,9 +45,7 @@ Content-length: 279
 { 
   "dueDateTime": "{{duedate}}",
   "displayName": "{{displayName}}",
-      "instructions": {
-        "Content": "{{instructions}}"
-      },
+      "instructions": {content: "{{instructions}}", contentType: "text"},
       "grading": {
         "@odata.type": "#microsoft.education.assignments.api.educationAssignmentPointsGradeType",
         "maxPoints": 100

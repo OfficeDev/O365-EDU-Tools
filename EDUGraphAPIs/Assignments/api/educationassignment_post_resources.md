@@ -42,7 +42,7 @@ Content-type: application/json
 Content-length: 822
 
 {
-  "distributeForStudentWork": true,
+  "distributeForStudentWork": false,
   "resource": {
     "displayName": "Bing",
     "link": "https://www.bing.com",
@@ -65,7 +65,7 @@ Content-length: 842
 
 {
   "id": "String (identifier)",
-  "distributeForStudentWork": true,
+  "distributeForStudentWork": false,
   "resource": {
     "displayName": "Bing",
     "link": "https://www.bing.com",
