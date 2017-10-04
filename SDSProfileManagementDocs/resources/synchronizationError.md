@@ -16,4 +16,4 @@ This resource represents an error during sync. An unique error will be generated
 | **errorCode** | string |  represents the error code for this error         |
 | **errorMessage** | string |  contains a description of the error         |
 | **joiningValue** | string |  the unique identifier for the entry         |
-| **recordedTime** | DateTimeOffset |  the time of occurrence of this error         |
+| **recordedDateTime** | DateTimeOffset |  the time of occurrence of this error         |
