@@ -44,9 +44,9 @@ Content-length: 279
 
 { 
   "dueDateTime": "{{duedate}}",
-  "displayName": "{{assignmentfolder}}",
+  "displayName": "{{displayName}}",
       "instructions": {
-        "Content": "{{assignmentfolder}}"
+        "Content": "{{instructions}}"
       },
       "grading": {
         "@odata.type": "#microsoft.education.assignments.api.educationAssignmentPointsGradeType",
