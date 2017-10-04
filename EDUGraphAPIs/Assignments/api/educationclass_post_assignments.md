@@ -42,23 +42,21 @@ POST https://graph.microsoft.com/beta/education/classes/<id>/assignments
 Content-type: application/json
 Content-length: 279
 
-{
-  "allowLateSubmissions": true,
-  "allowStudentsToAddResourcesToSubmission": true,
-  "assignDateTime": "String (timestamp)",
-  "assignTo": {"@odata.type": "microsoft.graph.educationAssignmentRecipient"},
-  "assignedDateTime": "String (timestamp)",
-  "classId": "String",
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "createdDateTime": "String (timestamp)",
-  "displayName": "String",
-  "dueDateTime": "String (timestamp)",
-  "grading": {"@odata.type": "microsoft.graph.educationAssignmentGradeType"},
-  "instructions": {"@odata.type": "microsoft.graph.itemBody"},
-  "lastModifiedBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "lastModifiedDateTime": "String (timestamp)",
-  "resourcesFolder": {"@odata.type": "microsoft.graph.educationODataRef"},
-  "status": "string"
+{ 
+  "dueDateTime": "{{duedate}}",
+  "displayName": "{{assignmentfolder}}",
+      "instructions": {
+        "Content": "{{assignmentfolder}}"
+      },
+      "grading": {
+        "@odata.type": "#microsoft.education.assignments.api.educationAssignmentPointsGradeType",
+        "maxPoints": 100
+      },
+      "assignTo": {
+        "@odata.type": "#microsoft.education.assignments.api.educationAssignmentClassRecipient"
+      },
+      "status":"draft",
+      "allowStudentsToAddResourcesToSubmission": true
 }
 ```
 In the request body, supply a JSON representation of [educationAssignment](../resources/educationassignment.md) object.
