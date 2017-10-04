@@ -5,6 +5,8 @@ set the property in assignments to this value.  This super class represents who 
 assignment be assigned to once the assignment is published.
 
 
+Subclasses: [educationAssignmentClassRecipient](educationassignmentclassrecipient.md)
+
 ## Properties
 None
 
