@@ -2,7 +2,7 @@
 
 When CSV files are the input source, this provider type should be used to setup the profile.  
 
-Derived from [dataprovider](dataProvider.md)
+Derived from [synchronizationDataProvider](synchronizationDataProvider.md)
 
 ### JSON representation
 

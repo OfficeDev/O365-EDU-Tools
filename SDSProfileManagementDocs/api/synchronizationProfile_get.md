@@ -44,7 +44,6 @@ Here is an example of the response. Note: The response object shown here may be 
     "@odata.context": "https://graph.microsoft.com/testsds/$metadata#synchronizationProfiles/$entity",
     "displayName": "Test Profile",
     "state": "provisioned",
-    "servicesToSetup": [],
     "id": "86904b1e-c7d0-4ead-b13a-98f11fc400ee",
     "dataProvider": {
         "@odata.type": "#microsoft.graph.csvDataProvider",
@@ -86,7 +85,7 @@ Here is an example of the response. Note: The response object shown here may be 
             }
         }
     },
-    "identitySyncConfiguration": {
+    "identitySynchronizationConfiguration": {
         "@odata.type": "#microsoft.graph.identityCreationConfiguration",
         "userDomains": [
             {

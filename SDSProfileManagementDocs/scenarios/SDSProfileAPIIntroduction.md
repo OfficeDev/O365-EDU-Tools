@@ -42,6 +42,7 @@ the following prerequisites:
 
     ![](./Images/AddPermissions.PNG)
 
+3. Authorization token needed to call the SDS APIs needs to be acquired in the user context. The resource the token is requested for should be "https://graph.microsoft.com".
 
 ### Prerequisites for running the App
 

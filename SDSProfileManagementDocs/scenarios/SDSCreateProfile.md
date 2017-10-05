@@ -35,9 +35,6 @@ Please refer to the [Create Profile API documentation](../api/synchronizationPro
 
 Specify the [displayName](../resources/synchronizationProfile.md) for the profile .
 
-#### Choose Services to setup:
-Specifies the services to be configured in the profile. Intune for education is the currently supported service. Refer to API reference document for details.
-
 #### Select the sync format:
 
   Create Profile supports two the following two mechanisms for data sync:
@@ -57,32 +54,28 @@ Specifies the services to be configured in the profile. Intune for education is 
   Create profile API provides two options for Identity sync:
   - IdentityMatchingConfiguration for Existing users:  Selecting this option matches students and teachers in your source data with users already existing in Office 365 / Azure Active Directory, and adds more attributes to those users.
 
-            "identitySyncConfiguration":{  
+            "identitySynchronizationConfiguration":{  
             "@odata.type":"#microsoft.graph.identityMatchingConfiguration",
             "matchingOptions":[  
                {  
                   "appliesTo":"student",
-                  "options":{  
-                     "sourcePropertyName":"Username",
-                     "targetPropertyName":"userPrincipalName",
-                     "targetDomain":"targetDomain.net"
-                  }
+                  "sourcePropertyName":"Username",
+                  "targetPropertyName":"userPrincipalName",
+                  "targetDomain":"targetDomain.net"
                },
                {  
                   "appliesTo":"teacher",
-                  "options":{  
-                     "sourcePropertyName":"Username",
-                     "targetPropertyName":"userPrincipalName",
-                     "targetDomain":targetDomain.net"
-                  }
+                  "sourcePropertyName":"Username",
+                  "targetPropertyName":"userPrincipalName",
+                  "targetDomain":targetDomain.net"
                }
             ]
-            }      
+            }
   - identityCreationConfiguration for New Users:  Selecting this option creates a new teacher or student account in Office 365 / Azure Active Directory for each user specified by your source data.
 
     Here is the sample code snippet :
 
-          "identitySyncConfiguration": {
+          "identitySynchronizationConfiguration": {
           "@odata.type": "#microsoft.graph.identityCreationConfiguration",
           "userDomains": [
           {
@@ -96,7 +89,7 @@ Specifies the services to be configured in the profile. Intune for education is 
           ]
           },
 
-  For a detailed reference documentation on identity configuration option, please reference to the following resources : [IdentitySyncConfiguration](../resources/identitySyncConfiguration.md)
+  For a detailed reference documentation on identity configuration option, please reference to the following resources : [identitySynchronizationConfiguration](../resources/identitySynchronizationConfiguration.md)
 
 #### Select data customizations
 SDS APIs providing for a mechanism for syncing custom data fields. If skipped, all available attributes will be synced. For detailed API reference on customizations, please refer to the [documentation](../resources/synchronizationCustomizations.md)
@@ -247,11 +240,11 @@ Once sync is started in the background you can query the sync status using the G
 
 |  Method    |  Request URI                                                              |   
 |---         |---                                                                        |
-| GET        | /{serviceroot}/SynchronizationProfiles/{profileId}/status
+| GET        | /{serviceroot}/SynchronizationProfiles/{profileId}/profileStatus
 
-Profile Management provides the  following upload status:
+Profile Management provides the  following statuses:
 
-    <EnumType Name="status">
+    <EnumType Name="synchronizationStatus">
         <Member Name="paused" Value="0" />
         <Member Name="inProgress" Value="1" />
         <Member Name="success" Value="2" />

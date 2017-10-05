@@ -47,7 +47,7 @@ Content-type: application/json
             }
         }
     },
-    "identitySyncConfiguration": {
+    "identitySynchronizationConfiguration": {
         "@odata.type": "#microsoft.graph.identityCreationConfiguration",
         "userDomains": [
             {
@@ -91,7 +91,6 @@ Content-type: application/json
 {
     "displayName": "Test Profile",
     "state": "provisioning",
-    "servicesToSetup": [],
     "id": "86904b1e-c7d0-4ead-b13a-98f11fc400ee",
     "dataProvider": {
         "@odata.type": "#microsoft.graph.csvDataProvider",
@@ -133,7 +132,7 @@ Content-type: application/json
             }
         }
     },
-    "identitySyncConfiguration": {
+    "identitySynchronizationConfiguration": {
         "@odata.type": "#microsoft.graph.identityCreationConfiguration",
         "userDomains": [
             {

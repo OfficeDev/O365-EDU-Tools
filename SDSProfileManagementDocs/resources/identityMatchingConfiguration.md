@@ -6,4 +6,4 @@ This resource defines the settings for matching identities. These identities inc
 
 | Property | Type | Description |
 |-|-|-|
-| **matchingOptions** | [matchingOptions](matchingOptions.md) collection | Mapping between the user account and the options to use to uniquely identify the user to update |
+| **matchingOptions** | [identityMatchingOptions](identityMatchingOptions.md) collection | Mapping between the user account and the options to use to uniquely identify the user to update |
