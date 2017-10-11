@@ -29,7 +29,7 @@ Here is an example of the request.
   "name": "get_synchronizationProfile"
 }-->
 ```http
-DELETE https://graph.microsoft.com/testsds/synchronizationProfiles/{id}
+DELETE https://graph.microsoft.com/testEduApi/education/synchronizationProfiles/{id}
 ```
 
 ##### Response

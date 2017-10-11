@@ -31,7 +31,7 @@ Here is an example of the request.
   "name": "update_synchronizationProfile"
 }-->
 ```http
-PUT https://graph.microsoft.com/testsds/synchronizationProfiles
+PUT https://graph.microsoft.com/testEduApi/education/synchronizationProfiles
 Content-type: application/json
 
 {
@@ -85,7 +85,7 @@ Here is an example of the response. Note: The response object shown here may be 
   "@odata.type": "microsoft.graph.synchronizationProfile",
 } -->
 ```http
-HTTP/1.1 201 Created
+HTTP/1.1 202 Accepted
 Content-type: application/json
 
 {

@@ -29,7 +29,7 @@ Here is an example of the request.
   "name": "post_synchronizationProfile_pause"
 }-->
 ```http
-POST https://graph.microsoft.com/testsds/synchronizationProfiles/{id}/pause
+POST https://graph.microsoft.com/testEduApi/education/synchronizationProfiles/{id}/pause
 ```
 
 ##### Response
