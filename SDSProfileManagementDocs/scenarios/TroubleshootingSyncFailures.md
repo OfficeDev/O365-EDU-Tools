@@ -23,19 +23,19 @@ Once sync is started in the background you can query the sync status using the G
 
 |  Method    |  Request URI                                                              |   
 |---         |---                                                                        |
-| GET        | /{serviceroot}/SynchronizationProfiles/{profileId}/Status
+| GET        | /{serviceroot}/SynchronizationProfiles/{profileId}/profileStatus
 
 Sample Response Body
 
             {  
-               "@odata.context":"https://graph.microsoft.com/testsds/$metadata#synchronizationProfiles('97ed51b9-bc23-4994-a225-218890f49f90')/status/$entity",
-               "syncStatus":"success",
-               "lastSynchronizationTime":"2017-06-14T01:13:21.2495183Z"
+               "@odata.context":"https://graph.microsoft.com/testsds/$metadata#synchronizationProfiles('97ed51b9-bc23-4994-a225-218890f49f90')/profileStatus/$entity",
+               "status":"success",
+               "lastSynchronizationDateTime":"2017-06-14T01:13:21.2495183Z"
             }
 
 SDS Profile Management provides the  following upload status:
 
-      <EnumType Name="status">
+      <EnumType Name="synchronizationStatus">
         <Member Name="paused" Value="0" />
         <Member Name="inProgress" Value="1" />
         <Member Name="success" Value="2" />
@@ -67,7 +67,7 @@ Sample Response for Get Errors
                      "errorCode":"UnsynchronizableChange",
                      "errorMessage":"Student cannot be updated as no matching entry in Active Directory was found for Student.  Verify the identity matching criteria for the profile.",
                      "joiningValue":"Tyler.Smith@zsd114.ccsctp.net",
-                     "recordedTime":"2017-06-12T21:50:00Z",
+                     "recordedDateTime":"2017-06-12T21:50:00Z",
                      "reportableIdentifier":"Tyler.Smith"
                   },
                   ...      {  
@@ -75,7 +75,7 @@ Sample Response for Get Errors
                      "errorCode":"UnsynchronizableChange",
                      "errorMessage":"Student cannot be updated as no matching entry in Active Directory was found for Student.  Verify the identity matching criteria for the profile.",
                      "joiningValue":"Colby.Garner@zsd114.ccsctp.net",
-                     "recordedTime":"2017-06-12T21:50:00Z",
+                     "recordedDateTime":"2017-06-12T21:50:00Z",
                      "reportableIdentifier":"Colby.Garner"
                   }
                ],

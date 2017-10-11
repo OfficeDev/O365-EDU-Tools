@@ -10,4 +10,4 @@ Derived from [identitySyncConfiguration](identitySyncConfiguration.md)
 
 | Property | Type | Description |
 |-|-|-|
-| **userDomains** | [domain](domain.md) collection |  Sets the list of domains to use per user type  |
+| **userDomains** | [identityDomain](identityDomain.md) collection |  Sets the list of domains to use per user type  |

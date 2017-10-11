@@ -15,7 +15,7 @@ This resource represents a set of configurations used to synchronize education e
 | [Reset a sync](..\api\synchronizationProfile_post_reset.md) | none | Resets the state of the profile and causes synchronization to restart |
 | [Start sync for uploaded files](..\api\synchronizationProfile_post_start.md) | collection of [verificationMessage](verificationMessage.md) | Verifies the uploaded source files and starts sync. _Applies only when the dataProvider is [csvDataProvider](csvDataProvider.md)_ |
 | [Get an upload URL](..\api\synchronizationProfile_get_uploadurl.md) | string | Returns the short-lived URL to upload CSV data files. _Applies only when the dataProvider is [csvDataProvider](csvDataProvider.md)_ |
-| [Get status of a sync](../api/synchronizationProfile_get_status.md) | [status](status.md) | Returns the status of a specific synchronization profile |
+| [Get status of a sync](../api/synchronizationProfile_get_status.md) | [status](synchronizationProfileStatus.md) | Returns the status of a specific synchronization profile |
 | [Get synchronization errors](../api/synchronizationProfile_get_errors.md) | collection of [synchronizationError](synchronizationError.md) | Gets all the errors generated during sync |
 
 ### Properties
@@ -24,22 +24,21 @@ This resource represents a set of configurations used to synchronize education e
 |-|-|-|
 | **displayName** | string |  Name of the configuration profile for syncing identities         |
 | **dataProvider** | [dataProvider](dataProvider.md) |  Data provider used for the profile         |
-| **IdentitySyncConfiguration** | [identitySyncConfiguration](identitySyncConfiguration.md) | Identity [creation](identityCreationConfiguration.md) or [matching](identityMatchingConfiguration.md) configuration         |
-| **licensesToAssign** | collection of [license](license.md) |  License setup configuration         |
+| **identitySynchronizationConfiguration** | [identitySyncConfiguration](identitySynchronizationConfiguration.md) | Identity [creation](identityCreationConfiguration.md) or [matching](identityMatchingConfiguration.md) configuration         |
+| **licensesToAssign** | collection of [synchronizationLicenseAssignment](synchronizationLicenseAssignment.md) |  License setup configuration         |
 | **state** | string |  Enumeration provides the state of the profile. Possible values: `provisioning`, `provisioned`, `provisioningFailed`, `deleting`, `deletionFailed`          |
-| **servicesToSetup** | collection of string |  Collection of service enumerations to setup apart for the synchronized accounts. Possible values: `intune`         |
 
 ### Relationships
 
 | Property | Type | Description |
 |-|-|-|
 | **errors** | collection of [synchronizationError](synchronizationError.md) | All errors associated with this synchronization profile |
-| **status** | [synchronizationStatus](synchronizationStatus.md) | Synchronization status |
+| **profileStatus** | [synchronizationProfileStatus](synchronizationProfileStatus.md) | Synchronization status |
 
 ### JSON representation
 Here is a JSON representation of a **synchronizationProfile**.
 
-<!-- { "blockType": "resource", "@odata.type": "Microsoft.Education.DataSync.synchronizationProfile" } -->
+<!-- { "blockType": "resource", "@odata.type": "#microsoft.graph.synchronizationProfile" } -->
 
 ```json
 {
@@ -48,10 +47,9 @@ Here is a JSON representation of a **synchronizationProfile**.
     "state": "Provisioned",
     "syncStatus": "Paused",
     "errorStatus": "None",
-    "servicesToSetup": [],
     "id": "19c097a9-ea10-49bb-9242-2cc657549032",
-    "dataProvider": { "@odata.type": "#Microsoft.Education.DataSync.CSVDataProvider" },
-    "identitySyncConfiguration": { "@odata.type": "#Microsoft.Education.DataSync.IdentityCreationConfiguration",
+    "dataProvider": { "@odata.type": "#microsoft.graph.csvDataProvider" },
+    "identitySynchronizationConfiguration": { "@odata.type": "#microsoft.graph.identityCreationConfiguration",
         "userDomains": [{
             "appliesTo": "Student",
             "name": "school.edu"

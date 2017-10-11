@@ -43,7 +43,7 @@ Here is an example of the response. Note: The response object shown here may be 
 } -->
 ```http
 {
-    "@odata.context": "https://graph.microsoft.com/testsds/$metadata#synchronizationProfiles('f4cb079d-8390-493c-8d79-75de910342bf')/errors",
+    "@odata.context": "https://graph.microsoft.com/testsds/$metadata#synchronizationProfiles('{id}')/errors",
     "@odata.count": 14,
     "value": [
         {
@@ -51,7 +51,7 @@ Here is an example of the response. Note: The response object shown here may be 
             "errorCode": "UnsynchronizableChange",
             "errorMessage": "Student cannot be updated as no matching entry in Active Directory was found for Student.  Verify the identity matching criteria for the profile.",
             "joiningValue": "richard.2wilson@testschool.edu",
-            "recordedTime": "2017-07-05T00:52:45Z",
+            "recordedDateTime": "2017-07-05T00:52:45Z",
             "reportableIdentifier": "richard.2wilson"
         },
         {
@@ -59,7 +59,7 @@ Here is an example of the response. Note: The response object shown here may be 
             "errorCode": "UnsynchronizableChange",
             "errorMessage": "Teacher cannot be updated as no matching entry in Active Directory was found for Teacher.  Verify the identity matching criteria for the profile.",
             "joiningValue": "alberto2.dorsey@testschool.edu",
-            "recordedTime": "2017-07-05T00:52:57Z",
+            "recordedDateTime": "2017-07-05T00:52:57Z",
             "reportableIdentifier": "alberto2.dorsey"
         },
         {
@@ -67,7 +67,7 @@ Here is an example of the response. Note: The response object shown here may be 
             "errorCode": "UnsynchronizableChange",
             "errorMessage": "Teacher cannot be updated as no matching entry in Active Directory was found for Teacher.  Verify the identity matching criteria for the profile.",
             "joiningValue": "madeline2.bullock@testschool.edu",
-            "recordedTime": "2017-07-05T00:52:57Z",
+            "recordedDateTime": "2017-07-05T00:52:57Z",
             "reportableIdentifier": "madeline2.bullock"
         }
     ]

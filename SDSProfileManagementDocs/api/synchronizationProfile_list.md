@@ -49,7 +49,6 @@ Here is an example of the response. Note: The response object shown here may be 
     {
         "displayName": "Test Profile",
         "state": "provisioned",
-        "servicesToSetup": [],
         "id": "15e9b9fa-de85-492e-aa44-550c40de626e",
         "dataProvider": {
             "@odata.type": "#microsoft.graph.csvDataProvider",
@@ -105,7 +104,7 @@ Here is an example of the response. Note: The response object shown here may be 
                 }
             }
         },
-        "identitySyncConfiguration": {
+        "identitySynchronizationConfiguration": {
             "@odata.type": "#microsoft.graph.identityCreationConfiguration",
             "userDomains": [
                 {
