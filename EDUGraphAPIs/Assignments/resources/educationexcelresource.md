@@ -7,7 +7,7 @@ or submission object to which this resource belongs.
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|file|[educationODataRef](educationodataref.md)|Pointer to the excel file object.|
+|fileUrl|String|Pointer to the excel file object.|
 
 ## JSON representation
 
@@ -23,7 +23,7 @@ Here is a JSON representation of the resource.
 
 ```json
 {
-  "file": {"@odata.type": "microsoft.graph.educationODataRef"}
+  "fileUrl": "String"
 }
 
 ```

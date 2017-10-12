@@ -67,7 +67,7 @@ Content-length: 712
   "recipient": {"@odata.type": "microsoft.graph.educationSubmissionRecipient"},
   "releasedBy": {"@odata.type": "microsoft.graph.identitySet"},
   "releasedDateTime": "String (timestamp)",
-  "resourcesFolder": {"@odata.type": "microsoft.graph.educationODataRef"},
+  "resourcesFolderUrl": "String",
   "status": "string",
   "submittedBy": {"@odata.type": "microsoft.graph.identitySet"},
   "submittedDateTime": "String (timestamp)"

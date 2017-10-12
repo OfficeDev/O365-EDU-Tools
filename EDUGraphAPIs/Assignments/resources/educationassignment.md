@@ -37,7 +37,7 @@ The status on an assignment cannot be changed via PATCH, the status is changed b
 |instructions|[itemBody](itembody.md)| Instructions for the assignment.  This along with the display name tell the student what to do. |
 |lastModifiedBy|[identitySet](identityset.md)| Who last modified the assignment. |
 |lastModifiedDateTime|DateTimeOffset|Moment when the assignment was last modified.  The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
-|resourcesFolder|[educationODataRef](educationodataref.md)| Folder into which file based resource should be put to be part of a assignmnet resource.  Files must live in this folder to be added as a resource.|
+|resourcesFolderUrl|String| Folder into which file based resource should be put to be part of a assignmnet resource.  Files must live in this folder to be added as a resource.|
 |status|string| Status of the Asssignment.  You can not PATCH this value.  Possible values are: `draft`, `published`, `assigned`.|
 
 ## Relationships
@@ -75,7 +75,7 @@ Here is a JSON representation of the resource.
   "instructions": {"@odata.type": "microsoft.graph.itemBody"},
   "lastModifiedBy": {"@odata.type": "microsoft.graph.identitySet"},
   "lastModifiedDateTime": "String (timestamp)",
-  "resourcesFolder": {"@odata.type": "microsoft.graph.educationODataRef"},
+  "resourcesFolderUrl": "String",
   "status": "string"
 }
 ```

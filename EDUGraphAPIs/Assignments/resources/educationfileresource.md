@@ -8,7 +8,7 @@ files (word, excel, etc.) but is a file that does not have special handling with
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|file|[educationODataRef](educationodataref.md)|Location on disk of the file resource.|
+|fileUrl|String|Location on disk of the file resource.|
 
 ## JSON representation
 
@@ -24,7 +24,7 @@ Here is a JSON representation of the resource.
 
 ```json
 {
-  "file": {"@odata.type": "microsoft.graph.educationODataRef"}
+  "fileUrl": "String"
 }
 
 ```

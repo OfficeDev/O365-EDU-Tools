@@ -7,7 +7,7 @@ assignment or submission.
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|file|[educationODataRef](educationodataref.md)|Location of the file on disk.|
+|fileUrl|String|Location of the file on disk.|
 
 ## JSON representation
 
@@ -23,7 +23,7 @@ Here is a JSON representation of the resource.
 
 ```json
 {
-  "file": {"@odata.type": "microsoft.graph.educationODataRef"}
+  "fileUrl": "String"
 }
 
 ```

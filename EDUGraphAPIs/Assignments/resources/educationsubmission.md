@@ -26,7 +26,7 @@ represent the resources that have actively been "turned-in" by students.  Note t
 |recipient|[educationSubmissionRecipient](educationsubmissionrecipient.md)|Who this submission is assigned to.|
 |releasedBy|[identitySet](identityset.md)|User who moved the status of this submission to released.|
 |releasedDateTime|DateTimeOffset|Moment in time when the submission was released.  The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
-|resourcesFolder|[educationODataRef](educationodataref.md)|Folder where all file resources for this submission need to be stored.|
+|resourcesFolderUrl|String|Folder where all file resources for this submission need to be stored.|
 |status|string| Read-Only.  Possible values are: `working`, `submitted`, `completed`.|
 |submittedBy|[identitySet](identityset.md)|User who moved the resource into the submitted state.|
 |submittedDateTime|DateTimeOffset|Moment in time when the submission was moved into the submitted state.  The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
@@ -35,7 +35,7 @@ represent the resources that have actively been "turned-in" by students.  Note t
 | Relationship | Type	|Description|
 |:---------------|:--------|:----------|
 |resources|[educationSubmissionResource](educationsubmissionresource.md) collection| Nullable.|
-|submittedResources|[educationSubmittedSubmissionResource](educationsubmittedsubmissionresource.md) collection| Read-only. Nullable.|
+|submittedResources|[educationSubmissionResource](educationSubmissionResource.md) collection| Read-only. Nullable.|
 
 ## JSON representation
 
@@ -57,7 +57,7 @@ Here is a JSON representation of the resource.
   "recipient": {"@odata.type": "microsoft.graph.educationSubmissionRecipient"},
   "releasedBy": {"@odata.type": "microsoft.graph.identitySet"},
   "releasedDateTime": "String (timestamp)",
-  "resourcesFolder": {"@odata.type": "microsoft.graph.educationODataRef"},
+  "resourcesFolderUrl": "String",
   "status": "string",
   "submittedBy": {"@odata.type": "microsoft.graph.identitySet"},
   "submittedDateTime": "String (timestamp)"

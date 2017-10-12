@@ -13,7 +13,7 @@ Wrapper around resource for used on a submission.  The wrapper adds a pointer to
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|assignmentResource|[educationODataRef](educationodataref.md)|Pointer to the assignment from which this resource was copied.  If this is null, the student uploaded the resource.|
+|assignmentResourceUrl|String|Pointer to the assignment from which this resource was copied.  If this is null, the student uploaded the resource.|
 |id|String| Read-only.|
 |resource|[educationResource](educationresource.md)|Resource object.|
 
@@ -35,7 +35,7 @@ Here is a JSON representation of the resource.
 
 ```json
 {
-  "assignmentResource": {"@odata.type": "microsoft.graph.educationODataRef"},
+  "assignmentResourceUrl": "String",
   "id": "String (identifier)",
   "resource": {"@odata.type": "microsoft.graph.educationResource"}
 }

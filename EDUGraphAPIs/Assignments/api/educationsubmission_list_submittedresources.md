@@ -54,7 +54,7 @@ Content-length: 1045
 {
   "value": [
     {
-      "assignmentResource": {"@odata.type": "microsoft.graph.educationODataRef"},
+      "assignmentResourceUrl": "String",
       "id": "String (identifier)",
       "resource": {"@odata.type": "microsoft.graph.educationResource"}
     }
