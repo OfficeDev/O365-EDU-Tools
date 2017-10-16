@@ -2,6 +2,12 @@
 
 Update the assignment object.  Only teachers in the class can do this action.  Note that the status of an assignment cannot be changed in a PATCH, the URL action should be used to change an assignment state.
 
+
+
+Due to a bug, the graph will return educationItemBody for the instructions property.  This is an exact duplicate of the itemBody that 
+is already found on the graph.   When the code moves to prodution, this will be updated.  For clients who simply use the json being
+sent back and forth to the graph, there should be no work necessary to handle this change.
+
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
 

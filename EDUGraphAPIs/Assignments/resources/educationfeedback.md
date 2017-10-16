@@ -3,6 +3,10 @@
 
 Feedback from a teacher to a student.  This property represents both the text part of the feedback along with the who.
 
+Due to a bug, the graph will return educationItemBody for the text property.  This is an exact duplicate of the itemBody that 
+is already found on the graph.   When the code moves to prodution, this will be updated.  For clients who simply use the json being
+sent back and forth to the graph, there should be no work necessary to handle this change.
+
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|

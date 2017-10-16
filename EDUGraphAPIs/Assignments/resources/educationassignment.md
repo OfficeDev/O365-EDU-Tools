@@ -6,6 +6,9 @@ Assignment starts in the "Draft" state when created.  In draft, students will no
 The status on an assignment cannot be changed via PATCH, the status is changed by using the action.  
 
 
+Due to a bug, the graph will return educationItemBody for the instructions property.  This is an exact duplicate of the itemBody that 
+is already found on the graph.   When the code moves to prodution, this will be updated.  For clients who simply use the json being
+sent back and forth to the graph, there should be no work necessary to handle this change.
 
 ## Methods
 
