@@ -31,7 +31,7 @@ Here is an example of the request.
   "name": "post_synchronizationProfile_start"
 }-->
 ```http
-POST https://graph.microsoft.com/testsds/synchronizationProfiles/{id}/start
+POST https://graph.microsoft.com/testEduApi/education/synchronizationProfiles/{id}/start
 ```
 
 ##### Response
@@ -44,7 +44,7 @@ Here is an example of the response. Note: The response object shown here may be 
 } -->
 ```http
 {
-    "@odata.context": "https://graph.microsoft.com/testsds/$metadata#Collection(microsoft.graph.verificationMessage)",
+    "@odata.context": "https://graph.microsoft.com/testEduApi/$metadata#education/Collection(microsoft.graph.verificationMessage)",
     "value": [
         {
             "type": "Error",

@@ -29,7 +29,7 @@ Here is an example of the request.
   "name": "get_synchronizationProfile_status"
 }-->
 ```http
-GET https://graph.microsoft.com/testsds/synchronizationProfiles/{id}/profileStatus
+GET https://graph.microsoft.com/testEduApi/education/synchronizationProfiles/{id}/profileStatus
 ```
 
 ##### Response
@@ -40,7 +40,7 @@ Here is an example of the response. Note: The response object shown here may be 
 } -->
 ```http
 {
-    "@odata.context": "https://graph.microsoft.com/testsds/$metadata#synchronizationProfiles('86904b1e-c7d0-4ead-b13a-98f11fc400ee')/profileStatus/$entity",
+    "@odata.context": "https://graph.microsoft.com/testEduApi/$metadata#education/synchronizationProfiles('{id}')/profileStatus/$entity",
     "status": "inProgress",
     "lastSynchronizationDateTime": "2017-07-04T22:06:37.6472621Z"
 }

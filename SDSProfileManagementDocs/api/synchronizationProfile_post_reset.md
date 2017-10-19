@@ -31,7 +31,7 @@ Here is an example of the request.
   "name": "post_synchronizationProfile_reset"
 }-->
 ```http
-POST https://graph.microsoft.com/testsds/synchronizationProfiles/{id}/reset
+POST https://graph.microsoft.com/testEduApi/education/synchronizationProfiles/{id}/reset
 ```
 
 ##### Response

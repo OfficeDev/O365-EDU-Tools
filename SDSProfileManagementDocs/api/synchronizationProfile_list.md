@@ -32,7 +32,7 @@ Here is an example of the request.
   "name": "list_synchronizationProfile"
 }-->
 ```http
-GET https://graph.microsoft.com/testsds/synchronizationProfiles
+GET https://graph.microsoft.com/testEduApi/education/synchronizationProfiles
 ```
 
 ##### Response
