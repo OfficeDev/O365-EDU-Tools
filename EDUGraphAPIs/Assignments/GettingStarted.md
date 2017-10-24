@@ -27,7 +27,7 @@
 |EduAssignments.ReadWriteBasic|Read and write a user's view of class assignments without grades|Allows the app to read and write assignments without grades on behalf of the user|View and modify your assignments without grades|Allows the app to view and modify your assignments on your behalf without seeing grades|
 |EduAssignments.Read|Read a user's view of class assignments and their grades|Allows the app to read assignments and their grades on behalf of the user|View your assignments and grades|Allows the app to view your assignments on your behalf including grades|
 |EduAssignments.ReadWrite|Read and write a user's view of class assignments and their grades|Allows the app to read and write assignments and their grades on behalf of the user|View and modify your assignments and grades|Allows the app to view and modify your assignments on your behalf including  grades|
-|
+ 
 
  ### Understanding assignment Resources
 
