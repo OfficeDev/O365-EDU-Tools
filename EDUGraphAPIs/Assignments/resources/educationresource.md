@@ -1,6 +1,6 @@
 # educationResource resource type
 
-Super class for all resource objects in the sytem.  A resource is something that is associated with an Assignment and/or Submission which represents the learning object that is being
+Super class for all resource objects in the system.  A resource is something that is associated with an Assignment and/or Submission which represents the learning object that is being
 handed-out or handed-in.  You cannot instantiate a resource directly, you must make a subclass which will represent which type of resource is being used.
 
 This resource stores the common properties across all resource types.
