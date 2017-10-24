@@ -33,7 +33,7 @@ Microsoft Graph **Assignments** Resources allow partners to integrate with the *
 
 #### 'Assignments' resource description 
 
-An [Assignment](./Assignments/resources/educationassignmentresource.md) is a task or unit of work assigned to a student or team member in a class as part of their study.  Only teachers or team owners can create assignments.  Assignments contain handouts and tasks that the teacher wants the student to work on.  Each student assignment has an associated [submission](./assignments/resources/educationsubmissionresource.md) that contains any work their teacher asked to be turned in. A teacher can add scores and feedback to the submission turned in by the student.
+An [Assignment](./Assignments/resources/educationassignmentresource.md) is a task or unit of work assigned to a student or team member in a class as part of their study.  Only teachers or team owners can create assignments.  Assignments contain handouts and tasks that the teacher wants the student to work on.  Each student assignment has an associated [submission](./Assignments/resources/educationsubmissionresource.md) that contains any work their teacher asked to be turned in. A teacher can add scores and feedback to the submission turned in by the student.
 
 
 #### Sample scenarios
