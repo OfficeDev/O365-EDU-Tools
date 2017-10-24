@@ -1,6 +1,6 @@
 # educationWordResource resource type
 
-Subclass of [educationResource](educationresource.md).  This is a word resource.  The word file must be uploaded in the fileResource directory associated with the 
+Subclass of [educationResource](educationresource.md).  This is a **Microsoft Word** document resource.  The word file must be uploaded in the **fileResource** directory associated with the 
 assignment or submission.
 
 

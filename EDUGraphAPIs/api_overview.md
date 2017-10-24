@@ -1,6 +1,5 @@
-# Microsoft Education Graph API :  Preview
+# Working with Edu assignments and rostering in Microsoft Graph
 
-## Introduction
 
 **Microsoft Graph Education Endpoint is available for private preview :
 https://graph.microsoft.com/beta/education/**
@@ -17,8 +16,15 @@ In addition, the Education endpoint also introduces two new education specific r
 
 The **Microsoft graph education** namespace allows developers access to schools, students, teachers, classes, enrollments, and **Assignments**.
 
-## Core scenarios
-This article introduces the two core scenarios enabled by the Education endpoint.
+## Authorization
+ 
+Read about the API permissions needed for the assignment API in the Assignments API [Getting started](./Assignments/GettingStarted.md) article. The API permissions needed for the rostering API are described in the Rostering API [Getting started](./Rostering/GettingStarted.md) article.
+
+For more information about permissions, including delegated and application permissions, see [Permissions](../../../concepts/permissions_reference.md). 
+
+## Common use cases 
+
+The core use cases for the Microsoft Education Graph API include automating student assignments and managing a school roster.
 
 ### Assignments APIs
 
@@ -41,8 +47,6 @@ As mentioned above the **Assignments** APIs allow partners to interact with the 
 
 These are just a few examples. The assignment APIs provide a mechanism for external applications to interact with the life-cycle of the assignment.
 
-#### Getting started with assignments API
-Read [Microsoft Education Graph Assignments API :  Getting Started](./Assignments/GettingStarted.md) to get started with  **Assignments** API including learning about Scopes, assignment Resources, APIs, Samples, and Building your first sample.
 
 
 ### Rostering APIs
@@ -51,7 +55,7 @@ Rostering APIs in the **Microsoft Graph Education endpoint** are used to extract
 
 #### Rostering resources description
 The typical scenario for Rostering APIs to enable the user logged into a 3rd party ISV app to know:
-- Who Iam
+- Who I am
 - What classes I attend or teach
 - What I need to do / by when
 
@@ -64,9 +68,17 @@ The Rostering APIs support this by providing APIs to support the following scena
 - get My Schools/Classes
 
 
-#### Getting started with Rostering API
+
+
+
+
+## Next steps
+Use your new understanding of the Microsoft Graph Education API to build education solutions around student assignments and school rosters.
+
+### Getting started with assignments API
+Read [Microsoft Education Graph Assignments API :  Getting Started](./Assignments/GettingStarted.md) to get started with  **Assignments** API including learning about Scopes, assignment Resources, APIs, Samples, and Building your first sample.
+
+
+### Getting started with Rostering API
 Read [Microsoft Education Graph Rostering API :  Getting Started](./Rostering/GettingStarted.md) to get started with Rostering API including learning about Scopes, Roster Resources , APIs, Samples and Building your first sample.
 
-
-## Contribute
-Send a pull request out to contribute.
