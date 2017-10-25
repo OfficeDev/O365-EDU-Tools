@@ -1,8 +1,10 @@
 # educationSubmission resource type
 
-Submissions are objects that are owned by an assignment.  A submission represents the resources that an individual (or group) turn-in for an assignment and the grade/feedback that is returned.
+Submissions are owned by an assignment.  A submission represents the resources that an individual (or group) turn in for an assignment and the grade/feedback that is returned.
 Submissions are automatically created when an assignment is published.  The submission owns two lists of resources.  Resources represent the user/groups working area while the submitted resources
-represent the resources that have actively been "turned-in" by students.  Note that the status is read-only and the object is moved through the workflow via actions. 
+represent the resources that have actively been turned in by students.  
+
+>**Note:** The status is read-only and the object is moved through the workflow via actions. 
 
 
 ## Methods
@@ -13,7 +15,7 @@ represent the resources that have actively been "turned-in" by students.  Note t
 |[List resources](../api/educationsubmission_list_resources.md) |[educationSubmissionResource](educationsubmissionresource.md) collection| Get a educationSubmissionResource object collection.|
 |[List submittedResources](../api/educationsubmission_list_submittedresources.md) |[educationSubmittedSubmissionResource](educationsubmittedsubmissionresource.md) collection| Get a educationSubmittedSubmissionResource object collection.|
 |[Update](../api/educationsubmission_update.md) | [educationSubmission](educationsubmission.md)	|Update educationSubmission object. |
-|[Recall](../api/educationsubmission_recall.md)|[educationSubmission](educationsubmission.md)|A studnet uses the recall to move the state of the submission from submitted back to working.|
+|[Recall](../api/educationsubmission_recall.md)|[educationSubmission](educationsubmission.md)|A student uses the recall to move the state of the submission from submitted back to working.|
 |[Release](../api/educationsubmission_release.md)|[educationSubmission](educationsubmission.md)|A teacher uses release to indicate that the grades/feedback can be shown to the student.|
 |[Submit](../api/educationsubmission_submit.md)|[educationSubmission](educationsubmission.md)|A student uses submit to turn in the assignment.  This will copy the resources into the submittedResources folder for grading and updates the status.|
 

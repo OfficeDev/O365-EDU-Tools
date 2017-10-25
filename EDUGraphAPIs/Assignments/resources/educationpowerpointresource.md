@@ -1,6 +1,6 @@
 # educationPowerPointResource resource type
 
-Subclass of [educationResource](educationresource.md).  This is a powerpoint resource.  The powerpoint file must be uploaded in the fileResource directory associated with the 
+Subclass of [educationResource](educationresource.md).  This is a **PowerPoint** resource.  The **PowerPoint** file must be uploaded in the fileResource directory associated with the 
 assignment or submission.
 
 

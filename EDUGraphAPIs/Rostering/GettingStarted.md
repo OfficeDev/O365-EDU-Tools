@@ -1,4 +1,4 @@
-# Microsoft Education Graph Assigments API :  Getting Started
+# Microsoft Education Graph Rostering API :  Getting Started
 
  This document provides information for getting started with Rostering API.
 
@@ -24,7 +24,7 @@ EduRostering.ReadBasic| Read a limited subset of a user's view of the roster | A
 
  ### 2. Understanding Education Roster Resources
 
-Assigment APIs provide the following key resources:
+assignment APIs provide the following key resources:
 
 - [School](resources/educationschool.md) - A resource that represents the school.
 - [Class](./resources/educationclass.md) - Represents a class within a school.
@@ -33,7 +33,7 @@ Assigment APIs provide the following key resources:
 - [Student](resources/educationstudent.md) - Represents a users with primary Role 'student'.
 
  ### 3. Overview of APIs
-Assigments endpoint in EDU Graph provide the following APIs.
+assignments endpoint in EDU Graph provide the following APIs.
 
 - [Get Students and Teachers for a Class](./api/educationclass_list_members.md)
 - [List Schools I teach](./api/educationclass_list_schools.md)

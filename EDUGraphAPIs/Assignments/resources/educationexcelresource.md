@@ -1,6 +1,9 @@
 # educationExcelResource resource type
 
-Subclass of [educationResource](educationresource.md).  This resource type represents an excel document.  Note that the excel file itself must be in the resourcefolder associated with the assignment
+Subclass of [educationResource](educationresource.md).  This resource type represents an **Excel**
+ document.  
+ 
+>**Note:** The excel file must be in the resource folder associated with the assignment
 or submission object to which this resource belongs.
 
 
