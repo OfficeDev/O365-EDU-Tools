@@ -12,10 +12,11 @@ One of the following permissions is required to call this API. To learn more, in
 |Application | Not Supported.  | 
 
 ## HTTP request
-<!-- { "blockType": "ignored" } -->
-```http
-DELETE /education/classes/<id>/assignments/<id>
 
+```http
+<!-- { "blockType": "ignored" } -->
+
+DELETE /education/classes/<id>/assignments/<id>
 ```
 ## Request headers
 | Header       | Value |
@@ -32,11 +33,13 @@ If successful, this method returns `204, No Content` response code. It does not 
 ## Example
 ##### Request
 Here is an example of the request.
+
+```http
 <!-- {
   "blockType": "request",
   "name": "delete_educationassignment"
 }-->
-```http
+
 DELETE https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>
 ```
 ##### Response

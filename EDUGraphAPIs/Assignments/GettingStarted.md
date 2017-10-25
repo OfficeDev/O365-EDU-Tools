@@ -16,7 +16,7 @@
 |EduAssignments.ReadWriteBasic.All | Read and write class assignments without grades | Allows the app to read and write assignments without grades for all users|
 |EduAssignments.Read.All| Read class assignments with grades | Allows the app to read assignments and their grades for all users |
 |EduAssignments.ReadWrite.All | Read and write class assignments with grades | Allows the app to read and write assignments and their grades for all users |
-|
+
 
 
 #### App+User Context
