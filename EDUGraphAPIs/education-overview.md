@@ -1,25 +1,20 @@
-# Working with Edu assignments and rostering in Microsoft Graph
+# Working with Education APIs in Microsoft Graph
 
-
-**Microsoft Graph Education Endpoint is available for private preview :
-https://graph.microsoft.com/beta/education/**
-
-The **Microsoft Graph API** is a valuable tool that gives developers access to Office 365 resources through one REST endpoint and one access token.  This is done by accessing the Graph through a set of URLs like the following examples:
+<!-- This content is not specific to the Education APIs. This overview topic should tell the story about the EDU APIs in Microsoft Graph specifically, rather than the Microsoft Graph API in general (that's covered in other topics).
+The Microsoft Graph API provides access to Office 365 resources through one REST endpoint and one access token. This is done by accessing the Graph through a set of URLs like the following examples:
 
     https://graph.microsost.com/<version>/users
     https://graph.microsost.com/<version>/groups
     https://graph.microsoft.com/<version>/me/calendars
+-->
+The Education APIs in Microsoft Graph enhance Office 365 resources and data with information that is relevant to education-related scenarios, including information about schools, students, teachers, classes, enrollments, and assignments. This makes it easy for you to build solutions that integrate with educational resources.
 
-While these **Office 365** resources are powerful and useful inside an educational institution that uses **Office 365**, the Education endpoint in Microsoft Graph also decorates **Office 365** graph data with education related information such as students, teachers, and classes. This makes it easier for ISV Office developers to integrate with educational resources.   
+The Education APIs include two new resources, **Rostering** and [educationAssignment](resources/educationassignment.md), that you can use to interact with the assignment and rostering services in Microsoft Teams.
 
-In addition, the Education endpoint also introduces two new education specific resources. **Rostering** and **Assignments** make it easy to interact with the assignment and rostering services within Microsoft Teams for Education.
-
-The **Microsoft graph education** namespace allows developers access to schools, students, teachers, classes, enrollments, and **Assignments**.
+<!-- What resource should we link to for Rostering? I don't see a Rostering resource topic in the Rostering/resources folder. -->
 
 ## Authorization
  
-Read about the API permissions needed for the assignment API in the Assignments API [Getting started](./Assignments/GettingStarted.md) article. The API permissions needed for the rostering API are described in the Rostering API [Getting started](./Rostering/GettingStarted.md) article.
-
 For more information about permissions, including delegated and application permissions, see [Permissions](../../../concepts/permissions_reference.md). 
 
 ## Common use cases 
@@ -68,17 +63,6 @@ The Rostering APIs support this by providing APIs to support the following scena
 - get My Schools/Classes
 
 
-
-
-
-
 ## Next steps
 Use your new understanding of the Microsoft Graph Education API to build education solutions around student assignments and school rosters.
-
-### Getting started with assignments API
-Read [Microsoft Education Graph Assignments API :  Getting Started](./Assignments/GettingStarted.md) to get started with  **Assignments** API including learning about Scopes, assignment Resources, APIs, Samples, and Building your first sample.
-
-
-### Getting started with Rostering API
-Read [Microsoft Education Graph Rostering API :  Getting Started](./Rostering/GettingStarted.md) to get started with Rostering API including learning about Scopes, Roster Resources , APIs, Samples and Building your first sample.
 
