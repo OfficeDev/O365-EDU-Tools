@@ -1,6 +1,6 @@
 # educationAssignmentGrade resource type
 
-Represents the Grade object on a Submission.  This is an abstract type and will never be instatiated, however all types of grading (points, pass/fail, etc.) will all subclass from this
+Represents the **Grade** object on a Submission.  This is an abstract type and will never be instantiated, however all types of grading (points, pass/fail, etc.) will all subclass from this
 resource type.  This object also tracks the who of the grading.  This is used in the submission.grade property.
 
 

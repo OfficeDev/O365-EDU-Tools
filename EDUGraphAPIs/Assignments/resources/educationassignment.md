@@ -1,13 +1,13 @@
 # educationAssignment resource type
 
-Assignment is the core object of the Assignments API.  Assignments are owned by a class and thus
-most of the APIs are done within the class namespace.  Only a teacher in a class can create an assignment.
+**Assignment** is the core object of the Assignments API.  Assignments are owned by a class and thus
+most of the APIs are exposed in the class namespace.  Only a teacher in a class can create an assignment.
 Assignment starts in the "Draft" state when created.  In draft, students will not see the assignment and submissions will not be created.
-The status on an assignment cannot be changed via PATCH, the status is changed by using the action.  
+The status on an assignment cannot be changed via PATCH. It can only be changed using the action.  
 
 
-Due to a bug, the graph will return educationItemBody for the instructions property.  This is an exact duplicate of the itemBody that 
-is already found on the graph.   When the code moves to prodution, this will be updated.  For clients who simply use the json being
+>**Note:** Due to a bug, the graph will return **educationItemBody** in the instructions property.  This is an exact duplicate of the **itemBody** that 
+is already found in the Graph API. When the code moves to production, this behavior will be updated.  For clients who simply use the json payload in the body of requests being
 sent back and forth to the graph, there should be no work necessary to handle this change.
 
 ## Methods
@@ -28,7 +28,7 @@ sent back and forth to the graph, there should be no work necessary to handle th
 |id|String| Read-only.|
 |allowLateSubmissions|Boolean| Identifies whether students can submit after the due date. |
 |allowStudentsToAddResourcesToSubmission|Boolean| Identifies whether students can add their own resources to a submission or if they can only modify resources added by the teacher. |
-|assignDateTime|DateTimeOffset|The date when the assignment should become active.  If in the future, the assignment is not shown to the student until this date.  The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
+|assignDateTime|DateTimeOffset|The date when the assignment should become active.  If in the future, the assignment is not shown to the student until this date.  The **Timestamp** type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
 |assignTo|[educationAssignmentRecipient](educationassignmentrecipient.md)| Which users, or whole class should receive a submission object once the assignment is published. |
 |assignedDateTime|DateTimeOffset|The moment that the assignment was published to students and the assignment shows up on the students timeline.  The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
 |classId|String| Class which this assignment belongs. |
@@ -40,8 +40,8 @@ sent back and forth to the graph, there should be no work necessary to handle th
 |instructions|[itemBody](itembody.md)| Instructions for the assignment.  This along with the display name tell the student what to do. |
 |lastModifiedBy|[identitySet](identityset.md)| Who last modified the assignment. |
 |lastModifiedDateTime|DateTimeOffset|Moment when the assignment was last modified.  The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
-|resourcesFolderUrl|String| Folder into which file based resource should be put to be part of a assignmnet resource.  Files must live in this folder to be added as a resource.|
-|status|string| Status of the Asssignment.  You can not PATCH this value.  Possible values are: `draft`, `published`, `assigned`.|
+|resourcesFolderUrl|String| Folder into which file based resource should be put to be part of a assignment resource.  Files must live in this folder to be added as a resource.|
+|status|string| Status of the **Assignment**.  You can not PATCH this value.  Possible values are: `draft`, `published`, `assigned`.|
 
 ## Relationships
 | Relationship | Type	|Description|

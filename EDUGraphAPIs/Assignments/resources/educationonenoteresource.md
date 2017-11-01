@@ -1,7 +1,9 @@
 # educationOneNoteResource resource type
 
 
-Subclass of [educationResource](educationresource.md).  This represents the location of the OneNote page.  Note that this API currently an incorrect syntax.  This will be 
+Subclass of [educationResource](educationresource.md).  This represents the location of the **OneNote** page.  
+
+>**Important:** This API currently an incorrect syntax.  This will be 
 replaced by the representation (single property) like the rest of graph.  Use this knowing it will change!!
 
 ## Properties

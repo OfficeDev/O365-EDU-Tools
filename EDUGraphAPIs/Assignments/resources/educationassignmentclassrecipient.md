@@ -1,8 +1,8 @@
 # educationAssignmentClassRecipient resource type
 
 
-Used inside the assignment.assignTo property.  When set to class recipient, every student in the class will 
-recieve a submission object when the assignment is published.
+Used inside the [assignment.assignTo](educationassignment.md) property.  When set to class recipient, every student in the class will 
+receive a submission object when the assignment is published.
 
 Subclass of [educationAssignmentRecipient](educationassignmentrecipient.md)
 
