@@ -31,9 +31,9 @@ The following are some common use cases for the assignment-related Education API
 
 |Use case|Description|See also|
 |:-------|:----------|:-------|
-|Create assignments|An external system can create an assignment for the class and attach resources to the assignment.||
-|Read assignment information|An analytics application can get information about assignments and student submissions, including dates and grades.||
-|Track student submissions|Your app can provide a teacher dashboard that shows how many submissions from students need to be graded.||
+|Create assignments|An external system can create an assignment for the class and attach resources to the assignment.|[Create assignment](../api/educationassignment_post_resources.md)|
+|Read assignment information|An analytics application can get information about assignments and student submissions, including dates and grades.|[Get assignment](../api/educationassignment_get.md)|
+|Track student submissions|Your app can provide a teacher dashboard that shows how many submissions from students need to be graded.|[Submission resource](educationsubmission.md)|
 
 ## Rostering
 
