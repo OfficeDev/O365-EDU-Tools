@@ -21,7 +21,7 @@ will receive a copy of this resource in the resource list of their assignment. E
 |resource|[educationResource](educationresource.md)|Resource object that has been associated with this assignment.|
 
 ## Relationships
-None
+None.
 
 
 ## JSON representation
