@@ -1,21 +1,23 @@
 # educationOneNoteResource resource type
 
+A subclass of [educationResource](educationresource.md). This represents the location of the OneNote page.  
 
-Subclass of [educationResource](educationresource.md).  This represents the location of the **OneNote** page.  
+<!-- Will this issue be resolved when you publish the APIs to beta? If not, please see the guidance for documenting Known issues, here: https://microsoft.sharepoint.com/teams/OfficeDeveloperEducation/DevEdWiki/Microsoft%20Graph%20known%20issues%20guidelines.aspx.
+-->
 
->**Important:** This API currently an incorrect syntax.  This will be 
-replaced by the representation (single property) like the rest of graph.  Use this knowing it will change!!
+>**Important:** This API currently uses a different syntax. This will be 
+replaced by the representation (single property).
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
 |notebookId|String|Notebook ID of the OneNote for this resource.|
-|pageId|String|Page Id of the OneNote.|
-|sectionName|String|Section Name of the OneNote.|
+|pageId|String|Page ID of the OneNote.|
+|sectionName|String|Section name of the OneNote.|
 
 ## JSON representation
 
-Here is a JSON representation of the resource.
+The following is a JSON representation of the resource.
 
 <!-- {
   "blockType": "resource",

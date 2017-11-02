@@ -1,20 +1,19 @@
 # educationExcelResource resource type
 
-Subclass of [educationResource](educationresource.md).  This resource type represents an **Excel**
- document.  
+A subclass of [educationResource](educationresource.md). This resource type represents an Excel document.  
  
->**Note:** The excel file must be in the resource folder associated with the assignment
+>**Note:** The Excel file must be in the resource folder associated with the assignment
 or submission object to which this resource belongs.
 
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|fileUrl|String|Pointer to the excel file object.|
+|fileUrl|String|Pointer to the Excel file object.|
 
 ## JSON representation
 
-Here is a JSON representation of the resource.
+The following is a JSON representation of the resource.
 
 <!-- {
   "blockType": "resource",
