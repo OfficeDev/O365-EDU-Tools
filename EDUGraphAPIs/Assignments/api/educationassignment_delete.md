@@ -13,9 +13,9 @@ One of the following permissions is required to call this API. To learn more, in
 
 ## HTTP request
 
-```http
 <!-- { "blockType": "ignored" } -->
 
+```http
 DELETE /education/classes/<id>/assignments/<id>
 ```
 ## Request headers

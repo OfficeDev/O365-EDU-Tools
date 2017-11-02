@@ -4,12 +4,15 @@
 most of the APIs are exposed in the class namespace.  Only a teacher in a class can create an assignment.
 Assignment starts in the "Draft" state when created.  In draft, students will not see the assignment and submissions will not be created.
 The status on an assignment cannot be changed via PATCH. It can only be changed using the action.  
+<!-- From Overview topic:
+An [Assignment](./Assignments/resources/educationassignmentresource.md) is a task or unit of work assigned to a student or team member in a class as part of their study.  Only teachers or team owners can create assignments.  Assignments contain handouts and tasks that the teacher wants the student to work on.  Each student assignment has an associated [submission](./Assignments/resources/educationsubmissionresource.md) that contains any work their teacher asked to be turned in. A teacher can add scores and feedback to the submission turned in by the student.
+-->
 
-
+<!-- Verify that this will be fixed before we publish the beta APIs, and remove this text.
 >**Note:** Due to a bug, the graph will return **educationItemBody** in the instructions property.  This is an exact duplicate of the **itemBody** that 
 is already found in the Graph API. When the code moves to production, this behavior will be updated.  For clients who simply use the json payload in the body of requests being
 sent back and forth to the graph, there should be no work necessary to handle this change.
-
+-->
 ## Methods
 
 | Method		   | Return Type	|Description|
