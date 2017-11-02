@@ -21,7 +21,7 @@ For more information about permissions for Education APIs, see [Permissions](../
 
 ## Assignments 
 
-You can use the assignment-related Education APIs to integrate with the Assignments service in Microsoft Teams in Office 365 for Education. Microsoft Teams in Office 365 for Education is based on the same Education APIs, and provides a use case for what you can do with the APIs. Your app can use the assignment APIs to interact with assignments throughout the assignment lifecycle. 
+You can use the assignment-related Education APIs to integrate with the Assignments service in Microsoft Teams. Microsoft Teams in Office 365 for Education is based on the same Education APIs, and provides a use case for what you can do with the APIs. Your app can use these APIs to interact with assignments throughout the assignment lifecycle. 
 
 <!-- I'm not sure that this text is clear. See the sentence that I added to the previous paragraph; please update to clarify the meaning.
 The Public API is the same API that _Microsoft Teams in Office 365 for Education_ built it's user interface with.  Thus, the best sample of what can be built with the Microsoft **Assignments** API is _Microsoft Teams in Office 365 for Education_.  
@@ -37,23 +37,28 @@ The following are some common use cases for the assignment-related Education API
 
 ## Rostering
 
-The rostering APIs enable you to extract data from a school's Office 365 tenant provisioned with Microsoft School Data Sync. These APIs provide access to information about schools, sections, teachers, students, and rosters. The APIs provide both app-only APIs primarily for sync-centric scenarios and app+user APIs designed for interactive scenarios.  The app+user APIs will enforce region-appropriate RBAC policies based on the user role calling the API.  This will provide a consistent API and minimal policy surface regardless of administrative configuration within tenants. In addition, the APIs also provide EDU specific scopes to ensure the right user has access to the data.
+The rostering APIs enable you to extract data from a school's Office 365 tenant provisioned with Microsoft School Data Sync. These APIs provide access to information about schools, sections, teachers, students, and rosters. The APIs support both app-only (sync) scenarios, and app + user (interactive) scenarios. The APIs that support interactive scenarios enforce region-appropriate RBAC policies based on the user role calling the API. This provides a consistent API and minimal policy surface, regardless of the administrative configuration within tenants. In addition, the APIs also provide education-specific permissions to ensure that the right user has access to the data.
 
-#### Rostering resources description
-The typical scenario for Rostering APIs to enable the user logged into a 3rd party ISV app to know:
+You can use the rostering APIs to enable an app user to know:
+
 - Who I am
 - What classes I attend or teach
-- What I need to do / by when
+- What I need to do and by when
 
-The Rostering APIs support this by providing APIs to support the following scenarios:
+The rostering APIs support support the following scenarios:
 
-- get Roster
-- get Schools
-- get Classes
-- get Teachers/Students
-- get My Schools/Classes
+- Get roster
+- Get schools
+- Get classes
+- get teachers/students
+- Get my schools/classes
 
 
 ## Next steps
-Use your new understanding of the Microsoft Graph Education API to build education solutions around student assignments and school rosters.
+Use the Microsoft Graph Education APIs to build education solutions that access student assignments and school rosters. To learn more:
+
+- Explore the resources and methods that are most helpful to your scenario.
+- Try the API in the [Graph Explorer](https://developer.microsoft.com/en-us/graph/graph-explorer).
+
+<!-- Verify that we'll have Education API examples in GE? Otherwise, remove the second bullet point. -->
 
