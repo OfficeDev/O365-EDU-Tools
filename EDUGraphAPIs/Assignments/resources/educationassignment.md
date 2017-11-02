@@ -1,12 +1,10 @@
 # educationAssignment resource type
 
-**Assignment** is the core object of the Assignments API.  Assignments are owned by a class and thus
-most of the APIs are exposed in the class namespace.  Only a teacher in a class can create an assignment.
-Assignment starts in the "Draft" state when created.  In draft, students will not see the assignment and submissions will not be created.
-The status on an assignment cannot be changed via PATCH. It can only be changed using the action.  
-<!-- From Overview topic:
-An [Assignment](./Assignments/resources/educationassignmentresource.md) is a task or unit of work assigned to a student or team member in a class as part of their study.  Only teachers or team owners can create assignments.  Assignments contain handouts and tasks that the teacher wants the student to work on.  Each student assignment has an associated [submission](./Assignments/resources/educationsubmissionresource.md) that contains any work their teacher asked to be turned in. A teacher can add scores and feedback to the submission turned in by the student.
--->
+The **educationAssignment** resource represents a task or unit of work assigned to a student or team member in a class as part of their study. Only teachers or team owners can create assignments. Assignments contain handouts and tasks that the teacher wants the student to work on. Each student assignment has an associated [submission](educationsubmissionresource.md) that contains any work their teacher asked to be turned in. A teacher can add scores and feedback to the submission turned in by the student.
+
+When an assignment is created, it is in a Draft state. Students can't see the assignment and submissions won't be created. You can change the status of an assignment by using the [publish](../api/educationassignment_publish.md) action. You can't use a PATCH request to change the assignment status.
+
+The assignment APIs are exposed in the class namespace.
 
 <!-- Verify that this will be fixed before we publish the beta APIs, and remove this text.
 >**Note:** Due to a bug, the graph will return **educationItemBody** in the instructions property.  This is an exact duplicate of the **itemBody** that 
@@ -17,13 +15,13 @@ sent back and forth to the graph, there should be no work necessary to handle th
 
 | Method		   | Return Type	|Description|
 |:---------------|:--------|:----------|
-|[Get educationAssignment](../api/educationassignment_get.md) | [educationAssignment](educationassignment.md) |Read properties and relationships of educationAssignment object.|
-|[Create educationAssignmentResource](../api/educationassignment_post_resources.md) |[educationAssignmentResource](educationassignmentresource.md)| Create a new educationAssignmentResource by posting to the resources collection.|
-|[List resources](../api/educationassignment_list_resources.md) |[educationAssignmentResource](educationassignmentresource.md) collection| Get a educationAssignmentResource object collection.|
-|[List submissions](../api/educationassignment_list_submissions.md) |[educationSubmission](educationsubmission.md) collection| Get a educationSubmission object collection.|
-|[Update](../api/educationassignment_update.md) | [educationAssignment](educationassignment.md)	|Update educationAssignment object. |
-|[Delete](../api/educationassignment_delete.md) | None |Delete educationAssignment object. |
-|[Publish](../api/educationassignment_publish.md)|[educationAssignment](educationassignment.md)||
+|[Get educationAssignment](../api/educationassignment_get.md) | [educationAssignment](educationassignment.md) |Read properties and relationships of an **educationAssignment** object.|
+|[Create educationAssignmentResource](../api/educationassignment_post_resources.md) |[educationAssignmentResource](educationassignmentresource.md)| Create a new **educationAssignmentResource** by posting to the resources collection.|
+|[List resources](../api/educationassignment_list_resources.md) |[educationAssignmentResource](educationassignmentresource.md) collection| Get an **educationAssignmentResource** object collection.|
+|[List submissions](../api/educationassignment_list_submissions.md) |[educationSubmission](educationsubmission.md) collection| Get an **educationSubmission** object collection.|
+|[Update](../api/educationassignment_update.md) | [educationAssignment](educationassignment.md)	|Update an **educationAssignment** object. |
+|[Delete](../api/educationassignment_delete.md) | None |Delete an **educationAssignment** object. |
+|[Publish](../api/educationassignment_publish.md)|[educationAssignment](educationassignment.md)|Change the state of an **educationAssignment** object from draft to published.|
 
 ## Properties
 | Property	   | Type	|Description|
@@ -54,7 +52,7 @@ sent back and forth to the graph, there should be no work necessary to handle th
 
 ## JSON representation
 
-Here is a JSON representation of the resource.
+The following is a JSON representation of the resource.
 
 <!-- {
   "blockType": "resource",
