@@ -1,6 +1,6 @@
 # Delete educationAssignmentResource
 
-Delete a resource from an assignment.  Only teachers in the class can remove a resource.  Once an assignment has been published to students, teachers cannot remove resources that have marked as "distributeToStudents".
+Delete a resource from an assignment. Only teachers in the class can remove a resource. After an assignment has been published to students, teachers cannot remove resources that are marked as "distributeToStudents".
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -27,11 +27,11 @@ Do not supply a request body for this method.
 
 
 ## Response
-If successful, this method returns `204, No Content` response code. It does not return anything in the response body.
+If successful, this method returns a `204 No Content` response code. It does not return anything in the response body.
 
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "delete_educationassignmentresource"
@@ -40,7 +40,10 @@ Here is an example of the request.
 DELETE https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/resources/<id>
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All of the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true

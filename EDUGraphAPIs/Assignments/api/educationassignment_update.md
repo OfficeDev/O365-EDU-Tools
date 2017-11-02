@@ -1,12 +1,12 @@
 # Update educationassignment
 
-Update the assignment object.  Only teachers in the class can do this action.  Note that the status of an assignment cannot be changed in a PATCH, the URL action should be used to change an assignment state.
+Update the assignment object. Only teachers in the class can do this. Note that you can't use a PATCH request to change the status of an assignment. Use the [publish](../api/educationassignment_publish.md) action to change the assignment status.
 
-
-
-Due to a bug, the graph will return educationItemBody for the instructions property.  This is an exact duplicate of the itemBody that 
-is already found on the graph.   When the code moves to prodution, this will be updated.  For clients who simply use the json being
-sent back and forth to the graph, there should be no work necessary to handle this change.
+<!-- Verify that this will be fixed before we publish the beta APIs, and remove this text.
+>**Note:** Microsoft Graph returns **educationItemBody** in the instructions property. This is a duplicate of the **itemBody** that 
+is already found in the Microsoft Graph API. For clients who use the JSON payload in the body of requests being
+sent back and forth to Microsoft Graph, there should be no work necessary to handle this change.
+-->
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -29,24 +29,24 @@ PATCH /education/classes/<id>/assignments/<id>
 | Content-Type  | application/json  |
 
 ## Request body
-In the request body, supply the values for relevant fields that should be updated. Existing properties that are not included in the request body will maintain their previous values or be recalculated based on changes to other property values. For best performance you shouldn't include existing values that haven't changed.
+In the request body, supply the values for relevant fields that should be updated. Existing properties that are not included in the request body will maintain their previous values or be recalculated based on changes to other property values. For best performance, don't include existing values that haven't changed.
 
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|allowLateSubmissions|Boolean| Whether submisions can be submitted after the due date|
-|allowStudentsToAddResourcesToSubmission|Boolean| Wether a student can add resources to a submission.  Indicated whether the only items on the submission came from the assignment resource list. |
-|assignDateTime|DateTimeOffset| Date the assignmetn should be published to students. |
-|assignTo|educationAssignmentRecipient| Students who get the assignment|
+|allowLateSubmissions|Boolean| Whether submissions can be submitted after the due date.|
+|allowStudentsToAddResourcesToSubmission|Boolean| Whether a student can add resources to a submission. Indicated whether the only items on the submission came from the assignment resource list. |
+|assignDateTime|DateTimeOffset| Date the assignment should be published to students. |
+|assignTo|educationAssignmentRecipient| Students who get the assignment.|
 |displayName|String| Name of assignment. |
 |dueDateTime|DateTimeOffset| Date assignment is due. |
 |grading|educationAssignmentGradeType| How the assignment will be graded.|
 |instructions|itemBody| Instructions to be given to the students along with the assignment. |
 
 ## Response
-If successful, this method returns a `200 OK` response code and updated [educationAssignment](../resources/educationassignment.md) object in the response body.
+If successful, this method returns a `200 OK` response code and an updated [educationAssignment](../resources/educationassignment.md) object in the response body.
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "update_educationassignment"
@@ -66,7 +66,10 @@ Content-length: 279
 }
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All of the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,

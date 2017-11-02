@@ -1,6 +1,6 @@
 # educationAssignment: publish
 
-This action changes the state of an assignment from its original draft status to the published status.  Only a teacher in the class can make this call.  When an assignment is in draft status, students will not see the assignment nor will there be any submission objects.  By calling this api, submission objects will be created and the assignment will show up in the student's list.
+This action changes the state of an assignment from its original draft status to the published status. Only a teacher in the class can make this call. When an assignment is in draft status, students will not see the assignment, nor will there be any submission objects. When you call this API submission object is created and the assignment appears in the student's list.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -25,12 +25,12 @@ POST /education/classes/<id>/assignments/<id>/publish
 ## Request body
 
 ## Response
-If successful, this method returns `204, No Content` response code. It does not return anything in the response body.
+If successful, this method returns a `204 No Content` response code. It does not return anything in the response body.
 
 ## Example
-Here is an example of how to call this API.
+The following example shows how to call this API.
 ##### Request
-Here is an example of the request.
+The following is an example of a request.
 <!-- {
   "blockType": "request",
   "name": "educationassignment_publish"
@@ -40,7 +40,8 @@ POST https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/pu
 ```
 
 ##### Response
-If successful, this method returns `204, No Content` response code. It does not return anything in the response body.
+The following is an example of a response. 
+
 <!-- {
   "blockType": "response",
   "truncated": true,

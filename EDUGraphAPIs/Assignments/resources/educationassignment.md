@@ -7,9 +7,9 @@ When an assignment is created, it is in a Draft state. Students can't see the as
 The assignment APIs are exposed in the class namespace.
 
 <!-- Verify that this will be fixed before we publish the beta APIs, and remove this text.
->**Note:** Due to a bug, the graph will return **educationItemBody** in the instructions property.  This is an exact duplicate of the **itemBody** that 
-is already found in the Graph API. When the code moves to production, this behavior will be updated.  For clients who simply use the json payload in the body of requests being
-sent back and forth to the graph, there should be no work necessary to handle this change.
+>**Note:** Microsoft Graph returns **educationItemBody** in the instructions property. This is a duplicate of the **itemBody** that 
+is already found in the Microsoft Graph API. For clients who use the JSON payload in the body of requests being
+sent back and forth to Microsoft Graph, there should be no work necessary to handle this change.
 -->
 ## Methods
 
