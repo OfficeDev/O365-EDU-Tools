@@ -1,8 +1,6 @@
 # List assignments
 
-Retrieve a list of assignment objects.  A teacher is allowed to see all assignment objects for the class, while the student can only see assignments that are assgined to them.
-
-
+Retrieve a list of assignment objects. A teacher is allowed to see all assignment objects for the class. Students can only see assignments that are assigned to them.
 
 Due to a bug, the graph will return educationItemBody for the instructions property.  This is an exact duplicate of the itemBody that 
 is already found on the graph.   When the code moves to prodution, this will be updated.  For clients who simply use the json being
