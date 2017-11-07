@@ -2,10 +2,11 @@
 
 Retrieve a list of assignment objects. A teacher is allowed to see all assignment objects for the class. Students can only see assignments that are assigned to them.
 
-Due to a bug, the graph will return educationItemBody for the instructions property.  This is an exact duplicate of the itemBody that 
-is already found on the graph.   When the code moves to prodution, this will be updated.  For clients who simply use the json being
-sent back and forth to the graph, there should be no work necessary to handle this change.
-
+<!-- Verify that this will be fixed before we publish the beta APIs, and remove this text.
+>**Note:** Microsoft Graph returns **educationItemBody** in the instructions property. This is a duplicate of the **itemBody** that 
+is already found in the Microsoft Graph API. For clients who use the JSON payload in the body of requests being
+sent back and forth to Microsoft Graph, there should be no work necessary to handle this change.
+-->
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -32,10 +33,10 @@ This method supports the [OData Query Parameters](http://graph.microsoft.io/docs
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and collection of [educationAssignment](../resources/educationassignment.md) objects in the response body.
+If successful, this method returns a `200 OK` response code and a collection of [educationAssignment](../resources/educationassignment.md) objects in the response body.
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "get_assignments"
@@ -44,7 +45,10 @@ Here is an example of the request.
 GET https://graph.microsoft.com/beta/education/classes/<id>/assignments
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
