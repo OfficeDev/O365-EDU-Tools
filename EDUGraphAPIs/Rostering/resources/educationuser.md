@@ -1,7 +1,7 @@
 # educationUser resource type
 
 A user in the system.  This is an education-specific variant of the user with the same `id` that Graph will return from the non-education-specific `/users` endpoint.
-This object provides a targetted subset of properties from the core [user](user.md) object and adds a set of education-specific properties such as primaryRole, student and teacher data.
+This object provides a targeted subset of properties from the core [user](user.md) object and adds a set of education-specific properties such as primaryRole, student, and teacher data.
 
 
 ## Methods
@@ -32,8 +32,8 @@ This object provides a targetted subset of properties from the core [user](user.
 |mailNickname|String|The mail alias for the user. This property must be specified when a user is created. Supports $filter.|
 |middleName| String | Middle Name of user.|
 |mobilePhone|String|The primary cellular telephone number for the user.|
-|passwordPolicies|String|Specifies password policies for the user. This value is an enumeration with one possible value being ìDisableStrongPasswordî, which allows weaker passwords than the default policy to be specified. ìDisablePasswordExpirationî can also be specified. The two may be specified together; for example: "DisablePasswordExpiration, DisableStrongPassword".|
-|passwordProfile|[PasswordProfile](passwordprofile.md)|Specifies the password profile for the user. The profile contains the userís password. This property is required when a user is created. The password in the profile must satisfy minimum requirements as specified by the **passwordPolicies** property. By default, a strong password is required.|
+|passwordPolicies|String|Specifies password policies for the user. This value is an enumeration with one possible value being ‚ÄúDisableStrongPassword‚Äù, which allows weaker passwords than the default policy to be specified. ‚ÄúDisablePasswordExpiration‚Äù can also be specified. The two may be specified together; for example: "DisablePasswordExpiration, DisableStrongPassword".|
+|passwordProfile|[PasswordProfile](passwordprofile.md)|Specifies the password profile for the user. The profile contains the user‚Äôs password. This property is required when a user is created. The password in the profile must satisfy minimum requirements as specified by the **passwordPolicies** property. By default, a strong password is required.|
 |preferredLanguage|String|The preferred language for the user. Should follow ISO 639-1 Code; for example "en-US".|
 |primaryRole|string| Default Role for a user.  The user's role might be different in an individual class. Possible values are: `student`, `teacher`, `enum_sentinel`.|
 |provisionedPlans|[ProvisionedPlan](provisionedplan.md) collection|The plans that are provisioned for the user. Read-only. Not nullable. |
@@ -42,8 +42,8 @@ This object provides a targetted subset of properties from the core [user](user.
 |surname|String|The user's surname (family name or last name). Supports $filter.|
 |teacher|[educationTeacher](educationteacher.md)| If the primary role is teacher, this block will conatin teacher specific data.|
 |usageLocation|String|A two letter country code (ISO standard 3166). Required for users that will be assigned licenses due to legal requirement to check for availability of services in countries.  Examples include: "US", "JP", and "GB". Not nullable. Supports $filter.|
-|userPrincipalName|String|The user principal name (UPN) of the user. The UPN is an Internet-style login name for the user based on the Internet standard RFC 822. By convention, this should map to the user's email name. The general format is alias@domain, where domain must be present in the tenantís collection of verified domains. This property is required when a user is created. The verified domains for the tenant can be accessed from the **verifiedDomains** property of [organization](organization.md). Supports $filter and $orderby.
-|userType|String|A string value that can be used to classify user types in your directory, such as ìMemberî and ìGuestî. Supports $filter.          |
+|userPrincipalName|String|The user principal name (UPN) of the user. The UPN is an Internet-style login name for the user based on the Internet standard RFC 822. By convention, this should map to the user's email name. The general format is alias@domain, where domain must be present in the tenant‚Äôs collection of verified domains. This property is required when a user is created. The verified domains for the tenant can be accessed from the **verifiedDomains** property of [organization](organization.md). Supports $filter and $orderby.
+|userType|String|A string value that can be used to classify user types in your directory, such as ‚ÄúMember‚Äù and ‚ÄúGuest‚Äù. Supports $filter.          |
 
 ## Relationships
 | Relationship | Type	|Description|
