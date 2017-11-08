@@ -3,7 +3,7 @@
 
 The `/education` namespace exposes special functionality specific to the education sector. 
 Some of these objects can be found in other parts of the Graph (users for instance),
-but the education namespace will provide education-specific properties and features as extensions to these objects.
+but the education namespace will provide education-specific properties and features on these objects.
 
 ## Methods
 

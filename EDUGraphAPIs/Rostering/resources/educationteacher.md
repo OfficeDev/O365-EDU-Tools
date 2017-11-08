@@ -7,7 +7,7 @@ Additional information added to an [educationUser](educationuser.md) which is pr
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|externalId|String| ID of the student in the source system.|
+|externalId|String| ID of the teacher in the source system.|
 |teacherNumber|String|Teacher Number.|
 
 ## JSON representation
