@@ -11,9 +11,8 @@ replaced by the representation (single property).
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|notebookId|String|Notebook ID of the OneNote for this resource.|
-|pageId|String|Page ID of the OneNote.|
-|sectionName|String|Section name of the OneNote.|
+|pageUrl|String|Graph URL to the Page in OneNote.|
+|sectionName|String|Section name that distributions should be copied into or were copied into.|
 
 ## JSON representation
 
@@ -29,8 +28,7 @@ The following is a JSON representation of the resource.
 
 ```json
 {
-  "notebookId": "String",
-  "pageId": "String",
+  "pageUrl": "String",
   "sectionName": "String"
 }
 

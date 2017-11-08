@@ -77,7 +77,6 @@ Content-length: 344
       "instructions": {"@odata.type": "microsoft.graph.itemBody"},
       "lastModifiedBy": {"@odata.type": "microsoft.graph.identitySet"},
       "lastModifiedDateTime": "String (timestamp)",
-      "resourcesFolderUrl": "String",
       "status": "string"
     }
   ]

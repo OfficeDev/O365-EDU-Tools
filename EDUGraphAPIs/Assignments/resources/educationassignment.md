@@ -22,6 +22,7 @@ sent back and forth to Microsoft Graph, there should be no work necessary to han
 |[Update](../api/educationassignment_update.md) | [educationAssignment](educationassignment.md)	|Update an **educationAssignment** object. |
 |[Delete](../api/educationassignment_delete.md) | None |Delete an **educationAssignment** object. |
 |[Publish](../api/educationassignment_publish.md)|[educationAssignment](educationassignment.md)|Change the state of an **educationAssignment** object from draft to published.|
+|[GetResourceFolderUrl](../api/educationassignment_getResourcesFolderUrl.md)| string| OneDrive folder into which file based resource should be put to be part of a assignment resource.  Files must live in this folder to be added as a resource.|
 
 ## Properties
 | Property	   | Type	|Description|
@@ -41,7 +42,6 @@ sent back and forth to Microsoft Graph, there should be no work necessary to han
 |instructions|[itemBody](itembody.md)| Instructions for the assignment.  This along with the display name tell the student what to do. |
 |lastModifiedBy|[identitySet](identityset.md)| Who last modified the assignment. |
 |lastModifiedDateTime|DateTimeOffset|Moment when the assignment was last modified.  The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
-|resourcesFolderUrl|String| Folder into which file based resource should be put to be part of a assignment resource.  Files must live in this folder to be added as a resource.|
 |status|string| Status of the **Assignment**.  You can not PATCH this value.  Possible values are: `draft`, `published`, `assigned`.|
 
 ## Relationships
@@ -79,7 +79,6 @@ The following is a JSON representation of the resource.
   "instructions": {"@odata.type": "microsoft.graph.itemBody"},
   "lastModifiedBy": {"@odata.type": "microsoft.graph.identitySet"},
   "lastModifiedDateTime": "String (timestamp)",
-  "resourcesFolderUrl": "String",
   "status": "string"
 }
 ```
