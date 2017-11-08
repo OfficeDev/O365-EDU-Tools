@@ -20,7 +20,7 @@ This object provides a targeted subset of properties from the core [user](user.m
 |accountEnabled|Boolean| **true** if the account is enabled; otherwise, **false**. This property is required when a user is created. Supports $filter.    |
 |assignedLicenses|[assignedLicense](assignedlicense.md) collection|The licenses that are assigned to the user. Not nullable.            |
 |assignedPlans|[assignedPlan](assignedplan.md) collection|The plans that are assigned to the user. Read-only. Not nullable. |
-|businessPhones|String collection|The telephone numbers for the user. NOTE: Although this is a string collection, only one number can be set for this property.|
+|businessPhones|String collection|The telephone numbers for the user. **Note:** Although this is a string collection, only one number can be set for this property.|
 |createdBy|[identitySet](identityset.md)| Entity who created the user. |
 |department|String|The name for the department in which the user works. Supports $filter.|
 |displayName|String|The name displayed in the address book for the user. This is usually the combination of the user's first name, middle initial and last name. This property is required when a user is created and it cannot be cleared during updates. Supports $filter and $orderby.|
