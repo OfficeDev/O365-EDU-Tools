@@ -1,6 +1,6 @@
 # Get educationSubmittedSubmissionResource
 
-Returns the submitted resource.  This will be available to a teacher after a student has submitted.  This will be available to the student once the teacher has released the submission.  Note that teachers can leave notes in the actual resources themselves, depending on the resource.
+Returns the submitted resource. This will be available to a teacher after a student has submitted, and will be available to the student after the teacher has released the submission.  Note that teachers can leave notes in some resources.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -27,10 +27,10 @@ This method supports the [OData Query Parameters](http://graph.microsoft.io/docs
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and [educationSubmittedSubmissionResource](../resources/educationsubmittedsubmissionresource.md) object in the response body.
+If successful, this method returns a `200 OK` response code and an[educationSubmittedSubmissionResource](../resources/educationsubmittedsubmissionresource.md) object in the response body.
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "get_educationsubmittedsubmissionresource"
@@ -39,7 +39,10 @@ Here is an example of the request.
 GET https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/submissions/<id>/submittedResources/<id>
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
