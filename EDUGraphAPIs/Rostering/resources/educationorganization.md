@@ -8,15 +8,15 @@ Abstract entity used to model the commonality between different organization typ
 |:---------------|:--------|:----------|
 |description|String| Organization description.|
 |displayName|String| Organization display name.|
-|externalSource|string| Source where this organization was created from.  Possible values are: `sis`, `manual`, `unknownFutureValue`.|
+|externalSource|string| Source where this organization was created from. Possible values are: `sis`, `manual`, `unknownFutureValue`.|
 
 ## Relationships
-None
+None.
 
 
 ## JSON representation
 
-Here is a JSON representation of the resource.
+The following is a JSON representation of the resource.
 
 <!-- {
   "blockType": "resource",
