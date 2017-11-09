@@ -1,6 +1,5 @@
 # educationRoot resource type
 
-
 The `/education` namespace exposes functionality that is specific to the education sector. 
 Some objects in the `/education` namespace can be found in other parts of Microsoft Graph (for example, [users](user.md)). The education namespace provides education-specific properties and features on these objects.
 
@@ -8,15 +7,15 @@ Some objects in the `/education` namespace can be found in other parts of Micros
 
 | Method		   | Return Type	|Description|
 |:---------------|:--------|:----------|
-|[Create educationClass](../api/educationroot_post_classes.md) |[educationClass](educationclass.md)| Create a new educationClass by posting to the classes collection.|
-|[List classes](../api/educationroot_list_classes.md) |[educationClass](educationclass.md) collection| Get a educationClass object collection.|
-|[Create educationSchool](../api/educationroot_post_schools.md) |[educationSchool](educationschool.md)| Create a new educationSchool by posting to the schools collection.|
-|[List schools](../api/educationroot_list_schools.md) |[educationSchool](educationschool.md) collection| Get a educationSchool object collection.|
-|[Create educationUser](../api/educationroot_post_users.md) |[educationUser](educationuser.md)| Create a new educationUser by posting to the users collection.|
-|[List users](../api/educationroot_list_users.md) |[educationUser](educationuser.md) collection| Get a educationUser object collection.|
+|[Create educationClass](../api/educationroot_post_classes.md) |[educationClass](educationclass.md)| Create a new **educationClass** by posting to the classes collection.|
+|[List classes](../api/educationroot_list_classes.md) |[educationClass](educationclass.md) collection| Get an **educationClass** object collection.|
+|[Create educationSchool](../api/educationroot_post_schools.md) |[educationSchool](educationschool.md)| Create a new **educationSchool** by posting to the schools collection.|
+|[List schools](../api/educationroot_list_schools.md) |[educationSchool](educationschool.md) collection| Get an **educationSchool** object collection.|
+|[Create educationUser](../api/educationroot_post_users.md) |[educationUser](educationuser.md)| Create a new **educationUser** by posting to the users collection.|
+|[List users](../api/educationroot_list_users.md) |[educationUser](educationuser.md) collection| Get an **educationUser** object collection.|
 
 ## Properties
-None
+None.
 
 ## Relationships
 | Relationship | Type	|Description|

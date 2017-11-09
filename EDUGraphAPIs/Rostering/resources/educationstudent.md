@@ -1,7 +1,6 @@
 # educationStudent resource type
 
-
-Additional information added to an [educationUser](educationuser.md) which is present when the primaryRole of a user is `student`.
+Additional information added to an [educationUser](educationuser.md) that is present when the primaryRole of a user is `student`.
 
 ## Properties
 | Property	   | Type	|Description|
@@ -15,7 +14,7 @@ Additional information added to an [educationUser](educationuser.md) which is pr
 
 ## JSON representation
 
-Here is a JSON representation of the resource.
+The following is a JSON representation of the resource.
 
 <!-- {
   "blockType": "resource",

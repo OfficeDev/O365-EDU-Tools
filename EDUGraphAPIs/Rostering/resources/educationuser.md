@@ -1,6 +1,6 @@
 # educationUser resource type
 
-A user in the system.  This is an education-specific variant of the user with the same `id` that Graph will return from the non-education-specific `/users` endpoint.
+A user in the system. This is an education-specific variant of the user with the same `id` that Microsoft Graph will return from the non-education-specific `/users` endpoint.
 This object provides a targeted subset of properties from the core [user](user.md) object and adds a set of education-specific properties such as primaryRole, student, and teacher data.
 
 
@@ -15,7 +15,7 @@ This object provides a targeted subset of properties from the core [user](user.m
 |[Delete](../api/educationuser_delete.md) | None |Delete educationUser object. |
 
 ## Properties
-| Property	   | Type	|Description|n
+| Property	   | Type	|Description|
 |:---------------|:--------|:----------|
 |accountEnabled|Boolean| **true** if the account is enabled; otherwise, **false**. This property is required when a user is created. Supports $filter.    |
 |assignedLicenses|[assignedLicense](assignedlicense.md) collection|The licenses that are assigned to the user. Not nullable.            |
@@ -50,11 +50,11 @@ This object provides a targeted subset of properties from the core [user](user.m
 |:---------------|:--------|:----------|
 |classes|[educationClass](educationclass.md) collection| Classes to which the user belongs. Nullable.|
 |schools|[educationSchool](educationschool.md) collection| Schools to which the user belongs. Nullable.|
-|assignments| [educationAssignment](../../Assignments/resources/educationAssignment.md)| List of assignments for hte user.  Nullable.|
+|assignments| [educationAssignment](../../Assignments/resources/educationAssignment.md)| List of assignments for hte user. Nullable.|
 
 ## JSON representation
 
-Here is a JSON representation of the resource.
+The following is a JSON representation of the resource.
 
 <!-- {
   "blockType": "resource",
