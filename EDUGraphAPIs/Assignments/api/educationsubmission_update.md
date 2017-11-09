@@ -1,6 +1,6 @@
 # Update educationsubmission
 
-This is used by the teacher to add a grade and feedback to a submission.  Note that the Basic scope is not allowed as it does not have access to the grade properties.  This action does not release the grade/feedback to the student, a teacher must take an explicit release action for the grade data to be returned to the student.
+Add a grade and feedback to a submission. Only teachers can perform this operation. Note that the Basic permission is not allowed because it does not provide access to the grade properties. This action does not release the grade and feedback to the student. A teacher must take an explicit release action for the grade data to be returned to the student.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -22,7 +22,9 @@ PATCH /education/classes/<id>/assignments/<id>/submissions/<id>
 | Authorization  | Bearer {token}. Required.  |
 
 ## Request body
-In the request body, supply the values for relevant fields that should be updated. Existing properties that are not included in the request body will maintain their previous values or be recalculated based on changes to other property values. For best performance you shouldn't include existing values that haven't changed.
+In the request body, supply the values for relevant fields that should be updated. Existing properties that are not included in the request body will maintain their previous values or be recalculated based on changes to other property values. For best performance, don't include existing values that haven't changed.
+
+<!-- Provide the property descriptions. -->
 
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
@@ -30,10 +32,10 @@ In the request body, supply the values for relevant fields that should be update
 |grade|educationAssignmentGrade||
 
 ## Response
-If successful, this method returns a `200 OK` response code and updated [educationSubmission](../resources/educationsubmission.md) object in the response body.
+If successful, this method returns a `200 OK` response code and an updated [educationSubmission](../resources/educationsubmission.md) object in the response body.
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "update_educationsubmission"
@@ -49,7 +51,10 @@ Content-length: 712
 }
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+>
 <!-- {
   "blockType": "response",
   "truncated": true,

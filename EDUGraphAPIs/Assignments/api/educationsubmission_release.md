@@ -1,6 +1,6 @@
 # educationSubmission: release
 
-Action makes the grade and feedback associated with this submission available back to the student.  This will change the status of the submission from "submitted" to "released" and indicates that grading is done.  This action can only be done by the teacher.
+This action makes the grade and feedback associated with this submission available to the student. This will change the status of the submission from "submitted" to "released" and indicates that grading is done. This action can only be done by the teacher.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -23,24 +23,27 @@ POST /education/classes/<id>/assignments/<id>/submissions/<id>/release
 | Authorization  | Bearer {token}. Required.  |
 
 ## Request body
+Do not supply a request body for this method.
 
 ## Response
-If successful, this method returns `204, No Content` response code. It does not return anything in the response body.
+If successful, this method returns `204 No Content` response code. It does not return anything in the response body.
 
 ## Example
-Here is an example of how to call this API.
+The following example shows how to call this API.
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "educationsubmission_release"
 }-->
 
-##### Response
 ```http
 POST https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/submissions/<id>/release
 ```
-If successful, this method returns `204, No Content` response code. It does not return anything in the response body.
+
+##### Response
+The following is an example of the response.
+
 <!-- {
   "blockType": "response",
   "truncated": true,

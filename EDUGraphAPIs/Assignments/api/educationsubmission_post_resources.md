@@ -28,7 +28,7 @@ In the request body, supply a JSON representation of the [educationSubmissionRes
 
 
 ## Response
-If successful, this method returns a `201 Created` response code and an[educationSubmissionResource](../resources/educationsubmissionresource.md) object in the response body.
+If successful, this method returns a `201 Created` response code and an [educationSubmissionResource](../resources/educationsubmissionresource.md) object in the response body.
 
 ## Example
 ##### Request
