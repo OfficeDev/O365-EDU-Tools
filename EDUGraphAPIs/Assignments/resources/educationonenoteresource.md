@@ -11,7 +11,7 @@ replaced by the representation (single property).
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|pageUrl|String|Graph URL to the Page in OneNote.|
+|pageUrl|String|The Microsoft Graph URL to the page in OneNote.|
 |sectionName|String|Section name that distributions should be copied into or were copied into.|
 
 ## JSON representation
