@@ -1,8 +1,7 @@
 # educationAssignment: getResourcesFolderUrl
 
-This function returns the OneDrive URL where all file based resources (files/Word/excel/etc) should be uploaded.  
-Note that files must live in this folder for them to be added as Resources. 
-Only a teacher in the class can make this call. 
+This function returns the OneDrive URL where all file-based resources (Word, Excel, and so on) should be uploaded.  
+Note that files must be located in this folder in order to be added as resources. Only a teacher in the class can determine what files to upload. 
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -27,7 +26,7 @@ POST /education/classes/<id>/assignments/<id>/getResourcesFolderUrl
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 Ok` response code. The Body will contain the One Drive URL of a folder to put all file based resources.
+If successful, this method returns a `200 Ok` response code. The body will contain the OneDrive URL of a folder in which to put all file-based resources.
 
 ## Example
 The following example shows how to call this API.

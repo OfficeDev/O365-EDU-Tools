@@ -22,7 +22,7 @@ sent back and forth to Microsoft Graph, there should be no work necessary to han
 |[Update](../api/educationassignment_update.md) | [educationAssignment](educationassignment.md)	|Update an **educationAssignment** object. |
 |[Delete](../api/educationassignment_delete.md) | None |Delete an **educationAssignment** object. |
 |[Publish](../api/educationassignment_publish.md)|[educationAssignment](educationassignment.md)|Change the state of an **educationAssignment** object from draft to published.|
-|[GetResourceFolderUrl](../api/educationassignment_getResourcesFolderUrl.md)| string| OneDrive folder into which file based resource should be put to be part of a assignment resource.  Files must live in this folder to be added as a resource.|
+|[GetResourceFolderUrl](../api/educationassignment_getResourcesFolderUrl.md)| string| OneDrive folder into which file-based resources should be put to be part of a assignment resource. Files must be located in this folder to be added as a resource.|
 
 ## Properties
 | Property	   | Type	|Description|
