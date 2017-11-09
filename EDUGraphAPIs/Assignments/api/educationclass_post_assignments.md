@@ -2,12 +2,6 @@
 
 Creates a new assignment. Only teachers in a class can create an assignment. Assignments start in the Draft state, which means that students will not see the assignment until publish is called.  
 
-<!-- Verify that this will be fixed before we publish the beta APIs, and remove this text.
->**Note:** Microsoft Graph returns **educationItemBody** in the instructions property. This is a duplicate of the **itemBody** that 
-is already found in the Microsoft Graph API. For clients who use the JSON payload in the body of requests being
-sent back and forth to Microsoft Graph, there should be no work necessary to handle this change.
--->
-
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
 
