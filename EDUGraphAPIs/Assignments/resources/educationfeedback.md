@@ -2,11 +2,6 @@
 
 Feedback from a teacher to a student. This property represents both the text part of the feedback along with the who.
 
-<!-- Verify that this has been fixed, and delete this note.
->**Note:** Due to a bug, Microsoft Graph will return **educationItemBody** for the text property. This is a duplicate of the itemBody that 
-is already found on the Microsoft Graph API. When the code moves to production, this behavior will be updated. For clients who use the JSON that's
-sent back and forth to Microsoft Graph, there should be no work necessary to handle this change.
--->
 
 ## Properties
 | Property	   | Type	|Description|
