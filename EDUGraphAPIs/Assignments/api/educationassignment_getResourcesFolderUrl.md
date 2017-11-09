@@ -25,7 +25,7 @@ POST /education/classes/<id>/assignments/<id>/getResourcesFolderUrl
 | Authorization  | Bearer {token}. Required.  |
 
 ## Request body
-
+Do not supply a request body for this method.
 ## Response
 If successful, this method returns a `200 Ok` response code. The Body will contain the One Drive URL of a folder to put all file based resources.
 
