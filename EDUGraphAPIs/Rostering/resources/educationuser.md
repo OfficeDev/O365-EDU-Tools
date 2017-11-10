@@ -8,34 +8,34 @@ This object provides a targeted subset of properties from the core [user](user.m
 
 | Method		   | Return Type	|Description|
 |:---------------|:--------|:----------|
-|[Get educationUser](../api/educationuser_get.md) | [educationUser](educationuser.md) |Read properties and relationships of educationUser object.|
-|[List classes](../api/educationuser_list_classes.md) |[educationClass](educationclass.md) collection| Get an educationClass object collection.|
-|[List schools](../api/educationuser_list_schools.md) |[educationSchool](educationschool.md) collection| Get an educationSchool object collection.|
-|[Update](../api/educationuser_update.md) | [educationUser](educationuser.md)	|Update educationUser object. |
-|[Delete](../api/educationuser_delete.md) | None |Delete educationUser object. |
+|[Get educationUser](../api/educationuser_get.md) | [educationUser](educationuser.md) |Read properties and relationships of an **educationUser** object.|
+|[List classes](../api/educationuser_list_classes.md) |[educationClass](educationclass.md) collection| Get an **educationClass** object collection.|
+|[List schools](../api/educationuser_list_schools.md) |[educationSchool](educationschool.md) collection| Get an **educationSchool** object collection.|
+|[Update](../api/educationuser_update.md) | [educationUser](educationuser.md)	|Update an **educationUser** object. |
+|[Delete](../api/educationuser_delete.md) | None |Delete an **educationUser** object. |
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|accountEnabled|Boolean| **true** if the account is enabled; otherwise, **false**. This property is required when a user is created. Supports $filter.    |
+|accountEnabled|Boolean| **True** if the account is enabled; otherwise, **false**. This property is required when a user is created. Supports $filter.    |
 |assignedLicenses|[assignedLicense](assignedlicense.md) collection|The licenses that are assigned to the user. Not nullable.            |
 |assignedPlans|[assignedPlan](assignedplan.md) collection|The plans that are assigned to the user. Read-only. Not nullable. |
 |businessPhones|String collection|The telephone numbers for the user. **Note:** Although this is a string collection, only one number can be set for this property.|
 |createdBy|[identitySet](identityset.md)| Entity who created the user. |
 |department|String|The name for the department in which the user works. Supports $filter.|
-|displayName|String|The name displayed in the address book for the user. This is usually the combination of the user's first name, middle initial and last name. This property is required when a user is created and it cannot be cleared during updates. Supports $filter and $orderby.|
-|externalSource|`educationExternalSource`| Where this user was created from.  Possible values are: `sis`, `manual`, `unkownFutureValue`.|
+|displayName|String|The name displayed in the address book for the user. This is usually the combination of the user's first name, middle initial, and last name. This property is required when a user is created and it cannot be cleared during updates. Supports $filter and $orderby.|
+|externalSource|`educationExternalSource`| Where this user was created from. Possible values are: `sis`, `manual`, `unkownFutureValue`.|
 |givenName|String|The given name (first name) of the user. Supports $filter.|
 |id|String|The unique identifier for the user. Inherited from [directoryObject](directoryobject.md). Key. Not nullable. Read-only.|
-|mail|String|The SMTP address for the user, for example, "jeff@contoso.onmicrosoft.com". Read-Only. Supports $filter.|
+|mail|String|The SMTP address for the user; for example, "jeff@contoso.onmicrosoft.com". Read-Only. Supports $filter.|
 |mailingAddress|[physicalAddress](physicaladdress.md)| Mail address of user.|
 |mailNickname|String|The mail alias for the user. This property must be specified when a user is created. Supports $filter.|
-|middleName| String | Middle Name of user.|
+|middleName| String | The middle name of user.|
 |mobilePhone|String|The primary cellular telephone number for the user.|
-|passwordPolicies|String|Specifies password policies for the user. This value is an enumeration with one possible value being “DisableStrongPassword”, which allows weaker passwords than the default policy to be specified. “DisablePasswordExpiration” can also be specified. The two may be specified together; for example: "DisablePasswordExpiration, DisableStrongPassword".|
+|passwordPolicies|String|Specifies password policies for the user. This value is an enumeration with one possible value being “DisableStrongPassword”, which allows weaker passwords than the default policy to be specified. “DisablePasswordExpiration” can also be specified. The two can be specified together; for example: "DisablePasswordExpiration, DisableStrongPassword".|
 |passwordProfile|[PasswordProfile](passwordprofile.md)|Specifies the password profile for the user. The profile contains the user’s password. This property is required when a user is created. The password in the profile must satisfy minimum requirements as specified by the **passwordPolicies** property. By default, a strong password is required.|
-|preferredLanguage|String|The preferred language for the user. Should follow ISO 639-1 Code; for example "en-US".|
-|primaryRole|string| Default Role for a user.  The user's role might be different in an individual class. Possible values are: `student`, `teacher`, `enum_sentinel`.|
+|preferredLanguage|String|The preferred language for the user. Should follow ISO 639-1 Code; for example, "en-US".|
+|primaryRole|string| Default role for a user. The user's role might be different in an individual class. Possible values are: `student`, `teacher`, `enum_sentinel`.|
 |provisionedPlans|[ProvisionedPlan](provisionedplan.md) collection|The plans that are provisioned for the user. Read-only. Not nullable. |
 |residenceAddress|[physicalAddress](physicaladdress.md)| Address where user lives.|
 |student|[educationStudent](educationstudent.md)| If the primary role is student, this block will contain student specific data.|

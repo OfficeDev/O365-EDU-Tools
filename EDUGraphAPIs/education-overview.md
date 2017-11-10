@@ -8,16 +8,16 @@ The Microsoft Graph API provides access to Office 365 resources through one REST
     https://graph.microsoft.com/<version>/me/calendars
 -->
 
-The Education APIs in Microsoft Graph enhance Office 365 resources and data with information that is relevant for education scenarios, including schools, students, teachers, classes, enrollments, and assignments. This makes it easy for you to build solutions that integrate with educational resources.
+The education APIs in Microsoft Graph enhance Office 365 resources and data with information that is relevant for education scenarios, including schools, students, teachers, classes, enrollments, and assignments. This makes it easy for you to build solutions that integrate with educational resources.
 
-The Education APIs include two new resources, **Rostering** and [educationAssignment](resources/educationassignment.md), that you can use to interact with the assignment and rostering services in Microsoft Teams. You can use these resources to automate student assignments and manage a school roster.
+The education APIs include two new resources, **rostering** and [educationAssignment](resources/educationassignment.md), that you can use to interact with the assignment and rostering services in Microsoft Teams. You can use these resources to automate student assignments and manage a school roster.
 
-<!-- What resource should we link to for Rostering? -->
+<!-- What resource should we link to for rostering? -->
 
 ## Authorization
 
-To call the Education APIs in Microsoft Graph, your app will need the appropriate permissions. 
-For more information about permissions for Education APIs, see [Permissions](../../../concepts/permissions_reference.md). 
+To call the education APIs in Microsoft Graph, your app will need the appropriate permissions. 
+For more information about permissions for education APIs, see [Permissions](../../../concepts/permissions_reference.md). 
 
 ## Rostering
 
@@ -39,13 +39,13 @@ The rostering APIs support support the following scenarios:
 
 ## Assignments 
 
-You can use the assignment-related Education APIs to integrate with the Assignments service in Microsoft Teams. Microsoft Teams in Office 365 for Education is based on the same Education APIs, and provides a use case for what you can do with the APIs. Your app can use these APIs to interact with assignments throughout the assignment lifecycle. 
+You can use the assignment-related education APIs to integrate with assignments in Microsoft Teams. Microsoft Teams in Office 365 for Education is based on the same education APIs, and provides a use case for what you can do with the APIs. Your app can use these APIs to interact with assignments throughout the assignment lifecycle. 
 
 <!-- I'm not sure that this text is clear. See the sentence that I added to the previous paragraph; please update to clarify the meaning.
 The Public API is the same API that _Microsoft Teams in Office 365 for Education_ built it's user interface with.  Thus, the best sample of what can be built with the Microsoft **Assignments** API is _Microsoft Teams in Office 365 for Education_.  
 -->
 
-The following are some common use cases for the assignment-related Education APIs.
+The following are some common use cases for the assignment-related education APIs.
 
 |Use case|Description|See also|
 |:-------|:----------|:-------|
@@ -54,7 +54,7 @@ The following are some common use cases for the assignment-related Education API
 |Track student submissions|Your app can provide a teacher dashboard that shows how many submissions from students need to be graded.|[Submission resource](educationsubmission.md)|
 
 ## Next steps
-Use the Microsoft Graph Education APIs to build education solutions that access student assignments and school rosters. To learn more:
+Use the Microsoft Graph education APIs to build education solutions that access student assignments and school rosters. To learn more:
 
 - Explore the resources and methods that are most helpful to your scenario.
 - Try the API in the [Graph Explorer](https://developer.microsoft.com/en-us/graph/graph-explorer).
