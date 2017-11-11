@@ -12,7 +12,7 @@ The education APIs in Microsoft Graph enhance Office 365 resources and data with
 
 The education APIs include two new resources, **rostering** and [educationAssignment](resources/educationassignment.md), that you can use to interact with the assignment and rostering services in Microsoft Teams. You can use these resources to automate student assignments and manage a school roster.
 
-<!-- What resource should we link to for rostering? -->
+<!-- What resource should we link to for rostering? Is there a resource for rostering? If not, please update the text so that it does not imply that rostering is a resource. -->
 
 ## Authorization
 
