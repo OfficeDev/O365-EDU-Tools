@@ -29,13 +29,27 @@ You can use the rostering APIs to enable an app user to know:
 - What classes I attend or teach
 - What I need to do and by when
 
+The rostering APIs provide the following key resources:
+
+- [educationSchool](resources/educationschool.md) - Represents the school.
+- [educationClass](resources/educationclass.md) - Represents a class within a school.
+- [educationTerm](resources/educationterm.md) - Represents a designated portion of the academic year.
+- [educationTeacher](resources/educationteacher.md) - Represents a users with the primary role of 'Teacher'.
+- [educationStudent](resources/educationstudent.md) - Represents a users with the primary role of 'student'.
+
 The rostering APIs support support the following scenarios:
 
-- Get roster
-- Get schools
-- Get classes
-- get teachers/students
-- Get my schools/classes
+- [Get students and teachers for a class](./api/educationclass_list_members.md)
+- [List schools in which a class is taught](./api/educationclass_list_schools.md)
+- [List teachers for a class](./api/educationclass_list_teachers.md)
+- [Add members to a class](./api/educationclass_post_members.md) 
+- [Get all classes](./api/educationroot_list_classes.md )
+- [List all schools](./api/educationroot_list_schools.md)
+- [Get classes in a school](./api/educationschool_list_classes.md)
+- [Get users in a school](./api/educationschool_list_users.md)
+- [Add classes to a school](./api/educationschool_post_classes.md)
+- [List classes for a user](./api/educationuser_list_classes.md)
+- [List schools for a user](./api/educationuser_list_schools.md)
 
 ## Assignments 
 
@@ -45,6 +59,22 @@ You can use the assignment-related education APIs to integrate with assignments 
 The Public API is the same API that _Microsoft Teams in Office 365 for Education_ built it's user interface with.  Thus, the best sample of what can be built with the Microsoft **Assignments** API is _Microsoft Teams in Office 365 for Education_.  
 -->
 
+The assignment APIs provide the following key resources:
+
+- [educationAssignment](./resources/educationassignment.md) - The core object of the assignments API. Represents a task or unit of work assigned to a student or team member in a class as part of their study.
+- [educationSubmission](.resources/educationsubmission.md) - Represents the resources that an individual (or group) submits for an assignment and the associated grade and feedback for that assignment.
+- [educationResource](resources/educationresource.md) - Represents the learning object that is being assigned or submitted. An **educationResource** is associated with an **educationAssignment** and/or an **educationSubmission**.
+
+The assignment APIs support the following scenarios:
+
+- [Create assignment](./api/educationclass_post_assignments.md)
+- [Publish assignment](./api/educationassignment_publish.md)
+- [Create assignment resource](./api/educationassignment_post_resources.md)
+- [Create submission resource](./api/educationsubmission_post_resources.md)
+- [Submit assignment](./api/educationsubmission_submit.md)   
+- [Release grades to student](./api/educationsubmission_release.md) 
+- [Get assignment details](./api/educationuser_list_assignments.md)
+
 The following are some common use cases for the assignment-related education APIs.
 
 |Use case|Description|See also|
@@ -52,6 +82,7 @@ The following are some common use cases for the assignment-related education API
 |Create assignments|An external system can create an assignment for the class and attach resources to the assignment.|[Create assignment](../api/educationassignment_post_resources.md)|
 |Read assignment information|An analytics application can get information about assignments and student submissions, including dates and grades.|[Get assignment](../api/educationassignment_get.md)|
 |Track student submissions|Your app can provide a teacher dashboard that shows how many submissions from students need to be graded.|[Submission resource](educationsubmission.md)|
+
 
 ## Next steps
 Use the Microsoft Graph education APIs to build education solutions that access student assignments and school rosters. To learn more:
