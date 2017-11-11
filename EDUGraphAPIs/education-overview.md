@@ -1,4 +1,4 @@
-# Working with Education APIs in Microsoft Graph
+# Working with education APIs in Microsoft Graph
 
 <!-- This content is not specific to the Education APIs. This overview topic should tell the story about the EDU APIs in Microsoft Graph specifically, rather than the Microsoft Graph API in general (that's covered in other topics).
 The Microsoft Graph API provides access to Office 365 resources through one REST endpoint and one access token. This is done by accessing the Graph through a set of URLs like the following examples:
