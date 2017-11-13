@@ -37,7 +37,7 @@ The rostering APIs provide the following key resources:
 - [educationTeacher](resources/educationteacher.md) - Represents a users with the primary role of 'Teacher'.
 - [educationStudent](resources/educationstudent.md) - Represents a users with the primary role of 'student'.
 
-The rostering APIs support support the following scenarios:
+The rostering APIs support the following scenarios:
 
 - [Get students and teachers for a class](./api/educationclass_list_members.md)
 - [List schools in which a class is taught](./api/educationclass_list_schools.md)
