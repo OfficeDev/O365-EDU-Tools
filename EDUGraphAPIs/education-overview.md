@@ -16,8 +16,25 @@ The education APIs include two new resources, **rostering** and [educationAssign
 
 ## Authorization
 
-To call the education APIs in Microsoft Graph, your app will need the appropriate permissions. 
-For more information about permissions for education APIs, see [Permissions](EDUGraphAPIs/permissions_reference.md). 
+To call the education APIs in Microsoft Graph, your app will need to acquire an access token. For details about access tokens, see [Get access tokens to call Microsoft Graph](https://developer.microsoft.com/en-us/graph/docs/concepts/auth_overview). Your app will also need the appropriate permissions. For more information about permissions for education APIs, see [Education permissions](EDUGraphAPIs/permissions_reference.md#education-permissions). 
+
+### App permissions to enable school IT admins to consent 
+
+To deploy apps that are integrated with the Education APIs in Microsoft Graph, school IT admins must first grant consent to the permissions requested by the app. This consent has to be granted only once, unless the permissions change. After the admin consents, the app is provisioned for all users in the tenant.
+
+To trigger a consent dialog box, use the following REST call.
+
+```
+GET https://login.microsoftonline.com/{tenant}/adminconsent?
+client_id={clientId}&state=12345&redirect_uri={redirectUrl}
+```
+
+|Parameter|Description|
+|:--------|:----------|
+|Tenant|Tenant ID of the school.|
+|clientId|Client ID of the app.|
+|redirectUrl|App redirect URL.|
+
 
 ## Rostering
 
