@@ -30,8 +30,14 @@ You can use the rostering APIs to enable an app user to know:
 - What I need to do and by when
 
 The rostering APIs provide the following key resources:
-
+<!-- 
 - [educationSchool](resources/educationschool.md) - Represents the school.
+- [educationClass](resources/educationclass.md) - Represents a class within a school.
+- [educationTerm](resources/educationterm.md) - Represents a designated portion of the academic year.
+- [educationTeacher](resources/educationteacher.md) - Represents a users with the primary role of 'Teacher'.
+- [educationStudent](resources/educationstudent.md) - Represents a users with the primary role of 'student'.
+-->
+- [educationSchool](rostering/resources/educationschool.md) - Represents the school.
 - [educationClass](resources/educationclass.md) - Represents a class within a school.
 - [educationTerm](resources/educationterm.md) - Represents a designated portion of the academic year.
 - [educationTeacher](resources/educationteacher.md) - Represents a users with the primary role of 'Teacher'.
@@ -39,6 +45,7 @@ The rostering APIs provide the following key resources:
 
 The rostering APIs support the following scenarios:
 
+<!--
 - [List all schools](./api/educationroot_list_schools.md) 
 - [List schools in which a class is taught](./api/educationclass_list_schools.md)
 - [List schools for a user](./api/educationuser_list_schools.md)
@@ -50,8 +57,19 @@ The rostering APIs support the following scenarios:
 - [Add members to a class](./api/educationclass_post_members.md) 
 - [List teachers for a class](./api/educationclass_list_teachers.md)
 - [Get users in a school](./api/educationschool_list_users.md)
+-->
 
-
+- [List all schools](rostering/api/educationroot_list_schools.md) 
+- [List schools in which a class is taught](./api/educationclass_list_schools.md)
+- [List schools for a user](./api/educationuser_list_schools.md)
+- [Get all classes](./api/educationroot_list_classes.md )
+- [Get classes in a school](./api/educationschool_list_classes.md)
+- [List classes for a user](./api/educationuser_list_classes.md)
+- [Add classes to a school](./api/educationschool_post_classes.md)
+- [Get students and teachers for a class](./api/educationclass_list_members.md)
+- [Add members to a class](./api/educationclass_post_members.md) 
+- [List teachers for a class](./api/educationclass_list_teachers.md)
+- [Get users in a school](./api/educationschool_list_users.md)
 
 ## Assignments 
 
