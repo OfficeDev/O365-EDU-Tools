@@ -39,17 +39,19 @@ The rostering APIs provide the following key resources:
 
 The rostering APIs support the following scenarios:
 
-- [Get students and teachers for a class](./api/educationclass_list_members.md)
+- [List all schools](./api/educationroot_list_schools.md) 
 - [List schools in which a class is taught](./api/educationclass_list_schools.md)
-- [List teachers for a class](./api/educationclass_list_teachers.md)
-- [Add members to a class](./api/educationclass_post_members.md) 
-- [Get all classes](./api/educationroot_list_classes.md )
-- [List all schools](./api/educationroot_list_schools.md)
-- [Get classes in a school](./api/educationschool_list_classes.md)
-- [Get users in a school](./api/educationschool_list_users.md)
-- [Add classes to a school](./api/educationschool_post_classes.md)
-- [List classes for a user](./api/educationuser_list_classes.md)
 - [List schools for a user](./api/educationuser_list_schools.md)
+- [Get all classes](./api/educationroot_list_classes.md )
+- [Get classes in a school](./api/educationschool_list_classes.md)
+- [List classes for a user](./api/educationuser_list_classes.md)
+- [Add classes to a school](./api/educationschool_post_classes.md)
+- [Get students and teachers for a class](./api/educationclass_list_members.md)
+- [Add members to a class](./api/educationclass_post_members.md) 
+- [List teachers for a class](./api/educationclass_list_teachers.md)
+- [Get users in a school](./api/educationschool_list_users.md)
+
+
 
 ## Assignments 
 
