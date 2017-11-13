@@ -16,7 +16,7 @@ The education APIs include two new resources, **rostering** and [educationAssign
 
 ## Authorization
 
-To call the education APIs in Microsoft Graph, your app will need to acquire an access token. For details about access tokens, see [Get access tokens to call Microsoft Graph](https://developer.microsoft.com/en-us/graph/docs/concepts/auth_overview). Your app will also need the appropriate permissions. For more information about permissions for education APIs, see [Education permissions](EDUGraphAPIs/permissions_reference.md#education-permissions). 
+To call the education APIs in Microsoft Graph, your app will need to acquire an access token. For details about access tokens, see [Get access tokens to call Microsoft Graph](https://developer.microsoft.com/en-us/graph/docs/concepts/auth_overview). Your app will also need the appropriate permissions. For more information, see [Education permissions](EDUGraphAPIs/permissions_reference.md#education-permissions). 
 
 ### App permissions to enable school IT admins to consent 
 
