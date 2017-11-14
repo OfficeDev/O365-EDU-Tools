@@ -1,6 +1,6 @@
 # Get educationClass
 
-Retreive a Class from the system.  A class is a universal group with a special property indicating to the system that the group is a class.  Group members represent the students while group admins represent the teachers in the class.  If using the delegated token, the user will only see classes in which they are members.
+Retrieve a class from the system. A class is a universal group with a special property that indicates to the system that the group is a class. Group members represent the students;  group admins represent the teachers in the class. If you're using the delegated token, the user will only see classes in which they are members.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -27,7 +27,7 @@ This method supports the [OData Query Parameters](http://graph.microsoft.io/docs
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and [educationClass](../resources/educationclass.md) object in the response body.
+If successful, this method returns a `200 OK` response code and an [educationClass](../resources/educationclass.md) object in the response body.
 ## Example
 ##### Request
 Here is an example of the request.
@@ -39,7 +39,10 @@ Here is an example of the request.
 GET https://graph.microsoft.com/beta/education/classes/<id>
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,

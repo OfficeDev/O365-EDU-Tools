@@ -1,6 +1,6 @@
-# Delete educationUser from educationClass
+# Delete educationUser (member)
 
-Delete a member from a Class.
+Delete a member from a class.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -26,11 +26,11 @@ Do not supply a request body for this method.
 
 
 ## Response
-If successful, this method returns `204, No Content` response code and empty response body.
+If successful, this method returns a `204 No Content` response code and an empty response body.
 
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "create_educationclass_from_educationschool"
@@ -38,9 +38,9 @@ Here is an example of the request.
 ```http
 DELETE https://graph.microsoft.com/beta/education/classes/<id>/members/{userId}/$ref
 ```
-In the request body, supply a JSON representation of [educationClass](../resources/educationclass.md) object.
+
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
 <!-- {
   "blockType": "response",
   "truncated": true,
