@@ -27,7 +27,7 @@ This method supports the [OData Query Parameters](http://graph.microsoft.io/docs
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and collection of [educationAssignmentResource](../resources/educationassignmentresource.md) objects in the response body.
+If successful, this method returns a `200 OK` response code and a collection of [educationAssignmentResource](../resources/educationassignmentresource.md) objects in the response body.
 ## Example
 ##### Request
 The following is an example of the request.
@@ -41,7 +41,7 @@ GET https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/res
 ##### Response
 The following is an example of the response. 
 
->**Note:** The response object shown here might be shortened for readability. All of the properties will be returned from an actual call.
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
 
 <!-- {
   "blockType": "response",

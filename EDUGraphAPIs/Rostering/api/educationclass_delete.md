@@ -1,6 +1,6 @@
 # Delete educationClass
 
-Delete a class.  As this is also a universal group, the group is deleted as well as the class and group are one in the same.
+Delete a class. Because a class is also a universal group, deleting a class deletes the group.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -27,11 +27,11 @@ Do not supply a request body for this method.
 
 
 ## Response
-If successful, this method returns `204, No Content` response code. It does not return anything in the response body.
+If successful, this method returns a `204 No Content` response code. It does not return anything in the response body.
 
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "delete_educationclass"
@@ -40,7 +40,8 @@ Here is an example of the request.
 DELETE https://graph.microsoft.com/beta/education/classes/<id>
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
 <!-- {
   "blockType": "response",
   "truncated": true
