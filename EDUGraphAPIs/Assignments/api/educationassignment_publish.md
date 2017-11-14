@@ -23,6 +23,7 @@ POST /education/classes/<id>/assignments/<id>/publish
 | Authorization  | Bearer {token}. Required.  |
 
 ## Request body
+Do not supply a request body for this method.
 
 ## Response
 If successful, this method returns a `204 No Content` response code. It does not return anything in the response body.
