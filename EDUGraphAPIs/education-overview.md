@@ -47,7 +47,7 @@ You can use the rostering APIs to enable an app user to know:
 - What I need to do and by when
 
 The rostering APIs provide the following key resources:
-<!-- 
+<!-- Reminder to update the links for the microsoft-graph-docs repo folder structure. 
 - [educationSchool](resources/educationschool.md) - Represents the school.
 - [educationClass](resources/educationclass.md) - Represents a class within a school.
 - [educationTerm](resources/educationterm.md) - Represents a designated portion of the academic year.
@@ -62,7 +62,7 @@ The rostering APIs provide the following key resources:
 
 The rostering APIs support the following scenarios:
 
-<!--
+<!-- Update the links.
 - [List all schools](./api/educationroot_list_schools.md) 
 - [List schools in which a class is taught](./api/educationclass_list_schools.md)
 - [List schools for a user](./api/educationuser_list_schools.md)
@@ -87,6 +87,8 @@ The rostering APIs support the following scenarios:
 - [Add members to a class](Rostering/api/educationclass_post_members.md) 
 - [List teachers for a class](Rostering/api/educationclass_list_teachers.md)
 - [Get users in a school](Rostering/api/educationschool_list_users.md)
+
+<!-- Should you list delete scenarios here as well? -->
 
 ## Assignments 
 
