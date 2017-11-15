@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-# Delete educationUser (member)
-
-Delete a member from a class.
-=======
 # Delete a student from an educationClass
 
 Delete a student from a class.
->>>>>>> johnau-edits
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
