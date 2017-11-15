@@ -1,10 +1,6 @@
 # Get educationClass
 
-<<<<<<< HEAD
 Retrieve a class from the system. A class is a universal group with a special property that indicates to the system that the group is a class. Group members represent the students;  group admins represent the teachers in the class. If you're using the delegated token, the user will only see classes in which they are members.
-=======
-Get a class from the system.  A class is a universal group with a property indicating that this is a class.  Class members are students and group admins are the class teachers.  If using the delegated token, the user will only see classes that they are students in.
->>>>>>> johnau-edits
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -43,15 +39,9 @@ Here is an example of the request.
 GET https://graph.microsoft.com/beta/education/classes/11023
 ```
 ##### Response
-<<<<<<< HEAD
 The following is an example of the response. 
 
 >**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
-=======
-Here is an example of the response. 
-
->Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
->>>>>>> johnau-edits
 
 <!-- {
   "blockType": "response",

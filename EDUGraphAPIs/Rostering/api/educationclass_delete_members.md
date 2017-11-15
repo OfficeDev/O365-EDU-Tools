@@ -40,12 +40,7 @@ DELETE https://graph.microsoft.com/beta/education/classes/11003/members/14008/$r
 ```
 
 ##### Response
-<<<<<<< HEAD
 The following is an example of the response. 
-=======
-Here is an example of the response.  
-
->>>>>>> johnau-edits
 <!-- {
   "blockType": "response",
   "truncated": true,

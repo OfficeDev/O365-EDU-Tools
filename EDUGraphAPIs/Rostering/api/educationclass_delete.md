@@ -1,10 +1,6 @@
 # Delete educationClass
 
-<<<<<<< HEAD
 Delete a class. Because a class is also a universal group, deleting a class deletes the group.
-=======
-Delete a class.  A class is also a universal group so the group is deleted as well.
->>>>>>> johnau-edits
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -44,12 +40,8 @@ The following is an example of the request.
 DELETE https://graph.microsoft.com/beta/education/classes/11022
 ```
 ##### Response
-<<<<<<< HEAD
 The following is an example of the response. 
 
-=======
-Here is an example of the response.
->>>>>>> johnau-edits
 <!-- {
   "blockType": "response",
   "truncated": true
