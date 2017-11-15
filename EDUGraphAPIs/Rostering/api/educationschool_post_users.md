@@ -48,6 +48,9 @@ Content-length: 56
 
 ##### Response
 The following is an example of the response. 
+
+<!-- Add the educationClass resource to the response. -->
+
 <!-- {
   "blockType": "response",
   "truncated": true,
