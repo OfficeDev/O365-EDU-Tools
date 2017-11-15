@@ -14,7 +14,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-PATCH /education/classes/<id>
+PATCH /education/classes/{id}
 ```
 ## Request headers
 | Header       | Value |
@@ -23,23 +23,24 @@ PATCH /education/classes/<id>
 | Content-Type  | application/json  |
 
 ## Request body
-In the request body, supply the values for relevant fields that should be updated. Existing properties that are not included in the request body will maintain their previous values or be recalculated based on changes to other property values. For best performance you shouldn't include existing values that haven't changed.
+In the request body, supply the values for relevant fields that should be updated. Existing properties that are not included in the request body will maintain their previous values or be recalculated based on changes to other property values. For best performance, don't include existing values that haven't changed.
 
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|description|String| Description of the class|
-|displayName|String| Name of the Class|
-|mailNickname|String| Mail name for sending email to all users if this is enabled. |
-|classCode|String| Class Code used by the school.|
+|description|String| Description of the class.|
+|displayName|String| Name of the class.|
+|mailNickname|String| Email alias for sending email to all users if that feature is enabled. |
+<!-- Please verify the revised description here. -->
+|classCode|String| Class code used by the school.|
 |externalId|String| ID of the class from the syncing system. |
 |externalName|String|Name of the class in the syncing system.|
-|externalSource|string| How this class was creaeted.  Possible values are: `sis`, `manual`, `enum_sentinel`.|
+|externalSource|string| How this class was created. Possible values are: `sis`, `manual`, `enum_sentinel`.|
 
 ## Response
-If successful, this method returns a `200 OK` response code and updated [educationClass](../resources/educationclass.md) object in the response body.
+If successful, this method returns a `200 OK` response code and an updated [educationClass](../resources/educationclass.md) object in the response body.
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "update_educationclass"
@@ -55,7 +56,10 @@ Content-length: 224
 }
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
