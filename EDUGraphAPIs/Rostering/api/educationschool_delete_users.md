@@ -36,7 +36,7 @@ Here is an example of the request.
   "name": "create_educationclass_from_educationschool"
 }-->
 ```http
-DELETE https://graph.microsoft.com/beta/education/schools/<id>/users/{userId}/$ref
+DELETE https://graph.microsoft.com/beta/education/schools/{id}/users/{userId}/$ref
 ```
 
 ##### Response
