@@ -14,7 +14,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-PATCH /education/schools/{id}
+PATCH /education/schools/<id>
 ```
 ## Request headers
 | Header       | Value |
@@ -23,7 +23,7 @@ PATCH /education/schools/{id}
 | Content-Type  | application/json  |
 
 ## Request body
-In the request body, supply the values for relevant fields that should be updated. Existing properties that are not included in the request body will maintain their previous values or be recalculated based on changes to other property values. For best performance, don't include existing values that haven't changed.
+In the request body, supply the values for relevant fields that should be updated. Existing properties that are not included in the request body will maintain their previous values or be recalculated based on changes to other property values. For best performance you shouldn't include existing values that haven't changed.
 
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
@@ -42,10 +42,10 @@ In the request body, supply the values for relevant fields that should be update
 |createdBy|[identitySet](identityset.md)|Entity who created the school.|
 
 ## Response
-If successful, this method returns a `200 OK` response code and an updated [educationSchool](../resources/educationschool.md) object in the response body.
+If successful, this method returns a `200 OK` response code and updated [educationSchool](../resources/educationschool.md) object in the response body.
 ## Example
 ##### Request
-The following is an example of the request.
+Here is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "update_educationschool"
@@ -61,10 +61,7 @@ Content-length: 292
 }
 ```
 ##### Response
-The following is an example of the response. 
-
->**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
-
+Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
 <!-- {
   "blockType": "response",
   "truncated": true,

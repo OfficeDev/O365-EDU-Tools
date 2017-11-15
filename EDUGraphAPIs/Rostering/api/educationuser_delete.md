@@ -2,8 +2,6 @@
 
 Delete a user.
 
-<!-- Update the description to better distinguish it from this topic: https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_delete. -->
-
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
 
@@ -16,7 +14,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-DELETE /education/users/{id}
+DELETE /education/users/<id>
 ```
 ## Request headers
 | Header       | Value |
@@ -28,7 +26,7 @@ Do not supply a request body for this method.
 
 
 ## Response
-If successful, this method returns a `204 No Content` response code. It does not return anything in the response body.
+If successful, this method returns `204, No Content` response code. It does not return anything in the response body.
 
 ## Example
 ##### Request
@@ -41,7 +39,7 @@ Here is an example of the request.
 DELETE https://graph.microsoft.com/beta/education/users/<id>
 ```
 ##### Response
-The following is an example of the response. 
+Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
 <!-- {
   "blockType": "response",
   "truncated": true

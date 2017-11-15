@@ -2,8 +2,6 @@
 
 Create a new user.
 
-<!-- Add some additional text to better distinguish this method from the user_post_users (https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_post_users) topic. -->
-
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
 
@@ -25,15 +23,15 @@ POST /education/users
 | Content-Type  | application/json  |
 
 ## Request body
-In the request body, supply a JSON representation of an [educationUser](../resources/educationuser.md) object.
+In the request body, supply a JSON representation of [educationUser](../resources/educationuser.md) object.
 
 
 ## Response
-If successful, this method returns a `201 Created` response code and an [educationUser](../resources/educationuser.md) object in the response body.
+If successful, this method returns `201, Created` response code and [educationUser](../resources/educationuser.md) object in the response body.
 
 ## Example
 ##### Request
-The following is an example of the request.
+Here is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "create_educationuser_from_educationroot"
@@ -58,12 +56,9 @@ Content-length: 508
   "student": {"@odata.type": "microsoft.graph.educationStudent"},
 }
 ```
-
+In the request body, supply a JSON representation of [educationUser](../resources/educationuser.md) object.
 ##### Response
-The following is an example of the response. 
-
->**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
-
+Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
 <!-- {
   "blockType": "response",
   "truncated": true,

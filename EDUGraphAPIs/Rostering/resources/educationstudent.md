@@ -1,15 +1,15 @@
 # educationStudent resource type
 
-Additional information added to an [educationUser](educationuser.md) that is present when the primaryRole of a user is `student`.
+Additional information added to an [educationUser](educationuser.md) that is present when the `primaryRole` of a user is `student`.
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|birthDate|Date| Birthdate of the student.|
+|birthDate|Date| Birth date of the student.|
 |externalId|String| ID of the student in the source system.|
 |gender|`educationGender enumeration`| Possible values are: `female`, `male`, `other`, `unkownFutureValue`.|
 |grade|String|Current grade level of the student.|
-|graduationYear|String| Year the child is graduating from the school.|
+|graduationYear|String| Year the student is graduating from the school.|
 |studentNumber|String| Student Number.|
 
 ## JSON representation
