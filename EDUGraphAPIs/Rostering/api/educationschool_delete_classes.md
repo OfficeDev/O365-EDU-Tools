@@ -1,4 +1,4 @@
-# Delete educationClass
+# Delete educationClass from educationSchool
 
 Delete a class from a school.
 
@@ -14,7 +14,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-DELETE /education/schools/{id}/classes/{classId}/$ref
+DELETE /education/schools/<id>/classes/{classId}/$ref
 ```
 ## Request headers
 | Header       | Value |
@@ -26,11 +26,11 @@ Do not supply a request body for this method.
 
 
 ## Response
-If successful, this method returns a `204 No Content` response code and a response body.
+If successful, this method returns `204, No Content` response code and a response body.
 
 ## Example
 ##### Request
-The following is an example of the request.
+Here is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "create_educationclass_from_educationschool"
@@ -38,10 +38,9 @@ The following is an example of the request.
 ```http
 DELETE https://graph.microsoft.com/beta/education/schools/<id>/classes/{classId}/$ref
 ```
-
+In the request body, supply a JSON representation of [educationClass](../resources/educationclass.md) object.
 ##### Response
-The following is an example of the response. 
-
+Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
 <!-- {
   "blockType": "response",
   "truncated": true,

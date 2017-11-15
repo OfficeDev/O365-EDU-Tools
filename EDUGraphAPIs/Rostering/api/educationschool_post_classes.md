@@ -14,7 +14,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-POST /education/schools/{id}/classes/$ref
+POST /education/schools/<id>/classes/$ref
 ```
 ## Request headers
 | Header       | Value |
@@ -23,15 +23,15 @@ POST /education/schools/{id}/classes/$ref
 | Content-Type  | application/json  |
 
 ## Request body
-In the request body, supply a JSON representation of an [educationClass](../resources/educationclass.md) object.
+In the request body, supply a JSON representation of [educationClass](../resources/educationclass.md) object.
 
 
 ## Response
-If successful, this method returns a `204 No Content` response code and an [educationClass](../resources/educationclass.md) object in the response body.
+If successful, this method returns `204, No Content` response code and [educationClass](../resources/educationclass.md) object in the response body.
 
 ## Example
 ##### Request
-The following is an example of the request.
+Here is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "create_educationclass_from_educationschool"
@@ -42,15 +42,12 @@ Content-type: application/json
 Content-length: 224
 
 {
-ï¿½ "@odata.id":"https://graph.microsoft.com/beta/education/classes/{classId}"ï¿½
+  "@odata.id":"https://graph.microsoft.com/beta/education/classes/{classId}" 
 }
 ```
-
+In the request body, supply a JSON representation of [educationClass](../resources/educationclass.md) object.
 ##### Response
-The following is an example of the response. 
-
-<!-- Add the educationClass resource to the response. -->
-
+Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
 <!-- {
   "blockType": "response",
   "truncated": true,

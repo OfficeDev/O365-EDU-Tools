@@ -14,7 +14,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-POST /education/classes/{id}/assignments/{id}/resources
+POST /education/classes/<id>/assignments/<id>/resources
 ```
 ## Request headers
 | Header       | Value |
@@ -57,12 +57,12 @@ The following is an example of the response.
 >**Note:** The response object shown here might be shortened for readability. All of the properties will be returned from an actual call.
 
 
-```http
 <!-- {
   "blockType": "response",
   "truncated": true,
   "@odata.type": "microsoft.graph.educationAssignmentResource"
 } -->
+```http
 
 HTTP/1.1 201 Created
 Content-type: application/json
@@ -78,7 +78,7 @@ Content-length: 842
   }
 }
 
-
+```
 <!-- uuid: 8fcb5dbc-d5aa-4681-8e31-b001d5168d79
 2015-10-25 14:57:30 UTC -->
 <!-- {
@@ -88,4 +88,3 @@ Content-length: 842
   "section": "documentation",
   "tocPath": ""
 }-->
-```

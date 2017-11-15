@@ -1,6 +1,6 @@
 # Get educationClass
 
-Retrieve a class from the system. A class is a universal group with a special property that indicates to the system that the group is a class. Group members represent the students;  group admins represent the teachers in the class. If you're using the delegated token, the user will only see classes in which they are members.
+Get a class from the system.  A class is a universal group with a property indicating that this is a class.  Class members are students and group admins are the class teachers.  If using the delegated token, the user will only see classes that they are students in.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -14,7 +14,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-GET /education/classes/{id}
+GET /education/classes/<id>
 ```
 ## Optional query parameters
 This method supports the [OData Query Parameters](http://graph.microsoft.io/docs/overview/query_parameters) to help customize the response.
@@ -27,7 +27,7 @@ This method supports the [OData Query Parameters](http://graph.microsoft.io/docs
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and an [educationClass](../resources/educationclass.md) object in the response body.
+If successful, this method returns a `200 OK` response code and [educationClass](../resources/educationclass.md) object in the response body.
 ## Example
 ##### Request
 Here is an example of the request.
@@ -36,12 +36,12 @@ Here is an example of the request.
   "name": "get_educationclass"
 }-->
 ```http
-GET https://graph.microsoft.com/beta/education/classes/<id>
+GET https://graph.microsoft.com/beta/education/classes/11023
 ```
 ##### Response
-The following is an example of the response. 
+Here is an example of the response. 
 
->**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+>Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
 
 <!-- {
   "blockType": "response",
@@ -54,15 +54,20 @@ Content-type: application/json
 Content-length: 224
 
 {
-  "id": "String",
-  "description": "String",
-  "classCode": "String",
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "displayName": "String",
-  "externalId": "String",
-  "externalName": "String",
-  "externalSource": "string",
-  "mailNickname": "String"
+  "id": "11023",
+  "description": "English Level 2",
+  "classCode": "11023",
+  "createdBy": {
+    "user": {
+      "displayName": "Susana Rocha",
+      "id": "14012",
+    }
+  },
+  "displayName": "English - Language 2",
+  "externalId": "301",
+  "externalName": "English Level 1",
+  "externalSource": "School of Fine Art",
+  "mailNickname": "fineartschool.net "
 }
 ```
 

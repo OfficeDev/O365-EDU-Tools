@@ -14,7 +14,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-POST /education/classes/{id}/assignments/{id}/publish
+POST /education/classes/<id>/assignments/<id>/publish
 
 ```
 ## Request headers
@@ -23,7 +23,6 @@ POST /education/classes/{id}/assignments/{id}/publish
 | Authorization  | Bearer {token}. Required.  |
 
 ## Request body
-Do not supply a request body for this method.
 
 ## Response
 If successful, this method returns a `204 No Content` response code. It does not return anything in the response body.
