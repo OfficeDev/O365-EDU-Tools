@@ -1,4 +1,4 @@
-# Delete educationUser (member)
+# Delete educationUser (student)
 
 Delete a member from a class.
 
