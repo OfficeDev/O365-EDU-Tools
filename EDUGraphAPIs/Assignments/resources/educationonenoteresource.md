@@ -2,12 +2,6 @@
 
 A subclass of [educationResource](educationresource.md). This represents the location of the OneNote page.  
 
-<!-- Will this issue be resolved when you publish the APIs to beta? If not, please see the guidance for documenting Known issues, here: https://microsoft.sharepoint.com/teams/OfficeDeveloperEducation/DevEdWiki/Microsoft%20Graph%20known%20issues%20guidelines.aspx.
--->
-
->**Important:** This API currently uses a different syntax. This will be 
-replaced by the representation (single property).
-
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
