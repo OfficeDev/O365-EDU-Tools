@@ -1,4 +1,4 @@
-# Remove a student from a class roster
+# Remove a student
 
 Removes a student from a class roster. an [educationUser](../resources/educationuser.md) with a **primaryRole** of `student` from an [educationClass](../resources/educationclass.md)
 
