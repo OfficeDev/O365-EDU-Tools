@@ -43,21 +43,14 @@ Content-type: application/json
 Content-length: 224
 
 {
-      "id": "11019",
-      "description": "Health Level 1",
-      "classCode": "Health 501",
-      "createdBy": {
-        "user": {
-          "displayName": "Susana Rocha",
-          "id": "14012",
-        }
-      },
-      "displayName": "Health 1",
-      "externalId": "11019",
-      "externalName": "Health Level 1",
-      "externalSource": "sis",
-      "mailNickname": "fineartschool.net"
-    }
+  "description": "Health Level 1",
+  "classCode": "Health 501",
+  "displayName": "Health 1",
+  "externalId": "11019",
+  "externalName": "Health Level 1",
+  "externalSource": "sis",
+  "mailNickname": "fineartschool.net"
+}
 ```
 
 ##### Response
@@ -76,21 +69,21 @@ Content-type: application/json
 Content-length: 224
 
 {
-      "id": "11019",
-      "description": "Health Level 1",
-      "classCode": "Health 501",
-      "createdBy": {
-        "user": {
-          "displayName": "Susana Rocha",
-          "id": "14012",
-        }
-      },
-      "displayName": "Health 1",
-      "externalId": "11019",
-      "externalName": "Health Level 1",
-      "externalSource": "sis",
-      "mailNickname": "fineartschool.net"
-    }
+    "id": "11019",
+    "description": "Health Level 1",
+    "classCode": "Health 501",
+    "createdBy": {
+      "user": {
+        "displayName": "Susana Rocha",
+        "id": "14012",
+      }
+    },
+    "displayName": "Health 1",
+    "externalId": "11019",
+    "externalName": "Health Level 1",
+    "externalSource": "sis",
+    "mailNickname": "fineartschool.net"
+}
 ```
 
 <!-- uuid: 8fcb5dbc-d5aa-4681-8e31-b001d5168d79

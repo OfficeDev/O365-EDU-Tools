@@ -1,6 +1,6 @@
 # Remove educationUser from an educationSchool
 
-Delete a user from a school.
+Remove a user from a school.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -36,7 +36,7 @@ Here is an example of the request.
   "name": "create_educationclass_from_educationschool"
 }-->
 ```http
-DELETE https://graph.microsoft.com/beta/education/schools/{id}/users/{userId}/$ref
+DELETE https://graph.microsoft.com/beta/education/schools/10001/users/13006
 ```
 
 ##### Response

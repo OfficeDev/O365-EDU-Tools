@@ -64,7 +64,7 @@ Content-length: 593
       "surname": "Matheson",
       "mail": "DionM@contoso.com",
       "mobilePhone": "+1 (253) 555-0101",
-      "createdBy": {"@odata.type": "microsoft.graph.identitySet"},{
+      "createdBy": {
         "user": {
           "displayName": "Susana Rocha",
           "id": "14012",

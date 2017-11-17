@@ -1,6 +1,6 @@
-# Delete educationClass
+# Remove educationClass
 
-Delete a class from a school.
+Remove a class from a school.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -36,7 +36,7 @@ The following is an example of the request.
   "name": "create_educationclass_from_educationschool"
 }-->
 ```http
-DELETE https://graph.microsoft.com/beta/education/schools/<id>/classes/{classId}/$ref
+DELETE https://graph.microsoft.com/beta/education/schools/10001/classes/11001
 ```
 
 ##### Response
