@@ -1,6 +1,6 @@
 # Add educationUser to an educationSchool
 
-Add a user to a school.
+Add a user from the root user collection to a school.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -42,7 +42,7 @@ Content-type: application/json
 Content-length: 56
 
 {
-  "@odata.id":"https://graph.microsoft.com/beta/education/users/{userId}"�
+  "@odata.id":"https://graph.microsoft.com/beta/education/users/14008"�
 }
 ```
 

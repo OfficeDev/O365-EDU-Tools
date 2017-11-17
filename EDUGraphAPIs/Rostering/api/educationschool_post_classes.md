@@ -1,6 +1,6 @@
 # Add educationClass to educationSchool
 
-Add a class to a school.
+Add a class from the root class collection to a school.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -37,12 +37,12 @@ The following is an example of the request.
   "name": "create_educationclass_from_educationschool"
 }-->
 ```http
-POST https://graph.microsoft.com/beta/education/schools/<id>/classes/$ref
+POST https://graph.microsoft.com/beta/education/schools/10002/classes/$ref
 Content-type: application/json
 Content-length: 224
 
 {
-� "@odata.id":"https://graph.microsoft.com/beta/education/classes/{classId}"�
+� "@odata.id":"https://graph.microsoft.com/beta/education/classes/11006"�
 }
 ```
 

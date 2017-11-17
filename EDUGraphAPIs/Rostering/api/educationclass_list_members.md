@@ -116,7 +116,6 @@ Content-length: 593
       "primaryRole": "student",
       "externalId": "13005",
       "birthDate": "2001-01-01T00:00:00Z",
-      "externalId": "123",
       "gender": "female",
       "grade": "9",
       "graduationYear": "2019",

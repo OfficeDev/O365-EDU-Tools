@@ -1,6 +1,8 @@
 # List classes
 
-Retrieve a list of class objects. Note that if the delegated token is used, members can only see information about their own classes. 
+Retrieve the [educationClass](../resources/educationclass.md) objects that the specified **educationUser** belongs to. 
+
+>**Note:** If the delegated token is used, members can only see information about their own classes. Use the `...beta/education/me/classes` resource in this case.
 
 <!-- Please verify the revision to the delegated token text. -->
 
@@ -60,16 +62,21 @@ Content-length: 277
 {
   "value": [
     {
-      "id": "String",
-      "description": "String",
-      "classCode": "String",
-      "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-      "displayName": "String",
-      "externalId": "String",
-      "externalName": "String",
-      "externalSource": "string",
-      "mailNickname": "String"
-    }  
+      "id": "11019",
+      "description": "Health Level 1",
+      "classCode": "Health 501",
+      "createdBy": {
+        "user": {
+          "displayName": "Susana Rocha",
+          "id": "14012",
+        }
+      },
+      "displayName": "Health 1",
+      "externalId": "11019",
+      "externalName": "Health Level 1",
+      "externalSource": "sis",
+      "mailNickname": "fineartschool.net"
+    } 
   ]
 }
 ```

@@ -1,8 +1,7 @@
 # Delete educationUser
 
-Delete a user.
+Delete an [educationUser](../resources/educationuser.md) from the Edu root **educationUser** collection.
 
-<!-- Update the description to better distinguish it from this topic: https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_delete. -->
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -38,7 +37,7 @@ Here is an example of the request.
   "name": "delete_educationuser"
 }-->
 ```http
-DELETE https://graph.microsoft.com/beta/education/users/<id>
+DELETE https://graph.microsoft.com/beta/education/users/13019
 ```
 ##### Response
 The following is an example of the response. 

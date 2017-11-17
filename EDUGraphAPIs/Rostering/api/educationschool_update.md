@@ -51,13 +51,13 @@ The following is an example of the request.
   "name": "update_educationschool"
 }-->
 ```http
-PATCH https://graph.microsoft.com/beta/education/schools/<id>
+PATCH https://graph.microsoft.com/beta/education/schools/10002
 Content-type: application/json
 Content-length: 292
 
 {
-  "displayName": "String",
-  "description": "String",
+  "displayName": "Fabrikam Arts High School",
+  "description": "Magnate school for the arts. Los Angeles School District",
 }
 ```
 ##### Response
@@ -76,22 +76,27 @@ Content-type: application/json
 Content-length: 292
 
 {
-  "id": "String",
-  "displayName": "String",
-  "description": "String",
+  "id": "10002"
+  "displayName": "Fabrikam Arts High School",
+  "description": "Magnate school for the arts. Los Angeles School District",
   "status": "String",
   "externalSource": "String",
-  "principalEmail": "String",
-  "principalName": "String",
-  "externalPrincipalId": "String",
-  "highestGrade": "String",
-  "lowestGrade": "String",
-  "schoolNumber": "String",
-  "address": {"@odata.type": "microsoft.graph.physicalAddress"},
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "externalId": "String",
-  "fax": "String",
-  "phone": "String"
+  "principalEmail": "AmyR@fabrikam.com",
+  "principalName": "Amy Roebuck",
+  "externalPrincipalId": "14007",
+  "highestGrade": "12",
+  "lowestGrade": "9",
+  "schoolNumber": "10002",
+  "address": {
+    "city": "Los Angeles",
+    "countryOrRegion": "United States",
+    "postalCode": "98055",
+    "state": "CA",
+    "street": "12345 Main St."
+  },
+  "externalId": "10002",
+  "fax": "+1 (253) 555-0101",
+  "phone": "+1 (253) 555-0102",
 }
 ```
 

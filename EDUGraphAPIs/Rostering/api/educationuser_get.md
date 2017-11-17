@@ -1,6 +1,6 @@
 # Get educationUser
 
-Retrieve the properties and relationships of a user.
+Retrieve the properties and relationships of an [educationUser](../resources/educationuser.md).
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -36,7 +36,7 @@ The following is an example of the request.
   "name": "get_educationuser"
 }-->
 ```http
-GET https://graph.microsoft.com/beta/education/users/<id>
+GET https://graph.microsoft.com/beta/education/users/13012
 ```
 ##### Response
 The following is an example of the response. 
@@ -54,19 +54,35 @@ Content-type: application/json
 Content-length: 508
 
 {
-  "id": "string",
-  "displayName": "string",
-  "givenName": "string",
-  "middleName": "string",
-  "surname": "string",
-  "mail": "string",
-  "mobilePhone": "string",
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "externalSource": "string",
-  "mailingAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
-  "primaryRole": "string",
-  "residenceAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
-  "teacher": {"@odata.type": "microsoft.graph.educationTeacher"}
+  "id": "13012",
+  "displayName": "Dion Matheson",
+  "givenName": "Dion",
+  "middleName": " ",
+  "surname": "Matheson",
+  "mail": "DionM@contoso.com",
+  "mobilePhone": "+1 (253) 555-0101",
+  "createdBy": {
+    "user": {
+      "displayName": "Susana Rocha",
+      "id": "14012",
+    }
+  }
+  "externalSource": "sis",
+  "mailingAddress": {
+    "city": "Los Angeles",
+    "countryOrRegion": "United States",
+    "postalCode": "98055",
+    "state": "CA",
+    "street": "12345 Main St."
+  },
+  "primaryRole": "student",
+  "residenceAddress": {
+    "city": "Los Angeles",
+    "countryOrRegion": "United States",
+    "postalCode": "98055",
+    "state": "CA",
+    "street": "12345 Main St."
+  },
 }
 ```
 
