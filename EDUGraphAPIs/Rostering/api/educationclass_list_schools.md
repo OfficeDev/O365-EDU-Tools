@@ -2,8 +2,6 @@
 
 Retrieve a list of schools where a class is taught.
 
-<!-- Please verify the description, original text was "... which teach the class. -->
-
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
 

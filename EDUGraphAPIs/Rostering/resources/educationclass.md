@@ -1,6 +1,6 @@
 # educationClass resource type
 
-Represents a class within a school. The **educationClass** resource corresponds to the Office Group and shares the same ID. Students are regular members of the class, and teachers are owners and have appropriate rights. For Office experiences to work correctly, teachers must be members of both the teachers and members collections.  
+Represents a class within a school. The **educationClass** resource corresponds to the Office 365 group and shares the same ID. Students are regular members of the class, and teachers are owners and have appropriate rights. For Office experiences to work correctly, teachers must be members of both the teachers and members collections.  
 
 
 ## Methods
@@ -10,7 +10,7 @@ Represents a class within a school. The **educationClass** resource corresponds 
 |[Get educationClass](../api/educationclass_get.md) | [educationClass](educationclass.md) |Read properties and relationships of an **educationClass** object.|
 |[Add member](../api/educationclass_post_members.md) |[educationUser](educationuser.md)| Add a new **educationUser** for the class by posting to the members navigation property.|
 |[List members](../api/educationclass_list_members.md) |[educationUser](educationuser.md) collection| Get an **educationUser** object collection.|
-|[Remove member](../api/educationclass_delete_members.md) |[educationUser](educationuser.md)| Remove an **educationUser** from the class through the members navigation property.|
+|[Remove student](../api/educationclass_delete_members.md) |[educationUser](educationuser.md)| Remove an **educationUser** from the class through the members navigation property.|
 |[List schools](../api/educationclass_list_schools.md) |[educationSchool](educationschool.md) collection| Get an **educationSchool** object collection.|
 |[Add teacher](../api/educationclass_post_teachers.md) |[educationUser](educationuser.md)| Add a new **educationUser** for the class by posting to the teachers navigation property.|
 |[List teachers](../api/educationclass_list_teachers.md) |[educationUser](educationuser.md) collection| Get a list of teachers for the class.|

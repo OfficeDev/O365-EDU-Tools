@@ -25,7 +25,7 @@ This resource is a subtype of [educationOrganization](educationorganization.md).
 |id|String|GUID of this school.|
 |displayName| String| Display name of the school.| 
 |description| String | Description of the school.| 
-|status| string| Read-Only.  Possible values are: `inactive`, `active`, `expired`, `deleteable`.|
+|status| string| Read-Only. Possible values are: `inactive`, `active`, `expired`, `deleteable`.|
 |externalSource| string| Read-Only.  Possible values are: `sis`, `manual`, `unknownFutureValue`.|
 |principalEmail| String| Email address of the principal.|
 |principalName| String | Name of the principal.|
@@ -36,7 +36,7 @@ This resource is a subtype of [educationOrganization](educationorganization.md).
 |externalId|String| ID of school in syncing system. |
 |phone|String| Phone number of school. |
 |fax|String| Fax number of school. |
-|address|[physicalAddress](physicaladdress.md)| Address of the School.|
+|address|[physicalAddress](physicaladdress.md)| Address of the school.|
 |createdBy|[identitySet](identityset.md)|Entity who created the school.|
 
 
