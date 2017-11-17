@@ -23,15 +23,15 @@ POST /education/schools
 | Content-Type  | application/json  |
 
 ## Request body
-In the request body, supply a JSON representation of [educationSchool](../resources/educationschool.md) object.
+In the request body, supply a JSON representation of an [educationSchool](../resources/educationschool.md) object.
 
 
 ## Response
-If successful, this method returns `201, Created` response code and [educationSchool](../resources/educationschool.md) object in the response body.
+If successful, this method returns a `201 Created` response code and an [educationSchool](../resources/educationschool.md) object in the response body.
 
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "create_educationschool_from_educationroot"
@@ -42,26 +42,34 @@ Content-type: application/json
 Content-length: 292
 
 {
-  "displayName": "String",
-  "description": "String",
+  "displayName": "Fabrikam High School",
+  "description": "Magnate school for the arts. Los Angeles School District",
   "status": "String",
   "externalSource": "String",
-  "principalEmail": "String",
-  "principalName": "String",
-  "externalPrincipalId": "String",
-  "highestGrade": "String",
-  "lowestGrade": "String",
-  "schoolNumber": "String",
-  "address": {"@odata.type": "microsoft.graph.physicalAddress"},
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "externalId": "String",
-  "fax": "String",
-  "phone": "String",
+  "principalEmail": "AmyR@fabrikam.com",
+  "principalName": "Amy Roebuck",
+  "externalPrincipalId": "14007",
+  "highestGrade": "12",
+  "lowestGrade": "9",
+  "schoolNumber": "10002",
+  "address": {
+    "city": "Los Angeles",
+    "countryOrRegion": "United States",
+    "postalCode": "98055",
+    "state": "CA",
+    "street": "12345 Main St."
+  },
+  "externalId": "10002",
+  "fax": "+1 (253) 555-0101",
+  "phone": "+1 (253) 555-0102",
 }
 ```
-In the request body, supply a JSON representation of [educationSchool](../resources/educationschool.md) object.
+
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
@@ -73,22 +81,33 @@ Content-type: application/json
 Content-length: 292
 
 {
-  "id": "String",
-  "displayName": "String",
-  "description": "String",
+  "id": "10002",
+  "displayName": "Fabrikam High School",
+  "description": "Magnate school for the arts. Los Angeles School District",
   "status": "String",
   "externalSource": "String",
-  "principalEmail": "String",
-  "principalName": "String",
-  "externalPrincipalId": "String",
-  "highestGrade": "String",
-  "lowestGrade": "String",
-  "schoolNumber": "String",
-  "address": {"@odata.type": "microsoft.graph.physicalAddress"},
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "externalId": "String",
-  "fax": "String",
-  "phone": "String",
+  "principalEmail": "AmyR@fabrikam.com",
+  "principalName": "Amy Roebuck",
+  "externalPrincipalId": "14007",
+  "highestGrade": "12",
+  "lowestGrade": "9",
+  "schoolNumber": "10002",
+  "address": {
+    "city": "Los Angeles",
+    "countryOrRegion": "United States",
+    "postalCode": "98055",
+    "state": "CA",
+    "street": "12345 Main St."
+  },
+  "createdBy": {
+    "user": {
+      "displayName": "Susana Rocha",
+      "id": "14012",
+    }
+  },
+  "externalId": "10002",
+  "fax": "+1 (253) 555-0101",
+  "phone": "+1 (253) 555-0102",
 }
 ```
 

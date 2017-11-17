@@ -1,6 +1,6 @@
 # List users
 
-Retrieve a list of user objects.  These user objects will be decorated with edu specific properties.
+Retrieve a list of user objects. These user objects will include education-specific properties.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -27,10 +27,10 @@ This method supports the [OData Query Parameters](http://graph.microsoft.io/docs
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and collection of [educationUser](../resources/educationuser.md) objects in the response body.
+If successful, this method returns a `200 OK` response code and a collection of [educationUser](../resources/educationuser.md) objects in the response body.
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "get_users"
@@ -39,7 +39,10 @@ Here is an example of the request.
 GET https://graph.microsoft.com/beta/education/users
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
@@ -54,18 +57,35 @@ Content-length: 593
 {
   "value": [
     {
-      "id": "string",
-      "displayName": "string",
-      "givenName": "string",
-      "middleName": "string",
-      "surname": "string",
-      "mail": "string",
-      "mobilePhone": "string",
-      "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-      "externalSource": "string",
-      "mailingAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
-      "primaryRole": "string",
-      "residenceAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
+      "id": "13012",
+      "displayName": "Dion Matheson",
+      "givenName": "Dion",
+      "middleName": " ",
+      "surname": "Matheson",
+      "mail": "DionM@contoso.com",
+      "mobilePhone": "+1 (253) 555-0101",
+      "createdBy": {
+        "user": {
+          "displayName": "Susana Rocha",
+          "id": "14012",
+        }
+      }
+      "externalSource": "sis",
+      "mailingAddress": {
+        "city": "Los Angeles",
+        "countryOrRegion": "United States",
+        "postalCode": "98055",
+        "state": "CA",
+        "street": "12345 Main St."
+      },
+      "primaryRole": "student",
+      "residenceAddress": {
+        "city": "Los Angeles",
+        "countryOrRegion": "United States",
+        "postalCode": "98055",
+        "state": "CA",
+        "street": "12345 Main St."
+      },
     }
   ]
 }

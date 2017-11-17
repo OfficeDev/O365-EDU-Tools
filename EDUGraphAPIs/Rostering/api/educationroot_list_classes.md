@@ -28,10 +28,10 @@ This method supports the [OData Query Parameters](http://graph.microsoft.io/docs
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and collection of [educationClass](../resources/educationclass.md) objects in the response body.
+If successful, this method returns a `200 OK` response code and a collection of [educationClass](../resources/educationclass.md) objects in the response body.
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "get_classes"
@@ -40,7 +40,10 @@ Here is an example of the request.
 GET https://graph.microsoft.com/beta/education/classes
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
@@ -55,15 +58,20 @@ Content-length: 277
 {
   "value": [
     {
-      "id": "String",
-      "description": "String",
-      "classCode": "String",
-      "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-      "displayName": "String",
-      "externalId": "String",
-      "externalName": "String",
-      "externalSource": "string",
-      "mailNickname": "String"
+      "id": "11019",
+      "description": "Health Level 1",
+      "classCode": "Health 501",
+      "createdBy": {
+        "user": {
+          "displayName": "Susana Rocha",
+          "id": "14012",
+        }
+      },
+      "displayName": "Health 1",
+      "externalId": "11019",
+      "externalName": "Health Level 1",
+      "externalSource": "sis",
+      "mailNickname": "fineartschool.net"
     }  
   ]
 }

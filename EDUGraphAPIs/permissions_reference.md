@@ -255,7 +255,7 @@ For more complex scenarios involving multiple permissions, see [Permission scena
 
 ---
 
-## Education Graph permissions
+## Education permissions
 
 #### Delegated permissions
 

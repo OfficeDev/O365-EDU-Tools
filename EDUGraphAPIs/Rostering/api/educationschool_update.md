@@ -1,4 +1,4 @@
-# Update educationschool
+# Update educationschool prpoerties
 
 Update the properties of a school object.
 
@@ -14,7 +14,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-PATCH /education/schools/<id>
+PATCH /education/schools/{id}
 ```
 ## Request headers
 | Header       | Value |
@@ -23,7 +23,7 @@ PATCH /education/schools/<id>
 | Content-Type  | application/json  |
 
 ## Request body
-In the request body, supply the values for relevant fields that should be updated. Existing properties that are not included in the request body will maintain their previous values or be recalculated based on changes to other property values. For best performance you shouldn't include existing values that haven't changed.
+In the request body, supply the values for relevant fields that should be updated. Existing properties that are not included in the request body will maintain their previous values or be recalculated based on changes to other property values. For best performance, don't include existing values that haven't changed.
 
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
@@ -42,26 +42,29 @@ In the request body, supply the values for relevant fields that should be update
 |createdBy|[identitySet](identityset.md)|Entity who created the school.|
 
 ## Response
-If successful, this method returns a `200 OK` response code and updated [educationSchool](../resources/educationschool.md) object in the response body.
+If successful, this method returns a `200 OK` response code and an updated [educationSchool](../resources/educationschool.md) object in the response body.
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "update_educationschool"
 }-->
 ```http
-PATCH https://graph.microsoft.com/beta/education/schools/<id>
+PATCH https://graph.microsoft.com/beta/education/schools/10002
 Content-type: application/json
 Content-length: 292
 
 {
-  "displayName": "String",
-  "description": "String",
+  "displayName": "Fabrikam Arts High School",
+  "description": "Magnate school for the arts. Los Angeles School District",
 }
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
@@ -73,22 +76,27 @@ Content-type: application/json
 Content-length: 292
 
 {
-  "id": "String",
-  "displayName": "String",
-  "description": "String",
+  "id": "10002"
+  "displayName": "Fabrikam Arts High School",
+  "description": "Magnate school for the arts. Los Angeles School District",
   "status": "String",
   "externalSource": "String",
-  "principalEmail": "String",
-  "principalName": "String",
-  "externalPrincipalId": "String",
-  "highestGrade": "String",
-  "lowestGrade": "String",
-  "schoolNumber": "String",
-  "address": {"@odata.type": "microsoft.graph.physicalAddress"},
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "externalId": "String",
-  "fax": "String",
-  "phone": "String"
+  "principalEmail": "AmyR@fabrikam.com",
+  "principalName": "Amy Roebuck",
+  "externalPrincipalId": "14007",
+  "highestGrade": "12",
+  "lowestGrade": "9",
+  "schoolNumber": "10002",
+  "address": {
+    "city": "Los Angeles",
+    "countryOrRegion": "United States",
+    "postalCode": "98055",
+    "state": "CA",
+    "street": "12345 Main St."
+  },
+  "externalId": "10002",
+  "fax": "+1 (253) 555-0101",
+  "phone": "+1 (253) 555-0102",
 }
 ```
 

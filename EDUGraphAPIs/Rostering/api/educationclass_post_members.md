@@ -1,6 +1,6 @@
-# Create educationUser
+# Add a student to a class roster
 
-Add a member to a class.
+Add a student to a class.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -14,7 +14,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-POST /education/classes/<id>/members/$ref
+POST /education/classes/{id}/members/$ref
 ```
 ## Request headers
 | Header       | Value |
@@ -23,31 +23,33 @@ POST /education/classes/<id>/members/$ref
 | Content-Type  | application/json  |
 
 ## Request body
-In the request body, supply a JSON representation of [educationUser](../resources/educationuser.md) object.
+In the request body, supply a JSON representation of an [educationUser](../resources/educationuser.md) object.
 
 
 ## Response
-If successful, this method returns `204, No Content` response code and [educationClass](../resources/educationclass.md) object in the response body.
+If successful, this method returns a `204 No Content` response code and an [educationClass](../resources/educationclass.md) object in the response body.
 
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "create_educationuser_from_educationclass"
 }-->
 ```http
-POST https://graph.microsoft.com/beta/education/classes/<id>/members/$ref
+POST https://graph.microsoft.com/beta/education/classes/11011/members/$ref
 Content-type: application/json
 Content-length: 56
 
 {
-  "@odata.id":"https://graph.microsoft.com/beta/education/users/{userId}" 
+  "@odata.id":"https://graph.microsoft.com/beta/education/users/13015"ï¿½
 }
 ```
-In the request body, supply a JSON representation of [educationUser](../resources/educationuser.md) object.
+
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+
 <!-- {
   "blockType": "response",
   "truncated": true,

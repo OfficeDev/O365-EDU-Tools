@@ -1,6 +1,7 @@
 # Delete educationUser
 
-Delete a user.
+Delete an [educationUser](../resources/educationuser.md) from the Edu root **educationUser** collection.
+
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -14,7 +15,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-DELETE /education/users/<id>
+DELETE /education/users/{id}
 ```
 ## Request headers
 | Header       | Value |
@@ -26,7 +27,7 @@ Do not supply a request body for this method.
 
 
 ## Response
-If successful, this method returns `204, No Content` response code. It does not return anything in the response body.
+If successful, this method returns a `204 No Content` response code. It does not return anything in the response body.
 
 ## Example
 ##### Request
@@ -36,10 +37,10 @@ Here is an example of the request.
   "name": "delete_educationuser"
 }-->
 ```http
-DELETE https://graph.microsoft.com/beta/education/users/<id>
+DELETE https://graph.microsoft.com/beta/education/users/13019
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
 <!-- {
   "blockType": "response",
   "truncated": true

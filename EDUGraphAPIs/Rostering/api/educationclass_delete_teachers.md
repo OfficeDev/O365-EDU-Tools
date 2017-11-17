@@ -1,6 +1,6 @@
-# Delete educationUser from educationClass
+# Remove a teacher
 
-Delete a teacher from a Class.
+Remove an [educationUser](../resources/educationuser.md) with a **primaryRole** of `teacher` from an [educationClass](../resources/educationclass.md)
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -14,7 +14,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-DELETE /education/classes/<id>/teachers/{userId}/$ref
+DELETE /education/classes/{id}/teachers/{userId}/$ref
 ```
 ## Request headers
 | Header       | Value |
@@ -26,21 +26,21 @@ Do not supply a request body for this method.
 
 
 ## Response
-If successful, this method returns `204, No Content` response code and empty response body.
+If successful, this method returns a `204 No Content` response code and an empty response body.
 
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "create_educationclass_from_educationschool"
 }-->
 ```http
-DELETE https://graph.microsoft.com/beta/education/classes/<id>/teachers/{userId}/$ref
+DELETE https://graph.microsoft.com/beta/education/classes/<id>/teachers/14012
 ```
 
 ##### Response
-Here is an example of the response. 
+The following is an example of the response. 
 <!-- {
   "blockType": "response",
   "truncated": true,

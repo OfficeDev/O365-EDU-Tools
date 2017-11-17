@@ -14,7 +14,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-DELETE /educationClasses/assignments/<id>/submissions/<id>/resources/<id>
+DELETE /educationClasses/assignments/{id}/submissions/{id}/resources/{id}
 
 ```
 ## Request headers
@@ -42,8 +42,6 @@ DELETE https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/
 ##### Response
 The following is an example of the response. 
 
->**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
->
 <!-- {
   "blockType": "response",
   "truncated": true
