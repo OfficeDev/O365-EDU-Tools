@@ -1,4 +1,4 @@
-# Update educationschool
+# Update educationschool prpoerties
 
 Update the properties of a school object.
 

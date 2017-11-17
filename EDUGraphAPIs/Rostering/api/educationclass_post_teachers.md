@@ -1,4 +1,4 @@
-# Create educationUser (teacher)
+# Add an educationUser (teacher) to an educationClass
 
 Add a teacher to a class.
 
@@ -37,12 +37,12 @@ The following is an example of the request.
   "name": "create_educationuser_from_educationclass"
 }-->
 ```http
-POST https://graph.microsoft.com/beta/education/classes/<id>/teachers/$ref
+POST https://graph.microsoft.com/beta/education/classes/11017/teachers/$ref
 Content-type: application/json
 Content-length: 508
 
 {
-  "@odata.id":"https://graph.microsoft.com/beta/education/users/{userId}"�
+  "@odata.id":"https://graph.microsoft.com/beta/education/users/14011"�
 }
 ```
 

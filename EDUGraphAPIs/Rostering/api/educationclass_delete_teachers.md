@@ -1,6 +1,6 @@
-# Delete educationUser (teacher)
+# Remove a teacher
 
-Delete a teacher from a class.
+Remove an [educationUser](../resources/educationuser.md) with a **primaryRole** of "teacher" from an [educationClass](../resources/educationclass.md)
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -36,7 +36,7 @@ The following is an example of the request.
   "name": "create_educationclass_from_educationschool"
 }-->
 ```http
-DELETE https://graph.microsoft.com/beta/education/classes/<id>/teachers/{userId}/$ref
+DELETE https://graph.microsoft.com/beta/education/classes/<id>/teachers/14012
 ```
 
 ##### Response

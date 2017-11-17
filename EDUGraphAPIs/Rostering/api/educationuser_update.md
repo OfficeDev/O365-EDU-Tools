@@ -1,4 +1,4 @@
-# Update educationuser
+# Update educationUser properties
 
 Update the properties of an **educationuser** object.
 ## Permissions

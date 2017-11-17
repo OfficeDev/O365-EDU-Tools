@@ -1,6 +1,6 @@
-# Create educationUser (member)
+# Add a student to a class roster
 
-Add a member to a class.
+Add a student to a class.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -37,12 +37,12 @@ The following is an example of the request.
   "name": "create_educationuser_from_educationclass"
 }-->
 ```http
-POST https://graph.microsoft.com/beta/education/classes/<id>/members/$ref
+POST https://graph.microsoft.com/beta/education/classes/11011/members/$ref
 Content-type: application/json
 Content-length: 56
 
 {
-  "@odata.id":"https://graph.microsoft.com/beta/education/users/{userId}"�
+  "@odata.id":"https://graph.microsoft.com/beta/education/users/13015"�
 }
 ```
 

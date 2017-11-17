@@ -1,4 +1,4 @@
-# Create educationUser
+# Add educationUser to an educationSchool
 
 Add a user to a school.
 

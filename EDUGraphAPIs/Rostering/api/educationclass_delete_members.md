@@ -1,6 +1,6 @@
-# Delete a student from an educationClass
+# Remove a student from a class roster
 
-Delete a student from a class.
+Removes a student from a class roster. an [educationUser](../resources/educationuser.md) with a **primaryRole** of `student` from an [educationClass](../resources/educationclass.md)
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -36,7 +36,7 @@ The following is an example of the request.
   "name": "create_educationclass_from_educationschool"
 }-->
 ```http
-DELETE https://graph.microsoft.com/beta/education/classes/11003/members/14008/$ref
+DELETE https://graph.microsoft.com/beta/education/classes/11003/members/14008
 ```
 
 ##### Response

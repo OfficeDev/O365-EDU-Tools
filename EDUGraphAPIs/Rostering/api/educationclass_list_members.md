@@ -1,6 +1,8 @@
 # List members
 
-Retrieves the teachers and students for a class. Note that if the delegated token is used, members can only be seen by other members of the class.
+Retrieves the teacher and students for a class. 
+
+>**Note:** If the delegated token is used, only a class member can retrieve other members of the class.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -36,7 +38,7 @@ The following is an example of the request.
   "name": "get_members"
 }-->
 ```http
-GET https://graph.microsoft.com/beta/education/classes/<id>/members
+GET https://graph.microsoft.com/beta/education/classes/11016/members
 ```
 ##### Response
 The following is an example of the response. 
@@ -57,18 +59,75 @@ Content-length: 593
 {
   "value": [
     {
-      "id": "string",
-      "displayName": "string",
-      "givenName": "string",
-      "middleName": "string",
-      "surname": "string",
-      "mail": "string",
-      "mobilePhone": "string",
-      "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-      "externalSource": "string",
-      "mailingAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
-      "primaryRole": "string",
-      "residenceAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
+      "id": "13013",
+      "displayName": "Ora Klein",
+      "givenName": "Ora",
+      "middleName": " ",
+      "surname": "Klein",
+      "mail": "OraK@contoso.com",
+      "mobilePhone": "+1 (253) 555-0101",
+      "createdBy": {
+        "user": {
+          "displayName": "Susana Rocha",
+          "id": "14012",
+        }
+      },
+      "externalSource": "School of Fine Art",
+      "mailingAddress": {
+        "city": "Buffalo",
+        "countryOrRegion": "United States",
+        "postalCode": "98055",
+        "state": "NY",
+        "street": "12345 Main St."
+      },
+      "primaryRole": "teacher",
+      "externalId": "13013",
+      "teacherNumber": "8802",
+      "residenceAddress": {
+        "city": "Los Angeles",
+        "countryOrRegion": "United States",
+        "postalCode": "98055",
+        "state": "CA",
+        "street": "12345 Main St."
+      },
+    },
+    {
+      "id": "13005",
+      "displayName": "Erna Parker",
+      "givenName": "Erna",
+      "middleName": " ",
+      "surname": "Parker",
+      "mail": "ernap@contoso.com",
+      "mobilePhone": "+1 (253) 555-0104",
+      "createdBy": {
+        "user": {
+          "displayName": "Susana Rocha",
+          "id": "14012",
+        }
+      },
+      "externalSource": "School of Fine Art",
+      "mailingAddress": {
+        "city": "Buffalo",
+        "countryOrRegion": "United States",
+        "postalCode": "98055",
+        "state": "NY",
+        "street": "12345 Main St."
+      },
+      "primaryRole": "student",
+      "externalId": "13005",
+      "birthDate": "2001-01-01T00:00:00Z",
+      "externalId": "123",
+      "gender": "female",
+      "grade": "9",
+      "graduationYear": "2019",
+      "studentNumber": "13005",
+      "residenceAddress": {
+        "city": "Long Beach",
+        "countryOrRegion": "United States",
+        "postalCode": "98055",
+        "state": "CA",
+        "street": "12345 Maple St."
+      },
     }
   ]
 }
