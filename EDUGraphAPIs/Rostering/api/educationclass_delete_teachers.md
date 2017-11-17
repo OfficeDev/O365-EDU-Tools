@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 # Remove a teacher
 
 Remove an [educationUser](../resources/educationuser.md) with a **primaryRole** of `teacher` from an [educationClass](../resources/educationclass.md)
-=======
-# Remove educationUser (teacher)
-
-Remove a teacher from a class.
->>>>>>> 121ca8792ac7ab9dd2716b939b1bfc3dfcc0b4f2
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
