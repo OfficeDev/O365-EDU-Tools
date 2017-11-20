@@ -1,5 +1,7 @@
 # List classes
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 Retrieve a list of classes owned by a school.
 
 ## Permissions
@@ -14,7 +16,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-GET /education/schools/<id>/classes
+GET /education/schools/{id}/classes
 ```
 ## Optional query parameters
 This method supports the [OData Query Parameters](http://graph.microsoft.io/docs/overview/query_parameters) to help customize the response.
@@ -27,19 +29,22 @@ This method supports the [OData Query Parameters](http://graph.microsoft.io/docs
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and collection of [educationClass](../resources/educationclass.md) objects in the response body.
+If successful, this method returns a `200 OK` response code and a collection of [educationClass](../resources/educationclass.md) objects in the response body.
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "get_classes"
 }-->
 ```http
-GET https://graph.microsoft.com/beta/education/schools/<id>/classes
+GET https://graph.microsoft.com/beta/education/schools/10002/classes
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
@@ -52,17 +57,22 @@ Content-type: application/json
 Content-length: 277
 
 {
-  "value": [
+  "classes": [
     {
-      "id": "String",
-      "description": "String",
-      "classCode": "String",
-      "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-      "displayName": "String",
-      "externalId": "String",
-      "externalName": "String",
-      "externalSource": "string",
-      "mailNickname": "String"
+      "id": "11019",
+      "description": "Health Level 1",
+      "classCode": "Health 501",
+      "createdBy": {
+        "user": {
+          "displayName": "Susana Rocha",
+          "id": "14012",
+        }
+      },
+      "displayName": "Health 1",
+      "externalId": "11019",
+      "externalName": "Health Level 1",
+      "externalSource": "sis",
+      "mailNickname": "fineartschool.net"
     }  
   ]
 }

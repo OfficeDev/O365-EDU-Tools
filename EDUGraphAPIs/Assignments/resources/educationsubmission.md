@@ -1,37 +1,37 @@
 # educationSubmission resource type
 
-Submissions are owned by an assignment.  A submission represents the resources that an individual (or group) turn in for an assignment and the grade/feedback that is returned.
-Submissions are automatically created when an assignment is published.  The submission owns two lists of resources.  Resources represent the user/groups working area while the submitted resources
-represent the resources that have actively been turned in by students.  
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+Submissions are owned by an assignment. A submission represents the resources that an individual (or group) turn in for an assignment and the grade/feedback that is returned.
+Submissions are automatically created when an assignment is published. The submission owns two lists of resources. Resources represent the user/groups working area while the submitted resources represent the resources that have actively been turned in by students.  
 
 >**Note:** The status is read-only and the object is moved through the workflow via actions. 
-
 
 ## Methods
 
 | Method		   | Return Type	|Description|
 |:---------------|:--------|:----------|
-|[Get educationSubmission](../api/educationsubmission_get.md) | [educationSubmission](educationsubmission.md) |Read properties and relationships of educationSubmission object.|
-|[List resources](../api/educationsubmission_list_resources.md) |[educationSubmissionResource](educationsubmissionresource.md) collection| Get a educationSubmissionResource object collection.|
-|[List submittedResources](../api/educationsubmission_list_submittedresources.md) |[educationSubmittedSubmissionResource](educationsubmittedsubmissionresource.md) collection| Get a educationSubmittedSubmissionResource object collection.|
-|[Update](../api/educationsubmission_update.md) | [educationSubmission](educationsubmission.md)	|Update educationSubmission object. |
+|[Get educationSubmission](../api/educationsubmission_get.md) | [educationSubmission](educationsubmission.md) |Read properties and relationships of an **educationSubmission** object.|
+|[List resources](../api/educationsubmission_list_resources.md) |[educationSubmissionResource](educationsubmissionresource.md) collection| Get an **educationSubmissionResource** object collection.|
+|[List submittedResources](../api/educationsubmission_list_submittedresources.md) |[educationSubmittedSubmissionResource](educationsubmittedsubmissionresource.md) collection| Get an **educationSubmittedSubmissionResource** object collection.|
+|[Update](../api/educationsubmission_update.md) | [educationSubmission](educationsubmission.md)	|Update an **educationSubmission** object. |
 |[Recall](../api/educationsubmission_recall.md)|[educationSubmission](educationsubmission.md)|A student uses the recall to move the state of the submission from submitted back to working.|
 |[Release](../api/educationsubmission_release.md)|[educationSubmission](educationsubmission.md)|A teacher uses release to indicate that the grades/feedback can be shown to the student.|
-|[Submit](../api/educationsubmission_submit.md)|[educationSubmission](educationsubmission.md)|A student uses submit to turn in the assignment.  This will copy the resources into the submittedResources folder for grading and updates the status.|
+|[Submit](../api/educationsubmission_submit.md)|[educationSubmission](educationsubmission.md)|A student uses submit to turn in the assignment. This will copy the resources into the **submittedResources** folder for grading and updates the status.|
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|feedback|[educationFeedback](educationfeedback.md)|Holds the feedback property which stores the teachers notes back to students.|
+|feedback|[educationFeedback](educationfeedback.md)|Holds the feedback property which stores the teacher's notes back to students.|
 |grade|[educationAssignmentGrade](educationassignmentgrade.md)|Holds the grade information a teacher assigns to this submission.|
 |id|String| Read-only.|
 |recipient|[educationSubmissionRecipient](educationsubmissionrecipient.md)|Who this submission is assigned to.|
 |releasedBy|[identitySet](identityset.md)|User who moved the status of this submission to released.|
-|releasedDateTime|DateTimeOffset|Moment in time when the submission was released.  The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
+|releasedDateTime|DateTimeOffset|Moment in time when the submission was released. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
 |resourcesFolderUrl|String|Folder where all file resources for this submission need to be stored.|
-|status|string| Read-Only.  Possible values are: `working`, `submitted`, `completed`.|
+|status|string| Read-Only. Possible values are: `working`, `submitted`, `completed`.|
 |submittedBy|[identitySet](identityset.md)|User who moved the resource into the submitted state.|
-|submittedDateTime|DateTimeOffset|Moment in time when the submission was moved into the submitted state.  The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
+|submittedDateTime|DateTimeOffset|Moment in time when the submission was moved into the submitted state. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
 
 ## Relationships
 | Relationship | Type	|Description|
@@ -41,7 +41,7 @@ represent the resources that have actively been turned in by students.
 
 ## JSON representation
 
-Here is a JSON representation of the resource.
+The following is a JSON representation of the resource.
 
 <!-- {
   "blockType": "resource",

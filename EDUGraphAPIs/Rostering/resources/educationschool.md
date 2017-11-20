@@ -1,24 +1,25 @@
 # educationSchool resource type
 
-A school.
-educationSchool currently corresponds one-to-one with Administrative Unit and shares the same id.  
-However, this relationship is not guaranteed for future versions of the Microsoft Graph.
-This is a subtype of [educationOrganization](educationorganization.md).
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+A school. The **educationSchool** resource currently corresponds to an [administrativeUnit](administrativeunit.md) resource and shares the same ID.  
+
+This resource is a subtype of [educationOrganization](educationorganization.md).
 
 
 ## Methods
 
 | Method		   | Return Type	|Description|
 |:---------------|:--------|:----------|
-|[Get educationSchool](../api/educationschool_get.md) | [educationSchool](educationschool.md) |Read properties and relationships of educationSchool object.|
-|[Add class](../api/educationschool_post_classes.md) |[educationClass](educationclass.md)| Add a new educationClass for the school by posting to the classes navigation property.|
-|[List classes](../api/educationschool_list_classes.md) |[educationClass](educationclass.md) collection| Get the educationClass object collection.|
-|[Remove class](../api/educationschool_delete_classes.md) |[educationClass](educationclass.md)| Remove an educationClass from the school through the classes navigation property.|
-|[Add user](../api/educationschool_post_users.md) |[educationUser](educationuser.md)| Add a new educationUser for the school by posting to the users navigation property.|
-|[List users](../api/educationschool_list_users.md) |[educationUser](educationuser.md) collection| Get the educationUser object collection.|
-|[Remove user](../api/educationschool_delete_users.md) |[educationUser](educationuser.md)| Remove an educationUser from the school through the users navigation property.|
-|[Update](../api/educationschool_update.md) | [educationSchool](educationschool.md)	|Update educationSchool object. |
-|[Delete](../api/educationschool_delete.md) | None |Delete educationSchool object. |
+|[Get educationSchool](../api/educationschool_get.md) | [educationSchool](educationschool.md) |Read properties and relationships of an **educationSchool** object.|
+|[Add class](../api/educationschool_post_classes.md) |[educationClass](educationclass.md)| Add a new **educationClass** for the school by posting to the classes navigation property.|
+|[List classes](../api/educationschool_list_classes.md) |[educationClass](educationclass.md) collection| Get the **educationClass** object collection.|
+|[Remove class](../api/educationschool_delete_classes.md) |[educationClass](educationclass.md)| Remove an **educationClass** from the school through the classes navigation property.|
+|[Add user](../api/educationschool_post_users.md) |[educationUser](educationuser.md)| Add a new **educationUser** for the school by posting to the **users** navigation property.|
+|[List users](../api/educationschool_list_users.md) |[educationUser](educationuser.md) collection| Get the **educationUser** object collection.|
+|[Remove user](../api/educationschool_delete_users.md) |[educationUser](educationuser.md)| Remove an **educationUser** from the school through the **users** navigation property.|
+|[Update](../api/educationschool_update.md) | [educationSchool](educationschool.md)	|Update an **educationSchool** object. |
+|[Delete](../api/educationschool_delete.md) | None |Delete an **educationSchool** object. |
 
 ## Properties
 | Property	   | Type	|Description|
@@ -26,18 +27,18 @@ This is a subtype of [educationOrganization](educationorganization.md).
 |id|String|GUID of this school.|
 |displayName| String| Display name of the school.| 
 |description| String | Description of the school.| 
-|status| string| Read-Only.  Possible values are: `inactive`, `active`, `expired`, `deleteable`.|
+|status| string| Read-Only. Possible values are: `inactive`, `active`, `expired`, `deleteable`.|
 |externalSource| string| Read-Only.  Possible values are: `sis`, `manual`, `unknownFutureValue`.|
 |principalEmail| String| Email address of the principal.|
 |principalName| String | Name of the principal.|
-|externalPrincipalId| String | Id of principal in syncing system. |
+|externalPrincipalId| String | ID of principal in syncing system. |
 |highestGrade|String| Highest grade taught. |
 |lowestGrade|String| Lowest grade taught. |
 |schoolNumber|String| School Number.|
-|externalId|String| Id of school in syncing system. |
+|externalId|String| ID of school in syncing system. |
 |phone|String| Phone number of school. |
 |fax|String| Fax number of school. |
-|address|[physicalAddress](physicaladdress.md)| Address of the School.|
+|address|[physicalAddress](physicaladdress.md)| Address of the school.|
 |createdBy|[identitySet](identityset.md)|Entity who created the school.|
 
 
@@ -49,7 +50,7 @@ This is a subtype of [educationOrganization](educationorganization.md).
 
 ## JSON representation
 
-Here is a JSON representation of the resource.
+The following is a JSON representation of the resource.
 
 <!-- {
   "blockType": "resource",

@@ -1,5 +1,7 @@
 # Get educationSchool
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 Retrieve the properties and relationships of the school object.
 
 ## Permissions
@@ -29,19 +31,22 @@ This method supports the [OData Query Parameters](http://graph.microsoft.io/docs
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and [educationSchool](../resources/educationschool.md) object in the response body.
+If successful, this method returns a `200 OK` response code and an [educationSchool](../resources/educationschool.md) object in the response body.
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "get_educationschool"
 }-->
 ```http
-GET https://graph.microsoft.com/beta/education/schools
+GET https://graph.microsoft.com/beta/education/schools/10001
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
@@ -53,12 +58,11 @@ Content-type: application/json
 Content-length: 292
 
 {
-  "schoolZone": "schoolZone-value",
-  "schoolPrincipalEmail": "schoolPrincipalEmail-value",
-  "schoolPrincipalName": "schoolPrincipalName-value",
-  "externalSchoolPrincipalId": "externalSchoolPrincipalId-value",
-  "lowestGrade": "lowestGrade-value",
-  "highestGrade": "highestGrade-value"
+  "schoolPrincipalEmail": "AmyRoebuck@contoso.com",
+  "schoolPrincipalName": "Amy Roebuck",
+  "externalSchoolPrincipalId": "14007",
+  "lowestGrade": "9",
+  "highestGrade": "12"
 }
 ```
 

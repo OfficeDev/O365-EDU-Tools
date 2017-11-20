@@ -1,6 +1,11 @@
 # List schools
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 Retrieve a list of schools for a user.
+
+>**Note:** If the delegated token is used, members can only see information about their own schools. Use the `...beta/education/me/schools` resource in this case.
+
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
 
@@ -14,7 +19,7 @@ One of the following permissions is required to call this API. To learn more, in
 <!-- { "blockType": "ignored" } -->
 ```http
 GET /education/me/schools
-GET /education/users/<id>/schools
+GET /education/users/{id}/schools
 ```
 ## Optional query parameters
 This method supports the [OData Query Parameters](http://graph.microsoft.io/docs/overview/query_parameters) to help customize the response.
@@ -27,10 +32,10 @@ This method supports the [OData Query Parameters](http://graph.microsoft.io/docs
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and collection of [educationSchool](../resources/educationschool.md) objects in the response body.
+If successful, this method returns a `200 OK` response code and a collection of [educationSchool](../resources/educationschool.md) objects in the response body.
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "get_schools"
@@ -39,7 +44,10 @@ Here is an example of the request.
 GET https://graph.microsoft.com/beta/education/me/schools
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
@@ -52,24 +60,35 @@ Content-type: application/json
 Content-length: 345
 
 {
-  "value": [
+  "schools": [
     {
-      "id": "String",
-      "displayName": "String",
-      "description": "String",
-      "status": "String",
-      "externalSource": "String",
-      "principalEmail": "String",
-      "principalName": "String",
-      "externalPrincipalId": "String",
-      "highestGrade": "String",
-      "lowestGrade": "String",
-      "schoolNumber": "String",
-      "address": {"@odata.type": "microsoft.graph.physicalAddress"},
-      "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-      "externalId": "String",
-      "fax": "String",
-      "phone": "String",
+      "id": "10001",
+      "displayName": "Contoso High School",
+      "description": "Public 9-12 high school",
+      "status": "active",
+      "externalSource": "sis",
+      "principalEmail": "amyr@contoso.com",
+      "principalName": "Amy Roebuck",
+      "externalPrincipalId": "14007",
+      "highestGrade": "12",
+      "lowestGrade": "9",
+      "schoolNumber": "10001",
+      "address": {
+        "city": "Los Angeles",
+        "countryOrRegion": "United States",
+        "postalCode": "98055",
+        "state": "CA",
+        "street": "12345 Main St."
+      },
+      "createdBy": {
+        "user": {
+          "displayName": "Susana Rocha",
+          "id": "14012",
+        }
+      },
+      "externalId": "10001",
+      "fax": "+1 (253) 555-0101",
+      "phone": "+1 (253) 555-0102",
     }
   ]
 }

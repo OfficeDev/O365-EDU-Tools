@@ -1,14 +1,11 @@
 # Get educationAssignment
 
-Use this API to get an assignment properties and its relationships.  Students can only see assignments assigned to them while teachers can see all assignments in a class.
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+Get the properties and relationships of an assignment. Students can only see assignments assigned to them; teachers can see all assignments in a class.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
-
-
-
->**Note:** Due to a bug, the graph will return educationItemBody for the instructions property.  This is an exact duplicate of the itemBody that 
-is already found on the graph. When the code moves to production, this will be updated. For clients who simply use the json being sent back and forth to the graph, there should be no work necessary to handle this change.
 
 
 |Permission type      | Permissions (from least to most privileged)              |
@@ -20,7 +17,7 @@ is already found on the graph. When the code moves to production, this will be u
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-GET /education/classes/<id>/assignments/<id>
+GET /education/classes/{id}/assignments/{id}
 ```
 ## Optional query parameters
 This method supports the [OData Query Parameters](http://graph.microsoft.io/docs/overview/query_parameters) to help customize the response.
@@ -34,19 +31,22 @@ This method supports the [OData Query Parameters](http://graph.microsoft.io/docs
 Do not supply a request body for this method.
 
 ## Response
-If successful, this method returns a `200 OK` response code and [educationAssignment](../resources/educationassignment.md) object in the response body.
+If successful, this method returns a `200 OK` response code and an [educationAssignment](../resources/educationassignment.md) object in the response body.
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "get_educationassignment"
 }-->
 ```http
-GET https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>
+GET https://graph.microsoft.com/beta/education/classes/11014/assignments/19002
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
@@ -58,23 +58,38 @@ Content-type: application/json
 Content-length: 279
 
 {
-  "id": "String (identifier)",
+  "id": "19002",
   "allowLateSubmissions": true,
   "allowStudentsToAddResourcesToSubmission": true,
   "assignDateTime": "String (timestamp)",
   "assignTo": {"@odata.type": "microsoft.graph.educationAssignmentRecipient"},
-  "assignedDateTime": "String (timestamp)",
-  "classId": "String",
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "createdDateTime": "String (timestamp)",
-  "displayName": "String",
-  "dueDateTime": "String (timestamp)",
-  "grading": {"@odata.type": "microsoft.graph.educationAssignmentGradeType"},
-  "instructions": {"@odata.type": "microsoft.graph.itemBody"},
-  "lastModifiedBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "lastModifiedDateTime": "String (timestamp)",
-  "resourcesFolderUrl": "String",
-  "status": "string"
+  "assignedDateTime": "2014-01-01T00:00:00Z",
+  "classId": "11006",
+  "createdBy": {
+    "user": {
+      "displayName": "Susana Rocha",
+      "id": "14012",
+    }
+  },
+  "createdDateTime": "2014-01-01T00:00:00Z",
+  "displayName": "Mid term exam",
+  "dueDateTime": "2014-01-11T00:00:00Z",
+  "grading": {
+      "@odata.type": "#microsoft.graph.educationAssignmentPointsGradeType",
+      "maxPoints": 100
+  },
+  "instructions": {
+    "content": "Answer every question correctly",
+    "contentType": "Text"
+  },
+  "lastModifiedBy": {
+    "user": {
+      "displayName": "Susana Rocha",
+      "id": "14012",
+    }
+  },
+  "lastModifiedDateTime": "2014-01-01T00:00:00Z",
+  "status": "assigned"
 }
 ```
 

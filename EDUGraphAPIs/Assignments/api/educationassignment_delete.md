@@ -1,6 +1,8 @@
 # Delete educationAssignment
 
-Use this API to delete an existing Assignment.  No request body is necessary.  Only Teachers within a Class can delete Assignments.
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+Delete an existing assignment. Only teachers within a class can delete assignments.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -13,9 +15,9 @@ One of the following permissions is required to call this API. To learn more, in
 
 ## HTTP request
 
-```http
 <!-- { "blockType": "ignored" } -->
 
+```http
 DELETE /education/classes/<id>/assignments/<id>
 ```
 ## Request headers
@@ -28,26 +30,29 @@ Do not supply a request body for this method.
 
 
 ## Response
-If successful, this method returns `204, No Content` response code. It does not return anything in the response body.
+If successful, this method returns a `204 No Content` response code. It does not return anything in the response body.
 
 ## Example
-##### Request
-Here is an example of the request.
+### Request
+The following is an example of the request.
 
-```http
 <!-- {
   "blockType": "request",
   "name": "delete_educationassignment"
 }-->
 
-DELETE https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>
+```http
+DELETE https://graph.microsoft.com/beta/education/classes/11014/assignments/19002
 ```
-##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+### Response
+The following is an example of the response. 
+
+
 <!-- {
   "blockType": "response",
   "truncated": true
 } -->
+
 ```http
 HTTP/1.1 204 No Content
 ```

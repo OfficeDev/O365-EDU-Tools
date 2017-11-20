@@ -1,5 +1,7 @@
 # List resources
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 Get all the resources associated with this assignment.
 
 ## Permissions
@@ -14,7 +16,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-GET /education/classes/<id>/assignments/<id>/resources
+GET /education/classes/{id}/assignments/{id}/resources
 ```
 ## Optional query parameters
 This method supports the [OData Query Parameters](http://graph.microsoft.io/docs/overview/query_parameters) to help customize the response.
@@ -27,19 +29,22 @@ This method supports the [OData Query Parameters](http://graph.microsoft.io/docs
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and collection of [educationAssignmentResource](../resources/educationassignmentresource.md) objects in the response body.
+If successful, this method returns a `200 OK` response code and a collection of [educationAssignmentResource](../resources/educationassignmentresource.md) objects in the response body.
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "get_resources"
 }-->
 ```http
-GET https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/resources
+GET https://graph.microsoft.com/beta/education/classes/11012/assignments/19002/resources
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
@@ -52,11 +57,60 @@ Content-type: application/json
 Content-length: 1011
 
 {
-  "value": [
+  "resources": [
+    {
+      "distributeForStudentWork": false,
+      "resource": {
+          "@odata.type": "#microsoft.graph.educationLinkResource",
+          "displayName": "Microsoft Homepage",
+          "createdDateTime": "2017-10-21T07:52:45.5675913Z",
+          "createdBy": {
+              "application": null,
+              "device": null,
+              "user": {
+                  "id": "63cc91d2-59c7-4732-9594-35b91a26b340",
+                  "displayName": null
+              }
+          },
+          "lastModifiedDateTime": "2017-10-21T07:52:45.5675913Z",
+          "lastModifiedBy": {
+              "application": null,
+              "device": null,
+              "user": {
+                  "id": "63cc91d2-59c7-4732-9594-35b91a26b340",
+                  "displayName": null
+              }
+          },
+          "link": "https://www.microsoft.com"
+      },
+      "id": "850f51b7-1df9-4ec0-bd62-64a0214b9cbf"
+    },
     {
       "distributeForStudentWork": true,
-      "id": "String (identifier)",
-      "resource": {"@odata.type": "microsoft.graph.educationResource"}
+      "resource": {
+          "@odata.type": "#microsoft.graph.educationWordResource",
+          "displayName": "Report.docx",
+          "createdDateTime": "2017-10-21T07:52:53.9863696Z",
+          "createdBy": {
+              "application": null,
+              "device": null,
+              "user": {
+                  "id": "63cc91d2-59c7-4732-9594-35b91a26b340",
+                  "displayName": null
+              }
+          },
+          "lastModifiedDateTime": "2017-10-21T07:52:53.9863696Z",
+          "lastModifiedBy": {
+              "application": null,
+              "device": null,
+              "user": {
+                  "id": "63cc91d2-59c7-4732-9594-35b91a26b340",
+                  "displayName": null
+              }
+          },
+          "fileUrl": "https://graph.microsoft.com/v1.0/drives/b!8-QjN2tsv0WyGnTv7vOvnQkmGHbbeMNLqYKONmHLVnvCVmBYIGpeTZ_iul5AdW9f/items/017NJZI27BCN2QI2H7HJGLIVPXR6SD2DH6"
+      },
+      "id": "f2387c3b-ec39-4bf2-a399-d7242677f024"
     }
   ]
 }

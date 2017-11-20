@@ -1,4 +1,6 @@
-# Update educationclass
+# Update educationclass properties
+
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
 
 Update the properties of a class.
 
@@ -14,7 +16,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-PATCH /education/classes/<id>
+PATCH /education/classes/{id}
 ```
 ## Request headers
 | Header       | Value |
@@ -23,39 +25,43 @@ PATCH /education/classes/<id>
 | Content-Type  | application/json  |
 
 ## Request body
-In the request body, supply the values for relevant fields that should be updated. Existing properties that are not included in the request body will maintain their previous values or be recalculated based on changes to other property values. For best performance you shouldn't include existing values that haven't changed.
+In the request body, supply the values for relevant fields that should be updated. Existing properties that are not included in the request body will maintain their previous values or be recalculated based on changes to other property values. For best performance, don't include existing values that haven't changed.
 
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|description|String| Description of the class|
-|displayName|String| Name of the Class|
-|mailNickname|String| Mail name for sending email to all users if this is enabled. |
-|classCode|String| Class Code used by the school.|
+|description|String| Description of the class.|
+|displayName|String| Name of the class.|
+|mailNickname|String| Email alias for sending email to all users if that feature is enabled. |
+<!-- Please verify the revised description here. -->
+|classCode|String| Class code used by the school.|
 |externalId|String| ID of the class from the syncing system. |
 |externalName|String|Name of the class in the syncing system.|
-|externalSource|string| How this class was creaeted.  Possible values are: `sis`, `manual`, `enum_sentinel`.|
+|externalSource|string| How this class was created. Possible values are: `sis`, `manual`, `enum_sentinel`.|
 
 ## Response
-If successful, this method returns a `200 OK` response code and updated [educationClass](../resources/educationclass.md) object in the response body.
+If successful, this method returns a `200 OK` response code and an updated [educationClass](../resources/educationclass.md) object in the response body.
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "update_educationclass"
 }-->
 ```http
-PATCH https://graph.microsoft.com/beta/education/classes/<id>
+PATCH https://graph.microsoft.com/beta/education/classes/11014
 Content-type: application/json
 Content-length: 224
 
 {
-  "description": "String",
-  "displayName": "String",
+  "description": "History - World History 1",
+  "displayName": "World History Level 1",
 }
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
@@ -67,15 +73,20 @@ Content-type: application/json
 Content-length: 224
 
 {
-  "id": "String",
-  "description": "String",
-  "classCode": "String",
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "displayName": "String",
-  "externalId": "String",
-  "externalName": "String",
-  "externalSource": "string",
-  "mailNickname": "String"
+  "id": "11014",
+  "description": "World History Level 1",
+  "classCode": "301",
+  "createdBy": {
+        "user": {
+          "displayName": "Susana Rocha",
+          "id": "14012",
+        }
+      },
+  "displayName": "History - World History 1",
+  "externalId": "301",
+  "externalName": "World History Level 1",
+  "externalSource": "Fabrikam High School",
+  "mailNickname": "Fabrikam"
 }
 ```
 

@@ -1,6 +1,10 @@
 # Create educationUser
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 Create a new user.
+
+<!-- Add some additional text to better distinguish this method from the user_post_users (https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_post_users) topic. -->
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -23,15 +27,15 @@ POST /education/users
 | Content-Type  | application/json  |
 
 ## Request body
-In the request body, supply a JSON representation of [educationUser](../resources/educationuser.md) object.
+In the request body, supply a JSON representation of an [educationUser](../resources/educationuser.md) object.
 
 
 ## Response
-If successful, this method returns `201, Created` response code and [educationUser](../resources/educationuser.md) object in the response body.
+If successful, this method returns a `201 Created` response code and an [educationUser](../resources/educationuser.md) object in the response body.
 
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "create_educationuser_from_educationroot"
@@ -42,23 +46,42 @@ Content-type: application/json
 Content-length: 508
 
 {
-  "displayName": "string",
-  "givenName": "string",
-  "middleName": "string",
-  "surname": "string",
-  "mail": "string",
-  "mobilePhone": "string",
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "externalSource": "string",
-  "mailingAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
-  "primaryRole": "string",
-  "residenceAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
-  "student": {"@odata.type": "microsoft.graph.educationStudent"},
+  "displayName": "Dion Matheson",
+  "givenName": "Dion",
+  "middleName": " ",
+  "surname": "Matheson",
+  "mail": "DionM@contoso.com",
+  "mobilePhone": "+1 (253) 555-0101",
+  "createdBy": {
+    "user": {
+      "displayName": "Susana Rocha",
+      "id": "14012",
+    }
+  }
+  "externalSource": "sis",
+  "mailingAddress": {
+    "city": "Los Angeles",
+    "countryOrRegion": "United States",
+    "postalCode": "98055",
+    "state": "CA",
+    "street": "12345 Main St."
+  },
+  "primaryRole": "student",
+  "residenceAddress": {
+    "city": "Los Angeles",
+    "countryOrRegion": "United States",
+    "postalCode": "98055",
+    "state": "CA",
+    "street": "12345 Main St."
+  },
 }
 ```
-In the request body, supply a JSON representation of [educationUser](../resources/educationuser.md) object.
+
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
@@ -70,19 +93,35 @@ Content-type: application/json
 Content-length: 508
 
 {
-  "id": "string",
-  "displayName": "string",
-  "givenName": "string",
-  "middleName": "string",
-  "surname": "string",
-  "mail": "string",
-  "mobilePhone": "string",
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "externalSource": "string",
-  "mailingAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
-  "primaryRole": "string",
-  "residenceAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
-  "student": {"@odata.type": "microsoft.graph.educationStudent"},
+  "id": "13012",
+  "displayName": "Dion Matheson",
+  "givenName": "Dion",
+  "middleName": " ",
+  "surname": "Matheson",
+  "mail": "DionM@contoso.com",
+  "mobilePhone": "+1 (253) 555-0101",
+  "createdBy": {
+    "user": {
+      "displayName": "Susana Rocha",
+      "id": "14012",
+    }
+  }
+  "externalSource": "sis",
+  "mailingAddress": {
+    "city": "Los Angeles",
+    "countryOrRegion": "United States",
+    "postalCode": "98055",
+    "state": "CA",
+    "street": "12345 Main St."
+  },
+  "primaryRole": "student",
+  "residenceAddress": {
+    "city": "Los Angeles",
+    "countryOrRegion": "United States",
+    "postalCode": "98055",
+    "state": "CA",
+    "street": "12345 Main St."
+  },
 }
 ```
 

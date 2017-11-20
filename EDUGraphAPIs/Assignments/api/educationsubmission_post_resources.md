@@ -1,6 +1,8 @@
 # Create educationSubmissionResource
 
-Adds a resource to the resources list.  This action can only be done by the student who this submission is assigned to.  This action will not succeed if the "allowStudentsToAddResources" flag is not set to true.  If the caller wants to create a new file based resource, the file must be uploaded to the resources folder that is associated with the submission.  If the file does not exist or is not in that folder, this POST will fail. 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+Adds a resource to the resources list. This action can only be done by the student to whom this submission is assigned. This action will not succeed if the **allowStudentsToAddResources** flag is not set to true. If the caller wants to create a new file-based resource, the file must be uploaded to the resources folder that is associated with the submission. If the file does not exist or is not in that folder, the POST request will fail. 
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -14,7 +16,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-POST /education/classes/<id>/assignments/<id>/submissions/<id>/resources
+POST /education/classes/{id}/assignments/{id}/submissions/{id}/resources
 
 ```
 ## Request headers
@@ -24,31 +26,59 @@ POST /education/classes/<id>/assignments/<id>/submissions/<id>/resources
 | Content-Type  | application/json  |
 
 ## Request body
-In the request body, supply a JSON representation of [educationSubmissionResource](../resources/educationsubmissionresource.md) object.
+In the request body, supply a JSON representation of the [educationSubmissionResource](../resources/educationsubmissionresource.md) object.
 
 
 ## Response
-If successful, this method returns `201, Created` response code and [educationSubmissionResource](../resources/educationsubmissionresource.md) object in the response body.
+If successful, this method returns a `201 Created` response code and an [educationSubmissionResource](../resources/educationsubmissionresource.md) object in the response body.
 
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "create_educationsubmissionresource_from_educationsubmission"
 }-->
 ```http
-POST https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/submissions/<id>/resources
+POST https://graph.microsoft.com/beta/education/classes/11021/assignments/19002/submissions/850f51b7/resources
 Content-type: application/json
-Content-length: 848
+Content-length: 1097
 
 {
-  "resource": {"@odata.type": "microsoft.graph.educationResource"}
+  "assignmentResourceUrl": "https://graph.microsoft.com/v1.0/drives/b!8-QjN2tsv0WyGnTv7vOvnQkmGHbbeMNLqYKONmHLVnvCVmBYIGpeT456457AdW9f/items/017NJZI25NOB5XZNLABF7646XAMDZTQQ6T",
+  "resource": {
+      "@odata.type": "#microsoft.graph.educationWordResource",
+      "displayName": "Report.docx",
+      "createdDateTime": "2017-10-21T07:52:53.9863696Z",
+      "createdBy": {
+          "application": null,
+          "device": null,
+          "user": {
+              "id": "63cc91d2-59c7-4732-9594-35b91a26b340",
+              "displayName": null
+          }
+      },
+      "lastModifiedDateTime": "2017-10-21T07:52:53.9863696Z",
+      "lastModifiedBy": {
+          "application": null,
+          "device": null,
+          "user": {
+              "id": "63cc91d2-59c7-4732-9594-35b91a26b340",
+              "displayName": null
+          }
+      },
+      "fileUrl": "https://graph.microsoft.com/v1.0/drives/b!8-QjN2tsv0WyGnTv7vOvnQkmGHbbeMNLqYKONmHLVnvCVmBYIGpeTZ_iul5AdW9f/items/017NJZI27BCN2QI2H7HJGLIVPXR6SD2DH6"
+  },
+  "@odata.type": "microsoft.graph.educationResource"
 }
+
 ```
-In the request body, supply a JSON representation of [educationSubmissionResource](../resources/educationsubmissionresource.md) object.
+
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
@@ -57,13 +87,36 @@ Here is an example of the response. Note: The response object shown here may be 
 ```http
 HTTP/1.1 201 Created
 Content-type: application/json
-Content-length: 868
-
+Content-length: 1152
 {
-  "assignmentResource": null,
-  "id": "String (identifier)",
-  "resource": {"@odata.type": "microsoft.graph.educationResource"}
+  "assignmentResourceUrl": "https://graph.microsoft.com/v1.0/drives/b!8-QjN2tsv0WyGnTv7vOvnQkmGHbbeMNLqYKONmHLVnvCVmBYIGpeT456457AdW9f/items/017NJZI25NOB5XZNLABF7646XAMDZTQQ6T",
+  "id": "f2387c3b-ec39-4bf2-a399-d7242677f024",
+  "resource": {
+      "@odata.type": "#microsoft.graph.educationWordResource",
+      "displayName": "Report.docx",
+      "createdDateTime": "2017-10-21T07:52:53.9863696Z",
+      "createdBy": {
+          "application": null,
+          "device": null,
+          "user": {
+              "id": "63cc91d2-59c7-4732-9594-35b91a26b340",
+              "displayName": null
+          }
+      },
+      "lastModifiedDateTime": "2017-10-21T07:52:53.9863696Z",
+      "lastModifiedBy": {
+          "application": null,
+          "device": null,
+          "user": {
+              "id": "63cc91d2-59c7-4732-9594-35b91a26b340",
+              "displayName": null
+          }
+      },
+      "fileUrl": "https://graph.microsoft.com/v1.0/drives/b!8-QjN2tsv0WyGnTv7vOvnQkmGHbbeMNLqYKONmHLVnvCVmBYIGpeTZ_iul5AdW9f/items/017NJZI27BCN2QI2H7HJGLIVPXR6SD2DH6",
+      "@odata.type": "microsoft.graph.educationResource"
+  }
 }
+
 ```
 
 <!-- uuid: 8fcb5dbc-d5aa-4681-8e31-b001d5168d79

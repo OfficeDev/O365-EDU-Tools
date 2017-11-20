@@ -1,6 +1,8 @@
 # educationSubmission: submit
 
-Action which indicates that a student is done with the work and is ready to hand in the assignment.  This action can only be taken by the student.  This will change the status of the submission from "working" to "submitted".  During the submit process, all of the resources will be copied to the submittedResources bucket.  The teacher will be looking at the submitted resources list for grading.
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+An action that indicates that a student is done with the work and is ready to hand in the assignment. This action can only be taken by the student. This will change the status of the submission from "working" to "submitted". During the submit process, all the resources will be copied to the submittedResources bucket. The teacher will be looking at the submitted resources list for grading.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -14,7 +16,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-POST /education/classes/<id>/assignments/<id>/submissions/<id>/submit
+POST /education/classes/{id}/assignments/{id}/submissions/{id}/submit
 
 ```
 ## Request headers
@@ -23,24 +25,26 @@ POST /education/classes/<id>/assignments/<id>/submissions/<id>/submit
 | Authorization  | Bearer {token}. Required.  |
 
 ## Request body
+Do not supply a request body for this method.
 
 ## Response
-If successful, this method returns `204, No Content` response code. It does not return anything in the response body.
+If successful, this method returns `204 No Content` response code. It does not return anything in the response body.
 
 ## Example
-Here is an example of how to call this API.
+The following example shows how to call this API.
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "educationsubmission_submit"
 }-->
 ```http
-POST https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/submissions/<id>/submit
+POST https://graph.microsoft.com/beta/education/classes/11021/assignments/19002/submissions/850f51b7/submit
 ```
 
 ##### Response
-If successful, this method returns `204, No Content` response code. It does not return anything in the response body.
+The following is an example of the response.
+
 <!-- {
   "blockType": "response",
   "truncated": true,

@@ -1,6 +1,8 @@
 # Get educationSubmittedSubmissionResource
 
-Returns the submitted resource.  This will be available to a teacher after a student has submitted.  This will be available to the student once the teacher has released the submission.  Note that teachers can leave notes in the actual resources themselves, depending on the resource.
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+Returns a submitted resource. This will be available to a teacher after a student has submitted, and will be available to the student after the teacher has released the submission.  Note that teachers can leave notes in some resources.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -14,7 +16,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-GET /education/classes/<id>/assignments/<id>/submissions/<id>/submittedResources/<id>
+GET /education/classes/{id}/assignments/{id}/submissions/{id}/submittedResources/{id}
 ```
 ## Optional query parameters
 This method supports the [OData Query Parameters](http://graph.microsoft.io/docs/overview/query_parameters) to help customize the response.
@@ -27,19 +29,22 @@ This method supports the [OData Query Parameters](http://graph.microsoft.io/docs
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and [educationSubmittedSubmissionResource](../resources/educationsubmittedsubmissionresource.md) object in the response body.
+If successful, this method returns a `200 OK` response code and an[educationSubmittedSubmissionResource](../resources/educationsubmittedsubmissionresource.md) object in the response body.
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "get_educationsubmittedsubmissionresource"
 }-->
 ```http
-GET https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/submissions/<id>/submittedResources/<id>
+GET https://graph.microsoft.com/beta/education/classes/11021/assignments/19002/submissions/850f51b7/submittedResources/f2387c3b-ec39-4bf2-a399-d7242677f024
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
@@ -48,12 +53,35 @@ Here is an example of the response. Note: The response object shown here may be 
 ```http
 HTTP/1.1 200 OK
 Content-type: application/json
-Content-length: 868
+Content-length: 1152
 
 {
-  "assignmentResourceUrl": "String",
-  "id": "String (identifier)",
-  "resource": {"@odata.type": "microsoft.graph.educationResource"}
+  "assignmentResourceUrl": "https://graph.microsoft.com/v1.0/drives/b!8-QjN2tsv0WyGnTv7vOvnQkmGHbbeMNLqYKONmHLVnvCVmBYIGpeT456457AdW9f/items/017NJZI25NOB5XZNLABF7646XAMDZTQQ6T",
+  "id": "f2387c3b-ec39-4bf2-a399-d7242677f024",
+  "resource": {
+      "@odata.type": "#microsoft.graph.educationWordResource",
+      "displayName": "Report.docx",
+      "createdDateTime": "2017-10-21T07:52:53.9863696Z",
+      "createdBy": {
+          "application": null,
+          "device": null,
+          "user": {
+              "id": "63cc91d2-59c7-4732-9594-35b91a26b340",
+              "displayName": null
+          }
+      },
+      "lastModifiedDateTime": "2017-10-21T07:52:53.9863696Z",
+      "lastModifiedBy": {
+          "application": null,
+          "device": null,
+          "user": {
+              "id": "63cc91d2-59c7-4732-9594-35b91a26b340",
+              "displayName": null
+          }
+      },
+      "fileUrl": "https://graph.microsoft.com/v1.0/drives/b!8-QjN2tsv0WyGnTv7vOvnQkmGHbbeMNLqYKONmHLVnvCVmBYIGpeTZ_iul5AdW9f/items/017NJZI27BCN2QI2H7HJGLIVPXR6SD2DH6",
+      "@odata.type": "microsoft.graph.educationResource"
+  }
 }
 ```
 

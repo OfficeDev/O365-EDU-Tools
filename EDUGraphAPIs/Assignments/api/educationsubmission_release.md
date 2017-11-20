@@ -1,6 +1,8 @@
 # educationSubmission: release
 
-Action makes the grade and feedback associated with this submission available back to the student.  This will change the status of the submission from "submitted" to "released" and indicates that grading is done.  This action can only be done by the teacher.
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+This action makes the grade and feedback associated with this submission available to the student. This will change the status of the submission from "submitted" to "released" and indicates that grading is done. This action can only be done by the teacher.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -14,7 +16,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-POST /education/classes/<id>/assignments/<id>/submissions/<id>/release
+POST /education/classes/{id}/assignments/{id}/submissions/{id}/release
 
 ```
 ## Request headers
@@ -23,24 +25,27 @@ POST /education/classes/<id>/assignments/<id>/submissions/<id>/release
 | Authorization  | Bearer {token}. Required.  |
 
 ## Request body
+Do not supply a request body for this method.
 
 ## Response
-If successful, this method returns `204, No Content` response code. It does not return anything in the response body.
+If successful, this method returns `204 No Content` response code. It does not return anything in the response body.
 
 ## Example
-Here is an example of how to call this API.
+The following example shows how to call this API.
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "educationsubmission_release"
 }-->
 
-##### Response
 ```http
-POST https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/submissions/<id>/release
+POST https://graph.microsoft.com/beta/education/classes/11021/assignments/19002/submissions/850f51b7/release
 ```
-If successful, this method returns `204, No Content` response code. It does not return anything in the response body.
+
+##### Response
+The following is an example of the response.
+
 <!-- {
   "blockType": "response",
   "truncated": true,

@@ -1,4 +1,6 @@
-# Delete educationUser from educationSchool
+# Remove educationUser from an educationSchool
+
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
 
 Delete a user from a school.
 
@@ -26,7 +28,7 @@ Do not supply a request body for this method.
 
 
 ## Response
-If successful, this method returns `204, No Content` response code and empty response body.
+If successful, this method returns a `204 No Content` response code and an empty response body.
 
 ## Example
 ##### Request
@@ -36,11 +38,11 @@ Here is an example of the request.
   "name": "create_educationclass_from_educationschool"
 }-->
 ```http
-DELETE https://graph.microsoft.com/beta/education/schools/<id>/users/{userId}/$ref
+DELETE https://graph.microsoft.com/beta/education/schools/10001/users/13006
 ```
-In the request body, supply a JSON representation of [educationClass](../resources/educationclass.md) object.
+
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
 <!-- {
   "blockType": "response",
   "truncated": true,
