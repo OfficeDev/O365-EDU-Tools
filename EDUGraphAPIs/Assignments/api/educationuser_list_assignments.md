@@ -59,22 +59,38 @@ Content-length: 344
 {
   "value": [
     {
-      "id": "String (identifier)",
+      "id": "19002",
       "allowLateSubmissions": true,
       "allowStudentsToAddResourcesToSubmission": true,
-      "assignDateTime": "String (timestamp)",
+      "assignDateTime": "2014-01-01T00:00:00Z",
       "assignTo": {"@odata.type": "microsoft.graph.educationAssignmentRecipient"},
-      "assignedDateTime": "String (timestamp)",
-      "classId": "String",
-      "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-      "createdDateTime": "String (timestamp)",
-      "displayName": "String",
-      "dueDateTime": "String (timestamp)",
-      "grading": {"@odata.type": "microsoft.graph.educationAssignmentGradeType"},
-      "instructions": {"@odata.type": "microsoft.graph.itemBody"},
-      "lastModifiedBy": {"@odata.type": "microsoft.graph.identitySet"},
-      "lastModifiedDateTime": "String (timestamp)",
-      "status": "string"
+      "assignedDateTime": "2014-01-01T00:00:00Z",
+      "classId": "11010",
+      "createdBy": {
+        "user": {
+            "displayName": "Susana Rocha",
+            "id": "14012",
+          }
+      },
+      "createdDateTime": "2014-01-01T00:00:00Z",
+      "displayName": "Assignment 1",
+      "dueDateTime": "2014-01-01T00:00:00Z",
+      "grading": {
+        "@odata.type": "#microsoft.graph.educationAssignmentPointsGradeType",
+        "maxPoints": 100
+      },
+      "instructions": {
+        "content": "Answer every question correctly",
+        "contentType": "Text"
+      },
+      "lastModifiedBy": {
+        "user": {
+            "displayName": "Susana Rocha",
+            "id": "14012",
+          }
+      },
+      "lastModifiedDateTime": "2014-01-01T00:00:00Z",
+      "status": "assigned"
     }
   ]
 }

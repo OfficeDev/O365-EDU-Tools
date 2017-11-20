@@ -41,13 +41,34 @@ The following is an example of the request.
   "name": "update_educationsubmission"
 }-->
 ```http
-PATCH https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/submissions/<id>
+PATCH https://graph.microsoft.com/beta/education/classes/11021/assignments/19002/submissions/850f51b7
 Content-type: application/json
-Content-length: 712
+Content-length: 658
 
 {
-  "feedback": {"@odata.type": "microsoft.graph.educationFeedback"},
-  "grade": {"@odata.type": "microsoft.graph.educationAssignmentGrade"}
+  "feedback": {
+    text: "Great work!"
+    feedbackDateTime: "2014-01-01T00:00:00Z"
+    feedbackBy: {
+      "user": {
+        "displayName": "Susana Rocha",
+        "id": "14012",
+      },
+      @odata.type: "microsoft.graph.identitySet"
+    },
+    "@odata.type": "microsoft.graph.educationFeedback"
+  },
+  "grade": {
+      "gradedBy": {
+      "user": {
+        "displayName": "Susana Rocha",
+        "id": "14012",
+      },
+      "@odata.type": "microsoft.graph.identitySet"
+    },
+    "gradedDateTime": "2014-01-01T00:00:00Z",
+    "@odata.type": "microsoft.graph.educationAssignmentGrade"
+  }
 }
 ```
 ##### Response
@@ -63,19 +84,54 @@ The following is an example of the response.
 ```http
 HTTP/1.1 200 OK
 Content-type: application/json
-Content-length: 712
+Content-length: 1217
 
 {
-  "feedback": {"@odata.type": "microsoft.graph.educationFeedback"},
-  "grade": {"@odata.type": "microsoft.graph.educationAssignmentGrade"},
-  "id": "String (identifier)",
-  "recipient": {"@odata.type": "microsoft.graph.educationSubmissionRecipient"},
-  "releasedBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "releasedDateTime": "String (timestamp)",
+  "feedback": {
+    text: "Great work!"
+    feedbackDateTime: "2014-01-01T00:00:00Z"
+    feedbackBy: {
+      "user": {
+        "displayName": "Susana Rocha",
+        "id": "14012",
+      },
+    }
+    "@odata.type": "microsoft.graph.educationFeedback"
+  },
+  "grade": {
+         "gradedBy": {
+          "user": {
+            "displayName": "Susana Rocha",
+            "id": "14012",
+          },
+          "@odata.type": "microsoft.graph.identitySet"
+        },
+        "gradedDateTime": "2014-01-01T00:00:00Z",
+        "@odata.type": "microsoft.graph.educationAssignmentGrade"
+  },
+  "id": "850f51b7",
+  "recipient": {
+    userId:"dsfewsddf",
+    "@odata.type": "microsoft.graph.educationSubmissionRecipient"
+  },
+  "releasedBy": {
+    "user": {
+      "displayName": "Susana Rocha",
+      "id": "14012",
+    },
+    "@odata.type": "microsoft.graph.identitySet"
+  },
+  "releasedDateTime": "2014-01-01T00:00:00Z",
   "resourcesFolderUrl": "String",
-  "status": "string",
-  "submittedBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "submittedDateTime": "String (timestamp)"
+  "status": "completed",
+  "submittedBy": {
+    "user": {
+      "displayName": "Susana Rocha",
+      "id": "14012",
+    },
+    "@odata.type": "microsoft.graph.identitySet"
+  },
+  "submittedDateTime": "2014-01-01T00:00:00Z"
 }
 ```
 

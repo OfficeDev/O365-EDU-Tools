@@ -1,6 +1,6 @@
-# Remove a student from a class roster
+# Remove a student
 
-Removes a student from a class roster. an [educationUser](../resources/educationuser.md) with a **primaryRole** of `student` from an [educationClass](../resources/educationclass.md)
+Removes an [educationUser](../resources/educationuser.md) with a **primaryRole** of `student` from an [educationClass](../resources/educationclass.md)
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
