@@ -1,6 +1,8 @@
 # Delete educationUser
 
-Delete an [educationUser](../resources/educationuser.md) from the Edu root **educationUser** collection.
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+Delete a user.
 
 
 ## Permissions

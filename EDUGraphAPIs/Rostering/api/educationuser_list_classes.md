@@ -1,8 +1,8 @@
 # List classes
 
-Retrieve the [educationClass](../resources/educationclass.md) objects that the specified **educationUser** belongs to. 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
 
->**Note:** If the delegated token is used, members can only see information about their own classes. Use the `...beta/education/me/classes` resource in this case.
+Retrieve a list of class objects. Note that if the delegated token is used, members can only see information about their own classes. 
 
 <!-- Please verify the revision to the delegated token text. -->
 

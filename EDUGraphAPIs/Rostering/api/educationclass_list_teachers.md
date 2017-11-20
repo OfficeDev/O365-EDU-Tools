@@ -1,6 +1,8 @@
 # List teachers
 
-Retrieve a list of teachers for a class. Only delegated tokens for a member of a class can get teachers for that class.
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+Retrieve a list teachers for a class. Delegated tokens must be members of the class to get the teacher list.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).

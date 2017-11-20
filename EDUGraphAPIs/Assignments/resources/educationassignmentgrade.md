@@ -1,7 +1,9 @@
 # educationAssignmentGrade resource type
 
-Represents the **Grade** object on a Submission. This is an abstract type that will never be instantiated; however, all grading schemes (points, pass/fail, and so on) are subclasses of this
-resource type. This object also the person assessing the assignment for a grade. This is used in the **submission.grade** property.
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+Represents the **Grade** object on a Submission. This is an abstract type that will never be instantiated; however, all types of grading (points, pass/fail, and so on) are subclasses of this
+resource type. This object also tracks who is doing the grading. This is used in the **submission.grade** property.
 
 
 ## Properties

@@ -1,6 +1,8 @@
 # educationAssignmentClassRecipient resource type
 
-A type assignment recipient and one of the values of the [assignment.assignTo](educationassignment.md) property. When set to class recipient, every student in the class will 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+Used inside the [assignment.assignTo](educationassignment.md) property. When set to class recipient, every student in the class will 
 receive a submission object when the assignment is published.
 
 This resource is a subclass of [educationAssignmentRecipient](educationassignmentrecipient.md).

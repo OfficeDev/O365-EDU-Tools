@@ -1,6 +1,8 @@
 # Remove a student
 
-Removes a student from a class roster. an [educationUser](../resources/educationuser.md) with a **primaryRole** of `student` from an [educationClass](../resources/educationclass.md)
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+Remove a student from a class.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).

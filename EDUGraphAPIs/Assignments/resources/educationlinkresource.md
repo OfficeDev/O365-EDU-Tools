@@ -1,5 +1,7 @@
 # educationLinkResource resource type
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 A subclass of [educationResource](educationresource.md). This resource is a link and does not have any additional data associated with it.
 
 

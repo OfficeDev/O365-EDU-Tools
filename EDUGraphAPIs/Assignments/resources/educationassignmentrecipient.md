@@ -1,5 +1,7 @@
 # educationAssignmentRecipient resource type
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 Used within the **assignments.assignTo** property. This superclass is abstract and you cannot
 set the property in assignments to this value. This superclass represents who the
 assignment should be assigned to when the assignment is published.

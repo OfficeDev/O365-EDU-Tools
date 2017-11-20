@@ -1,5 +1,7 @@
 # educationAssignmentGradeType resource type
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 Represents how an assignment will be graded. This is used within the **assignments.grading** property.
 
 This superclass can not be used directly in the assignment property. It exists to allow for multiple different ways to grade assignments.

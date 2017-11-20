@@ -1,5 +1,7 @@
 # educationAssignmentPointsGrade resource type
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 When an assignment is set to a points grade type, each submission will have this object associated with the **submission.grade** property. This creates a subclass from [educationAssignmentGrade](educationAssignmentGrade.md),
 which will add the who data to this property. The max points is stored in the **assignments.grading** property.
 
