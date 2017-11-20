@@ -1,5 +1,7 @@
 # Delete educationUser
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 Delete a user.
 
 <!-- Update the description to better distinguish it from this topic: https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/user_delete. -->

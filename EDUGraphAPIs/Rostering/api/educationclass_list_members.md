@@ -1,5 +1,7 @@
 # List members
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 Retrieves the teachers and students for a class. Note that if the delegated token is used, members can only be seen by other members of the class.
 
 ## Permissions

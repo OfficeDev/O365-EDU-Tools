@@ -1,5 +1,7 @@
 # Create educationClass
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 Create a new class. This will also create a universal group. When you use this API to create a class, it will add special properties to the group, which will
 add features such as assignments and special handling within Microsoft Teams.
 

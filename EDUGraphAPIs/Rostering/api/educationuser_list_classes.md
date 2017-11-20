@@ -1,5 +1,7 @@
 # List classes
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 Retrieve a list of class objects. Note that if the delegated token is used, members can only see information about their own classes. 
 
 <!-- Please verify the revision to the delegated token text. -->

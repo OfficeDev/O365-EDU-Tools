@@ -1,5 +1,7 @@
 # educationWordResource resource type
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 A subclass of [educationResource](educationresource.md). This is a Word document resource. The Word file must be uploaded in the **fileResource** directory associated with the 
 assignment or submission.
 
