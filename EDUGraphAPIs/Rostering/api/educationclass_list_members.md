@@ -57,7 +57,7 @@ Content-type: application/json
 Content-length: 593
 
 {
-  "value": [
+  "members": [
     {
       "id": "13013",
       "displayName": "Ora Klein",

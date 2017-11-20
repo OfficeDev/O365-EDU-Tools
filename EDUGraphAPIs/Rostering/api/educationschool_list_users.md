@@ -57,7 +57,7 @@ Content-type: application/json
 Content-length: 593
 
 {
-  "value": [
+  "users": [
     {
       "id": "13012",
       "displayName": "Dion Matheson",

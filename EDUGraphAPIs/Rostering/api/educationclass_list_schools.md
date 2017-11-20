@@ -58,7 +58,7 @@ Content-type: application/json
 Content-length: 892
 
 {
-  "value": [
+  "schools": [
     {
       "id": "10002",
       "displayName": "Fabrikam High School",

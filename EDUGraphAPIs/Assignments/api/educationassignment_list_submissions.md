@@ -57,7 +57,7 @@ Content-type: application/json
 Content-length: 873
 
 {
-  "value": [
+  "submissions": [
     {
       "feedback": {
         text: "Great work!"

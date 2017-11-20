@@ -57,7 +57,7 @@ Content-type: application/json
 Content-length: 593
 
 {
-  "value": [
+  "teachers": [
     {
       "id": "14006",
       "displayName": "Kristie Mitchell",
