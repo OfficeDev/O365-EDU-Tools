@@ -1,5 +1,7 @@
 # Get educationAssignment
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 Get the properties and relationships of an assignment. Students can only see assignments assigned to them; teachers can see all assignments in a class.
 
 ## Permissions

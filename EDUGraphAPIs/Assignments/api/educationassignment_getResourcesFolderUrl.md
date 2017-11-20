@@ -1,5 +1,7 @@
 # educationAssignment: getResourcesFolderUrl
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 This function returns the OneDrive URL where all file-based resources (Word, Excel, and so on) should be uploaded.  
 Note that files must be located in this folder in order to be added as resources. Only a teacher in the class can determine what files to upload. 
 

@@ -1,5 +1,7 @@
 # List assignments
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 Retrieve a list of assignment objects. A teacher is allowed to see all assignment objects for the class. Students can only see assignments that are assigned to them.
 
 ## Permissions

@@ -1,5 +1,7 @@
 # Working with education APIs in Microsoft Graph
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 The education APIs in Microsoft Graph enhance Office 365 resources and data with information that is relevant for education scenarios, including schools, students, teachers, classes, enrollments, and assignments. This makes it easy for you to build solutions that integrate with educational resources.
 
 The education APIs include rostering resources and assignments resources that you can use to interact with the rostering and assignment services in Microsoft Teams. You can use these resources to manage a school roster and automate student assignments.

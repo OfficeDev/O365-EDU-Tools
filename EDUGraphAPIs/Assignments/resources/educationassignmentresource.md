@@ -1,5 +1,7 @@
 # educationAssignmentResource resource type
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 A wrapper object that stores the resources associated with an assignment. The wrapper adds the **distributeForStudentWork** property and indicates that this resource will
 be copied to the student submission.  If the object is not copied, each student will see a link to the resource on the assignment. The student will not be able to update this resource. This is a handout from the teacher to the student with nothing to be turned in. If the resource is distributed, each student 
 will receive a copy of this resource in the resource list of their submission. Each student will be able to modify their copy and submit it for grading.

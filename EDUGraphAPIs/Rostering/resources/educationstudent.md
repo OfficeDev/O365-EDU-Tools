@@ -1,6 +1,8 @@
 # educationStudent resource type
 
-Additional information added to an [educationUser](educationuser.md) that is present when the `primaryRole` of a user is `student`.
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+Additional information added to an [educationUser](educationuser.md) that is present when the primaryRole of a user is `student`.
 
 ## Properties
 | Property	   | Type	|Description|
