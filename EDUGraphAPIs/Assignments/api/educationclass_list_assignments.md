@@ -70,7 +70,10 @@ Content-length: 344
       "createdDateTime": "String (timestamp)",
       "displayName": "String",
       "dueDateTime": "String (timestamp)",
-      "grading": {"@odata.type": "microsoft.graph.educationAssignmentGradeType"},
+      "grading": {
+        "@odata.type": "#microsoft.graph.educationAssignmentPointsGradeType",
+        "maxPoints": 100
+      },
       "instructions": {"@odata.type": "microsoft.graph.itemBody"},
       "lastModifiedBy": {"@odata.type": "microsoft.graph.identitySet"},
       "lastModifiedDateTime": "String (timestamp)",

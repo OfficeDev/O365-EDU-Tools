@@ -40,7 +40,7 @@ The following is an example of the request.
   "name": "get_educationschool"
 }-->
 ```http
-GET https://graph.microsoft.com/beta/education/schools
+GET https://graph.microsoft.com/beta/education/schools/10001
 ```
 ##### Response
 The following is an example of the response. 
@@ -58,12 +58,11 @@ Content-type: application/json
 Content-length: 292
 
 {
-  "schoolZone": "schoolZone-value",
-  "schoolPrincipalEmail": "schoolPrincipalEmail-value",
-  "schoolPrincipalName": "schoolPrincipalName-value",
-  "externalSchoolPrincipalId": "externalSchoolPrincipalId-value",
-  "lowestGrade": "lowestGrade-value",
-  "highestGrade": "highestGrade-value"
+  "schoolPrincipalEmail": "AmyRoebuck@contoso.com",
+  "schoolPrincipalName": "Amy Roebuck",
+  "externalSchoolPrincipalId": "14007",
+  "lowestGrade": "9",
+  "highestGrade": "12"
 }
 ```
 

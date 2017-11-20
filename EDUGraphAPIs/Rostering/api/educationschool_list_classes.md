@@ -38,7 +38,7 @@ The following is an example of the request.
   "name": "get_classes"
 }-->
 ```http
-GET https://graph.microsoft.com/beta/education/schools/<id>/classes
+GET https://graph.microsoft.com/beta/education/schools/10002/classes
 ```
 ##### Response
 The following is an example of the response. 
@@ -57,17 +57,22 @@ Content-type: application/json
 Content-length: 277
 
 {
-  "value": [
+  "classes": [
     {
-      "id": "String",
-      "description": "String",
-      "classCode": "String",
-      "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-      "displayName": "String",
-      "externalId": "String",
-      "externalName": "String",
-      "externalSource": "string",
-      "mailNickname": "String"
+      "id": "11019",
+      "description": "Health Level 1",
+      "classCode": "Health 501",
+      "createdBy": {
+        "user": {
+          "displayName": "Susana Rocha",
+          "id": "14012",
+        }
+      },
+      "displayName": "Health 1",
+      "externalId": "11019",
+      "externalName": "Health Level 1",
+      "externalSource": "sis",
+      "mailNickname": "fineartschool.net"
     }  
   ]
 }

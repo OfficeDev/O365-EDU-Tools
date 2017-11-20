@@ -39,7 +39,7 @@ The following is an example of the request.
   "name": "create_educationassignmentresource_from_educationassignment"
 }-->
 ```http
-POST https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/resources
+POST https://graph.microsoft.com/beta/education/classes/11021/assignments/19002/resources
 Content-type: application/json
 Content-length: 822
 
@@ -59,12 +59,12 @@ The following is an example of the response.
 >**Note:** The response object shown here might be shortened for readability. All of the properties will be returned from an actual call.
 
 
-```http
 <!-- {
   "blockType": "response",
   "truncated": true,
   "@odata.type": "microsoft.graph.educationAssignmentResource"
 } -->
+```http
 
 HTTP/1.1 201 Created
 Content-type: application/json
@@ -80,7 +80,7 @@ Content-length: 842
   }
 }
 
-
+```
 <!-- uuid: 8fcb5dbc-d5aa-4681-8e31-b001d5168d79
 2015-10-25 14:57:30 UTC -->
 <!-- {
@@ -90,4 +90,3 @@ Content-length: 842
   "section": "documentation",
   "tocPath": ""
 }-->
-```

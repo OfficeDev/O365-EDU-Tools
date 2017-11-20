@@ -45,14 +45,13 @@ Content-type: application/json
 Content-length: 224
 
 {
-  "description": "String",
-  "classCode": "String",
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "displayName": "String",
-  "externalId": "String",
-  "externalName": "String",
-  "externalSource": "string",
-  "mailNickname": "String"
+  "description": "Health Level 1",
+  "classCode": "Health 501",
+  "displayName": "Health 1",
+  "externalId": "11019",
+  "externalName": "Health Level 1",
+  "externalSource": "sis",
+  "mailNickname": "fineartschool.net"
 }
 ```
 
@@ -72,15 +71,20 @@ Content-type: application/json
 Content-length: 224
 
 {
-  "id": "String",
-  "description": "String",
-  "classCode": "String",
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "displayName": "String",
-  "externalId": "String",
-  "externalName": "String",
-  "externalSource": "string",
-  "mailNickname": "String"
+    "id": "11019",
+    "description": "Health Level 1",
+    "classCode": "Health 501",
+    "createdBy": {
+      "user": {
+        "displayName": "Susana Rocha",
+        "id": "14012",
+      }
+    },
+    "displayName": "Health 1",
+    "externalId": "11019",
+    "externalName": "Health Level 1",
+    "externalSource": "sis",
+    "mailNickname": "fineartschool.net"
 }
 ```
 

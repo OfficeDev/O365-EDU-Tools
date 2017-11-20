@@ -42,7 +42,7 @@ The following is an example of the request.
   "name": "update_educationassignmentresource"
 }-->
 ```http
-PATCH https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/resources/<id>
+PATCH https://graph.microsoft.com/beta/education/classes/11021/assignments/19002/resources/850f51b7-1df9-4ec0-bd62-64a0214b9cbf
 Content-type: application/json
 Content-length: 822
 
@@ -64,12 +64,33 @@ The following is an example of the response.
 ```http
 HTTP/1.1 200 OK
 Content-type: application/json
-Content-length: 842
-
+Content-length: 832
 {
   "distributeForStudentWork": false,
-  "id": "String (identifier)",
-  "resource": {"@odata.type": "microsoft.graph.educationResource"}
+  "resource": {
+      "@odata.type": "#microsoft.graph.educationLinkResource",
+      "displayName": "Microsoft Homepage",
+      "createdDateTime": "2017-10-21T07:52:45.5675913Z",
+      "createdBy": {
+          "application": null,
+          "device": null,
+          "user": {
+              "id": "63cc91d2-59c7-4732-9594-35b91a26b340",
+              "displayName": null
+          }
+      },
+      "lastModifiedDateTime": "2017-10-21T07:52:45.5675913Z",
+      "lastModifiedBy": {
+          "application": null,
+          "device": null,
+          "user": {
+              "id": "63cc91d2-59c7-4732-9594-35b91a26b340",
+              "displayName": null
+          }
+      },
+      "link": "https://www.microsoft.com"
+  },
+  "id": "850f51b7-1df9-4ec0-bd62-64a0214b9cbf"
 }
 ```
 

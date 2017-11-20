@@ -1,4 +1,4 @@
-# Create educationClass
+# Add educationClass to educationSchool
 
 > **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
 
@@ -39,12 +39,12 @@ The following is an example of the request.
   "name": "create_educationclass_from_educationschool"
 }-->
 ```http
-POST https://graph.microsoft.com/beta/education/schools/<id>/classes/$ref
+POST https://graph.microsoft.com/beta/education/schools/10002/classes/$ref
 Content-type: application/json
 Content-length: 224
 
 {
-� "@odata.id":"https://graph.microsoft.com/beta/education/classes/{classId}"�
+� "@odata.id":"https://graph.microsoft.com/beta/education/classes/11006"�
 }
 ```
 

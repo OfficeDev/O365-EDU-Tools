@@ -37,7 +37,7 @@ The following is an example of the request.
   "name": "get_educationassignmentresource"
 }-->
 ```http
-GET https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/resources/<id>
+GET https://graph.microsoft.com/beta/education/classes/11021/assignments/19002/resources/22002
 ```
 ##### Response
 The following is an example of the response. 
@@ -55,11 +55,26 @@ Content-type: application/json
 Content-length: 842
 
 {
-  "distributeForStudentWork": true,
-  "id": "String (identifier)",
-  "resource": {"@odata.type": "microsoft.graph.educationResource"}
-}
-```
+      "distributeForStudentWork": true,
+      "id": "22002",
+      "resource": {
+        "createdBy": {
+          "user": {
+            "displayName": "Susana Rocha",
+            "id": "14012",
+          },
+        },
+        "createdDateTime": "2014-01-01T00:00:00Z",
+        "displayName": "Excel workbook 1",
+        "lastModifiedBy": {
+          "user": {
+            "displayName": "Susana Rocha",
+            "id": "14012",
+          },
+        },
+        "lastModifiedDateTime": "2014-01-01T00:00:00Z"
+      }
+    }```
 
 <!-- uuid: 8fcb5dbc-d5aa-4681-8e31-b001d5168d79
 2015-10-25 14:57:30 UTC -->

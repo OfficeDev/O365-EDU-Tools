@@ -38,7 +38,7 @@ The following is an example of the request.
   "name": "educationsubmission_recall"
 }-->
 ```http
-POST https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/submissions/<id>/recall
+POST https://graph.microsoft.com/beta/education/classes/11021/assignments/19002/submissions/850f51b7/recall
 ```
 
 ##### Response

@@ -38,7 +38,7 @@ The following is an example of the request.
   "name": "get_submissions"
 }-->
 ```http
-GET https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/submissions
+GET https://graph.microsoft.com/beta/education/classes/11021/assignments/19002/submissions
 ```
 ##### Response
 The following is an example of the response. 
@@ -57,18 +57,52 @@ Content-type: application/json
 Content-length: 873
 
 {
-  "value": [
+  "submissions": [
     {
-      "feedback": {"@odata.type": "microsoft.graph.educationFeedback"},
-      "grade": {"@odata.type": "microsoft.graph.educationAssignmentGrade"},
-      "id": "String (identifier)",
-      "recipient": {"@odata.type": "microsoft.graph.educationSubmissionRecipient"},
-      "releasedBy": {"@odata.type": "microsoft.graph.identitySet"},
-      "releasedDateTime": "String (timestamp)",
-      "resourcesFolderUrl": "String",
-      "status": "string",
-      "submittedBy": {"@odata.type": "microsoft.graph.identitySet"},
-      "submittedDateTime": "String (timestamp)"
+      "feedback": {
+        text: "Great work!"
+        feedbackDateTime: "2014-01-01T00:00:00Z"
+        feedbackBy: {
+          "user": {
+            "displayName": "Susana Rocha",
+            "id": "14012",
+          },
+          "@odata.type": "microsoft.graph.identitySet"
+        }
+        "@odata.type": "microsoft.graph.educationFeedback"},
+      "grade": {
+         "gradedBy": {
+          "user": {
+            "displayName": "Susana Rocha",
+            "id": "14012",
+          },
+          "@odata.type": "microsoft.graph.identitySet"
+        },
+        "gradedDateTime": "2014-01-01T00:00:00Z"
+      },
+      "id": "33223",
+      "recipient": {
+        "userId": "13015",
+        "microsoft.graph.educationSubmissionRecipient"
+      },
+      "releasedBy": {
+          "user": {
+            "displayName": "Susana Rocha",
+            "id": "14012",
+          },
+          "@odata.type": "microsoft.graph.identitySet"
+        },
+      "releasedDateTime": "2014-01-01T00:00:00Z",
+      "resourcesFolderUrl": "https://graph.microsoft.com/v1.0/drives/b!8-QjN2tsv0WyGnTv7vOvnQkmGHbbeMNLqYKONmHLVnvCVmBYIGpeT456457AdW9f/items/017NJZI25NOB5XZNLABF7646XAMDZTQQ6T",
+      "status": "working",
+      "submittedBy": {
+          "user": {
+            "displayName": "Susana Rocha",
+            "id": "14012",
+          },
+          "@odata.type": "microsoft.graph.identitySet"
+        },
+      "submittedDateTime": "2014-01-01T00:00:00Z"
     }
   ]
 }

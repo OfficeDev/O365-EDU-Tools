@@ -1,4 +1,4 @@
-# Remove educationUser (teacher)
+# Remove a teacher
 
 > **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
 
@@ -38,7 +38,7 @@ The following is an example of the request.
   "name": "create_educationclass_from_educationschool"
 }-->
 ```http
-DELETE https://graph.microsoft.com/beta/education/classes/<id>/teachers/{userId}/$ref
+DELETE https://graph.microsoft.com/beta/education/classes/<id>/teachers/14012
 ```
 
 ##### Response

@@ -39,7 +39,7 @@ The following is an example of the request.
   "name": "get_schools"
 }-->
 ```http
-GET https://graph.microsoft.com/beta/education/classes/<id>/schools
+GET https://graph.microsoft.com/beta/education/classes/11014/schools
 ```
 ##### Response
 The following is an example of the response. 
@@ -55,27 +55,38 @@ The following is an example of the response.
 ```http
 HTTP/1.1 200 OK
 Content-type: application/json
-Content-length: 345
+Content-length: 892
 
 {
-  "value": [
+  "schools": [
     {
-      "id": "String",
-      "displayName": "String",
-      "description": "String",
+      "id": "10002",
+      "displayName": "Fabrikam High School",
+      "description": "Magnate school for the arts. Los Angeles School District",
       "status": "String",
       "externalSource": "String",
-      "principalEmail": "String",
-      "principalName": "String",
-      "externalPrincipalId": "String",
-      "highestGrade": "String",
-      "lowestGrade": "String",
-      "schoolNumber": "String",
-      "address": {"@odata.type": "microsoft.graph.physicalAddress"},
-      "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-      "externalId": "String",
-      "fax": "String",
-      "phone": "String",
+      "principalEmail": "AmyR@fabrikam.com",
+      "principalName": "Amy Roebuck",
+      "externalPrincipalId": "14007",
+      "highestGrade": "12",
+      "lowestGrade": "9",
+      "schoolNumber": "10002",
+      "address": {
+        "city": "Los Angeles",
+        "countryOrRegion": "United States",
+        "postalCode": "98055",
+        "state": "CA",
+        "street": "12345 Main St."
+      },
+      "createdBy": {
+        "user": {
+          "displayName": "Susana Rocha",
+          "id": "14012",
+        }
+      },
+      "externalId": "10002",
+      "fax": "+1 (253) 555-0101",
+      "phone": "+1 (253) 555-0102",
     }
   ]
 }

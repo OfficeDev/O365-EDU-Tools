@@ -38,7 +38,7 @@ The following is an example of the request.
   "name": "get_teachers"
 }-->
 ```http
-GET https://graph.microsoft.com/beta/education/classes/<id>/teachers
+GET https://graph.microsoft.com/beta/education/classes/11023/teachers
 ```
 ##### Response
 The following is an example of the response. 
@@ -57,20 +57,37 @@ Content-type: application/json
 Content-length: 593
 
 {
-  "value": [
+  "teachers": [
     {
-      "id": "string",
-      "displayName": "string",
-      "givenName": "string",
-      "middleName": "string",
-      "surname": "string",
-      "mail": "string",
-      "mobilePhone": "string",
-      "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-      "externalSource": "string",
-      "mailingAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
-      "primaryRole": "string",
-      "residenceAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
+      "id": "14006",
+      "displayName": "Kristie Mitchell",
+      "givenName": "Kristie",
+      "middleName": "Anne",
+      "surname": "Mitchell",
+      "mail": "kristiem@Contoso.com",
+      "mobilePhone": "+1 (253) 555-0101",
+      "createdBy": {
+        "user": {
+          "displayName": "Susana Rocha",
+          "id": "14012",
+        }
+      },
+      "externalSource": "Edu",
+      "mailingAddress": {
+        "city": "Los Angeles",
+        "countryOrRegion": "United States",
+        "postalCode": "98055",
+        "state": "CA",
+        "street": "12345 Main St."
+      },
+      "primaryRole": "Teacher",
+      "residenceAddress": {
+        "city": "Los Angeles",
+        "countryOrRegion": "United States",
+        "postalCode": "98055",
+        "state": "CA",
+        "street": "12345 Main St."
+      },
     }
   ]
 }

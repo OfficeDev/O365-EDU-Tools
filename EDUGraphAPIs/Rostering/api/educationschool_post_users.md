@@ -1,4 +1,4 @@
-# Create educationUser
+# Add educationUser to an educationSchool
 
 > **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
 
@@ -44,7 +44,7 @@ Content-type: application/json
 Content-length: 56
 
 {
-  "@odata.id":"https://graph.microsoft.com/beta/education/users/{userId}"�
+  "@odata.id":"https://graph.microsoft.com/beta/education/users/14008"�
 }
 ```
 

@@ -46,18 +46,34 @@ Content-type: application/json
 Content-length: 508
 
 {
-  "displayName": "string",
-  "givenName": "string",
-  "middleName": "string",
-  "surname": "string",
-  "mail": "string",
-  "mobilePhone": "string",
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "externalSource": "string",
-  "mailingAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
-  "primaryRole": "string",
-  "residenceAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
-  "student": {"@odata.type": "microsoft.graph.educationStudent"},
+  "displayName": "Dion Matheson",
+  "givenName": "Dion",
+  "middleName": " ",
+  "surname": "Matheson",
+  "mail": "DionM@contoso.com",
+  "mobilePhone": "+1 (253) 555-0101",
+  "createdBy": {
+    "user": {
+      "displayName": "Susana Rocha",
+      "id": "14012",
+    }
+  }
+  "externalSource": "sis",
+  "mailingAddress": {
+    "city": "Los Angeles",
+    "countryOrRegion": "United States",
+    "postalCode": "98055",
+    "state": "CA",
+    "street": "12345 Main St."
+  },
+  "primaryRole": "student",
+  "residenceAddress": {
+    "city": "Los Angeles",
+    "countryOrRegion": "United States",
+    "postalCode": "98055",
+    "state": "CA",
+    "street": "12345 Main St."
+  },
 }
 ```
 
@@ -77,19 +93,35 @@ Content-type: application/json
 Content-length: 508
 
 {
-  "id": "string",
-  "displayName": "string",
-  "givenName": "string",
-  "middleName": "string",
-  "surname": "string",
-  "mail": "string",
-  "mobilePhone": "string",
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "externalSource": "string",
-  "mailingAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
-  "primaryRole": "string",
-  "residenceAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
-  "student": {"@odata.type": "microsoft.graph.educationStudent"},
+  "id": "13012",
+  "displayName": "Dion Matheson",
+  "givenName": "Dion",
+  "middleName": " ",
+  "surname": "Matheson",
+  "mail": "DionM@contoso.com",
+  "mobilePhone": "+1 (253) 555-0101",
+  "createdBy": {
+    "user": {
+      "displayName": "Susana Rocha",
+      "id": "14012",
+    }
+  }
+  "externalSource": "sis",
+  "mailingAddress": {
+    "city": "Los Angeles",
+    "countryOrRegion": "United States",
+    "postalCode": "98055",
+    "state": "CA",
+    "street": "12345 Main St."
+  },
+  "primaryRole": "student",
+  "residenceAddress": {
+    "city": "Los Angeles",
+    "countryOrRegion": "United States",
+    "postalCode": "98055",
+    "state": "CA",
+    "street": "12345 Main St."
+  },
 }
 ```
 

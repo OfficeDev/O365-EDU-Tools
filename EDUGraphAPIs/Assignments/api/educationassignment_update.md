@@ -48,17 +48,17 @@ The following is an example of the request.
   "name": "update_educationassignment"
 }-->
 ```http
-PATCH https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>
+PATCH https://graph.microsoft.com/beta/education/classes/11021/assignments/19002
 Content-type: application/json
 Content-length: 279
 
 {
-  "displayName": "displayName-value",
+  "displayName": "Week 1 reading assignment",
   "instructions": {
-    "contentType": "contentType-value",
-    "content": "content-value"
+    "contentType": "Text",
+    "content": "Read chapters 1 through 3"
   },
-  "dueDateTime": "datetime-value"
+  "dueDateTime": "2014-02-01T00:00:00Z"
 }
 ```
 ##### Response
@@ -77,15 +77,15 @@ Content-type: application/json
 Content-length: 279
 
 {
-  "classId": "classId-value",
-  "displayName": "displayName-value",
+  "classId": "11021",
+  "displayName": "Week 1 reading assignment",
   "instructions": {
-    "contentType": "contentType-value",
-    "content": "content-value"
+    "contentType": "Text",
+    "content": "Read chapters 1 through 3"
   },
-  "dueDateTime": "datetime-value",
-  "assignDateTime": "datetime-value",
-  "assignedDateTime": "datetime-value"
+  "dueDateTime": "2014-02-01T00:00:00Z",
+  "assignDateTime": "2014-01-01T00:00:00Z",
+  "assignedDateTime": "2014-01-01T00:00:00Z"
 }
 ```
 

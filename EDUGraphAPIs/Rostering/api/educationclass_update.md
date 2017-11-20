@@ -1,4 +1,4 @@
-# Update educationclass
+# Update educationclass properties
 
 > **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
 
@@ -48,13 +48,13 @@ The following is an example of the request.
   "name": "update_educationclass"
 }-->
 ```http
-PATCH https://graph.microsoft.com/beta/education/classes/<id>
+PATCH https://graph.microsoft.com/beta/education/classes/11014
 Content-type: application/json
 Content-length: 224
 
 {
-  "description": "String",
-  "displayName": "String",
+  "description": "History - World History 1",
+  "displayName": "World History Level 1",
 }
 ```
 ##### Response
@@ -73,15 +73,20 @@ Content-type: application/json
 Content-length: 224
 
 {
-  "id": "String",
-  "description": "String",
-  "classCode": "String",
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "displayName": "String",
-  "externalId": "String",
-  "externalName": "String",
-  "externalSource": "string",
-  "mailNickname": "String"
+  "id": "11014",
+  "description": "World History Level 1",
+  "classCode": "301",
+  "createdBy": {
+        "user": {
+          "displayName": "Susana Rocha",
+          "id": "14012",
+        }
+      },
+  "displayName": "History - World History 1",
+  "externalId": "301",
+  "externalName": "World History Level 1",
+  "externalSource": "Fabrikam High School",
+  "mailNickname": "Fabrikam"
 }
 ```
 
