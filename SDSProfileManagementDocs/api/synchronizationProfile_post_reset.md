@@ -1,6 +1,6 @@
 # Reset sync on a synchronization profile
 
-Reset sync of a specific [synchronization profile](..\resources\synchronizationProfile.md) in the tenant.
+Reset sync of a specific [synchronization profile](../resources/synchronizationProfile.md) in the tenant.
 
 > **Note:** Reset will cause synchronization to re-start. Any errors encountered will be deleted. No data will be deleted from Azure Active Directory. 
 
@@ -31,7 +31,7 @@ Here is an example of the request.
   "name": "post_synchronizationProfile_reset"
 }-->
 ```http
-POST https://graph.microsoft.com/testEduApi/education/synchronizationProfiles/{id}/reset
+POST https://graph.microsoft.com/beta/education/synchronizationProfiles/{id}/reset
 ```
 
 ##### Response

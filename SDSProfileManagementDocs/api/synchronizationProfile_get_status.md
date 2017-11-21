@@ -1,6 +1,6 @@
 # Get the status of a synchronization profile
 
-Get the status of a specific [synchronization profile](..\resources\synchronizationProfile.md) in the tenant. The response will indicate the status of the sync.
+Get the status of a specific [synchronization profile](../resources/synchronizationProfile.md) in the tenant. The response will indicate the status of the sync.
 
 ## Prerequisites
 The following **scopes** are required to execute this API: **EduAdministration.ReadWrite** or **EduAdministration.Read**
@@ -29,7 +29,7 @@ Here is an example of the request.
   "name": "get_synchronizationProfile_status"
 }-->
 ```http
-GET https://graph.microsoft.com/testEduApi/education/synchronizationProfiles/{id}/profileStatus
+GET https://graph.microsoft.com/beta/education/synchronizationProfiles/{id}/profileStatus
 ```
 
 ##### Response
@@ -40,7 +40,7 @@ Here is an example of the response. Note: The response object shown here may be 
 } -->
 ```http
 {
-    "@odata.context": "https://graph.microsoft.com/testEduApi/$metadata#education/synchronizationProfiles('{id}')/profileStatus/$entity",
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#education/synchronizationProfiles('{id}')/profileStatus/$entity",
     "status": "inProgress",
     "lastSynchronizationDateTime": "2017-07-04T22:06:37.6472621Z"
 }

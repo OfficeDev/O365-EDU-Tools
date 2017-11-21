@@ -1,6 +1,6 @@
 # Get synchronization errors
 
-Get the errors generated during sync of a specific [synchronization profile](..\resources\synchronizationProfile.md) in the tenant.
+Get the errors generated during sync of a specific [synchronization profile](../resources/synchronizationProfile.md) in the tenant.
 
 ## Prerequisites
 The following **scopes** are required to execute this API: **EduAdministration.ReadWrite** or **EduAdministration.Read**
@@ -31,7 +31,7 @@ Here is an example of the request.
   "name": "get_synchronizationProfile_error"
 }-->
 ```http
-GET https://graph.microsoft.com/testEduApi/education/synchronizationProfiles/{id}/error
+GET https://graph.microsoft.com/beta/education/synchronizationProfiles/{id}/error
 ```
 
 ##### Response
@@ -43,7 +43,7 @@ Here is an example of the response. Note: The response object shown here may be 
 } -->
 ```http
 {
-    "@odata.context": "https://graph.microsoft.com/testEduApi/$metadata#education/synchronizationProfiles('{id}')/errors",
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#education/synchronizationProfiles('{id}')/errors",
     "@odata.count": 14,
     "value": [
         {

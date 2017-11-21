@@ -31,7 +31,7 @@ Here is an example of the request.
   "name": "create_synchronizationProfile"
 }-->
 ```http
-POST https://graph.microsoft.com/testEduApi/education/synchronizationProfiles
+POST https://graph.microsoft.com/beta/education/synchronizationProfiles
 Content-type: application/json
 
 {

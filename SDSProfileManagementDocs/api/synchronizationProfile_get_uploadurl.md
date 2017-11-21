@@ -1,6 +1,6 @@
 # Get an upload URL
 
-Retrieve a shared access signature (SAS) for uploading source files to azure blob storage for a specific [synchronization profile](..\resources\synchronizationProfile.md) in the tenant. The SAS token has a validity of 1 hour.
+Retrieve a shared access signature (SAS) for uploading source files to azure blob storage for a specific [synchronization profile](../resources/synchronizationProfile.md) in the tenant. The SAS token has a validity of 1 hour.
 
 > **Note:** To access the blob storage with the SAS token use [Azure storage SDKs](https://github.com/search?q=org%3AAzure+azure-storage) or [AzCopy](https://docs.microsoft.com/en-us/azure/storage/storage-use-azcopy).
 
@@ -31,7 +31,7 @@ Here is an example of the request.
   "name": "get_synchronizationProfile_uploadurl"
 }-->
 ```http
-GET https://graph.microsoft.com/testEduApi/education/synchronizationProfiles/{id}/uploadUrl
+GET https://graph.microsoft.com/beta/education/synchronizationProfiles/{id}/uploadUrl
 ```
 
 ##### Response
@@ -42,7 +42,7 @@ Here is an example of the response. Note: The response object shown here may be 
 } -->
 ```http
 {
-    "@odata.context": "https://graph.microsoft.com/testEduApi/$metadata#Edm.String",
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#Edm.String",
     "value": "https://sdsstorage.blob.core.windows.net/86904b1e-c7d0-4ead-b13a-98f11fc400ee?sv=2015-07-08&sr=c&si=SharedAccessPolicy_20170704044441&sig=CH65vxxqXETCkQNH0Lfsu31cUo0s0XcEEo0OE2YiL6Q%3D&se=2017-07-04T08%3A43%3A01Z&sp=w"
 }
 ```

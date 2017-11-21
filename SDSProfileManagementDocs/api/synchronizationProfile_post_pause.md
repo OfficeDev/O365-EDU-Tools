@@ -1,6 +1,6 @@
 # Pause sync on an active synchronization profile
 
-Pause sync of a specific [synchronization profile](..\resources\synchronizationProfile.md) in the tenant.
+Pause sync of a specific [synchronization profile](../resources/synchronizationProfile.md) in the tenant.
 
 ## Prerequisites
 The following **scopes** are required to execute this API: **EduAdministration.ReadWrite**
@@ -29,7 +29,7 @@ Here is an example of the request.
   "name": "post_synchronizationProfile_pause"
 }-->
 ```http
-POST https://graph.microsoft.com/testEduApi/education/synchronizationProfiles/{id}/pause
+POST https://graph.microsoft.com/beta/education/synchronizationProfiles/{id}/pause
 ```
 
 ##### Response

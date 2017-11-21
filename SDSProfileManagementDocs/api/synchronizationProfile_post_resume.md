@@ -1,6 +1,6 @@
 # Resume sync on a synchronization profile
 
-Resume sync of a specific [synchronization profile](..\resources\synchronizationProfile.md) in the tenant.
+Resume sync of a specific [synchronization profile](../resources/synchronizationProfile.md) in the tenant.
 
 ## Prerequisites
 The following **scopes** are required to execute this API: **EduAdministration.ReadWrite**
@@ -29,7 +29,7 @@ Here is an example of the request.
   "name": "post_synchronizationProfile_resume"
 }-->
 ```http
-POST https://graph.microsoft.com/testEduApi/education/synchronizationProfiles/{id}/resume
+POST https://graph.microsoft.com/beta/education/synchronizationProfiles/{id}/resume
 ```
 
 ##### Response

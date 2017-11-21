@@ -1,6 +1,6 @@
 # Start sync after uploading files to a synchronization profile
 
-Verify the files uploaded to a specific [synchronization profile](..\resources\synchronizationProfile.md) in the tenant. If verification is successful, then synchronization will start on the profile. Else, the response will contain errors and warnings due to which sync was not started. If the response contains only warnings, synchronization will still be started.
+Verify the files uploaded to a specific [synchronization profile](../resources/synchronizationProfile.md) in the tenant. If verification is successful, then synchronization will start on the profile. Else, the response will contain errors and warnings due to which sync was not started. If the response contains only warnings, synchronization will still be started.
 
 > **Note:** This API is applicable only when data provider is of type [csvDataProvider](../resources/csvDataProvider.md). Also, the profile's state property needs to be 'provisioned' before it can be started. This can be checked by polling the profile object and checking its state property.
 
@@ -31,7 +31,7 @@ Here is an example of the request.
   "name": "post_synchronizationProfile_start"
 }-->
 ```http
-POST https://graph.microsoft.com/testEduApi/education/synchronizationProfiles/{id}/start
+POST https://graph.microsoft.com/beta/education/synchronizationProfiles/{id}/start
 ```
 
 ##### Response
@@ -44,7 +44,7 @@ Here is an example of the response. Note: The response object shown here may be 
 } -->
 ```http
 {
-    "@odata.context": "https://graph.microsoft.com/testEduApi/$metadata#education/Collection(microsoft.graph.verificationMessage)",
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#education/Collection(microsoft.graph.verificationMessage)",
     "value": [
         {
             "type": "Error",

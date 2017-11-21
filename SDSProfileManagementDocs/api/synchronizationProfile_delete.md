@@ -1,6 +1,6 @@
 # Delete a synchronizationProfile
 
-Delete a [synchronization profile](..\resources\synchronizationProfile.md) in the tenant based on the identifier.
+Delete a [synchronization profile](../resources/synchronizationProfile.md) in the tenant based on the identifier.
 
 ## Prerequisites
 The following **scopes** are required to execute this API: **EduAdministration.ReadWrite**
@@ -29,7 +29,7 @@ Here is an example of the request.
   "name": "get_synchronizationProfile"
 }-->
 ```http
-DELETE https://graph.microsoft.com/testEduApi/education/synchronizationProfiles/{id}
+DELETE https://graph.microsoft.com/beta/education/synchronizationProfiles/{id}
 ```
 
 ##### Response

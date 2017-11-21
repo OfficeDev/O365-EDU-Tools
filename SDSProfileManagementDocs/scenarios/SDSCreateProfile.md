@@ -16,10 +16,11 @@ Setting up a sync profile with CSV files is a 4step process:
 
 |   Operation	                            |  REST Verb 	|   Description                             	|   	
 |------	                                    |---	        |---	                                        |
-| [Create Profile ](../api/synchronizationProfile_create.md) (Mandatory)	                        |   POST	    |   Setup a profile for SDS Sync	            |   	
-| [Get URL to upload CSV files](../api/synchronizationProfile_get_uploadurl.md) (Mandatory)        |   GET	        |   Gets the SDS url to upload the files   |
-| [Start sync after uploading files](../api/synchronizationProfile_post_start.md) (Mandatory)                               |   POST	        |   Verify files are valid and trigger sync	    |   	
-| [Get Status](../api/synchronizationProfile_get_status.md)    (Optional)     	                    |   GET	        |   Gets the status of the ongoing sync	        |   	
+| [Create Profile ](../api/synchronizationProfile_create.md) (Mandatory)	                        |   POST	    |   Setup a profile for SDS Sync	            |   
+| [Monitor Provisioning ](../api/synchronizationProfile_get.md) (Mandatory)	                        |   GET	    |   Verify profile is provisioned by checking the state property   |
+| [Get URL to upload CSV files](../api/synchronizationProfile_get_uploadurl.md) (Mandatory)         |   GET	        |   Gets the SDS url to upload the files   |
+| [Start sync after uploading files](../api/synchronizationProfile_post_start.md) (Mandatory)                               |   POST        |   Verify files are valid and trigger sync	    |   	
+| [Get Status](../api/synchronizationProfile_get_status.md)    (Optional)                           |   GET	        |   Gets the status of the ongoing sync	        |   
 
 
 ## Step 1 : Create Profile
@@ -214,8 +215,9 @@ Click [here](https://support.office.com/en-us/article/CSV-files-for-School-Data-
 
 #### Upload files:
 
-A tool like AzCopy or [Storage Explorer](http://storageexplorer.com/) can be used to upload the file to the storage location.
+A tool like AzCopy or [Storage Explorer](http://storageexplorer.com/) can be used to upload the files to the storage location.
 The URL can also be used to upload files programatically using [Azure storage SDKs](https://github.com/search?q=org%3AAzure+azure-storage).
+The files should be the same format as required by the School Data Sync Website.
 
 This documentation uses AzCopy to upload the file.
 
@@ -224,7 +226,7 @@ Click [here](https://docs.microsoft.com/en-us/azure/storage/storage-use-azcopy) 
 Run the following Azcopy command to upload all the files in the C:\myfolder to the storage url from the Get file URL API.
 
 
-      AzCopy /Source:C:\myfolder /Dest:https://myaccount.blob.core.windows.net/mycontainer /DestKey:key /S
+      AzCopy /Source:'C:\myfolder' /Dest:'{Upload URL}'
 
 
 ### Step 4 :  Start sync
