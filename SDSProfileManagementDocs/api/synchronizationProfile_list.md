@@ -1,6 +1,6 @@
 # List synchronization profiles
 
-Retrieve the collection of [synchronization profiles](..\resources\synchronizationProfile.md) in the tenant.
+Retrieve the collection of [synchronization profiles](../resources/synchronizationProfile.md) in the tenant.
 
 ## Prerequisites
 The following **scopes** are required to execute this API: **EduAdministration.ReadWrite** or **EduAdministration.Read**
@@ -32,7 +32,7 @@ Here is an example of the request.
   "name": "list_synchronizationProfile"
 }-->
 ```http
-GET https://graph.microsoft.com/testEduApi/education/synchronizationProfiles
+GET https://graph.microsoft.com/beta/education/synchronizationProfiles
 ```
 
 ##### Response

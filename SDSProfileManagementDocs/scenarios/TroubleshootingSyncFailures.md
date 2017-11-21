@@ -28,7 +28,7 @@ Once sync is started in the background you can query the sync status using the G
 Sample Response Body
 
             {  
-               "@odata.context":"https://graph.microsoft.com/testEduApi/$metadata#education/synchronizationProfiles('{id}')/profileStatus/$entity",
+               "@odata.context":"https://graph.microsoft.com/beta/$metadata#education/synchronizationProfiles('{id}')/profileStatus/$entity",
                "status":"success",
                "lastSynchronizationDateTime":"2017-06-14T01:13:21.2495183Z"
             }
@@ -59,7 +59,7 @@ If the status of sync is "error", "validationError" or "quarantined" you can cal
 Sample Response for Get Errors
 
             {  
-               "@odata.context":"https://graph.microsoft.com/testEduApi/$metadata#education/synchronizationProfiles('{id}')/errors",
+               "@odata.context":"https://graph.microsoft.com/beta/$metadata#education/synchronizationProfiles('{id}')/errors",
                "@odata.count":220,
                "value":[  
                   {  
@@ -79,7 +79,7 @@ Sample Response for Get Errors
                      "reportableIdentifier":"Colby.Garner"
                   }
                ],
-               "@odata.nextLink":"https://graph.microsoft.com/testEduApi/$metadata#education/synchronizationProfiles/{id}/errors?skipToken={token}"
+               "@odata.nextLink":"https://graph.microsoft.com/beta/$metadata#education/synchronizationProfiles/{id}/errors?skipToken={token}"
             }
 
 Follow the error description in the response code to perform remediation and retry by sync process again.

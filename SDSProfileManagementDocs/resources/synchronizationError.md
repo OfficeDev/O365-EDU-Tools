@@ -6,7 +6,7 @@ This resource represents an error during sync. An unique error will be generated
 
 | Method | Return Type | Description |
 |-|-|-|
-| [Get synchronization errors](..\api\synchronizationProfile_get_errors.md) | collection of synchronizationError | Returns the list of synchronization errors observed in a profile |
+| [Get synchronization errors](../api/synchronizationProfile_get_errors.md) | collection of synchronizationError | Returns the list of synchronization errors observed in a profile |
 
 ### Properties
 

@@ -1,6 +1,6 @@
 # Get a synchronizationProfile
 
-Retrieve a [synchronization profile](..\resources\synchronizationProfile.md) in the tenant based on the identifier.
+Retrieve a [synchronization profile](../resources/synchronizationProfile.md) in the tenant based on the identifier.
 
 ## Prerequisites
 The following **scopes** are required to execute this API: **EduAdministration.ReadWrite** or **EduAdministration.Read**
@@ -29,7 +29,7 @@ Here is an example of the request.
   "name": "get_synchronizationProfile"
 }-->
 ```http
-GET https://graph.microsoft.com/testEduApi/education/synchronizationProfiles/{id}
+GET https://graph.microsoft.com/beta/education/synchronizationProfiles/{id}
 ```
 
 ##### Response
@@ -41,7 +41,7 @@ Here is an example of the response. Note: The response object shown here may be 
 } -->
 ```http
 {
-    "@odata.context": "https://graph.microsoft.com/testEduApi/$metadata#education/synchronizationProfiles/$entity",
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#education/synchronizationProfiles/$entity",
     "displayName": "Test Profile",
     "state": "provisioned",
     "id": "86904b1e-c7d0-4ead-b13a-98f11fc400ee",

@@ -10,6 +10,7 @@ The School Data Sync APIs enable automated profile and Roster sync management. S
 |   Operation	                            |  REST Verb 	|   Description                             	|   	
 |------	                                    |---	        |---	                                        |
 |[Create Profile](../api/synchronizationProfile_create.md) (Mandatory)	                        |   POST	    |   Setup a profile for SDS Sync	            |   	
+| [Monitor Provisioning ](../api/synchronizationProfile_get.md) (Mandatory)	                        |   GET	    |   Verify profile is provisioned by checking the state property   |
 | [Get Status](../api/synchronizationProfile_get_status.md) (Optional)         	                    |   GET	        |   Gets the status of the ongoing sync	        |   	
 
 
@@ -55,6 +56,10 @@ Powerschool is one of the custom API provider that's currently supported, to int
            "schoolsIds":[  
               "55"
       }
+
+## Step 2 : Monitor profile provisioning.
+
+After a profile creation is accepted, it is provisioned by the system. The object returned in the response by the Create Profile API has a state of 'provisioning' and an 'id' which will be the unique identifier for the profile. To monitor the provisioning, perform a [GET operation on the profile](../api/synchronizationProfile_get.md) and check the profile state in the response. As soon as the state returned is 'provisioned', the profile is ready to sync.
 
 ### Step 2 : Get Sync Status
 Once sync is started in the background you can query the sync status using the GetSyncStatus API

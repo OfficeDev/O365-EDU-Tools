@@ -31,7 +31,7 @@ Here is an example of the request.
   "name": "update_synchronizationProfile"
 }-->
 ```http
-PUT https://graph.microsoft.com/testEduApi/education/synchronizationProfiles
+PUT https://graph.microsoft.com/beta/education/synchronizationProfiles
 Content-type: application/json
 
 {
