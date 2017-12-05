@@ -4,9 +4,9 @@ Creates a request for a new [synchronization profile](../resources/educationsync
 
 ## Permissions
 The following permissions are required to call this API.
-| Permission type | Permissions
+| Permission type | Permissions |
 |:-----------|:----------|
-| Delegated (work or school account) | EduAdministration.ReadWrite
+| Delegated (work or school account) | EduAdministration.ReadWrite |
 
 
 ## HTTP request

@@ -6,9 +6,9 @@ Reset sync of a specific [synchronization profile](../resources/educationsynchro
 
 ## Permissions
 The following permissions are required to call this API.
-| Permission type | Permissions
+| Permission type | Permissions |
 |:-----------|:----------|
-| Delegated (work or school account) | EduAdministration.ReadWrite
+| Delegated (work or school account) | EduAdministration.ReadWrite |
 
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
