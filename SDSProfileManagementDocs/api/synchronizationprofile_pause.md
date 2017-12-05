@@ -1,11 +1,11 @@
 # Pause sync on an active synchronization profile
 
-Pause sync of a specific [synchronization profile](../resources/synchronizationprofile.md) in the tenant.
+Pause sync of a specific [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant.
 
 ## Permissions
 The following permissions are required to call this API.
 | Permission type | Permissions
-|:-----------|:------|:----------|
+|:-----------|:----------|
 | Delegated (work or school account) | EduAdministration.ReadWrite
 
 ## HTTP request

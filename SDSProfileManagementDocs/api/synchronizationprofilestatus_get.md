@@ -1,11 +1,11 @@
 # Get the status of a synchronization profile
 
-Get the status of a specific [synchronization profile](../resources/synchronizationprofile.md) in the tenant. The response will indicate the status of the sync.
+Get the status of a specific [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant. The response will indicate the status of the sync.
 
 ## Permissions
 One of the following permissions are required to call this API.
 | Permission type | Permissions (from least to most privileged)
-|:-----------|:------|:----------|
+|:-----------|:----------|
 | Delegated (work or school account) | EduAdministration.Read, EduAdministration.ReadWrite
 
 ## HTTP request
@@ -22,7 +22,7 @@ GET /synchronizationProfiles/{id}/profileStatus
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and a [synchronizationProfileStatus](../resources/synchronizationprofilestatus.md) object in the response body.
+If successful, this method returns a `200 OK` response code and a [educationsynchronizationprofilestatus](../resources/educationsynchronizationprofilestatus.md) object in the response body.
 
 ## Example
 ##### Request
@@ -39,7 +39,7 @@ GET https://graph.microsoft.com/beta/education/synchronizationProfiles/{id}/prof
 Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
 <!-- {
   "blockType": "response",
-  "@odata.type": "microsoft.graph.synchronizationProfileStatus",
+  "@odata.type": "microsoft.graph.educationsynchronizationprofilestatus",
 } -->
 ```http
 {

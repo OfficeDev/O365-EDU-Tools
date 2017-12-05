@@ -1,13 +1,13 @@
 # Reset sync on a synchronization profile
 
-Reset sync of a specific [synchronization profile](../resources/synchronizationprofile.md) in the tenant.
+Reset sync of a specific [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant.
 
 > **Note:** Reset will cause synchronization to re-start. Any errors encountered will be deleted. No data will be deleted from Azure Active Directory. 
 
 ## Permissions
 The following permissions are required to call this API.
 | Permission type | Permissions
-|:-----------|:------|:----------|
+|:-----------|:----------|
 | Delegated (work or school account) | EduAdministration.ReadWrite
 
 ## HTTP request

@@ -1,11 +1,11 @@
 # Get synchronization errors
 
-Get the errors generated during sync of a specific [synchronization profile](../resources/synchronizationprofile.md) in the tenant.
+Get the errors generated during sync of a specific [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant.
 
 ## Permissions
 One of the following permissions are required to call this API.
 | Permission type | Permissions (from least to most privileged)
-|:-----------|:------|:----------|
+|:-----------|:------|
 | Delegated (work or school account) | EduAdministration.Read, EduAdministration.ReadWrite
 
 ## HTTP request
@@ -24,7 +24,7 @@ This method supports the [OData Query Parameters](http://developer.microsoft.com
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and a collection of [synchronization error](../resources/synchronizationerror.md) objects in the response body.
+If successful, this method returns a `200 OK` response code and a collection of [synchronization error](../resources/educationsynchronizationerror.md) objects in the response body.
 
 ## Example
 ##### Request
@@ -41,7 +41,7 @@ GET https://graph.microsoft.com/beta/education/synchronizationProfiles/{id}/erro
 Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
 <!-- {
   "blockType": "response",
-  "@odata.type": "microsoft.graph.synchronizationError",
+  "@odata.type": "microsoft.graph.educationsynchronizationerror",
   "isCollection": true
 } -->
 ```http
