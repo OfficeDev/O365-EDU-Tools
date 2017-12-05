@@ -6,6 +6,7 @@ Verify the files uploaded to a specific [synchronization profile](../resources/e
 
 ## Permissions
 The following permissions are required to call this API.
+
 | Permission type | Permissions |
 |:-----------|:----------|
 | Delegated (work or school account) | EduAdministration.ReadWrite |
