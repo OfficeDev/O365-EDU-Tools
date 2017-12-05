@@ -1,4 +1,4 @@
-# identityMatchingOptions resource type
+# educationidentitymatchingoptions resource type
 
 This resource type provides mapping between a source property to a target property for matching user accounts. The source property should exist in the source data. The target property should be a valid property in AAD.
 

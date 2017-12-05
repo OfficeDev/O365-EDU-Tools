@@ -1,4 +1,4 @@
-# synchronizationCustomization resource type
+# educationsynchronizationcustomization resource type
 
 This resource provides settings for customizing the synchronization of the resource entities. The customization can be applied to all the entities being synchronized. 
 

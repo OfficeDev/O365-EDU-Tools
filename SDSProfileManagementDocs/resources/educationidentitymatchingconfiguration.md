@@ -1,4 +1,4 @@
-## identityMatchingConfiguration resource type
+## educationidentitymatchingconfiguration resource type
 
 This resource defines the settings for matching identities. These identities include students and teachers. Based on these settings the users will be updated in the directory.
 
@@ -6,13 +6,13 @@ This resource defines the settings for matching identities. These identities inc
 
 | Property | Type | Description |
 |-|-|-|
-| **matchingOptions** | [identityMatchingOptions](identitymatchingoptions.md) collection | Mapping between the user account and the options to use to uniquely identify the user to update |
+| **matchingOptions** | [educationidentitymatchingoptions](educationidentitymatchingoptions.md) collection | Mapping between the user account and the options to use to uniquely identify the user to update |
 
 ### JSON
 
 ```json
 "identitySynchronizationConfiguration": {
-    "@odata.type": "#microsoft.graph.identityMatchingConfiguration",
+    "@odata.type": "#microsoft.graph.educationidentitymatchingconfiguration",
     "matchingOptions": [
         {
             "appliesTo": "student",

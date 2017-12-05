@@ -1,8 +1,8 @@
-## identityCreationConfiguration resource type
+## educationidentitycreationconfiguration resource type
 
 This resource defines the settings on creation of identities. These identities include students and teachers. Based on these settings the users will be created in the directory.
 
-> **Note:** If you have directory sync turned on to sync between on-premise AD and AAD, then this resource type should not be used. Instead developers should use [IdentityMatchingConfiguration](identitymatchingconfiguration.md)
+> **Note:** If you have directory sync turned on to sync between on-premise AD and AAD, then this resource type should not be used. Instead developers should use [educationidentitymatchingconfiguration](educationidentitymatchingconfiguration.md)
 
 Derived from [identitySyncConfiguration](identitySyncConfiguration.md)
 
@@ -10,13 +10,13 @@ Derived from [identitySyncConfiguration](identitySyncConfiguration.md)
 
 | Property | Type | Description |
 |-|-|-|
-| **userDomains** | [identityDomain](identityDomain.md) collection |  Sets the list of domains to use per user type  |
+| **userDomains** | [educationidentitydomain](educationidentitydomain.md) collection |  Sets the list of domains to use per user type  |
 
 ### JSON
 
 ```json
 "identitySynchronizationConfiguration": {
-    "@odata.type": "#microsoft.graph.identityCreationConfiguration",
+    "@odata.type": "#microsoft.graph.educationidentitycreationconfiguration",
     "userDomains": [
         {
             "appliesTo": "student",
