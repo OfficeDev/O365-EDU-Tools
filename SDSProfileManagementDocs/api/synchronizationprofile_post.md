@@ -1,11 +1,11 @@
 # Create a synchronizationProfile
 
-Creates a request for a new [synchronization profile](../resources/synchronizationprofile.md) in the tenant. [Query the status](synchronizationprofilestatus_get.md) to know the state of the profile. 
+Creates a request for a new [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant. [Query the status](synchronizationprofilestatus_get.md) to know the state of the profile. 
 
 ## Permissions
 The following permissions are required to call this API.
 | Permission type | Permissions
-|:-----------|:------|:----------|
+|:-----------|:----------|
 | Delegated (work or school account) | EduAdministration.ReadWrite
 
 
@@ -22,10 +22,10 @@ POST /synchronizationProfiles
 | Content-Type | string | application/json. Required. |
 
 ## Request body
-In the request body, supply a JSON representation of the [synchronizationProfile](../resources/synchronizationprofile.md) object.
+In the request body, supply a JSON representation of the [synchronizationProfile](../resources/educationsynchronizationprofile.md) object.
 
 ## Response
-If successful, this method returns a `202, Accepted` response code and a [synchronizationProfile](../resources/synchronizationprofile.md) object in the response body.
+If successful, this method returns a `202, Accepted` response code and a [synchronizationProfile](../resources/educationsynchronizationprofile.md) object in the response body.
 
 ## Example
 ##### Request
@@ -41,7 +41,7 @@ Content-type: application/json
 {
     "displayName": "Test Profile",
     "dataProvider": {
-        "@odata.type": "#microsoft.graph.csvDataProvider",
+        "@odata.type": "#microsoft.graph.educationcsvdataprovider",
         "customizations": {
             "student": {
                 "optionalPropertiesToSync": [
@@ -52,7 +52,7 @@ Content-type: application/json
         }
     },
     "identitySynchronizationConfiguration": {
-        "@odata.type": "#microsoft.graph.identityCreationConfiguration",
+        "@odata.type": "#microsoft.graph.educationidentitycreationconfiguration",
         "userDomains": [
             {
                 "appliesTo": "student",
@@ -97,7 +97,7 @@ Content-type: application/json
     "state": "provisioning",
     "id": "86904b1e-c7d0-4ead-b13a-98f11fc400ee",
     "dataProvider": {
-        "@odata.type": "#microsoft.graph.csvDataProvider",
+        "@odata.type": "#microsoft.graph.educationcsvdataprovider",
         "customizations": {
             "student": {
                 "optionalPropertiesToSync": [
@@ -137,7 +137,7 @@ Content-type: application/json
         }
     },
     "identitySynchronizationConfiguration": {
-        "@odata.type": "#microsoft.graph.identityCreationConfiguration",
+        "@odata.type": "#microsoft.graph.educationidentitycreationconfiguration",
         "userDomains": [
             {
                 "appliesTo": "student",

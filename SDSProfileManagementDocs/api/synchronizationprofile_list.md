@@ -1,11 +1,11 @@
 # List synchronization profiles
 
-Retrieve the collection of [synchronization profiles](../resources/synchronizationprofile.md) in the tenant.
+Retrieve the collection of [synchronization profiles](../resources/educationsynchronizationprofile.md) in the tenant.
 
 ## Permissions
 One of the following permissions are required to call this API.
 | Permission type | Permissions (from least to most privileged)
-|:-----------|:------|:----------|
+|:-----------|:----------|
 | Delegated (work or school account) | EduAdministration.Read, EduAdministration.ReadWrite
 
 ## HTTP request
@@ -25,7 +25,7 @@ This method supports the [OData Query Parameters](http://developer.microsoft.com
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and a collection of [synchronizationProfile](../resources/synchronizationprofile.md) objects in the response body.
+If successful, this method returns a `200 OK` response code and a collection of [synchronizationProfile](../resources/educationsynchronizationprofile.md) objects in the response body.
 
 ## Example
 ##### Request
@@ -54,7 +54,7 @@ Here is an example of the response. Note: The response object shown here may be 
         "state": "provisioned",
         "id": "15e9b9fa-de85-492e-aa44-550c40de626e",
         "dataProvider": {
-            "@odata.type": "#microsoft.graph.csvDataProvider",
+            "@odata.type": "#microsoft.graph.educationcsvdataprovider",
             "customizations": {
                 "school": {
                     "optionalPropertiesToSync": [
@@ -108,7 +108,7 @@ Here is an example of the response. Note: The response object shown here may be 
             }
         },
         "identitySynchronizationConfiguration": {
-            "@odata.type": "#microsoft.graph.identityCreationConfiguration",
+            "@odata.type": "#microsoft.graph.educationidentitycreationconfiguration",
             "userDomains": [
                 {
                     "appliesTo": "student",

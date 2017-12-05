@@ -34,7 +34,7 @@ Please refer to the [Create Profile API documentation](../api/synchronizationpro
 
 #### Select the profile Name:
 
-Specify the [displayName](../resources/synchronizationprofile.md) for the profile .
+Specify the [displayName](../resources/educationsynchronizationprofile.md) for the profile .
 
 #### Select the sync format:
 
@@ -90,10 +90,10 @@ Specify the [displayName](../resources/synchronizationprofile.md) for the profil
           ]
           },
 
-  For a detailed reference documentation on identity configuration option, please reference to the following resources : [identitySynchronizationConfiguration](../resources/identitysynchronizationconfiguration.md)
+  For a detailed reference documentation on identity configuration option, please reference to the following resources : [educationIdentitySynchronizationConfiguration](../resources/educationidentitysynchronizationconfiguration.md)
 
 #### Select data customizations
-SDS APIs providing for a mechanism for syncing custom data fields. If skipped, all available attributes will be synced. For detailed API reference on customizations, please refer to the [documentation](../resources/synchronizationcustomizations.md)
+SDS APIs providing for a mechanism for syncing custom data fields. If skipped, all available attributes will be synced. For detailed API reference on customizations, please refer to the [documentation](../resources/educationsynchronizationcustomizations.md)
 
 Here is an overview of the properties:
 
@@ -230,7 +230,7 @@ Run the following Azcopy command to upload all the files in the C:\myfolder to t
 
 
 ### Step 4 :  Start sync
-This is a mandatory step to verify the files uploaded to a specific [synchronization profile](../resources/synchronizationprofile.md) in the tenant. If verification is successful, then synchronization will start on the profile automatically. Refer to [Start sync](../api/synchronizationprofile_start.md) for detailed documentation.
+This is a mandatory step to verify the files uploaded to a specific [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant. If verification is successful, then synchronization will start on the profile automatically. Refer to [Start sync](../api/synchronizationprofile_start.md) for detailed documentation.
 
 |  Method    |  Request URI                                                              |   
 |---         |---                                                                        |

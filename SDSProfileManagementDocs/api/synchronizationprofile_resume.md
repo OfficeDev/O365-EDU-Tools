@@ -1,11 +1,11 @@
 # Resume sync on a synchronization profile
 
-Resume sync of a specific [synchronization profile](../resources/synchronizationprofile.md) in the tenant.
+Resume sync of a specific [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant.
 
 ## Permissions
 The following permissions are required to call this API.
 | Permission type | Permissions
-|:-----------|:------|:----------|
+|:-----------|:----------|
 | Delegated (work or school account) | EduAdministration.ReadWrite
 
 ## HTTP request

@@ -1,4 +1,4 @@
-# fileSynchronizationVerificationMessage resource type
+# educationfilesynchronizationverificationmessage resource type
 
 This resource represents an error returned to the client in response to [start sync](../api/synchronizationprofile_start.md) for CSV based profiles. The resource will contain errors resulting from the verification. This should allow end users to fix the source data before attempting to synchronize with Azure Active Directory.
 

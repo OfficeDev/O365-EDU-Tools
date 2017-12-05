@@ -1,13 +1,13 @@
 # Start sync after uploading files to a synchronization profile
 
-Verify the files uploaded to a specific [synchronization profile](../resources/synchronizationprofile.md) in the tenant. If verification is successful, then synchronization will start on the profile. Else, the response will contain errors and warnings due to which sync was not started. If the response contains only warnings, synchronization will still be started.
+Verify the files uploaded to a specific [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant. If verification is successful, then synchronization will start on the profile. Else, the response will contain errors and warnings due to which sync was not started. If the response contains only warnings, synchronization will still be started.
 
-> **Note:** This API is applicable only when data provider is of type [csvDataProvider](../resources/csvdataprovider.md). Also, the profile's state property needs to be 'provisioned' before it can be started. This can be checked by polling the profile object and checking its state property.
+> **Note:** This API is applicable only when data provider is of type [educationcsvdataprovider](../resources/educationcsvdataprovider.md). Also, the profile's state property needs to be 'provisioned' before it can be started. This can be checked by polling the profile object and checking its state property.
 
 ## Permissions
 The following permissions are required to call this API.
 | Permission type | Permissions
-|:-----------|:------|:----------|
+|:-----------|:----------|
 | Delegated (work or school account) | EduAdministration.ReadWrite
 
 ## HTTP request
@@ -24,7 +24,7 @@ POST /synchronizationProfiles/{id}/start
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code. If unsuccessful it returns a `400 Bad Request`. Response contains a collection of [fileSynchronizationVerificationMessage](../resources/filesynchronizationverificationmessage.md) as part of the response body if any errors or warnings were found.
+If successful, this method returns a `200 OK` response code. If unsuccessful it returns a `400 Bad Request`. Response contains a collection of [educationfilesynchronizationverificationmessage](../resources/educationfilesynchronizationverificationmessage.md) as part of the response body if any errors or warnings were found.
 
 ## Example
 ##### Request

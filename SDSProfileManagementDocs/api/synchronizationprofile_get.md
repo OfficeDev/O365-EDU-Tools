@@ -1,11 +1,11 @@
 # Get a synchronizationProfile
 
-Retrieve a [synchronization profile](../resources/synchronizationprofile.md) in the tenant based on the identifier.
+Retrieve a [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant based on the identifier.
 
 ## Permissions
 One of the following permissions are required to call this API.
 | Permission type | Permissions (from least to most privileged)
-|:-----------|:------|:----------|
+|:-----------|:----------|
 | Delegated (work or school account) | EduAdministration.Read, EduAdministration.ReadWrite
 
 ## HTTP request
@@ -22,7 +22,7 @@ GET /synchronizationProfiles/{id}
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and a [synchronizationProfile](../resources/synchronizationprofile.md) object in the response body.
+If successful, this method returns a `200 OK` response code and a [synchronizationProfile](../resources/educationsynchronizationprofile.md) object in the response body.
 
 ## Example
 ##### Request
@@ -49,7 +49,7 @@ Here is an example of the response. Note: The response object shown here may be 
     "state": "provisioned",
     "id": "86904b1e-c7d0-4ead-b13a-98f11fc400ee",
     "dataProvider": {
-        "@odata.type": "#microsoft.graph.csvDataProvider",
+        "@odata.type": "#microsoft.graph.educationcsvdataprovider",
         "customizations": {
             "student": {
                 "optionalPropertiesToSync": [
@@ -89,7 +89,7 @@ Here is an example of the response. Note: The response object shown here may be 
         }
     },
     "identitySynchronizationConfiguration": {
-        "@odata.type": "#microsoft.graph.identityCreationConfiguration",
+        "@odata.type": "#microsoft.graph.educationidentitycreationconfiguration",
         "userDomains": [
             {
                 "appliesTo": "student",

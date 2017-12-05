@@ -1,11 +1,11 @@
 # Delete a synchronizationProfile
 
-Delete a [synchronization profile](../resources/synchronizationprofile.md) in the tenant based on the identifier.
+Delete a [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant based on the identifier.
 
 ## Permissions
 The following permissions are required to call this API.
 | Permission type | Permissions
-|:-----------|:------|:----------|
+|:-----------|:----------|
 | Delegated (work or school account) | EduAdministration.ReadWrite
 
 ## HTTP request

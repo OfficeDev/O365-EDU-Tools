@@ -1,13 +1,13 @@
 # Get an upload URL
 
-Retrieve a shared access signature (SAS) for uploading source files to azure blob storage for a specific [synchronization profile](../resources/synchronizationprofile.md) in the tenant. The SAS token has a validity of 1 hour.
+Retrieve a shared access signature (SAS) for uploading source files to azure blob storage for a specific [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant. The SAS token has a validity of 1 hour.
 
 > **Note:** To access the blob storage with the SAS token use [Azure storage SDKs](https://github.com/search?q=org%3AAzure+azure-storage) or [AzCopy](https://docs.microsoft.com/en-us/azure/storage/storage-use-azcopy).
 
 ## Permissions
 The following permissions are required to call this API.
 | Permission type | Permissions
-|:-----------|:------|:----------|
+|:-----------|:----------|
 | Delegated (work or school account) | EduAdministration.ReadWrite
 
 ## HTTP request
@@ -24,7 +24,7 @@ GET /synchronizationProfiles/{id}/uploadUrl
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and a SAS URL for the [synchronizationProfile](../resources/synchronizationprofile.md) in the response body.
+If successful, this method returns a `200 OK` response code and a SAS URL for the [synchronizationProfile](../resources/educationsynchronizationprofile.md) in the response body.
 
 ## Example
 ##### Request

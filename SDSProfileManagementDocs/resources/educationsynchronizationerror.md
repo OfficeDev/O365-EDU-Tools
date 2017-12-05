@@ -1,4 +1,4 @@
-# synchronizationError resource type
+# educationsynchronizationerror resource type
 
 This resource represents an error during sync. An unique error will be generated for every entry that fails to synchronize with AAD.
 
@@ -6,7 +6,7 @@ This resource represents an error during sync. An unique error will be generated
 
 | Method | Return Type | Description |
 |-|-|-|
-| [Get synchronization errors](../api/synchronizationerrors_get.md) | collection of synchronizationError | Returns the list of synchronization errors observed in a profile |
+| [Get synchronization errors](../api/educationsynchronizationerrors_get.md) | collection of educationsynchronizationerror | Returns the list of synchronization errors observed in a profile |
 
 ### Properties
 

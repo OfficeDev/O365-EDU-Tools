@@ -1,8 +1,8 @@
-# powerSchoolDataProvider resource
+# educationpowerschooldataprovider resource
 
 When PowerSchool is used as the input source, this provider type should be used to setup the profile.
 
-Derived from [synchronizationDataProvider](synchronizationdataprovider.md)
+Derived from [educationsynchronizationdataprovider](educationsynchronizationdataprovider.md)
 
 ### Properties
 
@@ -14,13 +14,13 @@ Derived from [synchronizationDataProvider](synchronizationdataprovider.md)
 | **schoolsIds** | String collection |  The list of schools to sync |
 | **schoolYear** | String |  The school year to sync |
 | **allowTeachersInMultipleSchools** | Boolean |  Indicates whether source has multiple identifiers for a single student or teacher |
-| **customizations** | [synchronizationCustomizations](synchronizationcustomizations.md) | Optional customization to be applied to the synchronization profile.
+| **customizations** | [educationsynchronizationcustomizations](educationsynchronizationcustomizations.md) | Optional customization to be applied to the synchronization profile.
 
 ### JSON
 
 ```json
 "dataProvider": {
-    "@odata.type": "#microsoft.graph.powerSchoolDataProvider",
+    "@odata.type": "#microsoft.graph.educationpowerschooldataprovider",
     "connectionUrl": "{PowerSchool Server Url}",
     "clientId": "{ClientId}",
     "clientSecret": "{ClientSecret}",
