@@ -4,9 +4,9 @@ Retrieve a [synchronization profile](../resources/educationsynchronizationprofil
 
 ## Permissions
 One of the following permissions are required to call this API.
-| Permission type | Permissions (from least to most privileged)
+| Permission type | Permissions (from least to most privileged) |
 |:-----------|:----------|
-| Delegated (work or school account) | EduAdministration.Read, EduAdministration.ReadWrite
+| Delegated (work or school account) | EduAdministration.Read, EduAdministration.ReadWrite |
 
 ## HTTP request
 <!-- { "blockType": "ignored" } -->

@@ -6,9 +6,9 @@ Retrieve a shared access signature (SAS) for uploading source files to azure blo
 
 ## Permissions
 The following permissions are required to call this API.
-| Permission type | Permissions
+| Permission type | Permissions |
 |:-----------|:----------|
-| Delegated (work or school account) | EduAdministration.ReadWrite
+| Delegated (work or school account) | EduAdministration.ReadWrite |
 
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
