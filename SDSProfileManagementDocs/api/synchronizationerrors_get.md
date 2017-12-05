@@ -4,6 +4,7 @@ Get the errors generated during sync of a specific [synchronization profile](../
 
 ## Permissions
 One of the following permissions are required to call this API.
+
 | Permission type | Permissions (from least to most privileged) |
 |:-----------|:------|
 | Delegated (work or school account) | EduAdministration.Read, EduAdministration.ReadWrite |
