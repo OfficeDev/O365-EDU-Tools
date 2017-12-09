@@ -1,15 +1,17 @@
-# Reset sync on a synchronization profile
+# Reset sync on an educationSynchronizationProfile
 
-Reset sync of a specific [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant.
+Reset the sync of a specific school data [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant.
 
-> **Note:** Reset will cause synchronization to re-start. Any errors encountered will be deleted. No data will be deleted from Azure Active Directory. 
+> **Note:** This operation will cause synchronization to restart. Any errors encountered will be deleted. No data will be deleted from Azure Active Directory (Azure AD). 
 
 ## Permissions
-The following permissions are required to call this API.
+One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
 
 | Permission type | Permissions |
 |:-----------|:----------|
 | Delegated (work or school account) | EduAdministration.ReadWrite |
+|Delegated (personal Microsoft account|Not supported.|
+|Application|Not supported.|
 
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
@@ -29,10 +31,10 @@ If successful, this method returns a `200 OK` response code.
 
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
-  "name": "post_synchronizationProfile_reset"
+  "name": "post_educationSynchronizationProfile_reset"
 }-->
 ```http
 POST https://graph.microsoft.com/beta/education/synchronizationProfiles/{id}/reset

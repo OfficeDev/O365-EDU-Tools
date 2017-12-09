@@ -1,13 +1,15 @@
-# List synchronization profiles
+# List educationSynchronizationProfiles
 
-Retrieve the collection of [synchronization profiles](../resources/educationsynchronizationprofile.md) in the tenant.
+Retrieve the collection of school data [synchronization profiles](../resources/educationsynchronizationprofile.md) in the tenant.
 
 ## Permissions
-One of the following permissions are required to call this API.
+One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
 
 | Permission type | Permissions (from least to most privileged) |
 |:-----------|:----------|
 | Delegated (work or school account) | EduAdministration.Read, EduAdministration.ReadWrite |
+|Delegated (personal Microsoft account|Not supported.|
+|Application|Not supported.|
 
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
@@ -16,7 +18,7 @@ GET /synchronizationProfiles
 ```
 
 ## Optional query parameters
-This method supports the [OData Query Parameters](http://developer.microsoft.com/en-us/graph/docs/overview/query_parameters) to help customize the response. The method supports $filter, $orderby, $top, $skip and $count parameters.
+This method supports the following [OData Query Parameters](http://developer.microsoft.com/en-us/graph/docs/overview/query_parameters) to help customize the response: $filter, $orderby, $top, $skip, and $count.
 
 ## Request headers
 | Name       | Type | Description|
@@ -26,11 +28,11 @@ This method supports the [OData Query Parameters](http://developer.microsoft.com
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and a collection of [synchronizationProfile](../resources/educationsynchronizationprofile.md) objects in the response body.
+If successful, this method returns a `200 OK` response code and a collection of [educationSynchronizationProfile](../resources/educationsynchronizationprofile.md) objects in the response body.
 
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "list_synchronizationProfile"
@@ -40,7 +42,10 @@ GET https://graph.microsoft.com/beta/education/synchronizationProfiles
 ```
 
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,

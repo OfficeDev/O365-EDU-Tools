@@ -1,13 +1,15 @@
-# Get synchronization errors
+# Get educationSynchronizationErrors
 
-Get the errors generated during sync of a specific [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant.
+Get the errors generated during a sync of a specific school data [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant.
 
 ## Permissions
-One of the following permissions are required to call this API.
+One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
 
 | Permission type | Permissions (from least to most privileged) |
 |:-----------|:------|
 | Delegated (work or school account) | EduAdministration.Read, EduAdministration.ReadWrite |
+|Delegated (personal Microsoft account|Not supported.|
+|Application|Not supported.|
 
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
@@ -15,7 +17,7 @@ One of the following permissions are required to call this API.
 GET /synchronizationProfiles/{id}/errors
 ```
 ## Optional query parameters
-This method supports the [OData Query Parameters](http://developer.microsoft.com/en-us/graph/docs/overview/query_parameters) to help customize the response. The method supports $filter, $orderby, $top, $skip and $count parameters.
+This method supports the following [OData Query Parameters](http://developer.microsoft.com/en-us/graph/docs/overview/query_parameters) to help customize the response: $filter, $orderby, $top, $skip, and $count.
 
 ## Request headers
 | Name       | Type | Description|
@@ -29,20 +31,23 @@ If successful, this method returns a `200 OK` response code and a collection of 
 
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
-  "name": "get_synchronizationProfile_error"
+  "name": "get_educationSynchronizationProfile_error"
 }-->
 ```http
 GET https://graph.microsoft.com/beta/education/synchronizationProfiles/{id}/error
 ```
 
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
-  "@odata.type": "microsoft.graph.educationsynchronizationerror",
+  "@odata.type": "microsoft.graph.educationsynchronizationprofilenerror",
   "isCollection": true
 } -->
 ```http
