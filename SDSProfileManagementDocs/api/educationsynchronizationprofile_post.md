@@ -1,14 +1,15 @@
-# Create a synchronizationProfile
+# Create an educationSynchronizationProfile
 
-Creates a request for a new [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant. [Query the status](synchronizationprofilestatus_get.md) to know the state of the profile. 
+Create a request for a new school data [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant. [Query the status](educationsynchronizationprofilestatus_get.md) to get the status of the profile. 
 
 ## Permissions
-The following permissions are required to call this API.
+One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
 
 | Permission type | Permissions |
 |:-----------|:----------|
 | Delegated (work or school account) | EduAdministration.ReadWrite |
-
+|Delegated (personal Microsoft account|Not supported.|
+|Application|Not supported.|
 
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
@@ -20,20 +21,20 @@ POST /synchronizationProfiles
 | Name       | Type | Description|
 |:-----------|:------|:----------|
 | Authorization  | string  | Bearer {token}. Required.  |
-| Content-Type | string | application/json. Required. |
+| Content-Type | string | Application/json. Required. |
 
 ## Request body
-In the request body, supply a JSON representation of the [synchronizationProfile](../resources/educationsynchronizationprofile.md) object.
+In the request body, supply a JSON representation of the [educationSynchronizationProfile](../resources/educationsynchronizationprofile.md) object.
 
 ## Response
-If successful, this method returns a `202, Accepted` response code and a [synchronizationProfile](../resources/educationsynchronizationprofile.md) object in the response body.
+If successful, this method returns a `202, Accepted` response code and an [educationSynchronizationProfile](../resources/educationsynchronizationprofile.md) object in the response body.
 
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
-  "name": "create_synchronizationProfile"
+  "name": "create_educationSynchronizationProfile"
 }-->
 ```http
 POST https://graph.microsoft.com/beta/education/synchronizationProfiles
@@ -83,11 +84,14 @@ Content-type: application/json
 ```
 
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
-  "@odata.type": "microsoft.graph.synchronizationProfile",
+  "@odata.type": "microsoft.graph.educationSynchronizationProfile",
 } -->
 ```http
 HTTP/1.1 201 Created

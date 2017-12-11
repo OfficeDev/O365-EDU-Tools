@@ -1,13 +1,15 @@
-# Update a synchronizationProfile
+# Update an educationSynchronizationProfile
 
-Updates properties for an existing [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant.
+Update properties for an existing school data [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant.
 
 ## Permissions
-The following permissions are required to call this API.
+One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
 
 | Permission type | Permissions |
 |:-----------|:----------|
 | Delegated (work or school account) | EduAdministration.ReadWrite |
+|Delegated (personal Microsoft account|Not supported.|
+|Application|Not supported.|
 
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
@@ -82,7 +84,10 @@ Content-type: application/json
 ```
 
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+Here is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,

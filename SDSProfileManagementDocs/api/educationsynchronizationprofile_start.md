@@ -1,15 +1,17 @@
-# Start sync after uploading files to a synchronization profile
+# Start sync after uploading files to an educationSynchronizationProfile
 
-Verify the files uploaded to a specific [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant. If verification is successful, then synchronization will start on the profile. Else, the response will contain errors and warnings due to which sync was not started. If the response contains only warnings, synchronization will still be started.
+Verify the files uploaded to a specific school data [synchronization profile](../resources/educationsynchronizationprofile.md) in the tenant. If the verification is successful, synchronization will start on the profile. Otherwise, the response will contain errors and warnings. If the response contains errors, sync will not start. If the response contains only warnings, synchronization will start.
 
-> **Note:** This API is applicable only when data provider is of type [educationcsvdataprovider](../resources/educationcsvdataprovider.md). Also, the profile's state property needs to be 'provisioned' before it can be started. This can be checked by polling the profile object and checking its state property.
+> **Note:** Use this method only when the data provider is of type [educationcsvdataprovider](../resources/educationcsvdataprovider.md). Also, the profile's state property needs to be provisioned before it can be started. Poll the profile object to check its state property.
 
 ## Permissions
-The following permissions are required to call this API.
+One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
 
 | Permission type | Permissions |
 |:-----------|:----------|
 | Delegated (work or school account) | EduAdministration.ReadWrite |
+|Delegated (personal Microsoft account|Not supported.|
+|Application|Not supported.|
 
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
@@ -25,21 +27,24 @@ POST /synchronizationProfiles/{id}/start
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code. If unsuccessful it returns a `400 Bad Request`. Response contains a collection of [educationfilesynchronizationverificationmessage](../resources/educationfilesynchronizationverificationmessage.md) as part of the response body if any errors or warnings were found.
+If successful, this method returns a `200 OK` response code. If unsuccessful, it returns a `400 Bad Request`. The response contains a collection of [educationFileSynchronizationVerificationMessage](../resources/educationfilesynchronizationverificationmessage.md) objects as part of the response body if any errors or warnings were found.
 
 ## Example
 ##### Request
 Here is an example of the request.
 <!-- {
   "blockType": "request",
-  "name": "post_synchronizationProfile_start"
+  "name": "post_educationSynchronizationProfile_start"
 }-->
 ```http
 POST https://graph.microsoft.com/beta/education/synchronizationProfiles/{id}/start
 ```
 
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+Here is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
