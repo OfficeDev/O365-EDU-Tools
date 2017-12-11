@@ -1,8 +1,8 @@
 # educationcsvdataprovider resource type
 
-When CSV files are the input source, this provider type should be used to setup the profile.  
+Used to set up the school data synchronization profile when CSV files are the input source.  
 
-Derived from [educationsynchronizationdataprovider](educationsynchronizationdataprovider.md)
+Derived from [educationsynchronizationdataprovider](educationsynchronizationdataprovider.md).
 
 ### Properties
 
