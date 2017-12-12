@@ -5,13 +5,13 @@ This resource represents an error during sync. An unique error will be generated
 ## Methods
 
 | Method | Return Type | Description |
-|-|-|-|
+|:-|:-|:-|
 | [Get synchronization errors](../api/educationsynchronizationerrors_get.md) | collection of educationsynchronizationerror | Returns the list of synchronization errors observed in a profile |
 
 ## Properties
 
 | Property | Type | Description |
-|-|-|-|
+|:-|:-|:-|
 | **entryType** | string |  represents the sync entity (school, section, student, teacher)         |
 | **errorCode** | string |  represents the error code for this error         |
 | **errorMessage** | string |  contains a description of the error         |

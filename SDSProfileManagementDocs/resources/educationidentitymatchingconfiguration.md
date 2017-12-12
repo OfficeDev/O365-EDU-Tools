@@ -7,7 +7,7 @@ Defines the settings for matching school data profile identities. These identiti
 ## Properties
 
 | Property | Type | Description |
-|-|-|-|
+|:-|:-|:-|
 | **matchingOptions** | [educationidentitymatchingoptions](educationidentitymatchingoptions.md) collection | Mapping between the user account and the options to use to uniquely identify the user to update. |
 
 ## JSON representation

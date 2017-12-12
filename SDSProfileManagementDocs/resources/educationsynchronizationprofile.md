@@ -5,7 +5,7 @@ This resource represents a set of configurations used to synchronize education e
 ## Methods
 
 | Method | Return Type | Description |
-|-|-|-|
+|:-|:-|:-|
 | [List synchronization profiles](../api/synchronizationprofile_list.md) | collection of synchronizationProfile | Gets a list of all the synchronization profiles in the tenant |
 | [Get synchronization profile](../api/synchronizationprofile_get.md) | synchronizationProfile | Retrieve a specific profile given the profile identifier |
 | [Create synchronization profile](../api/synchronizationprofile_post.md) | none | Creates a new synchronization profile |
@@ -21,7 +21,7 @@ This resource represents a set of configurations used to synchronize education e
 ## Properties
 
 | Property | Type | Description |
-|-|-|-|
+|:-|:-|:-|
 | **displayName** | string |  Name of the configuration profile for syncing identities         |
 | **dataProvider** | [dataProvider](educationsynchronizationdataprovider.md) |  Data provider used for the profile         |
 | **identitysynchronizationconfiguration** | [educationidentitysynchronizationconfiguration](educationidentitysynchronizationconfiguration.md) | Identity [creation](educationidentitycreationconfiguration.md) or [matching](educationidentitymatchingconfiguration.md) configuration         |
@@ -31,7 +31,7 @@ This resource represents a set of configurations used to synchronize education e
 ## Relationships
 
 | Property | Type | Description |
-|-|-|-|
+|:-|:-|:-|
 | **errors** | collection of [educationsynchronizationerror](educationsynchronizationerror.md) | All errors associated with this synchronization profile |
 | **profileStatus** | [educationsynchronizationprofilestatus](educationsynchronizationprofilestatus.md) | Synchronization status |
 

@@ -5,7 +5,7 @@ Provides a mapping between a source property and a target property for matching 
 ## Properties
 
 | Property | Type | Description |
-|-|-|-|
+|:-|:-|:-|
 | **appliesTo** | string |  The user role type to assign to the license. Possible values are `student`, `teacher`.      |
 | **sourcePropertyName** | string |  The name of the source property, which should be a field name in the source data. This property is case-sensitive.        |
 | **targetPropertyName** | string |  The name of the target property, which should be a valid property in Azure AD. This property is case-sensitive.     |

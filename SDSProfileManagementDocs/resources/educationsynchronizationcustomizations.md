@@ -1,10 +1,10 @@
 # educationsynchronizationcustomizations resource type
 
-This resource contains the list of entities to sync and their [customizations](educationsynchronizationcustomization.md) if any.
+Contains the list of entities to sync and their [customizations](educationsynchronizationcustomization.md), if any.
 
 > **Note:** For studentEnrollment and teacherRoster customization of properties to sync doesn't apply.
 
-This resource is member of the following data providers
+This resource is member of the following data providers:
 
 * [educationcsvdataprovider](educationcsvdataprovider.md)
 * [educationpowerschooldataprovider](educationpowerschooldataprovider.md)
@@ -12,7 +12,7 @@ This resource is member of the following data providers
 ## Properties
 
 | Property | Type | Description |
-|-|-|-|
+|:-|:-|:-|
 | **school** | [educationsynchronizationcustomization](educationsynchronizationcustomization.md) |  Customization for a school entity         |
 | **section** | [educationsynchronizationcustomization](educationsynchronizationcustomization.md) |  Customization for a section entity         |
 | **student** | [educationsynchronizationcustomization](educationsynchronizationcustomization.md) |  Customization for a student entity         |

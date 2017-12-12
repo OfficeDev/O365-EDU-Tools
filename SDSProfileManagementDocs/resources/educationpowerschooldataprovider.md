@@ -7,7 +7,7 @@ Derived from [educationsynchronizationdataprovider](educationsynchronizationdata
 ## Properties
 
 | Property | Type | Description |
-|-|-|-|
+|:-|:-|:-|
 | **connectionUrl** | String | The connection URL to the PowerSchool instance. |
 | **clientId** | String |  The client ID used to connect to PowerSchool. |
 | **clientSecret** | String |  The client secret to authenticate the connection to the PowerSchool instance. |

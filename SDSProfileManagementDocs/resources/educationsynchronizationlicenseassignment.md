@@ -5,7 +5,7 @@ This resource represents the license information to assign to user accounts. The
 ## Properties
 
 | Property | Type | Description |
-|-|-|-|
+|:-|:-|:-|
 | **appliesTo** | string |  Enumeration user role type to assign to license. Possible values: `student`, `teacher`         |
 | **skuIds** | collection of strings |  Collection of strings representing the SKU identifiers of the licenses to assign         |
 

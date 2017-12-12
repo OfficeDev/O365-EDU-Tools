@@ -9,7 +9,7 @@ Derived from [identitySyncConfiguration](identitySyncConfiguration.md).
 ## Properties
 
 | Property | Type | Description |
-|-|-|-|
+|:-|:-|:-|
 | **userDomains** | [educationidentitydomain](educationidentitydomain.md) collection |  Sets the list of domains to use per user type.  |
 
 ## JSON representation
