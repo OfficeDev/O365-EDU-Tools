@@ -1,4 +1,4 @@
-## educationidentitymatchingconfiguration resource type
+## educationIdentityMatchingConfiguration resource type
 
 Defines the settings for matching school data profile identities. These identities include students and teachers. Based on these settings, the users will be updated in the directory.
 
@@ -8,7 +8,7 @@ Defines the settings for matching school data profile identities. These identiti
 
 | Property | Type | Description |
 |:-|:-|:-|
-| **matchingOptions** | [educationidentitymatchingoptions](educationidentitymatchingoptions.md) collection | Mapping between the user account and the options to use to uniquely identify the user to update. |
+| **matchingOptions** | [educationIdentityMatchingOptions](educationidentitymatchingoptions.md) collection | Mapping between the user account and the options to use to uniquely identify the user to update. |
 
 ## JSON representation
 

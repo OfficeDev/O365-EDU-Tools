@@ -1,4 +1,4 @@
-# synchronizationProfile resource type
+# educationSynchronizationProfile resource type
 
 This resource represents a set of configurations used to synchronize education entities and roster information from a source directory to Azure Active Directory. The resource provides a programmatic representation used in [School Data Sync](https://sds.microsoft.com).
 

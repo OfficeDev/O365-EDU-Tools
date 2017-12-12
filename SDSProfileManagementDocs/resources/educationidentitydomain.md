@@ -1,4 +1,4 @@
-# educationidentitydomain resource type
+# educationIdentityDomain resource type
 
 Represents the mapping between an education user type and the domain the user's account belongs to. The domain resource is part of the [identity creation configuration](educationidentitycreationconfiguration.md). 
 

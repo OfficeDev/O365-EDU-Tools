@@ -1,24 +1,24 @@
-# educationsynchronizationcustomizations resource type
+# educationSynchronizationCustomizations resource type
 
 Contains the list of entities to sync and their [customizations](educationsynchronizationcustomization.md), if any.
 
-> **Note:** For studentEnrollment and teacherRoster customization of properties to sync doesn't apply.
+> **Note:** Customization of properties to sync does not apply to the **studentEnrollment** and **teacherRoster** entities.
 
 This resource is member of the following data providers:
 
-* [educationcsvdataprovider](educationcsvdataprovider.md)
-* [educationpowerschooldataprovider](educationpowerschooldataprovider.md)
+* [educationCsvDataProvider](educationcsvdataprovider.md)
+* [educationPowerSchoolDataProvider](educationpowerschooldataprovider.md)
 
 ## Properties
 
 | Property | Type | Description |
 |:-|:-|:-|
-| **school** | [educationsynchronizationcustomization](educationsynchronizationcustomization.md) |  Customization for a school entity         |
-| **section** | [educationsynchronizationcustomization](educationsynchronizationcustomization.md) |  Customization for a section entity         |
-| **student** | [educationsynchronizationcustomization](educationsynchronizationcustomization.md) |  Customization for a student entity         |
-| **teacher** | [educationsynchronizationcustomization](educationsynchronizationcustomization.md) |  Customization for a teacher entity         |
-| **studentEnrollment** | [educationsynchronizationcustomization](educationsynchronizationcustomization.md) |  Customization for student enrollment.           |
-| **teacherRoster** | [educationsynchronizationcustomization](educationsynchronizationcustomization.md) |       Customization for teacher roster.    |
+| **school** | [educationSynchronizationCustomization](educationsynchronizationcustomization.md) |  Customization for a school entity.        |
+| **section** | [educationSynchronizationCustomization](educationsynchronizationcustomization.md) |  Customization for a section entity.         |
+| **student** | [educationSynchronizationCustomization](educationsynchronizationcustomization.md) |  Customization for a student entity.         |
+| **teacher** | [educationSynchronizationCustomization](educationsynchronizationcustomization.md) |  Customization for a teacher entity.         |
+| **studentEnrollment** | [educationSynchronizationCustomization](educationsynchronizationcustomization.md) |  Customization for student enrollment.           |
+| **teacherRoster** | [educationSynchronizationCustomization](educationsynchronizationcustomization.md) |       Customization for a teacher roster.    |
 
 ## JSON representation
 

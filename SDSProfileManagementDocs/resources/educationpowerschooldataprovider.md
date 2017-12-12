@@ -1,8 +1,8 @@
-# educationpowerschooldataprovider resource
+# educationPowerSchoolDataProvider resource
 
 Used to set up the school data synchronization profile when [PowerSchool](https://www.powerschool.com/solutions/student-information-system-sis/) is used as the input source.
 
-Derived from [educationsynchronizationdataprovider](educationsynchronizationdataprovider.md).
+Derived from [educationSynchronizationDataProvider](educationsynchronizationdataprovider.md).
 
 ## Properties
 
@@ -14,7 +14,7 @@ Derived from [educationsynchronizationdataprovider](educationsynchronizationdata
 | **schoolsIds** | String collection |  The list of schools to sync. |
 | **schoolYear** | String |  The school year to sync. |
 | **allowTeachersInMultipleSchools** | Boolean |  Indicates whether the source has multiple identifiers for a single student or teacher. |
-| **customizations** | [educationsynchronizationcustomizations](educationsynchronizationcustomizations.md) | Optional customization to be applied to the synchronization profile.|
+| **customizations** | [educationSynchronizationCustomizations](educationsynchronizationcustomizations.md) | Optional customization to be applied to the synchronization profile.|
 
 ## JSON representation
 

@@ -1,4 +1,4 @@
-# license resource type
+# educationSynchronizationLicenseAssignment resource type
 
 This resource represents the license information to assign to user accounts. The resource will be used to setup license assignments when creating new user accounts.
 

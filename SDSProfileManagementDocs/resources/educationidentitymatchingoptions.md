@@ -1,4 +1,4 @@
-# educationidentitymatchingoptions resource type
+# educationIdentityMatchingOptions resource type
 
 Provides a mapping between a source property and a target property for matching user accounts. The source property should exist in the source data. The target property should be a valid property in Azure Active Directory (Azure AD).
 
