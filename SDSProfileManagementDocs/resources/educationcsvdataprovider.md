@@ -4,13 +4,13 @@ Used to set up the school data synchronization profile when CSV files are the in
 
 Derived from [educationsynchronizationdataprovider](educationsynchronizationdataprovider.md).
 
-### Properties
+## Properties
 
 | Property | Type | Description |
 |:-|:-|:-|
-| customizations | [educationsynchronizationcustomizations](educationsynchronizationcustomizations.md) | Optional customizations to be applied to the synchronization profile.
+| customizations | [educationsynchronizationcustomizations](educationsynchronizationcustomizations.md) | Optional customizations to be applied to the synchronization profile.|
 
-### JSON
+## JSON representation
 
 ```json
 "dataProvider":{

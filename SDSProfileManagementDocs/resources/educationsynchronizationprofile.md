@@ -2,7 +2,7 @@
 
 This resource represents a set of configurations used to synchronize education entities and roster information from a source directory to Azure Active Directory. The resource provides a programmatic representation used in [School Data Sync](https://sds.microsoft.com).
 
-### Methods
+## Methods
 
 | Method | Return Type | Description |
 |-|-|-|
@@ -18,7 +18,7 @@ This resource represents a set of configurations used to synchronize education e
 | [Get status of a sync](../api/synchronizationprofilestatus_get.md) | [status](synchronizationprofilestatus.md) | Returns the status of a specific synchronization profile |
 | [Get synchronization errors](../api/synchronizationerrors_get.md) | collection of [educationsynchronizationerror](educationsynchronizationerror.md) | Gets all the errors generated during sync |
 
-### Properties
+## Properties
 
 | Property | Type | Description |
 |-|-|-|
@@ -28,15 +28,15 @@ This resource represents a set of configurations used to synchronize education e
 | **licensesToAssign** | collection of [educationsynchronizationlicenseassignment](educationsynchronizationlicenseassignment.md) |  License setup configuration         |
 | **state** | string |  Enumeration provides the state of the profile. Possible values: `provisioning`, `provisioned`, `provisioningFailed`, `deleting`, `deletionFailed`          |
 
-### Relationships
+## Relationships
 
 | Property | Type | Description |
 |-|-|-|
 | **errors** | collection of [educationsynchronizationerror](educationsynchronizationerror.md) | All errors associated with this synchronization profile |
 | **profileStatus** | [educationsynchronizationprofilestatus](educationsynchronizationprofilestatus.md) | Synchronization status |
 
-### JSON representation
-Here is a JSON representation of a **synchronizationProfile**.
+## JSON representation
+The following is a JSON representation of a **synchronizationProfile**.
 
 <!-- { "blockType": "resource", "@odata.type": "#microsoft.graph.synchronizationProfile" } -->
 

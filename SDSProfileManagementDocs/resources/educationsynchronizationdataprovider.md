@@ -4,13 +4,13 @@ A data provider represents the source SIS schema. This allows the system to know
 
 > **Note:** This complex type is abstract and callers should refer to the specific types listed below
 
-### Derived types
+## Derived types
 | Type | Description | 
 |:-|:-|
 | [educationcsvdataprovider](educationcsvdataprovider.md) | Used with CSV files as input source |
 | [educationpowerschooldataprovider](educationpowerschooldataprovider.md) | Used with PowerSchool as the input source |
 | [educationonerosterapidataprovider](educationonerosterapidataprovider.md) | Used with OneRoster API as the input source |
 
-### Properties
+## Properties
 
-No properties are exposed by this type
+No properties are exposed by this type.

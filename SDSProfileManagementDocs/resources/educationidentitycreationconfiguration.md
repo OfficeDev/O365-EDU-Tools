@@ -6,13 +6,13 @@ Defines the settings on creation of identities. These identities include student
 
 Derived from [identitySyncConfiguration](identitySyncConfiguration.md).
 
-### Properties
+## Properties
 
 | Property | Type | Description |
 |-|-|-|
 | **userDomains** | [educationidentitydomain](educationidentitydomain.md) collection |  Sets the list of domains to use per user type.  |
 
-### JSON
+## JSON representation
 
 ```json
 "identitySynchronizationConfiguration": {

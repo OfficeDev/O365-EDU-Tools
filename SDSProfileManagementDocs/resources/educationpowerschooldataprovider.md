@@ -4,7 +4,7 @@ When PowerSchool is used as the input source, this provider type should be used 
 
 Derived from [educationsynchronizationdataprovider](educationsynchronizationdataprovider.md)
 
-### Properties
+## Properties
 
 | Property | Type | Description |
 |-|-|-|
@@ -16,7 +16,7 @@ Derived from [educationsynchronizationdataprovider](educationsynchronizationdata
 | **allowTeachersInMultipleSchools** | Boolean |  Indicates whether source has multiple identifiers for a single student or teacher |
 | **customizations** | [educationsynchronizationcustomizations](educationsynchronizationcustomizations.md) | Optional customization to be applied to the synchronization profile.
 
-### JSON
+## JSON representation
 
 ```json
 "dataProvider": {

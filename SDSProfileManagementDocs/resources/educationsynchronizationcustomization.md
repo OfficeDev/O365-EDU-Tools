@@ -4,7 +4,7 @@ This resource provides settings for customizing the synchronization of the resou
 
 > **Note:** The **synchronizationStartDate** property only applies to _StudentEnrollment_ entity.
 
-### Properties
+## Properties
 
 | Property | Type | Description |
 |-|-|-|
@@ -12,7 +12,7 @@ This resource provides settings for customizing the synchronization of the resou
 | **synchronizationStartDate** | DateTime |  Date that the synchronization should be deferred to. Should be set to a future value. If set to null, the resource will be synchronized when the profile setup completes. _This only applies to StudentEnrollment_      |
 | **allowDisplayNameUpdate** | boolean |  Value indicating whether the display name of the resource can be overwritten by sync         |
 
-### JSON
+## JSON representation
 
 ```json
 {  

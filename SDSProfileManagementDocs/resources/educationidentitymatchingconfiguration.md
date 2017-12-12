@@ -4,11 +4,13 @@ Defines the settings for matching identities. These identities include students 
 
 > **Note:** No users are created when this resource is selected.
 
+## Properties
+
 | Property | Type | Description |
 |-|-|-|
 | **matchingOptions** | [educationidentitymatchingoptions](educationidentitymatchingoptions.md) collection | Mapping between the user account and the options to use to uniquely identify the user to update. |
 
-### JSON
+## JSON representation
 
 ```json
 "identitySynchronizationConfiguration": {

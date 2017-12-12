@@ -9,7 +9,7 @@ This resource is member of the following data providers
 * [educationcsvdataprovider](educationcsvdataprovider.md)
 * [educationpowerschooldataprovider](educationpowerschooldataprovider.md)
 
-### Properties
+## Properties
 
 | Property | Type | Description |
 |-|-|-|
@@ -20,7 +20,7 @@ This resource is member of the following data providers
 | **studentEnrollment** | [educationsynchronizationcustomization](educationsynchronizationcustomization.md) |  Customization for student enrollment.           |
 | **teacherRoster** | [educationsynchronizationcustomization](educationsynchronizationcustomization.md) |       Customization for teacher roster.    |
 
-### JSON
+## JSON representation
 
 ```json
 "customizations": {

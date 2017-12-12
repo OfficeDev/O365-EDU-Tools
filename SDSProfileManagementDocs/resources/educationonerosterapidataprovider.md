@@ -4,7 +4,7 @@ When OneRoster API is used as the input source, this provider type should be use
 
 Derived from [educationsynchronizationdataprovider](educationsynchronizationdataprovider.md)
 
-### Properties
+## Properties
 
 | Property | Type | Description |
 |-|-|-|
@@ -13,7 +13,7 @@ Derived from [educationsynchronizationdataprovider](educationsynchronizationdata
 | **clientSecret** | String |  Client secret to authenticate connection to OneRoster instance |
 | **customizations** | [educationsynchronizationcustomizations](educationsynchronizationcustomizations.md) | Optional customization to be applied to the synchronization profile.
 
-### JSON
+## JSON representation
 
 ```json
 "dataProvider": {
