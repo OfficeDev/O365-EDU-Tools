@@ -27,10 +27,8 @@ This resource represents a set of configurations used to synchronize education e
 | **identitysynchronizationconfiguration** | [educationidentitysynchronizationconfiguration](educationidentitysynchronizationconfiguration.md) | Identity [creation](educationidentitycreationconfiguration.md) or [matching](educationidentitymatchingconfiguration.md) configuration         |
 | **licensesToAssign** | collection of [educationsynchronizationlicenseassignment](educationsynchronizationlicenseassignment.md) |  License setup configuration         |
 | **state** | string |  Enumeration provides the state of the profile. Possible values: `provisioning`, `provisioned`, `provisioningFailed`, `deleting`, `deletionFailed`          |
-| **handleSpecialCharacterConstraint** | boolean |            |
-| **termStartDate** | string |            |
-| **termEndDate** | string |            |
-| **dateFormat** | string |            |
+| **handleSpecialCharacterConstraint** | boolean | Defines how to handle special characters while synchronizing properties . If set to `true`, the special characters will be replaced by `_`. The following are considered special characters `!@~#%*{}:<>?+&,$|`           |
+
 
 ### Relationships
 
@@ -59,9 +57,6 @@ Here is a JSON representation of a **synchronizationProfile**.
     "dataProvider": { "@odata.type": "#microsoft.graph.educationcsvdataprovider" },
     "identitySynchronizationConfiguration": { "@odata.type": "#microsoft.graph.educationIdentitySynchronizationConfiguration" },
     "licensesToAssign": [{"@odata.type":"microsoft.graph.educationSynchronizationLicenseAssignment"}],
-    "handleSpecialCharacterConstraint": "Boolean",
-    "termStartDate": "String",
-    "termEndDate": "String",
-    "dateFormat": "String"
+    "handleSpecialCharacterConstraint": "Boolean"
 }
 ```
