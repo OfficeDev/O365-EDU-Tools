@@ -1,4 +1,4 @@
-## educationidentitycreationconfiguration resource type
+## educationIdentityCreationConfiguration resource type
 
 This resource defines the settings on creation of identities. These identities include students and teachers. Based on these settings the users will be created in the directory.
 
@@ -13,18 +13,20 @@ Derived from [identitySyncConfiguration](identitySyncConfiguration.md)
 | **userDomains** | [educationidentitydomain](educationidentitydomain.md) collection |  Sets the list of domains to use per user type  |
 
 ### JSON
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationIdentityCreationConfiguration"
+}-->
 
 ```json
 "identitySynchronizationConfiguration": {
-    "@odata.type": "#microsoft.graph.educationidentitycreationconfiguration",
+    "@odata.type": "#microsoft.graph.educationIdentityCreationConfiguration",
     "userDomains": [
         {
-            "appliesTo": "student",
-            "name": "testschool.edu"
-        },
-        {
-            "appliesTo": "teacher",
-            "name": "testschool.edu"
+            "@odata.type": "#microsoft.graph.educationIdentityDomain",
         }
     ]
 }

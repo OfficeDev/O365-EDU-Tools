@@ -1,4 +1,4 @@
-# educationsynchronizationcustomizations resource type
+# educationSynchronizationCustomizations resource type
 
 This resource contains the list of entities to sync and their [customizations](educationsynchronizationcustomization.md) if any.
 
@@ -13,40 +13,30 @@ This resource is member of the following data providers
 
 | Property | Type | Description |
 |-|-|-|
-| **school** | [educationsynchronizationcustomization](educationsynchronizationcustomization.md) |  Customization for a school entity         |
-| **section** | [educationsynchronizationcustomization](educationsynchronizationcustomization.md) |  Customization for a section entity         |
-| **student** | [educationsynchronizationcustomization](educationsynchronizationcustomization.md) |  Customization for a student entity         |
-| **teacher** | [educationsynchronizationcustomization](educationsynchronizationcustomization.md) |  Customization for a teacher entity         |
-| **studentEnrollment** | [educationsynchronizationcustomization](educationsynchronizationcustomization.md) |  Customization for student enrollment.           |
-| **teacherRoster** | [educationsynchronizationcustomization](educationsynchronizationcustomization.md) |       Customization for teacher roster.    |
+| **school** | [educationSynchronizationCustomizations](educationsynchronizationcustomization.md) |  Customization for a school entity         |
+| **section** | [educationSynchronizationCustomizations](educationsynchronizationcustomization.md) |  Customization for a section entity         |
+| **student** | [educationSynchronizationCustomizations](educationsynchronizationcustomization.md) |  Customization for a student entity         |
+| **teacher** | [educationSynchronizationCustomizations](educationsynchronizationcustomization.md) |  Customization for a teacher entity         |
+| **studentEnrollment** | [educationSynchronizationCustomizations](educationsynchronizationcustomization.md) |  Customization for student enrollment.           |
+| **teacherRoster** | [educationSynchronizationCustomizations](educationsynchronizationcustomization.md) |       Customization for teacher roster.    |
 
 ### JSON
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationSynchronizationCustomizations"
+}-->
 
 ```json
 "customizations": {
-        "school": {
-            "optionalPropertiesToSync": []
-        },
-        "section": {
-            "optionalPropertiesToSync": [],
-            "allowDisplayNameUpdate": false
-        },
-        "student": {
-            "optionalPropertiesToSync": [],
-            "allowDisplayNameUpdate": false
-        },
-        "teacher": {
-            "optionalPropertiesToSync": [],
-            "allowDisplayNameUpdate": false
-        },
-        "studentEnrollment": {
-            "optionalPropertiesToSync": [],
-            "synchronizationStartDate": "{UTC Date if delay required. Immediate by default}",
-            "isSyncDeferred": false
-        },
-        "teacherRoster": {
-            "optionalPropertiesToSync": []
-        }
+        "school": {"@odata.type": "microsoft.graph.educationSynchronizationCustomization"},
+        "section": {"@odata.type": "microsoft.graph.educationSynchronizationCustomization"},
+        "student": {"@odata.type": "microsoft.graph.educationSynchronizationCustomization"},
+        "teacher": {"@odata.type": "microsoft.graph.educationSynchronizationCustomization"},
+        "studentEnrollment": {"@odata.type": "microsoft.graph.educationSynchronizationCustomization"},
+        "teacherRoster": {"@odata.type": "microsoft.graph.educationSynchronizationCustomization"}
     }
 }
 ```

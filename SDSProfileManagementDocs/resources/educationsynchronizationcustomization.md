@@ -1,4 +1,4 @@
-# educationsynchronizationcustomization resource type
+# educationSynchronizationCustomization resource type
 
 This resource provides settings for customizing the synchronization of the resource entities. The customization can be applied to all the entities being synchronized. 
 
@@ -13,12 +13,19 @@ This resource provides settings for customizing the synchronization of the resou
 | **allowDisplayNameUpdate** | boolean |  Value indicating whether the display name of the resource can be overwritten by sync         |
 
 ### JSON
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationSynchronizationCustomization"
+}-->
 
 ```json
 {  
-    "optionalPropertiesToSync":[  
-        "{property1}",
-        "{property2}"
-    ]
+    "optionalPropertiesToSync":["String"],
+    "synchronizationStartDate": "DateTimeOffset",
+    "isSyncDeferred": "Boolean",
+    "allowDisplayNameUpdate": "Boolean"
 }
 ```

@@ -1,4 +1,4 @@
-# educationsynchronizationerror resource type
+# educationSynchronizationError resource type
 
 This resource represents an error during sync. An unique error will be generated for every entry that fails to synchronize with AAD.
 
@@ -19,14 +19,21 @@ This resource represents an error during sync. An unique error will be generated
 | **recordedDateTime** | DateTimeOffset |  the time of occurrence of this error         |
 
 ### JSON
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationSynchronizationError"
+}-->
 
 ```json
 {
-    "entryType": "Student",
-    "errorCode": "UnsynchronizableChange",
-    "errorMessage": "Student cannot be updated as no matching entry in Active Directory was found for Student.  Verify the identity matching criteria for the profile.",
-    "joiningValue": "test@testschool.edu",
-    "recordedDateTime": "2017-07-05T00:52:45Z",
-    "reportableIdentifier": "test"
+    "entryType": "String",
+    "errorCode": "String",
+    "errorMessage": "String",
+    "joiningValue": "String",
+    "recordedDateTime": "DateTimeOffset",
+    "reportableIdentifier": "String"
 }
 ```

@@ -1,4 +1,4 @@
-# educationidentitydomain resource type
+# educationIdentityDomain resource type
 
 This resource represents mapping between an education user type and the domain the user's account belongs to. The domain resource is part of the [identity creation option](educationidentitycreationconfiguration.md). 
 
@@ -10,10 +10,17 @@ This resource represents mapping between an education user type and the domain t
 | **name** | string |  Represents the domain for the user account         |
 
 ### JSON
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationIdentityDomain"
+}-->
 
 ```json
 {
-    "appliesTo": "student",
-    "name": "testschool.edu"
+    "appliesTo": {"@odata.type": "#microsoft.graph.educationUserRole"},
+    "name": "String"
 }
 ```
