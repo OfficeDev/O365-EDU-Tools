@@ -1,22 +1,22 @@
 # educationSynchronizationProfile resource type
 
-This resource represents a set of configurations used to synchronize education entities and roster information from a source directory to Azure Active Directory. The resource provides a programmatic representation used in [School Data Sync](https://sds.microsoft.com).
+Represents a set of configurations used to synchronize education entities and roster information from a source directory to Azure Active Directory (Azure AD). The resource provides a programmatic representation used in [School Data Sync](https://sds.microsoft.com).
 
 ## Methods
 
 | Method | Return Type | Description |
 |:-|:-|:-|
-| [List synchronization profiles](../api/synchronizationprofile_list.md) | collection of synchronizationProfile | Gets a list of all the synchronization profiles in the tenant |
-| [Get synchronization profile](../api/synchronizationprofile_get.md) | synchronizationProfile | Retrieve a specific profile given the profile identifier |
-| [Create synchronization profile](../api/synchronizationprofile_post.md) | none | Creates a new synchronization profile |
-| [Delete synchronization profile](../api/synchronizationprofile_delete.md) | synchronizationProfile | Retrieve a specific profile given the profile identifier |
-| [Pause an ongoing sync](../api/synchronizationprofile_pause.md) | none | Pauses an ongoing synchronization |
-| [Resume a paused sync](../api/synchronizationprofile_resume.md) | none | Resumes a paused synchronization |
-| [Reset a sync](../api/synchronizationprofile_reset.md) | none | Resets the state of the profile and causes synchronization to restart |
-| [Start sync for uploaded files](../api/synchronizationprofile_start.md) | collection of [verificationMessage](verificationMessage.md) | Verifies the uploaded source files and starts sync. _Applies only when the dataProvider is [educationcsvdataprovider](educationcsvdataprovider.md)_ |
+| [List synchronization profiles](../api/synchronizationprofile_list.md) | **educationSynchronizationProfile** collection | Gets a list of all the synchronization profiles in the tenant |
+| [Get synchronization profile](../api/synchronizationprofile_get.md) | **educationSynchronizationProfile** | Retrieve a specific profile given the profile identifier |
+| [Create synchronization profile](../api/synchronizationprofile_post.md) | None | Creates a new synchronization profile |
+| [Delete synchronization profile](../api/synchronizationprofile_delete.md) | **educationSynchronizationProfile** | Retrieve a specific profile given the profile identifier |
+| [Pause an ongoing sync](../api/synchronizationprofile_pause.md) | None | Pauses an ongoing synchronization |
+| [Resume a paused sync](../api/synchronizationprofile_resume.md) | None | Resumes a paused synchronization |
+| [Reset a sync](../api/synchronizationprofile_reset.md) | None | Resets the state of the profile and causes synchronization to restart |
+| [Start sync for uploaded files](../api/synchronizationprofile_start.md) | [educationSynchronizationVerificationMessage](verificationMessage.md) collection| Verifies the uploaded source files and starts sync. _Applies only when the dataProvider is [educationcsvdataprovider](educationcsvdataprovider.md)_ |
 | [Get an upload URL](../api/synchronizationProfile_get_uploadurl.md) | string | Returns the short-lived URL to upload CSV data files. _Applies only when the dataProvider is [educationcsvdataprovider](educationcsvdataprovider.md)_ |
 | [Get status of a sync](../api/synchronizationprofilestatus_get.md) | [status](synchronizationprofilestatus.md) | Returns the status of a specific synchronization profile |
-| [Get synchronization errors](../api/synchronizationerrors_get.md) | collection of [educationsynchronizationerror](educationsynchronizationerror.md) | Gets all the errors generated during sync |
+| [Get synchronization errors](../api/synchronizationerrors_get.md) | [educationSynchronizationError](educationsynchronizationerror.md) collection| Gets all the errors generated during sync. |
 
 ## Properties
 

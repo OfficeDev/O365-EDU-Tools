@@ -6,7 +6,7 @@ Represents an error during school data profile sync. An unique error will be gen
 
 | Method | Return Type | Description |
 |:-|:-|:-|
-| [Get synchronization errors](../api/educationsynchronizationerrors_get.md) | Collection of **educationSynchronizationError** | Returns the list of synchronization errors observed in a profile |
+| [Get synchronization errors](../api/educationsynchronizationerrors_get.md) | **educationSynchronizationError** collection| Returns the list of synchronization errors associated with a profile. |
 
 ## Properties
 
