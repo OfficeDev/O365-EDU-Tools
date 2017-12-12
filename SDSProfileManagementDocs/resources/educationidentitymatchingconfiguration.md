@@ -1,6 +1,6 @@
 ## educationidentitymatchingconfiguration resource type
 
-Defines the settings for matching identities. These identities include students and teachers. Based on these settings, the users will be updated in the directory.
+Defines the settings for matching school data profile identities. These identities include students and teachers. Based on these settings, the users will be updated in the directory.
 
 > **Note:** No users are created when this resource is selected.
 

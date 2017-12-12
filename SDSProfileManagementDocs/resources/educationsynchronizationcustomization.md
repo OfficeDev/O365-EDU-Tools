@@ -1,8 +1,8 @@
 # educationsynchronizationcustomization resource type
 
-This resource provides settings for customizing the synchronization of the resource entities. The customization can be applied to all the entities being synchronized. 
+Provides settings for customizing the synchronization of the resource entities. The customization can be applied to all the entities being synchronized. 
 
-> **Note:** The **synchronizationStartDate** property only applies to _StudentEnrollment_ entity.
+> **Note:** The **synchronizationStartDate** property only applies to the StudentEnrollment entity.
 
 ## Properties
 
