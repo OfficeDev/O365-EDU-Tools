@@ -11,11 +11,18 @@ This resource represents an error returned to the client in response to [start s
 | **description** | string | Detailed information on the message type |
 
 ### JSON
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "microsoft.graph.educationFileSynchronizationVerificationMessage"
+}-->
 
 ```json
 {
-    "type": "Error",
-    "fileName": "section.csv",
-    "description": "5 row(s) have missing data for the field - SIS ID"
+    "type": "String",
+    "fileName": "String",
+    "description": "String"
 }
 ```

@@ -1,4 +1,4 @@
-# educationpowerschooldataprovider resource
+# educationPowerSchoolDataProvider resource
 
 When PowerSchool is used as the input source, this provider type should be used to setup the profile.
 
@@ -17,13 +17,23 @@ Derived from [educationsynchronizationdataprovider](educationsynchronizationdata
 | **customizations** | [educationsynchronizationcustomizations](educationsynchronizationcustomizations.md) | Optional customization to be applied to the synchronization profile.
 
 ### JSON
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationPowerSchoolDataProvider"
+}-->
 
 ```json
 "dataProvider": {
-    "@odata.type": "#microsoft.graph.educationpowerschooldataprovider",
-    "connectionUrl": "{PowerSchool Server Url}",
-    "clientId": "{ClientId}",
-    "clientSecret": "{ClientSecret}",
-    "customizations": { ... }
+    "@odata.type": "#microsoft.graph.educationPowerSchoolDataProvider",
+    "connectionUrl": "String",
+    "clientId": "String",
+    "clientSecret": "String",
+    "schoolsids": ["String"],
+    "schoolYear": "String",
+    "allowTeachersInMultipleSchools": "Boolean",
+    "customizations": { "@odata.type": "microsoft.graph.educationSynchronizationCustomizations" }
 }
 ```

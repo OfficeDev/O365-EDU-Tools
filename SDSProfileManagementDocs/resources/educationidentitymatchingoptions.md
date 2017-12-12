@@ -1,4 +1,4 @@
-# educationidentitymatchingoptions resource type
+# educationIdentityMatchingOptions resource type
 
 This resource type provides mapping between a source property to a target property for matching user accounts. The source property should exist in the source data. The target property should be a valid property in AAD.
 
@@ -12,12 +12,19 @@ This resource type provides mapping between a source property to a target proper
 | **targetDomain** | string |  Domain to suffix with the source property to match on the target. If provided as null, then the source property will be used to match with the target property         |
 
 ### JSON
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationIdentityMatchingOptions"
+}-->
 
 ```json
 {
-    "appliesTo": "student",
-    "sourcePropertyName": "Username",
-    "targetPropertyName": "userPrincipalName",
-    "targetDomain": "{domain}"
+    "appliesTo": {"@odata.type": "#microsoft.graph.educationUserRole"},
+    "sourcePropertyName": "String",
+    "targetPropertyName": "String",
+    "targetDomain": "String"
 }
 ```

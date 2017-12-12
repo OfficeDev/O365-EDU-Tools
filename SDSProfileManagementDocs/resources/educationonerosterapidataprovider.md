@@ -1,4 +1,4 @@
-# educationonerosterapidataprovider resource
+# educationoneRosterApiDataProvider resource
 
 When OneRoster API is used as the input source, this provider type should be used to setup the profile.
 
@@ -14,13 +14,20 @@ Derived from [educationsynchronizationdataprovider](educationsynchronizationdata
 | **customizations** | [educationsynchronizationcustomizations](educationsynchronizationcustomizations.md) | Optional customization to be applied to the synchronization profile.
 
 ### JSON
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationoneRosterApiDataProvider"
+}-->
 
 ```json
 "dataProvider": {
-    "@odata.type": "#microsoft.graph.educationonerosterapidataprovider",
-    "connectionUrl": "{OneRoster Url}",
-    "clientId": "{ClientId}",
-    "clientSecret": "{ClientSecret}",
-    "customizations": { ... }
+    "@odata.type": "#microsoft.graph.educationoneRosterApiDataProvider",
+    "connectionUrl": "String",
+    "clientId": "String",
+    "clientSecret": "String",
+    "customizations": { "@odata.type": "microsoft.graph.educationSynchronizationCustomizations" }
 }
 ```

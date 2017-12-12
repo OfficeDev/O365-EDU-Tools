@@ -1,4 +1,4 @@
-# license resource type
+# educationSynchronizationLicenseAssignment resource type
 
 This resource represents the license information to assign to user accounts. The resource will be used to setup license assignments when creating new user accounts.
 
@@ -10,12 +10,17 @@ This resource represents the license information to assign to user accounts. The
 | **skuIds** | collection of strings |  Collection of strings representing the SKU identifiers of the licenses to assign         |
 
 ### JSON
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationSynchronizationLicenseAssignment"
+}-->
 
 ```json
 {
-    "appliesTo": "teacher",
-    "skuIds": [
-        "{License Sku Id}"
-    ]
+    "appliesTo": {"@odata.type": "#microsoft.graph.educationUserRole"},
+    "skuIds": ["String"]
 }
 ```
