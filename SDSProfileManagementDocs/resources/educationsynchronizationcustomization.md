@@ -1,18 +1,20 @@
 # educationSynchronizationCustomization resource type
 
-This resource provides settings for customizing the synchronization of the resource entities. The customization can be applied to all the entities being synchronized. 
+Provides settings for customizing the school data profile synchronization of the resource entities. The customization can be applied to all the entities being synchronized. 
 
-> **Note:** The **synchronizationStartDate** property only applies to _StudentEnrollment_ entity.
+>**Note:** The **synchronizationStartDate** property only applies to the **StudentEnrollment** entity.
 
-### Properties
+## Properties
 
 | Property | Type | Description |
-|-|-|-|
-| **optionalPropertiesToSync** | collection of string |  Collection of property names to sync. If set to null, all properties will be synchronized       |
-| **synchronizationStartDate** | DateTime |  Date that the synchronization should be deferred to. Should be set to a future value. If set to null, the resource will be synchronized when the profile setup completes. _This only applies to StudentEnrollment_      |
-| **allowDisplayNameUpdate** | boolean |  Value indicating whether the display name of the resource can be overwritten by sync         |
+|:-|:-|:-|
+| **optionalPropertiesToSync** | collection of string |  The collection of property names to sync. If set to null, all properties will be synchronized.       |
+| **synchronizationStartDate** | DateTime |  The date that the synchronization should start. This value should be set to a future date. If set to null, the resource will be synchronized when the profile setup completes. **Note:** This only applies to the **StudentEnrollment** property.      |
+|**isSyncDeferred** |Boolean | Indicates whether synchronization of the parent entity is deferred to a later date. |
+| **allowDisplayNameUpdate** | Boolean |  Indicates whether the display name of the resource can be overwritten by the sync.         |
 
-### JSON
+
+## JSON representation
 <!-- {
   "blockType": "resource",
   "optionalProperties": [

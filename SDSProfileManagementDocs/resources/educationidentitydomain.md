@@ -1,15 +1,15 @@
 # educationIdentityDomain resource type
 
-This resource represents mapping between an education user type and the domain the user's account belongs to. The domain resource is part of the [identity creation option](educationidentitycreationconfiguration.md). 
+Represents the mapping between an education user type and the domain the user's account belongs to. The domain resource is part of the [identity creation configuration](educationidentitycreationconfiguration.md). 
 
-### Properties
+## Properties
 
 | Property | Type | Description |
-|-|-|-|
-| **appliesTo** | string |  Enumeration user role type to assign to license. Possible values: `student`, `teacher`       |
-| **name** | string |  Represents the domain for the user account         |
+|:-|:-|:-|
+| **appliesTo** | string |  The user role type to assign to license. Possible values are: `student`, `teacher`.      |
+| **name** | string |  Represents the domain for the user account.         |
 
-### JSON
+## JSON representation
 <!-- {
   "blockType": "resource",
   "optionalProperties": [

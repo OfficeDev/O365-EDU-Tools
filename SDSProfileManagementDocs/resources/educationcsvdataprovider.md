@@ -1,16 +1,17 @@
 # educationCsvDataProvider resource type
 
-When CSV files are the input source, this provider type should be used to setup the profile.  
+Used to set up the school data synchronization profile when CSV files are the input source.  
 
-Derived from [educationsynchronizationdataprovider](educationsynchronizationdataprovider.md)
+Derived from [educationSynchronizationDataProvider](educationsynchronizationdataprovider.md).
 
-### Properties
+## Properties
 
 | Property | Type | Description |
 |:-|:-|:-|
-| customizations | [educationsynchronizationcustomizations](educationsynchronizationcustomizations.md) | Optional customizations to be applied to the synchronization profile.
+| **customizations** | [educationSynchronizationCustomizations](educationsynchronizationcustomizations.md) | Optional customizations to be applied to the synchronization profile.|
 
-### JSON
+## JSON representation
+
 <!-- {
   "blockType": "resource",
   "optionalProperties": [
@@ -18,6 +19,7 @@ Derived from [educationsynchronizationdataprovider](educationsynchronizationdata
   ],
   "@odata.type": "#microsoft.graph.educationCsvDataProvider"
 }-->
+
 
 ```json
 "dataProvider":{

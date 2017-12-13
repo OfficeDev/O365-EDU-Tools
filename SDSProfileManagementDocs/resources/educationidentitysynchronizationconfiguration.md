@@ -1,9 +1,9 @@
-# educationidentitysynchronizationconfiguration resource type
+# educationIdentitySynchronizationConfiguration resource type
 
-Abstract base class for all identity synchronization configurations. The derived classes define the behavior for synchronizing identities. The following are the derived types
+Abstract base class for all school data profile identity synchronization configurations. The derived classes define the behavior for synchronizing identities. The following are the derived types.
 
-### Derived types
+## Derived types
 | Type | Description | 
 |:-|:-|
-| [**educationidentitymatchingconfiguration**](educationidentitymatchingconfiguration.md) | Use this type to match existing user accounts in AAD |
-| [**educationidentitycreationconfiguration**](educationidentitycreationconfiguration.md) | Use this type to create new user accounts in AAD |
+| [**educationIdentityMatchingConfiguration**](educationidentitymatchingconfiguration.md) | Use this type to match existing user accounts in Azure Active Directory (Azure AD). |
+| [**educationIdentityCreationConfiguration**](educationidentitycreationconfiguration.md) | Use this type to create new user accounts in Azure AD. |

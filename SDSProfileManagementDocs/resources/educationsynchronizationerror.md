@@ -1,24 +1,24 @@
 # educationSynchronizationError resource type
 
-This resource represents an error during sync. An unique error will be generated for every entry that fails to synchronize with AAD.
+Represents an error during school data profile sync. An unique error will be generated for every entry that fails to synchronize with Azure Active Directory (Azure AD).
 
-### Methods
+## Methods
 
 | Method | Return Type | Description |
-|-|-|-|
-| [Get synchronization errors](../api/educationsynchronizationerrors_get.md) | collection of educationsynchronizationerror | Returns the list of synchronization errors observed in a profile |
+|:-|:-|:-|
+| [Get synchronization errors](../api/educationsynchronizationerrors_get.md) | **educationSynchronizationError** collection| Returns the list of synchronization errors associated with a profile. |
 
-### Properties
+## Properties
 
 | Property | Type | Description |
-|-|-|-|
+|:-|:-|:-|
 | **entryType** | string |  represents the sync entity (school, section, student, teacher)         |
 | **errorCode** | string |  represents the error code for this error         |
 | **errorMessage** | string |  contains a description of the error         |
 | **joiningValue** | string |  the unique identifier for the entry         |
 | **recordedDateTime** | DateTimeOffset |  the time of occurrence of this error         |
 
-### JSON
+## JSON representation
 <!-- {
   "blockType": "resource",
   "optionalProperties": [
