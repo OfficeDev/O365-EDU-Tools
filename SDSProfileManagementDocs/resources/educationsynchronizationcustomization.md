@@ -10,11 +10,9 @@ Provides settings for customizing the school data profile synchronization of the
 |:-|:-|:-|
 | **optionalPropertiesToSync** | collection of string |  The collection of property names to sync. If set to null, all properties will be synchronized.       |
 | **synchronizationStartDate** | DateTime |  The date that the synchronization should start. This value should be set to a future date. If set to null, the resource will be synchronized when the profile setup completes. **Note:** This only applies to **StudentEnrollment** property.      |
-|**isSyncDeferred** |Boolean |
+|**isSyncDeferred** |Boolean | Indicates whether synchronization of the parent entity is deferred to a later date |
 | **allowDisplayNameUpdate** | Boolean |  Indicates whether the display name of the resource can be overwritten by the sync.         |
 
-
-<!-- We are missing the isSyncDeferred property on this page. I added the property; please add the description.-->
 
 ## JSON representation
 <!-- {
