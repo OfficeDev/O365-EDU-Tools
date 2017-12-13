@@ -21,32 +21,22 @@ This resource is member of the following data providers:
 | **teacherRoster** | [educationSynchronizationCustomization](educationsynchronizationcustomization.md) |       Customization for a teacher roster.    |
 
 ## JSON representation
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationSynchronizationCustomizations"
+}-->
 
 ```json
 "customizations": {
-        "school": {
-            "optionalPropertiesToSync": []
-        },
-        "section": {
-            "optionalPropertiesToSync": [],
-            "allowDisplayNameUpdate": false
-        },
-        "student": {
-            "optionalPropertiesToSync": [],
-            "allowDisplayNameUpdate": false
-        },
-        "teacher": {
-            "optionalPropertiesToSync": [],
-            "allowDisplayNameUpdate": false
-        },
-        "studentEnrollment": {
-            "optionalPropertiesToSync": [],
-            "synchronizationStartDate": "{UTC Date if delay required. Immediate by default}",
-            "isSyncDeferred": false
-        },
-        "teacherRoster": {
-            "optionalPropertiesToSync": []
-        }
+        "school": {"@odata.type": "microsoft.graph.educationSynchronizationCustomization"},
+        "section": {"@odata.type": "microsoft.graph.educationSynchronizationCustomization"},
+        "student": {"@odata.type": "microsoft.graph.educationSynchronizationCustomization"},
+        "teacher": {"@odata.type": "microsoft.graph.educationSynchronizationCustomization"},
+        "studentEnrollment": {"@odata.type": "microsoft.graph.educationSynchronizationCustomization"},
+        "teacherRoster": {"@odata.type": "microsoft.graph.educationSynchronizationCustomization"}
     }
 }
 ```

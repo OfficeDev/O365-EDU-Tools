@@ -12,10 +12,18 @@ Represents an error returned to the client in response to a request to [start sy
 
 ## JSON representation
 
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "microsoft.graph.educationFileSynchronizationVerificationMessage"
+}-->
+
 ```json
 {
-    "type": "Error",
-    "fileName": "section.csv",
-    "description": "5 row(s) have missing data for the field - SIS ID"
+    "type": "String",
+    "fileName": "String",
+    "description": "String"
 }
 ```

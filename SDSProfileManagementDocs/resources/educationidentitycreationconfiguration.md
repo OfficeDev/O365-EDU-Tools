@@ -12,19 +12,22 @@ Derived from [identitySyncConfiguration](identitySyncConfiguration.md).
 |:-|:-|:-|
 | **userDomains** | [educationIdentityDomain](educationidentitydomain.md) collection |  Sets the list of domains to use per user type.  |
 
+
 ## JSON representation
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationIdentityCreationConfiguration"
+}-->
 
 ```json
 "identitySynchronizationConfiguration": {
-    "@odata.type": "#microsoft.graph.educationidentitycreationconfiguration",
+    "@odata.type": "#microsoft.graph.educationIdentityCreationConfiguration",
     "userDomains": [
         {
-            "appliesTo": "student",
-            "name": "testschool.edu"
-        },
-        {
-            "appliesTo": "teacher",
-            "name": "testschool.edu"
+            "@odata.type": "#microsoft.graph.educationIdentityDomain",
         }
     ]
 }

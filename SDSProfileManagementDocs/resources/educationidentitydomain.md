@@ -10,10 +10,17 @@ Represents the mapping between an education user type and the domain the user's 
 | **name** | string |  Represents the domain for the user account.         |
 
 ## JSON representation
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationIdentityDomain"
+}-->
 
 ```json
 {
-    "appliesTo": "student",
-    "name": "testschool.edu"
+    "appliesTo": {"@odata.type": "#microsoft.graph.educationUserRole"},
+    "name": "String"
 }
 ```

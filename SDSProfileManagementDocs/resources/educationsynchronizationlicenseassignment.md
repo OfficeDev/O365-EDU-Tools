@@ -10,12 +10,17 @@ Represents the license information to assign to user accounts. The resource will
 | **skuIds** | collection of strings |  Represents the SKU identifiers of the licenses to assign.        |
 
 ## JSON representation
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationSynchronizationLicenseAssignment"
+}-->
 
 ```json
 {
-    "appliesTo": "teacher",
-    "skuIds": [
-        "{License Sku Id}"
-    ]
+    "appliesTo": {"@odata.type": "#microsoft.graph.educationUserRole"},
+    "skuIds": ["String"]
 }
 ```

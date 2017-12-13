@@ -12,12 +12,19 @@ Provides a mapping between a source property and a target property for matching 
 | **targetDomain** | string |  The domain to suffix with the source property to match on the target. If provided as null,  the source property will be used to match with the target property.        |
 
 ## JSON representation
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationIdentityMatchingOptions"
+}-->
 
 ```json
 {
-    "appliesTo": "student",
-    "sourcePropertyName": "Username",
-    "targetPropertyName": "userPrincipalName",
-    "targetDomain": "{domain}"
+    "appliesTo": {"@odata.type": "#microsoft.graph.educationUserRole"},
+    "sourcePropertyName": "String",
+    "targetPropertyName": "String",
+    "targetDomain": "String"
 }
 ```

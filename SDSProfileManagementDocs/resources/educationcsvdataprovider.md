@@ -12,10 +12,19 @@ Derived from [educationSynchronizationDataProvider](educationsynchronizationdata
 
 ## JSON representation
 
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationCsvDataProvider"
+}-->
+
+
 ```json
 "dataProvider":{
-    "@odata.type": "#microsoft.graph.educationcsvdataprovider",
-    "customizations": { ... }
+    "@odata.type": "#microsoft.graph.educationCsvDataProvider",
+    "customizations": { "@odata.type": "microsoft.graph.educationSynchronizationCustomizations" }
     }
 }
 ```

@@ -18,11 +18,18 @@ Represents the synchronization status of a school data [synchronization profile]
 | **lastSynchronizationDateTime** | DateTimeOffset | Represents the time when most recent changes have been observed in the directory.  |
 
 ## JSON representation
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationSynchronizationProfileStatus"
+}-->
 
 ```json
 {
     "@odata.context": "https://graph.microsoft.com/beta/$metadata#education/synchronizationProfiles('{id}')/profileStatus/$entity",
-    "status": "inProgress",
-    "lastSynchronizationDateTime": "2017-07-04T22:06:37.6472621Z"
+    "status": {"@odata.type":"microsoft.graph.educationSynchronizationStatus"},
+    "lastSynchronizationDateTime": "DateTimeOffset"
 }
 ```

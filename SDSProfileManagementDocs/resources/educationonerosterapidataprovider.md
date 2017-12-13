@@ -14,13 +14,20 @@ Derived from [educationSynchronizationDataProvider](educationsynchronizationdata
 | **customizations** | [educationSynchronizationCustomizations](educationsynchronizationcustomizations.md) | Optional customization to be applied to the synchronization profile.|
 
 ## JSON representation
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationoneRosterApiDataProvider"
+}-->
 
 ```json
 "dataProvider": {
-    "@odata.type": "#microsoft.graph.educationonerosterapidataprovider",
-    "connectionUrl": "{OneRoster Url}",
-    "clientId": "{ClientId}",
-    "clientSecret": "{ClientSecret}",
-    "customizations": { ... }
+    "@odata.type": "#microsoft.graph.educationoneRosterApiDataProvider",
+    "connectionUrl": "String",
+    "clientId": "String",
+    "clientSecret": "String",
+    "customizations": { "@odata.type": "microsoft.graph.educationSynchronizationCustomizations" }
 }
 ```

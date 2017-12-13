@@ -13,15 +13,23 @@ Provides settings for customizing the school data profile synchronization of the
 |**isSyncDeferred** |Boolean |
 | **allowDisplayNameUpdate** | Boolean |  Indicates whether the display name of the resource can be overwritten by the sync.         |
 
+
 <!-- We are missing the isSyncDeferred property on this page. I added the property; please add the description.-->
 
 ## JSON representation
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationSynchronizationCustomization"
+}-->
 
 ```json
 {  
-    "optionalPropertiesToSync":[  
-        "{property1}",
-        "{property2}"
-    ]
+    "optionalPropertiesToSync":["String"],
+    "synchronizationStartDate": "DateTimeOffset",
+    "isSyncDeferred": "Boolean",
+    "allowDisplayNameUpdate": "Boolean"
 }
 ```

@@ -38,56 +38,23 @@ Represents a set of configurations used to synchronize education entities and ro
 ## JSON representation
 The following is a JSON representation of a **synchronizationProfile**.
 
-<!-- { "blockType": "resource", "@odata.type": "#microsoft.graph.synchronizationProfile" } -->
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationSynchronizationProfile"
+}-->
 
 ```json
 {
-    "displayName": "Term 1 Sync",
-    "lastSynchronizationTime": "0001-01-01T00:00:00Z",
-    "state": "Provisioned",
-    "syncStatus": "Paused",
-    "errorStatus": "None",
-    "id": "19c097a9-ea10-49bb-9242-2cc657549032",
+    "displayName": "String",
+    "state": { "@odata.type": "microsoft.graph.educationSynchronizationProfileState" },
+    "profileStatus": {"@odata.type": "microsoft.graph.educationSynchronizationProfileStatus"},
+    "errors": [{"@odata.type": "microsoft.graph.educationSynchronizationProfileStatus" }],
     "dataProvider": { "@odata.type": "#microsoft.graph.educationcsvdataprovider" },
-    "identitySynchronizationConfiguration": { "@odata.type": "#microsoft.graph.educationidentitycreationconfiguration",
-        "userDomains": [{
-            "appliesTo": "Student",
-            "name": "school.edu"
-        }, {
-            "appliesTo": "Teacher",
-            "name": "school.edu"
-        }]
-    },
-    "licensesToAssign": [{
-        "appliesTo": "Teacher",
-        "skuIds": ["6fd2c87f-b296-42f0-b197-1e91e994b900"]
-    }, {
-        "appliesTo": "Student",
-        "skuIds": ["6fd2c87f-b296-42f0-b197-1e91e994b900"]
-    }],
-    "customizations": {
-        "school": { "optionalPropertiesToSync": [], "allowDisplayNameUpdate": false },
-        "section": {
-            "optionalPropertiesToSync": [],
-            "allowDisplayNameUpdate": false
-        },
-        "student": {
-            "optionalPropertiesToSync": [],
-            "allowDisplayNameUpdate": false
-        },
-        "teacher": {
-            "optionalPropertiesToSync": [],
-            "allowDisplayNameUpdate": false
-        },
-        "studentEnrollment": {
-            "optionalPropertiesToSync": [],
-            "synchronizationStartDate": "0001-01-01T00:00:00Z",
-            "allowDisplayNameUpdate": false
-        },
-        "teacherRoster": {
-            "optionalPropertiesToSync": [],
-            "allowDisplayNameUpdate": false
-        }
-    }
+    "identitySynchronizationConfiguration": { "@odata.type": "#microsoft.graph.educationIdentitySynchronizationConfiguration" },
+    "licensesToAssign": [{"@odata.type":"microsoft.graph.educationSynchronizationLicenseAssignment"}],
+    "handleSpecialCharacterConstraint": "Boolean"
 }
 ```

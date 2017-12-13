@@ -17,13 +17,23 @@ Derived from [educationSynchronizationDataProvider](educationsynchronizationdata
 | **customizations** | [educationSynchronizationCustomizations](educationsynchronizationcustomizations.md) | Optional customization to be applied to the synchronization profile.|
 
 ## JSON representation
+<!-- {
+  "blockType": "resource",
+  "optionalProperties": [
+
+  ],
+  "@odata.type": "#microsoft.graph.educationPowerSchoolDataProvider"
+}-->
 
 ```json
 "dataProvider": {
-    "@odata.type": "#microsoft.graph.educationpowerschooldataprovider",
-    "connectionUrl": "{PowerSchool Server Url}",
-    "clientId": "{ClientId}",
-    "clientSecret": "{ClientSecret}",
-    "customizations": { ... }
+    "@odata.type": "#microsoft.graph.educationPowerSchoolDataProvider",
+    "connectionUrl": "String",
+    "clientId": "String",
+    "clientSecret": "String",
+    "schoolsids": ["String"],
+    "schoolYear": "String",
+    "allowTeachersInMultipleSchools": "Boolean",
+    "customizations": { "@odata.type": "microsoft.graph.educationSynchronizationCustomizations" }
 }
 ```
