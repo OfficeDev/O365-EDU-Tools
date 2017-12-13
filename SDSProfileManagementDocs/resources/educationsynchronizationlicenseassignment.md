@@ -6,7 +6,7 @@ Represents the license information to assign to user accounts. The resource will
 
 | Property | Type | Description |
 |:-|:-|:-|
-| **appliesTo** | string | The user role type to assign to license. Possible values: `student`, `teacher`.         |
+| **appliesTo** | string | The user role type to assign to license. Possible values are: `student`, `teacher`.         |
 | **skuIds** | collection of strings |  Represents the SKU identifiers of the licenses to assign.        |
 
 ## JSON representation
