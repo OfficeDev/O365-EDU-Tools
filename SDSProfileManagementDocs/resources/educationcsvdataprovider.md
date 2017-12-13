@@ -8,7 +8,7 @@ Derived from [educationSynchronizationDataProvider](educationsynchronizationdata
 
 | Property | Type | Description |
 |:-|:-|:-|
-| customizations | [educationSynchronizationCustomizations](educationsynchronizationcustomizations.md) | Optional customizations to be applied to the synchronization profile.|
+| **customizations** | [educationSynchronizationCustomizations](educationsynchronizationcustomizations.md) | Optional customizations to be applied to the synchronization profile.|
 
 ## JSON representation
 
