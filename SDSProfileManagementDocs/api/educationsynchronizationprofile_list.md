@@ -49,10 +49,14 @@ The following is an example of the response.
 <!-- {
   "blockType": "response",
   "truncated": true,
-  "@odata.type": "microsoft.graph.synchronizationProfile",
+  "@odata.type": "microsoft.graph.educationSynchronizationProfile",
   "isCollection": true
 } -->
 ```http
+HTTP/1.1 200 OK
+Content-type: application/json
+Content-length: 3296
+
 {
     "value": [
     {

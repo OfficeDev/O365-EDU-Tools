@@ -91,7 +91,7 @@ Here is an example of the response.
 <!-- {
   "blockType": "response",
   "truncated": true,
-  "@odata.type": "microsoft.graph.synchronizationProfile",
+  "@odata.type": "microsoft.graph.educationSynchronizationProfile",
 } -->
 ```http
 HTTP/1.1 202 Accepted

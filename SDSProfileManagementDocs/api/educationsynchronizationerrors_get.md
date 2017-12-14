@@ -51,6 +51,10 @@ The following is an example of the response.
   "isCollection": true
 } -->
 ```http
+HTTP/1.1 200 OK
+Content-type: application/json
+Content-length: 1568
+
 {
     "@odata.context": "https://graph.microsoft.com/beta/$metadata#education/synchronizationProfiles('{id}')/errors",
     "@odata.count": 14,

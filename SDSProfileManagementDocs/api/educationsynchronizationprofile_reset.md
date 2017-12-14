@@ -43,3 +43,11 @@ POST https://graph.microsoft.com/beta/education/synchronizationProfiles/{id}/res
 ##### Response
 
 There is no response body.
+
+<!-- {
+  "blockType": "response",
+  "name": "post_educationSynchronizationProfile_reset"
+}-->
+```
+HTTP/1.1 200 OK
+```

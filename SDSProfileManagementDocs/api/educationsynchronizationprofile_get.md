@@ -49,6 +49,10 @@ The following is an example of the response.
   "@odata.type": "microsoft.graph.educationSynchronizationProfile",
 } -->
 ```http
+HTTP/1.1 200 OK
+Content-type: application/json
+Content-length: 2487
+
 {
     "@odata.context": "https://graph.microsoft.com/beta/$metadata#education/synchronizationProfiles/$entity",
     "displayName": "Test Profile",
