@@ -642,7 +642,7 @@ function Get-Overview
 # Main
 
 &{
-    
+	[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12';
 	$global:AccessToken = Get-AccessToken;
 
     
