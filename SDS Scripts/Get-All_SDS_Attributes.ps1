@@ -63,7 +63,7 @@ function Get-PrerequisiteHelp
     
     c. Sign in with any tenant administrator credentials
     
-    d. If you are returned to the PowerShell sesion without error, you are correctly set up
+    d. If you are returned to the PowerShell session without error, you are correctly set up
 
 5. Retry this script.  If you still get an error about failing to load the MSOnline module, troubleshoot why "Import-Module MSOnline" isn't working
 

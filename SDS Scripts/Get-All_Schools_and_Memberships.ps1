@@ -3,7 +3,7 @@ Script Name:
 Get-All_Schools_and_Memberships.ps1
 
 Synopsis:
-This script is designed to export all Schools and their respective members. The result of this script is a single CSV export in your c:\temp directory, called Get-All_Schools_and_Memberships.csv. This script first requires a PowerShell connection to Azure Active Directory. If you’re not familiar with connecting, run the Connect-Azure_AD_and_Exchange_Online.ps1. If you haven’t installed the Azure AD module or the MOSSIA, you won’t be able to connect. To install these pre-requisites, run the Install-AAD_Module_and_Sign_in_Assistant.ps1 first.
+This script is designed to export all Schools and their respective members. The result of this script is a single CSV export in your c:\temp directory, called Get-All_Schools_and_Memberships.csv. This script first requires a PowerShell connection to Azure Active Directory. If you’re not familiar with connecting, run the Connect-Azure_AD_and_Exchange_Online.ps1. If you haven’t installed the Azure AD module or the MOSSIA, you won’t be able to connect. To install these prerequisites, run the Install-AAD_Module_and_Sign_in_Assistant.ps1 first.
 
 Syntax:
 .\Get-All_Schools_and_Memberships.ps1 
