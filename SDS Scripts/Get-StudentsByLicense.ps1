@@ -92,9 +92,11 @@ Write-Host "`n"
 Write-Host -ForegroundColor Green "Script is complete"
 Write-Host "`n"
 
+
+Write-Host -ForegroundColor Green "Confirm each SkuID listed in the csv file matches the Student SkuIDs shown below:"
 Foreach ($Element in $StudentSkuIDs) {
 $SkuPart = (Get-AzureADSubscribedSku | ? {$_.SkuID -eq $Element}).SkuPartNumber
-Write-Host -ForegroundColor Green "Confirm each SkuID listed in the csv file matches the student skuIDs shown below"
 Write-Host -ForegroundColor Green "SkuID ${Element} for License $SkuPart"
 }
+Write-Host "`n"
 
