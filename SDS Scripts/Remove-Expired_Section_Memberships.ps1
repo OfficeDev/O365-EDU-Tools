@@ -12,26 +12,26 @@ Written By:
 Bill Sluss
 
 Change Log:
-Version 1.0, 12/07/206 - First Draft
+Version 1.0, 8/08/206 - First Draft
 #>
 
-$Groups = Get-AzureADGroup -All:$true | ? {$_.DisplayName –like “Exp*”}
+$Groups = Get-AzureADGroup -All:$true | ? {$_.DisplayName â€“like â€œExp*â€}
 $Count = $Groups.count
-Write-host –ForegroundColor Green “Found $Count Classes Marked Expired. Starting Cleanup - Remove Members”
+Write-host â€“ForegroundColor Green â€œFound $Count Classes Marked Expired. Starting Cleanup - Remove Membersâ€
 
 Foreach ($Group in $Groups) {
 $Obj = $Group.objectID
 $DN = $Group.DisplayName
-Write-host –ForegroundColor Red “Removing Members of $DN”
+Write-host â€“ForegroundColor Red â€œRemoving Members of $DNâ€
 $Members = Get-AzureADGroupMember -ObjectID $Obj
 
 	Foreach ($Member in $Members){
 	$MemID = $Member.ObjectID
 	$MemName = $member.DisplayName
-	Write-host –ForegroundColor Green “Removing $MemName from $DN”
+	Write-host â€“ForegroundColor Green â€œRemoving $MemName from $DNâ€
 	Remove-AzureADGroupMember -MemberId $MemID -ObjectId $Obj
 			}
  		}
 
 #Export the output array to CSV
-Write-host –ForegroundColor Green “Script Complete”
+Write-host â€“ForegroundColor Green â€œScript Completeâ€
