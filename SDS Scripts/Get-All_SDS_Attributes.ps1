@@ -314,7 +314,7 @@ function Get-SdsSections
         $data += [pscustomobject]@{
             "SIS ID" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SectionId
             "School SIS ID" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId
-            "Section Name" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_SectionName
+            "Section Name" = $group.DisplayName
             #"Name" = $au.DisplayName                    
             "Section Number" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_SectionNumber
  
