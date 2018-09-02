@@ -78,7 +78,7 @@ function Load-ActiveDirectoryAuthenticationLibrary
 		$wc.DownloadFile($NugetClientLatest, $nugetClientPath);
 		
         # Install ADAL nuget package
-		$nugetDownloadExpression = $nugetClientPath + " install Microsoft.IdentityModel.Clients.ActiveDirectory -source https://www.nuget.org/api/v2/ -Version 2.19.208020213 -OutputDirectory " + $modulePath + "\Nugets"
+		$nugetDownloadExpression = $nugetClientPath + " install Microsoft.IdentityModel.Clients.ActiveDirectory -source https://www.nuget.org/api/v2/ -Version 3.19.8 -OutputDirectory " + $modulePath + "\Nugets"
         Write-Verbose "Active Directory Authentication Library Nuget doesn't exist. Downloading now: `n$nugetDownloadExpression"
 		Invoke-Expression $nugetDownloadExpression
 	}
@@ -92,13 +92,11 @@ function Load-ActiveDirectoryAuthenticationLibrary
 
     $adal4_5Directory = Join-Path $adalPackageDirectories[$adalPackageDirectories.length-1].FullName -ChildPath "lib\net45"
 	$ADAL_Assembly = Join-Path $adal4_5Directory -ChildPath "Microsoft.IdentityModel.Clients.ActiveDirectory.dll"
-	$ADAL_WindowsForms_Assembly = Join-Path $adal4_5Directory -ChildPath "Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll"
-
-	if($ADAL_Assembly.Length -gt 0 -and $ADAL_WindowsForms_Assembly.Length -gt 0){
-		Write-Verbose "Loading ADAL Assemblies: `n`t$ADAL_Assembly `n`t$ADAL_WindowsForms_Assembly"
+	
+	if($ADAL_Assembly.Length -gt 0){
+		Write-Verbose "Loading ADAL Assembly: `n`t$ADAL_Assembly"
         Write-Debug "file path length for $ADAL_Assembly is $($ADAL_Assembly.Length)"
-		[System.Reflection.Assembly]::LoadFrom($ADAL_Assembly) | out-null
-		[System.Reflection.Assembly]::LoadFrom($ADAL_WindowsForms_Assembly) | out-null
+		[System.Reflection.Assembly]::LoadFrom($ADAL_Assembly) | out-null		
 		return $true
 	}
 	else{
@@ -122,9 +120,11 @@ function Get-AuthenticationResult()
   $resourceAppIdURI = $graphEndPoint
   $authority = $authEndPoint + "/common"
  
+  $promptBehavior = [Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior]::Always 
+  $platformParams = New-Object "Microsoft.IdentityModel.Clients.ActiveDirectory.PlatformParameters" -ArgumentList $promptBehavior
   $authContext = New-Object "Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext" -ArgumentList $authority,$false
-  $promptBehavior = [Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior]::Always
-  $authResult = $authContext.AcquireToken([string] $resourceAppIdURI, [string] $clientId, [Uri] $redirectUri, $promptBehavior)
+  
+  $authResult = $authContext.AcquireTokenAsync([string] $resourceAppIdURI, [string] $clientId, [Uri] $redirectUri, $platformParams).Result
   
   Write-Output $authResult
 }
