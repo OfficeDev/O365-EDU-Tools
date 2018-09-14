@@ -23,7 +23,7 @@ $softDeletePrefix = "SoftDeleted_"
 Echo "Starting script to remove all groups at $([System.DateTime]::UtcNow)" | Out-File $logFilePath -Append
 
 #Get all O365 Groups in a tenant with mail nickname starting with "Section_"
-$Groups = Get-AzureADGroup -All $true | ? {$_.MailNickName -like "Section_*"}
+$Groups = Get-AzureADGroup -All $true | ? {$_.MailNickName -like "*Section_*"}
 
 Foreach ($Group in $Groups) {
 	#Update group properties and delete
