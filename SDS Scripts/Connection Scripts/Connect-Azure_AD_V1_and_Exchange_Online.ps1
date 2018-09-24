@@ -1,12 +1,12 @@
 <#
 Script Name:
-Connect-Azure_AD_and_Exchange_Online.ps1
+Connect-Azure_AD_V1_and_Exchange_Online.ps1
 
 Synopsis:
 This script is designed to connect your PowerShell client to Azure AD and Exchange Online. This script requires you have already installed the Azure AD module for PowerShell. If you haven't, run the Install-AAD_Module_and_Sign_in_Assistant.ps1 included in this script repository.
 
 Syntax Examples:
-.\Connect-Azure_AD_and_Exchange_Online.ps1
+.\Connect-Azure_AD_V1_and_Exchange_Online.ps1
 
 Written By: 
 Bill Sluss
