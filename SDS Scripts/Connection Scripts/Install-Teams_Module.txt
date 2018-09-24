@@ -1,0 +1,20 @@
+<#
+Script Name:
+Install-Teams_Module.ps1
+
+Synopsis:
+This script is designed to install the Azure AD Preview Module for PowerShell. 
+
+Syntax Examples:
+.\Install-Teams_Module.ps1
+
+Written By: 
+Bill Sluss
+
+Change Log:
+Version 1.0, 09/24/2018 - First Draft
+#>
+
+#Connect to AAD and ExO
+Write-Host -Foregroundcolor green "Installing the AzureADPreview Module for PowerShell"
+Install-Module -Name MicrosoftTeams
