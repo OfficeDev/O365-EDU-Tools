@@ -1,4 +1,4 @@
-How to use the files in the directory?
+How to use the files in this directory?
 
 1. Download and Install Postman tool if you don't alread yhave it (https://www.getpostman.com)
 2. Import the collection JSON file 
