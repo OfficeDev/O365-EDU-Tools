@@ -1,0 +1,3 @@
+SIS ID,Name,School Number,School NCES_ID,State ID,Grade Low,Grade High,Principal SIS ID,Principal Name,Principal Secondary Email,Address,City,State,Country,Zip,Phone,Zone
+10001,Contoso High School,10001,1,WA,9,12,14007,Amy Roebuck,,2 Microsoft Way,Redmond,WA,US,98052,555-123-4567,1
+10002,Fabrikam High School,10002,2,WA,9,12,14008,Harry James,,3 Microsoft Way,Redmond,WA,US,98052,555-987-6543,2
