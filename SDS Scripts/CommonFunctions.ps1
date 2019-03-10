@@ -60,24 +60,30 @@ function Send-WebRequest
 function Load-ActiveDirectoryAuthenticationLibrary 
 {
 	$moduleDirPath = ($ENV:PSModulePath -split ';')[0]
-	$modulePath = $moduleDirPath + "\AADGraph"
-	if(-not (Test-Path ($modulePath+"\Nugets"))) {New-Item -Path ($modulePath+"\Nugets") -ItemType "Directory" | out-null}
-	$adalPackageDirectories = (Get-ChildItem -Path ($modulePath+"\Nugets") -Filter "Microsoft.IdentityModel.Clients.ActiveDirectory*" -Directory)
-	if($adalPackageDirectories.Length -eq 0){
-        # Get latest nuget client
-        $nugetClientPath = $modulePath + "\Nugets\nuget.exe"
+	
+	$modulePath = Join-Path $moduleDirPath "AADGraph"
+	$nugetPath = Join-Path $modulePath "Nugets"
+	$nugetClientPath = Join-Path $nugetPath "nuget.exe"
+	
+	$modulePathEsc = $modulePath -replace ' ', '` '		
+	$nugetPathEsc = $nugetPath -replace ' ', '` '
+	$nugetClientPathEsc = $nugetClientPath -replace ' ', '` '
+	
+	if(-not (Test-Path $nugetPath)) {New-Item -Path $nugetPath -ItemType "Directory" | out-null}
+	$adalPackageDirectories = (Get-ChildItem -Path $nugetPath -Filter "Microsoft.IdentityModel.Clients.ActiveDirectory*" -Directory)
+	if($adalPackageDirectories.Length -eq 0){        	
         Remove-Item -Path $nugetClientPath -Force -ErrorAction Ignore
 		Write-Verbose "Downloading latest nuget client from $NugetClientLatest"
 		$wc = New-Object System.Net.WebClient
 		$wc.DownloadFile($NugetClientLatest, $nugetClientPath);
 		
         # Install ADAL nuget package
-		$nugetDownloadExpression = $nugetClientPath + " install Microsoft.IdentityModel.Clients.ActiveDirectory -source https://www.nuget.org/api/v2/ -Version 3.19.8 -OutputDirectory " + $modulePath + "\Nugets"
+		$nugetDownloadExpression = $nugetClientPathEsc + " install Microsoft.IdentityModel.Clients.ActiveDirectory -source https://www.nuget.org/api/v2/ -Version 3.19.8 -OutputDirectory " + $nugetPathEsc
         Write-Verbose "Active Directory Authentication Library Nuget doesn't exist. Downloading now: `n$nugetDownloadExpression"
 		Invoke-Expression $nugetDownloadExpression
 	}
 
-	$adalPackageDirectories = (Get-ChildItem -Path ($modulePath+"\Nugets") -Filter "Microsoft.IdentityModel.Clients.ActiveDirectory*" -Directory)
+	$adalPackageDirectories = (Get-ChildItem -Path $nugetPath -Filter "Microsoft.IdentityModel.Clients.ActiveDirectory*" -Directory)
     if ($adalPackageDirectories -eq $null -or $adalPackageDirectories.length -le 0)
     {
         Write-Error "Unable to download ADAL nuget package"
