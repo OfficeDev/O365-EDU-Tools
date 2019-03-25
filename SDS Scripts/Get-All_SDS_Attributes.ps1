@@ -1,4 +1,4 @@
-﻿<#
+<#
 Script Name:
 Get-All_SDS_Attributes.ps1
 
@@ -809,8 +809,12 @@ $graphEndPoint = $GraphEndpointProd
 $authEndPoint = $AuthEndpointProd
 if ($PPE)
 {
+    Write-Host "Switching to PPE endpoints"
     $graphEndPoint = $GraphEndpointPPE
     $authEndPoint = $AuthEndpointPPE
+}
+else {
+    Write-Host "Using PROD endpoints"
 }
 
 $activityName = "Reading SDS objects in the directory"
@@ -832,7 +836,13 @@ Write-Progress -Activity $activityName -Status "Connecting to tenant"
 Get-MsolDomain -ErrorAction SilentlyContinue | Out-Null
 if(-Not $?)
 {
-    Connect-MsolService -ErrorAction Stop
+    if ($PPE)
+    {
+        Connect-MsolService -AzureEnvironment AzurePPE  -ErrorAction Stop
+    }
+    else {
+        Connect-MsolService -ErrorAction Stop    
+    }
 }
 
 $adalLoaded = Load-ActiveDirectoryAuthenticationLibrary
