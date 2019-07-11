@@ -122,12 +122,11 @@ function Get-AuthenticationResult()
   $resourceClientId = "00000002-0000-0000-c000-000000000000"
   $resourceAppIdURI = $graphEndPoint
   $authority = $authEndPoint + "/common"
- 
   $authContext = New-Object "Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext" -ArgumentList $authority,$false
+  $promptBehavior = [Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior]::Always
   $platformParameter = New-Object "Microsoft.IdentityModel.Clients.ActiveDirectory.PlatformParameters" -ArgumentList $promptBehavior
   $authResult = $authContext.AcquireTokenAsync([string] $resourceAppIdURI, [string] $clientId, [Uri] $redirectUri, $platformParameter).Result
   Write-Output $authResult
-
 }
 
 <#
