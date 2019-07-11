@@ -124,7 +124,8 @@ function Get-AuthenticationResult()
  
   $authContext = New-Object "Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext" -ArgumentList $authority,$false
   $promptBehavior = [Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior]::Always
-  $authResult = $authContext.AcquireToken([string] $resourceAppIdURI, [string] $clientId, [Uri] $redirectUri, $promptBehavior)
+  $platformParameter = New-Object "Microsoft.IdentityModel.Clients.ActiveDirectory.PlatformParameters" -ArgumentList $promptBehavior
+  $authResult = $authContext.AcquireTokenAsync([string] $resourceAppIdURI, [string] $clientId, [Uri] $redirectUri, $platformParameter).Result
   
   Write-Output $authResult
 }
