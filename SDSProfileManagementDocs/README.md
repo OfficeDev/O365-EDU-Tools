@@ -10,24 +10,24 @@ Getting Started:
 - [Introduction to Automated Sync and Profile Management APIs](./scenarios/SDSProfileAPIIntroduction.md)
 
 Profile Management Scenarios:
-- [Create Profile using CSV Files](./scenarios/SDS-Create-Profile.md)
-- [Create Profile using an API Connector](./scenarios/SDS-Create-ProfileAPI.md)
-- [Update operations on SDS Sync Profiles](./scenarios/Update-Sync-Profiles.md)
-- [Troubleshooting Sync failures](./scenarios/Troubleshooting-Sync-Failures.md)
+- [Create Profile using CSV Files](./scenarios/create-synchronization-profile.md)
+- [Create Profile using an API Connector](./scenarios/create-api-synchronization-profile.md)
+- [Update operations on SDS Sync Profiles](./scenarios/update-synchronization-profile.md)
+- [Troubleshooting Sync failures](./scenarios/troubleshooting-sync-failures.md)
 
 Profile Management APIs:
-- [CreateProfile](./api/educationsynchronizationProfile_create.md)
-- [DeleteProfile](./api/educationsynchronizationProfile_delete.md)
-- [GetErrors](./api/educationsynchronizationProfile_get_errors.md)
-- [GetStatus](./api/educationsynchronizationProfile_get_status.md)
-- [GetUploadURL](./api/educationsynchronizationProfile_get_uploadurl.md)
-- [GetProfile](./api/educationsynchronizationProfile_get.md)
-- [ListProfile](./api/educationsynchronizationProfile_list.md)
-- [PauseProfileSync](./api/educationsynchronizationProfile_post_reset.md)
-- [ResetProfile](./api/educationsynchronizationProfile_get.md)
-- [ResumeProfile](./api/educationsynchronizationProfile_post_resume.md)
-- [UpdateProfile](./api/educationsynchronizationProfile_update.md)
-- [Start](./api/educationsynchronizationProfile_post_start.md)
+- [CreateProfile](./api/educationsynchronizationprofile_put.md)
+- [DeleteProfile](./api/educationsynchronizationprofile_delete.md)
+- [GetErrors](./api/educationsynchronizationerrors_get.md)
+- [GetStatus](./api/educationsynchronizationprofile_get_status.md)
+- [GetUploadURL](./api/educationsynchronizationprofile_get_uploadurl.md)
+- [GetProfile](./api/educationsynchronizationprofile_get.md)
+- [ListProfile](./api/educationsynchronizationprofile_list.md)
+- [PauseProfileSync](./api/educationsynchronizationprofile_pause.md)
+- [ResetProfile](./api/educationsynchronizationprofile_reset.md)
+- [ResumeProfile](./api/educationsynchronizationprofile_resume.md)
+- [UpdateProfile](./api/educationsynchronizationprofile_post.md)
+- [Start](./api/educationsynchronizationprofile_start.md)
 
 ## Contribute
 Send a pull request out to contribute.
