@@ -16,17 +16,17 @@ Profile Management Scenarios:
 - [Troubleshooting Sync failures](./scenarios/troubleshooting-sync-failures.md)
 
 Profile Management APIs:
-- [CreateProfile](./api/educationsynchronizationprofile_put.md)
+- [CreateProfile](./api/educationsynchronizationprofile_post.md)
 - [DeleteProfile](./api/educationsynchronizationprofile_delete.md)
 - [GetErrors](./api/educationsynchronizationerrors_get.md)
-- [GetStatus](./api/educationsynchronizationprofile_get_status.md)
-- [GetUploadURL](./api/educationsynchronizationprofile_get_uploadurl.md)
+- [GetStatus](./api/educationsynchronizationprofilestatus_get.md)
+- [GetUploadURL](./api/educationsynchronizationprofile_uploadurl.md)
 - [GetProfile](./api/educationsynchronizationprofile_get.md)
 - [ListProfile](./api/educationsynchronizationprofile_list.md)
 - [PauseProfileSync](./api/educationsynchronizationprofile_pause.md)
 - [ResetProfile](./api/educationsynchronizationprofile_reset.md)
 - [ResumeProfile](./api/educationsynchronizationprofile_resume.md)
-- [UpdateProfile](./api/educationsynchronizationprofile_post.md)
+- [UpdateProfile](./api/educationsynchronizationprofile_put.md)
 - [Start](./api/educationsynchronizationprofile_start.md)
 
 ## Contribute
