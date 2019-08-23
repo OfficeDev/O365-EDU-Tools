@@ -11,7 +11,7 @@
 param
 (
     [Parameter(Mandatory=$true)]
-    [string]$UserId,
+    [string]$UPN,
 
     [Parameter(Mandatory=$true)]
     [string]$TenantName
@@ -58,26 +58,32 @@ $headers = @{
 # --Fetch all groups for the user
 $groupPaginationLimit = 999
 
-$groupsRequestUrl = "https://graph.microsoft.com/edu/users/$UserId/ownedObjects/microsoft.graph.group?`$top=$groupPaginationLimit"
+$groupsRequestUrl = "https://graph.microsoft.com/edu/users/$UPN/ownedObjects/microsoft.graph.group?`$top=$groupPaginationLimit"
 
 $groups = New-Object System.Collections.ArrayList
+try {
+    do {    
+        $groupsResponse = Invoke-WebRequest -Uri $groupsRequestUrl -Method Get -Headers $headers
 
-do {    
-    $groupsResponse = Invoke-WebRequest -Uri $groupsRequestUrl -Method Get -Headers $headers
+        $groupsContent = ConvertFrom-Json -InputObject $groupsResponse.Content
 
-    $groupsContent = ConvertFrom-Json -InputObject $groupsResponse.Content
+        $groupsCount = $groupsContent.value.Count
 
-    $groupsCount = $groupsContent.value.Count
+        [void]$groups.AddRange($groupsContent.value)
 
-    [void]$groups.AddRange($groupsContent.value)
+        Write-Verbose -Message "Retrieved $groupsCount groups."
+        if ($groupsContent.'@odata.nextLink'){
+            Write-Verbose -Message "More groups to retrieve..."
+        }
 
-    Write-Verbose -Message "Retrieved $groupsCount groups."
-    if ($groupsContent.'@odata.nextLink'){
-        Write-Verbose -Message "More groups to retrieve..."
-    }
+        $groupsRequestUrl = $groupsContent.'@odata.nextLink'
+    } while ($groupsRequestUrl)
+} catch {
+    $message = $_.Exception.Message
 
-    $groupsRequestUrl = $groupsContent.'@odata.nextLink'
-} while ($groupsRequestUrl)
+    Write-Host "Error while getting groups for $UPN : $message"
+    return
+}
 
 $groupsCount = $groups.Count
 
