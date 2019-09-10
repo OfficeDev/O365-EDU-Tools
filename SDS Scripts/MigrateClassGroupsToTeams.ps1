@@ -157,8 +157,9 @@ foreach ($group in $groups) {
             continue
         }
 
-        Write-Verbose -Message "Error: " + $requestError.Exception.Message + "\n" + $resultStr
-        [void]$results.Add(@($group.displayName, "error: " + $request.Exception.Message), $failed)
+        $message = $requestError.Exception.Message
+        Write-Verbose -Message "Error: $message \n $resultStr"
+        [void]$results.Add(@($group.displayName, "error: " + $request.Exception.Message, $failed))
     }
 }
 
