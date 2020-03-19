@@ -1,0 +1,10 @@
+page_type: sample
+products:
+  - office-365
+languages:
+  - powershell
+extensions:
+  contentType: tools
+  createdDate: '10/10/2016 3:12:09 PM'
+title: O365-EDU-Tools
+description: O365 Education tools and scripts repository
