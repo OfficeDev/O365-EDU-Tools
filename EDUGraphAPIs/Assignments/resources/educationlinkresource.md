@@ -1,6 +1,6 @@
 # educationLinkResource resource type
 
-Subclass of [educationResource](educationresource.md).  This resource is a link and does not have any other data associated with it besides the string which holds the web link.
+A subclass of [educationResource](educationresource.md). This resource is a link and does not have any additional data associated with it.
 
 
 ## Properties
@@ -10,7 +10,7 @@ Subclass of [educationResource](educationresource.md).  This resource is a link 
 
 ## JSON representation
 
-Here is a JSON representation of the resource.
+The following is a JSON representation of the resource.
 
 <!-- {
   "blockType": "resource",

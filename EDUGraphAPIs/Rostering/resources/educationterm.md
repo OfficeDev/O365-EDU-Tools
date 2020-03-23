@@ -1,18 +1,18 @@
 # educationTerm resource type
 
-A Term. This represents a designated portion of the academic year. It is used within [educationClass](educationclass.md).
+A term. This represents a designated portion of the academic year. It is used within [educationClass](educationclass.md).
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
 |displayName| String| Display name of the term.| 
-|externalId|String| Id of term in syncing system.|
-|startDate|Date|Start of the Term.|
-|endDate|Date|End of the Term.|
+|externalId|String| ID of term in the syncing system.|
+|startDate|Date|Start of the term.|
+|endDate|Date|End of the term.|
 
 ## JSON representation
 
-Here is a JSON representation of the resource.
+The following is a JSON representation of the resource.
 
 <!-- {
   "blockType": "resource",

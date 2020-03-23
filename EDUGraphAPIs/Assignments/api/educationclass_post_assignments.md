@@ -1,12 +1,6 @@
 # Create educationAssignment
 
-Creates a new assignment.  Only teachers in a class can create an assignment.  Assignments start in the "Draft" state meaning students will not see the assignment until publish is called.  
-
-
-
-Due to a bug, the graph will return educationItemBody for the instructions property.  This is an exact duplicate of the itemBody that 
-is already found on the graph.   When the code moves to prodution, this will be updated.  For clients who simply use the json being
-sent back and forth to the graph, there should be no work necessary to handle this change.
+Creates a new assignment. Only teachers in a class can create an assignment. Assignments start in the Draft state, which means that students will not see the assignment until publish is called.  
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -30,15 +24,15 @@ POST /education/classes/<id>/assignments
 | Content-Type  | application/json  |
 
 ## Request body
-In the request body, supply a JSON representation of [educationAssignment](../resources/educationassignment.md) object.
+In the request body, supply a JSON representation of an [educationAssignment](../resources/educationassignment.md) object.
 
 
 ## Response
-If successful, this method returns `201, Created` response code and [educationAssignment](../resources/educationassignment.md) object in the response body.
+If successful, this method returns a `201 Created` response code and an [educationAssignment](../resources/educationassignment.md) object in the response body.
 
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "create_educationassignment_from_educationclass"
@@ -63,9 +57,13 @@ Content-length: 279
       "allowStudentsToAddResourcesToSubmission": true
 }
 ```
-In the request body, supply a JSON representation of [educationAssignment](../resources/educationassignment.md) object.
+In the request body, supply a JSON representation of an [educationAssignment](../resources/educationassignment.md) object.
+
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
@@ -92,7 +90,6 @@ Content-length: 279
   "instructions": {"@odata.type": "microsoft.graph.itemBody"},
   "lastModifiedBy": {"@odata.type": "microsoft.graph.identitySet"},
   "lastModifiedDateTime": "String (timestamp)",
-  "resourcesFolderUrl": "String",
   "status": "string"
 }
 ```

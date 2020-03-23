@@ -1,6 +1,6 @@
 # Get educationSubmissionResource
 
-Retrieves the properties of a specific resource associated with the submission.  This resource is in the "working" resource list and should be considered work in process by a student.  This resource is wrapped with a possible pointer back to the assingmnet resource if it was copied from tha assignmnet.
+Retrieves the properties of a specific resource associated with the submission. This resource is in the "working" resource list and should be considered work in process by a student. This resource is wrapped with a possible pointer back to the assignment resource if it was copied from the assignment.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -27,10 +27,10 @@ This method supports the [OData Query Parameters](http://graph.microsoft.io/docs
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and [educationSubmissionResource](../resources/educationsubmissionresource.md) object in the response body.
+If successful, this method returns a `200 OK` response code and an [educationSubmissionResource](../resources/educationsubmissionresource.md) object in the response body.
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "get_educationsubmissionresource"
@@ -39,7 +39,10 @@ Here is an example of the request.
 GET https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/submissions/<id>/resources/<id>
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,

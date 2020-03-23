@@ -1,18 +1,18 @@
 # educationTeacher resource type
 
 
-Additional information added to an [educationUser](educationuser.md) which is present when the primaryRole of a user is `teacher`.
+Additional information added to an [educationUser](educationuser.md) that is present when the primaryRole of a user is `teacher`.
 
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|externalId|String| ID of the student in the source system.|
-|teacherNumber|String|Teacher Number.|
+|externalId|String| ID of the teacher in the source system.|
+|teacherNumber|String|Teacher number.|
 
 ## JSON representation
 
-Here is a JSON representation of the resource.
+The following is a JSON representation of the resource.
 
 <!-- {
   "blockType": "resource",

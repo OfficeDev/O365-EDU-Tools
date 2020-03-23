@@ -1,6 +1,6 @@
 # educationSubmission: recall
 
-Action which indicates that a student wants to take back a submission.  This action can only be done by a student.  It will change the status of this submission from "submitted" back to "working".
+Indicates that a student wants to take back a submission. This action can only be done by a student. It will change the status of the submission from "submitted" back to "working".
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -25,12 +25,12 @@ POST /education/classes/<id>/assignments/<id>/submissions/<id>/recall
 ## Request body
 
 ## Response
-If successful, this method returns `204, No Content` response code. It does not return anything in the response body.
+If successful, this method returns a `204 No Content` response code. It does not return anything in the response body.
 
 ## Example
-Here is an example of how to call this API.
+The following example shows how to call this API.
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "educationsubmission_recall"
@@ -39,7 +39,9 @@ Here is an example of the request.
 POST https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/submissions/<id>/recall
 ```
 
-If successful, this method returns `204, No Content` response code. It does not return anything in the response body.
+##### Response
+The following is an example of the response.
+
 <!-- {
   "blockType": "response",
   "truncated": true,

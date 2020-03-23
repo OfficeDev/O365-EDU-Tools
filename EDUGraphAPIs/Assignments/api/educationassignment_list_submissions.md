@@ -1,6 +1,6 @@
 # List submissions
 
-List all the submissions associated with this assignment.  A teacher can get all of the submissions while a student can only get submissions that they are associated with.
+List all the submissions associated with this assignment. A teacher can get all the submissions while a student can only get submissions that they are associated with.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -30,7 +30,7 @@ Do not supply a request body for this method.
 If successful, this method returns a `200 OK` response code and collection of [educationSubmission](../resources/educationsubmission.md) objects in the response body.
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "get_submissions"
@@ -39,7 +39,10 @@ Here is an example of the request.
 GET https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/submissions
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All of the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,

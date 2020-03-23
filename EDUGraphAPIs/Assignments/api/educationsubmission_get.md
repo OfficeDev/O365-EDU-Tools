@@ -1,6 +1,8 @@
 # Get educationSubmission
 
-Retrieve a particular submission.  A submission object represents a student's work for an assignment.  There are resources associated with it which represent this work.  Only the student to which the submission is assigned to can see and modify the submission while a teacher has full access to all submissions.  The grade and feedback from a teacher are also part of this object.  Only teachers can add/change grades/feedback.  Students will not see the grade/feedback until the assignment has been released.  The "Basic" scopes will not include grade and feedback but will include everything else.
+Retrieve a particular submission. A submission object represents a student's work for an assignment. Resources associated with the submission represent this work. Only the student the submission is assigned to can see and modify the submission. A teacher has full access to all submissions. 
+
+The grade and feedback from a teacher are also part of this object. Only teachers can add or change grades and feedback. Students will not see the grade or feedback until the assignment has been released. The Basic permissions do not include grade and feedback but do include everything else.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -27,10 +29,10 @@ This method supports the [OData Query Parameters](http://graph.microsoft.io/docs
 ## Request body
 Do not supply a request body for this method.
 ## Response
-If successful, this method returns a `200 OK` response code and [educationSubmission](../resources/educationsubmission.md) object in the response body.
+If successful, this method returns a `200 OK` response code and an [educationSubmission](../resources/educationsubmission.md) object in the response body.
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "get_educationsubmission"
@@ -39,7 +41,10 @@ Here is an example of the request.
 GET https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/submissions/<id>
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,

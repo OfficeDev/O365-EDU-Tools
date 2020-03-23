@@ -1,6 +1,6 @@
 # educationPowerPointResource resource type
 
-Subclass of [educationResource](educationresource.md).  This is a **PowerPoint** resource.  The **PowerPoint** file must be uploaded in the fileResource directory associated with the 
+A subclass of [educationResource](educationresource.md). This is a PowerPoint resource. The PowerPoint file must be uploaded in the **fileResource** directory associated with the 
 assignment or submission.
 
 
@@ -11,7 +11,7 @@ assignment or submission.
 
 ## JSON representation
 
-Here is a JSON representation of the resource.
+The following is a JSON representation of the resource.
 
 <!-- {
   "blockType": "resource",

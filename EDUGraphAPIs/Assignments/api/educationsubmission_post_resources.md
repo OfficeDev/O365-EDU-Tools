@@ -1,6 +1,6 @@
 # Create educationSubmissionResource
 
-Adds a resource to the resources list.  This action can only be done by the student who this submission is assigned to.  This action will not succeed if the "allowStudentsToAddResources" flag is not set to true.  If the caller wants to create a new file based resource, the file must be uploaded to the resources folder that is associated with the submission.  If the file does not exist or is not in that folder, this POST will fail. 
+Adds a resource to the resources list. This action can only be done by the student to whom this submission is assigned. This action will not succeed if the **allowStudentsToAddResources** flag is not set to true. If the caller wants to create a new file-based resource, the file must be uploaded to the resources folder that is associated with the submission. If the file does not exist or is not in that folder, the POST request will fail. 
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -24,15 +24,15 @@ POST /education/classes/<id>/assignments/<id>/submissions/<id>/resources
 | Content-Type  | application/json  |
 
 ## Request body
-In the request body, supply a JSON representation of [educationSubmissionResource](../resources/educationsubmissionresource.md) object.
+In the request body, supply a JSON representation of the [educationSubmissionResource](../resources/educationsubmissionresource.md) object.
 
 
 ## Response
-If successful, this method returns `201, Created` response code and [educationSubmissionResource](../resources/educationsubmissionresource.md) object in the response body.
+If successful, this method returns a `201 Created` response code and an [educationSubmissionResource](../resources/educationsubmissionresource.md) object in the response body.
 
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "create_educationsubmissionresource_from_educationsubmission"
@@ -46,9 +46,12 @@ Content-length: 848
   "resource": {"@odata.type": "microsoft.graph.educationResource"}
 }
 ```
-In the request body, supply a JSON representation of [educationSubmissionResource](../resources/educationsubmissionresource.md) object.
+
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
