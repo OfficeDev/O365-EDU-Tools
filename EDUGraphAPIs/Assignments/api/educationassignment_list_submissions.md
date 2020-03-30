@@ -1,6 +1,8 @@
 # List submissions
 
-List all the submissions associated with this assignment.  A teacher can get all of the submissions while a student can only get submissions that they are associated with.
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+List all the submissions associated with this assignment. A teacher can get all the submissions while a student can only get submissions that they are associated with.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -14,7 +16,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-GET /education/classes/<id>/assignments/<id>/submissions
+GET /education/classes/{id}/assignments/{id}/submissions
 ```
 ## Optional query parameters
 This method supports the [OData Query Parameters](http://graph.microsoft.io/docs/overview/query_parameters) to help customize the response.
@@ -30,16 +32,19 @@ Do not supply a request body for this method.
 If successful, this method returns a `200 OK` response code and collection of [educationSubmission](../resources/educationsubmission.md) objects in the response body.
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "get_submissions"
 }-->
 ```http
-GET https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/submissions
+GET https://graph.microsoft.com/beta/education/classes/11021/assignments/19002/submissions
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All of the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
@@ -52,18 +57,52 @@ Content-type: application/json
 Content-length: 873
 
 {
-  "value": [
+  "submissions": [
     {
-      "feedback": {"@odata.type": "microsoft.graph.educationFeedback"},
-      "grade": {"@odata.type": "microsoft.graph.educationAssignmentGrade"},
-      "id": "String (identifier)",
-      "recipient": {"@odata.type": "microsoft.graph.educationSubmissionRecipient"},
-      "releasedBy": {"@odata.type": "microsoft.graph.identitySet"},
-      "releasedDateTime": "String (timestamp)",
-      "resourcesFolderUrl": "String",
-      "status": "string",
-      "submittedBy": {"@odata.type": "microsoft.graph.identitySet"},
-      "submittedDateTime": "String (timestamp)"
+      "feedback": {
+        text: "Great work!"
+        feedbackDateTime: "2014-01-01T00:00:00Z"
+        feedbackBy: {
+          "user": {
+            "displayName": "Susana Rocha",
+            "id": "14012",
+          },
+          "@odata.type": "microsoft.graph.identitySet"
+        }
+        "@odata.type": "microsoft.graph.educationFeedback"},
+      "grade": {
+         "gradedBy": {
+          "user": {
+            "displayName": "Susana Rocha",
+            "id": "14012",
+          },
+          "@odata.type": "microsoft.graph.identitySet"
+        },
+        "gradedDateTime": "2014-01-01T00:00:00Z"
+      },
+      "id": "33223",
+      "recipient": {
+        "userId": "13015",
+        "microsoft.graph.educationSubmissionRecipient"
+      },
+      "releasedBy": {
+          "user": {
+            "displayName": "Susana Rocha",
+            "id": "14012",
+          },
+          "@odata.type": "microsoft.graph.identitySet"
+        },
+      "releasedDateTime": "2014-01-01T00:00:00Z",
+      "resourcesFolderUrl": "https://graph.microsoft.com/v1.0/drives/b!8-QjN2tsv0WyGnTv7vOvnQkmGHbbeMNLqYKONmHLVnvCVmBYIGpeT456457AdW9f/items/017NJZI25NOB5XZNLABF7646XAMDZTQQ6T",
+      "status": "working",
+      "submittedBy": {
+          "user": {
+            "displayName": "Susana Rocha",
+            "id": "14012",
+          },
+          "@odata.type": "microsoft.graph.identitySet"
+        },
+      "submittedDateTime": "2014-01-01T00:00:00Z"
     }
   ]
 }

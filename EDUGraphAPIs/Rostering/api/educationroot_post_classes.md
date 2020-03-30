@@ -1,7 +1,9 @@
 # Create educationClass
 
-Create a new class.  This will also create a universal group as well.  Use this api to create a class as it will add special properties to indicate the special group which will
-have extra features such as assignments and special handling within Microsoft Teams.
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+Create a new class. This will also create a universal group. When you use this API to create a class, it will add special properties to the group, which will
+add features such as assignments and special handling within Microsoft Teams.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -24,15 +26,15 @@ POST /education/classes
 | Content-Type  | application/json  |
 
 ## Request body
-In the request body, supply a JSON representation of [educationClass](../resources/educationclass.md) object.
+In the request body, supply a JSON representation of an [educationClass](../resources/educationclass.md) object.
 
 
 ## Response
-If successful, this method returns `201, Created` response code and [educationClass](../resources/educationclass.md) object in the response body.
+If successful, this method returns a `201 Created` response code and an [educationClass](../resources/educationclass.md) object in the response body.
 
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "create_educationclass_from_educationroot"
@@ -43,19 +45,21 @@ Content-type: application/json
 Content-length: 224
 
 {
-  "description": "String",
-  "classCode": "String",
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "displayName": "String",
-  "externalId": "String",
-  "externalName": "String",
-  "externalSource": "string",
-  "mailNickname": "String"
+  "description": "Health Level 1",
+  "classCode": "Health 501",
+  "displayName": "Health 1",
+  "externalId": "11019",
+  "externalName": "Health Level 1",
+  "externalSource": "sis",
+  "mailNickname": "fineartschool.net"
 }
 ```
-In the request body, supply a JSON representation of [educationClass](../resources/educationclass.md) object.
+
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
+>**Note:** The response object shown here might be shortened for readability. All the properties will be returned from an actual call.
+
 <!-- {
   "blockType": "response",
   "truncated": true,
@@ -67,15 +71,20 @@ Content-type: application/json
 Content-length: 224
 
 {
-  "id": "String",
-  "description": "String",
-  "classCode": "String",
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "displayName": "String",
-  "externalId": "String",
-  "externalName": "String",
-  "externalSource": "string",
-  "mailNickname": "String"
+    "id": "11019",
+    "description": "Health Level 1",
+    "classCode": "Health 501",
+    "createdBy": {
+      "user": {
+        "displayName": "Susana Rocha",
+        "id": "14012",
+      }
+    },
+    "displayName": "Health 1",
+    "externalId": "11019",
+    "externalName": "Health Level 1",
+    "externalSource": "sis",
+    "mailNickname": "fineartschool.net"
 }
 ```
 

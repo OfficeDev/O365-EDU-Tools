@@ -1,6 +1,8 @@
 # educationPowerPointResource resource type
 
-Subclass of [educationResource](educationresource.md).  This is a **PowerPoint** resource.  The **PowerPoint** file must be uploaded in the fileResource directory associated with the 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+A subclass of [educationResource](educationresource.md). This is a PowerPoint resource. The PowerPoint file must be uploaded in the **fileResource** directory associated with the 
 assignment or submission.
 
 
@@ -11,7 +13,7 @@ assignment or submission.
 
 ## JSON representation
 
-Here is a JSON representation of the resource.
+The following is a JSON representation of the resource.
 
 <!-- {
   "blockType": "resource",

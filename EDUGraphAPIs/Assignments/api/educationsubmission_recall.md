@@ -1,6 +1,8 @@
 # educationSubmission: recall
 
-Action which indicates that a student wants to take back a submission.  This action can only be done by a student.  It will change the status of this submission from "submitted" back to "working".
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+Indicates that a student wants to take back a submission. This action can only be done by a student. It will change the status of the submission from "submitted" back to "working".
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -14,7 +16,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-POST /education/classes/<id>/assignments/<id>/submissions/<id>/recall
+POST /education/classes/<id>/assignments/{id}/submissions/{id}/recall
 
 ```
 ## Request headers
@@ -25,21 +27,23 @@ POST /education/classes/<id>/assignments/<id>/submissions/<id>/recall
 ## Request body
 
 ## Response
-If successful, this method returns `204, No Content` response code. It does not return anything in the response body.
+If successful, this method returns a `204 No Content` response code. It does not return anything in the response body.
 
 ## Example
-Here is an example of how to call this API.
+The following example shows how to call this API.
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "educationsubmission_recall"
 }-->
 ```http
-POST https://graph.microsoft.com/beta/education/classes/<id>/assignments/<id>/submissions/<id>/recall
+POST https://graph.microsoft.com/beta/education/classes/11021/assignments/19002/submissions/850f51b7/recall
 ```
 
-If successful, this method returns `204, No Content` response code. It does not return anything in the response body.
+##### Response
+The following is an example of the response.
+
 <!-- {
   "blockType": "response",
   "truncated": true,

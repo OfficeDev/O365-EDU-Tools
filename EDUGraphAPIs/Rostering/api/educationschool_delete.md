@@ -1,5 +1,7 @@
 # Delete educationSchool
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
 Delete a school.
 
 ## Permissions
@@ -14,7 +16,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-DELETE /education/schools/<id>
+DELETE /education/schools/{id}
 ```
 ## Request headers
 | Header       | Value |
@@ -26,20 +28,21 @@ Do not supply a request body for this method.
 
 
 ## Response
-If successful, this method returns `204, No Content` response code. It does not return anything in the response body.
+If successful, this method returns a `204 No Content` response code. It does not return anything in the response body.
 
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "delete_educationschool"
 }-->
 ```http
-DELETE https://graph.microsoft.com/beta/education/schools/<id>
+DELETE https://graph.microsoft.com/beta/education/schools/10002
 ```
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
+
 <!-- {
   "blockType": "response",
   "truncated": true

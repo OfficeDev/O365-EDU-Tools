@@ -1,22 +1,20 @@
 # educationFeedback resource type
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
 
-Feedback from a teacher to a student.  This property represents both the text part of the feedback along with the who.
+Feedback from a teacher to a student. This property represents both the text part of the feedback along with the who.
 
->**Note:** Due to a bug, the graph will return **educationItemBody** for the text property.  This is an exact duplicate of the itemBody that 
-is already found on the graph API. When the code moves to production, this behavior will be updated.  For clients who simply use the json being
-sent back and forth to the graph, there should be no work necessary to handle this change.
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
 |feedbackBy|[identitySet](identityset.md)|User who created the feedback.|
-|feedbackDateTime|DateTimeOffset|Moment in time when the feedback was given.  The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
+|feedbackDateTime|DateTimeOffset|Moment in time when the feedback was given. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: `'2014-01-01T00:00:00Z'`|
 |text|[itemBody](itembody.md)|Feedback.|
 
 ## JSON representation
 
-Here is a JSON representation of the resource.
+The following is a JSON representation of the resource.
 
 <!-- {
   "blockType": "resource",

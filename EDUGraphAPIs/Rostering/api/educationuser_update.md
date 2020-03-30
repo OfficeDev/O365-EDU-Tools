@@ -1,6 +1,8 @@
-# Update educationuser
+# Update educationUser properties
 
-Update the properties of educationuser object.
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+Update the properties of an **educationuser** object.
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
 
@@ -14,7 +16,7 @@ One of the following permissions is required to call this API. To learn more, in
 <!-- { "blockType": "ignored" } -->
 ```http
 PATCH /education/me
-PATCH /education/users/<id>
+PATCH /education/users/{id}
 ```
 ## Request headers
 | Header       | Value |
@@ -23,7 +25,7 @@ PATCH /education/users/<id>
 | Content-Type  | application/json  |
 
 ## Request body
-In the request body, supply the values for relevant fields that should be updated. Existing properties that are not included in the request body will maintain their previous values or be recalculated based on changes to other property values. For best performance you shouldn't include existing values that haven't changed.
+In the request body, supply the values for relevant fields that should be updated. Existing properties that are not included in the request body will maintain their previous values or be recalculated based on changes to other property values. For best performance, don't include existing values that haven't changed.
 
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
@@ -52,15 +54,15 @@ Here is an example of the request.
   "name": "update_educationuser"
 }-->
 ```http
-PATCH https://graph.microsoft.com/beta/education/users/<id>
+PATCH https://graph.microsoft.com/beta/education/users/13020
 Content-type: application/json
 Content-length: 508
 
 {
-  "displayName": "string",
-  "givenName": "string",
-  "middleName": "string",
-  "surname": "string",
+  "displayName": "Rogelio Cazares",
+  "givenName": "Rogelio",
+  "middleName": "Fernando",
+  "surname": "Cazares",
 }
 ```
 ##### Response
@@ -76,20 +78,39 @@ Content-type: application/json
 Content-length: 508
 
 {
-  "id": "string",
-  "displayName": "string",
-  "givenName": "string",
-  "middleName": "string",
-  "surname": "string",
-  "mail": "string",
-  "mobilePhone": "string",
-  "createdBy": {"@odata.type": "microsoft.graph.identitySet"},
-  "externalSource": "string",
-  "mailingAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
+  "id": "13020",
+  "displayName": "Rogelio Cazares",
+  "givenName": "Rogelio",
+  "middleName": "Fernando",
+  "surname": "Cazares",
+  "mail": "rogelioC@contoso.com",
+  "mobilePhone": "+1 (253) 555-0101",
+  "createdBy": {
+        "user": {
+          "displayName": "Susana Rocha",
+          "id": "14012",
+        },
+  "externalSource": "sis",
+  "mailingAddress": {
+        "city": "Los Angeles",
+        "countryOrRegion": "United States",
+        "postalCode": "98055",
+        "state": "CA",
+        "street": "12345 Main St."
+      },
   "primaryRole": "string",
-  "residenceAddress": {"@odata.type": "microsoft.graph.physicalAddress"},
-  "student": {"@odata.type": "microsoft.graph.educationStudent"},
-  "teacher": {"@odata.type": "microsoft.graph.educationTeacher"}
+  "residenceAddress": {
+        "city": "Los Angeles",
+        "countryOrRegion": "United States",
+        "postalCode": "98055",
+        "state": "CA",
+        "street": "12345 Main St."
+      },
+  "student": {
+      "primaryRole": "student",
+      "externalId": "13005",
+      "birthDate": "2001-01-01T00:00:00Z"
+    }
 }
 ```
 

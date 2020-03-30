@@ -1,21 +1,18 @@
 # educationOneNoteResource resource type
 
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
 
-Subclass of [educationResource](educationresource.md).  This represents the location of the **OneNote** page.  
-
->**Important:** This API currently an incorrect syntax.  This will be 
-replaced by the representation (single property) like the rest of graph.  Use this knowing it will change!!
+A subclass of [educationResource](educationresource.md). This represents the location of the OneNote page.  
 
 ## Properties
 | Property	   | Type	|Description|
 |:---------------|:--------|:----------|
-|notebookId|String|Notebook ID of the OneNote for this resource.|
-|pageId|String|Page Id of the OneNote.|
-|sectionName|String|Section Name of the OneNote.|
+|pageUrl|String|The Microsoft Graph URL to the page in OneNote.|
+|sectionName|String|Section name that distributions should be copied into or were copied into.|
 
 ## JSON representation
 
-Here is a JSON representation of the resource.
+The following is a JSON representation of the resource.
 
 <!-- {
   "blockType": "resource",
@@ -27,8 +24,7 @@ Here is a JSON representation of the resource.
 
 ```json
 {
-  "notebookId": "String",
-  "pageId": "String",
+  "pageUrl": "String",
   "sectionName": "String"
 }
 

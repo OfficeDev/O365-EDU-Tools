@@ -1,6 +1,10 @@
-# Delete educationUser from educationClass
+# Remove a student
 
-Delete a member from a Class.
+> **Important:** APIs under the /beta version in Microsoft Graph are in preview and are subject to change. Use of these APIs in production applications is not supported.
+
+Removes an [educationUser](../resources/educationuser.md) from an [educationClass](../resources/educationclass.md)
+
+>**Note:** Teachers _and_ students are in the class **members** collection. Before calling this API, insure that the **educationUser** you are removing is not a teacher.  Get the list of teachers by calling [educationclass_list_teachers](educationclass_list_teachers.md) and verifying the user Id of the user to be removed is not in the returned teacher list.
 
 ## Permissions
 One of the following permissions is required to call this API. To learn more, including how to choose permissions, see [Permissions](../../../concepts/permissions_reference.md).
@@ -14,7 +18,7 @@ One of the following permissions is required to call this API. To learn more, in
 ## HTTP request
 <!-- { "blockType": "ignored" } -->
 ```http
-DELETE /education/classes/<id>/members/{userId}/$ref
+DELETE /education/classes/{id}/members/{userId}/$ref
 ```
 ## Request headers
 | Header       | Value |
@@ -26,21 +30,21 @@ Do not supply a request body for this method.
 
 
 ## Response
-If successful, this method returns `204, No Content` response code and empty response body.
+If successful, this method returns a `204 No Content` response code and an empty response body.
 
 ## Example
 ##### Request
-Here is an example of the request.
+The following is an example of the request.
 <!-- {
   "blockType": "request",
   "name": "create_educationclass_from_educationschool"
 }-->
 ```http
-DELETE https://graph.microsoft.com/beta/education/classes/<id>/members/{userId}/$ref
+DELETE https://graph.microsoft.com/beta/education/classes/11003/members/14008
 ```
-In the request body, supply a JSON representation of [educationClass](../resources/educationclass.md) object.
+
 ##### Response
-Here is an example of the response. Note: The response object shown here may be truncated for brevity. All of the properties will be returned from an actual call.
+The following is an example of the response. 
 <!-- {
   "blockType": "response",
   "truncated": true,
