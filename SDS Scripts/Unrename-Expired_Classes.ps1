@@ -251,7 +251,7 @@ function Generate-UpdateBatchRequest($sections)
         Write-Log ([string]::Format("PATCH {0} :{1}",$index + 1, $url))
 
         $request | Add-Member -type NoteProperty -name "headers" -value $headers
-        $anchorId = $section.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_AnchorId -replace $SDSExpiredPrefix
+        $anchorId = $section.extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId -replace $SDSExpiredPrefix
         $sectionId = $section.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SectionId -replace $SDSExpiredPrefix
         $displayName = $section.displayName -replace $SDSExpiredPrefix
         $mailNickName = $section.mailNickName -replace $SDSExpiredPrefix
