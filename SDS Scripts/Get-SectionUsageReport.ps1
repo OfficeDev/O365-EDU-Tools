@@ -261,7 +261,7 @@ function Get-Report (
                 $result = Send-WebRequest -Method Get -Uri $uri -Payload $null
                 $sections = $result.value
                 $uri = $result.'@odata.nextLink'
-                Write-Message "Received $($res.value.Count) sections"
+                Write-Message "Received $($result.value.Count) sections"
                 $outSections = $sections | Select-Object `
                 @{label = "GraphId"; expression = { $_.id } }, `
                 @{label = "SectionId"; expression = { $_.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SectionId } }, `
