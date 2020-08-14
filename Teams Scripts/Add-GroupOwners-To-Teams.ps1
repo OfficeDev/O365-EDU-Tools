@@ -160,27 +160,33 @@ function Execute($EducatorUPN, $recordedGroups, $logFilePath) {
     Initialize
     
     if ($EducatorUPN -eq "") {
-        Write-Output "Obtaining list of SDS Created Teams. Please wait..."
+        Write-Host "Obtaining list of SDS Created Teams. Please wait..."
+        Write-Output "Obtaining list of SDS Created Teams. Please wait..." | out-file $logFilePath -append
 
         $SDSTeams = Get-SDSTeams $logFilePath
 
+        Write-Host "Identified $($SDSTeams.count) teams that are provisioned."
         Write-Output "Identified $($SDSTeams.count) teams that are provisioned." | Out-File $logFilePath -Append
 
         # Process Removal and addition of all team owners
 
         Write-Output "Processing addition of all owners for $($SDSTeams.count) Teams, please wait as this could take several hours..." | Out-File $logFilePath -Append
+        Write-Host "Processing addition of all owners for $($SDSTeams.count) Teams, please wait as this could take several hours..."
 
         $processedTeams = Refresh-AllTeamsOwners $SDSTeams $logFilePath
     }
     else {
         Write-Output "Obtaining list of SDS Teams for user $($EducatorUPN), Please wait..." | Out-File $logFilePath -Append
+        Write-Host "Obtaining list of SDS Teams for user $($EducatorUPN), Please wait..."
         $SDSTeams = Get-SDSTeams-ForUser $EducatorUPN $logFilePath
 
         Write-Output "Identified $($SDSTeams.count) teams that are provisioned." | Out-File $logFilePath -Append
+        Write-Host "Identified $($SDSTeams.count) teams that are provisioned."
 
         # Process addition of all team owners
 
         Write-Output "Processing addition of all owners for $($SDSTeams.count) Teams, please wait as this could take several hours..." | Out-File $logFilePath -Append
+        Write-Host "Processing addition of all owners for $($SDSTeams.count) Teams, please wait as this could take several hours..."
 
         $processedTeams = Refresh-AllTeamsOwners $SDSTeams $logFilePath
     }
@@ -188,6 +194,7 @@ function Execute($EducatorUPN, $recordedGroups, $logFilePath) {
     $processedTeams | Export-Csv -Path $recordedGroups -NoTypeInformation
 
     Write-Output "Script Complete." | Out-File $logFilePath -Append
+    Write-Host "Script Complete."
 }
 
 $logFilePath = ".\Add-Group-Owners-To-Teams.log"
@@ -198,6 +205,7 @@ try {
 }
 catch {
     Write-Error "Terminal Error occurred in processing."
+    write-error $_
     Write-output "Terminal error: exception: $($_.Exception)" | out-file $logFilePath -append
 }
 
