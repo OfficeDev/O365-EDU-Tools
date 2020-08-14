@@ -30,7 +30,7 @@ function Initialize() {
 
 $lastRefreshed = $null
 function Refresh-Token() {
-    if ($lastRefreshed -eq $null -or (get-date - $lastRefreshed).Minutes -gt 29) {
+    if ($lastRefreshed -eq $null -or (get-date - $lastRefreshed).Minutes -gt 10) {
         connect-graph -scopes TeamMember.ReadWrite.All,Group.Read.All
         $lastRefreshed = get-date
     }
