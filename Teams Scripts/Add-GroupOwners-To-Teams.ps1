@@ -139,7 +139,7 @@ function Get-SDSTeams($logFilePath) {
 }
 
 function Get-SDSTeams-ForUser($EducatorUPN, $logFilePath) {
-    $initialOwnedObjectsUri = "https://graph.microsoft.com/beta/user/$EducatorUPN/ownedObjects?$groupSelectClause"
+    $initialOwnedObjectsUri = "https://graph.microsoft.com/beta/users/$EducatorUPN/ownedObjects?$groupSelectClause"
     $unfilteredOwnedGroups = PageAll-GraphRequest $initialOwnedObjectsUri $logFilePath
     $filteredOwnedGroups =  $unfilteredOwnedGroups | Where-Object { Check-Team $_}
     return $filteredOwnedGroups
