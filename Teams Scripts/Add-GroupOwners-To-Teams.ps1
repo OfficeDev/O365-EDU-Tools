@@ -30,7 +30,7 @@ function Initialize() {
 
 $lastRefreshed = $null
 function Refresh-Token() {
-    if ($lastRefreshed -eq $null -or (get-date - $lastRefreshed).Minutes -gt 29) {
+    if ($lastRefreshed -eq $null -or (get-date - $lastRefreshed).Minutes -gt 10) {
         connect-graph -scopes TeamMember.ReadWrite.All,Group.Read.All
         $lastRefreshed = get-date
     }
@@ -45,7 +45,7 @@ function Refresh-Token() {
 #        "user@odata.bind":"https://graph.microsoft.com/beta/users/{userId}"
 #        } '
 #    -Headers @{"Content-Type"="application/json"}
-function Add-TeamOwner($groupId, $memberId, $role) {
+function Add-TeamUser($groupId, $memberId, $role, $logFilePath) {
     $uri = "https://graph.microsoft.com/beta/teams/$groupId/members"
     $requestBody = '{
         "@odata.type":"#microsoft.graph.aadUserConversationMember",
@@ -53,7 +53,18 @@ function Add-TeamOwner($groupId, $memberId, $role) {
         "user@odata.bind":"https://graph.microsoft.com/beta/users(''' + $memberId +''')"
     }'
 
-    $result = invoke-graphrequest -Method POST -Uri $uri -body $requestBody -ContentType "application/json"
+    $result = invoke-graphrequest -Method POST -Uri $uri -body $requestBody -ContentType "application/json" -SkipHttpErrorCheck
+    if ($result -ne $null -and $result.ContainsKey("error")) {
+        if ($result.error.message.Contains("You do not have permission to perform this operation"))
+        {
+            write-output "User $memberId cannot be added to $groupId. They do not have an appropriate licenses." | out-file $logFilePath -Append
+            write-host "User $memberId cannot be added to $groupId. They do not have an appropriate licenses."
+        }
+        else {
+            write-output "Error encountered processing $memberId for team $groupId - $($result.error.message)." | out-file $logFilePath -Append
+            write-host "Error encountered processing $memberId for team $groupId - $($result.error.message)."
+        }
+    }
 }
 
 function Refresh-TeamOwners($groupId, $logFilePath) {
@@ -62,12 +73,13 @@ function Refresh-TeamOwners($groupId, $logFilePath) {
         Try {
             Write-Output "Attempting to add owner $($owner.displayName), $($owner.id)" | Out-File $logFilePath -Append
 
-            Add-TeamOwner $groupId $owner.id "owner"
+            Add-TeamUser $groupId $owner.id "owner" $logFilePath
 
             Start-Sleep -Seconds 0.5
         }
         Catch {
-            $owner.id | Out-File $logFilePath -Append
+            write-output "Owner $($owner.id) failed." | Out-File $logFilePath -Append
+            write-output $_ | out-file $logFilePath -Append
             Write-Output ($_.Exception) | Format-List -force | Out-File $logFilePath -Append
         }
     }

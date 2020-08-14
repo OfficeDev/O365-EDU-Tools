@@ -45,7 +45,7 @@ function Initialize() {
 #        "user@odata.bind":"https://graph.microsoft.com/beta/users/{userId}"
 #        } '
 #    -Headers @{"Content-Type"="application/json"}
-function Add-TeamUser($groupId, $memberId, $role) {
+function Add-TeamUser($groupId, $memberId, $role, $logFilePath) {
     $uri = "https://graph.microsoft.com/beta/teams/$groupId/members"
     $requestBody = '{
         "@odata.type":"#microsoft.graph.aadUserConversationMember",
@@ -53,7 +53,18 @@ function Add-TeamUser($groupId, $memberId, $role) {
         "user@odata.bind":"https://graph.microsoft.com/beta/users(''' + $memberId +''')"
     }'
 
-    $result = invoke-graphrequest -Method POST -Uri $uri -body $requestBody -ContentType "application/json"
+    $result = invoke-graphrequest -Method POST -Uri $uri -body $requestBody -ContentType "application/json" -SkipHttpErrorCheck
+    if ($result -ne $null -and $result.ContainsKey("error")) {
+        if ($result.error.message.Contains("You do not have permission to perform this operation"))
+        {
+            write-output "User $memberId cannot be added to $groupId. They do not have an appropriate licenses." | out-file $logFilePath -Append
+            write-host "User $memberId cannot be added to $groupId. They do not have an appropriate licenses."
+        }
+        else {
+            write-output "Error encountered processing $memberId for team $groupId - $($result.error.message)." | out-file $logFilePath -Append
+            write-host "Error encountered processing $memberId for team $groupId - $($result.error.message)."
+        }
+    }
 }
 
 function Remove-OwnersFromMembers($members, $groupOwners) {
@@ -71,7 +82,7 @@ function Refresh-TeamMembers($groupId, $groupOwners, $logFilePath) {
 }
 
 function Set-TeamOwners($groupId, $groupOwners, $logFilePath) {
-    Write-host "Processing $($groupOwners.Count) members."
+    Write-host "Processing $($groupOwners.Count) owners."
     Refresh-TeamUsers $groupId $groupOwners "owner" $logFilePath
 }
 
@@ -80,7 +91,7 @@ function Refresh-TeamUsers($groupId, $users, $role, $logFilePath) {
         Try {
             Write-Output "Attempting to add $role $($user.displayName), $($user.id)" | Out-File $logFilePath -Append
 
-            Add-TeamUser $groupId $user.id $role
+            Add-TeamUser $groupId $user.id $role $logFilePath
 
             Start-Sleep -Seconds 0.5
         }
@@ -182,7 +193,6 @@ function Execute($sisId, $emailAddress, $mailNickname, $groupId, $logFilePath) {
 
     Write-host "Retrieving group owners."
     $groupOwners = Get-Owners-ForGroup $groupId
-    Write-host "Processing $($groupOwners.Count) owners."
     Set-TeamOwners $groupId $groupOwners $logFilePath
 
     if (Check-IsTeamUnlocked $teamResult) {
