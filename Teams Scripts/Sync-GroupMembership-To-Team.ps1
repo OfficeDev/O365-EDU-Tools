@@ -53,7 +53,18 @@ function Add-TeamUser($groupId, $memberId, $role, $logFilePath) {
         "user@odata.bind":"https://graph.microsoft.com/beta/users(''' + $memberId +''')"
     }'
 
-    $result = invoke-graphrequest -Method POST -Uri $uri -body $requestBody -ContentType "application/json"
+    $result = invoke-graphrequest -Method POST -Uri $uri -body $requestBody -ContentType "application/json" -SkipHttpErrorCheck
+    if ($result -ne $null -and $result.ContainsKey("error")) {
+        if ($result.error.message.Contains("You do not have permission to perform this operation"))
+        {
+            write-output "User $memberId cannot be added to $groupId. They do not have an appropriate licenses." | out-file $logFilePath -Append
+            write-host "User $memberId cannot be added to $groupId. They do not have an appropriate licenses."
+        }
+        else {
+            write-output "Error encountered processing $memberId for team $groupId - $($result.error.message)." | out-file $logFilePath -Append
+            write-host "Error encountered processing $memberId for team $groupId - $($result.error.message)."
+        }
+    }
 }
 
 function Remove-OwnersFromMembers($members, $groupOwners) {
