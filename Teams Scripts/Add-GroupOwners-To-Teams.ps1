@@ -133,15 +133,17 @@ function Get-SDSTeams($logFilePath) {
     $initialSDSGroupUri = "https://graph.microsoft.com/beta/groups?`$filter=groupTypes/any(c:c+eq+'Unified')+and+startswith(mailNickname,'Section_')+and+resourceProvisioningOptions/Any(x:x+eq+'Team')&$groupSelectClause"
     $unfilteredSDSGroups = PageAll-GraphRequest $initialSDSGroupUri $logFilePath
     write-output "Retrieve $($unfilteredSDSGroups.Count) groups." | out-file $logFilePath -Append
-    $filteredSDSTeams = $unfilteredSDSGroups | Where-Object { Check-Team $_ }
+    $i = 0
+    $filteredSDSTeams = $unfilteredSDSGroups | Where-Object { (Write-Progress "Validating groups..." -Status "Progress" -PercentComplete (($i++ / $unfilteredSDSGroups.count) * 100)) -or (Check-Team $_) }
     write-output "Filtered to $($filteredSDSTeams.Count) groups." | out-file $logFilePath -Append
     return $filteredSDSTeams
 }
 
 function Get-SDSTeams-ForUser($EducatorUPN, $logFilePath) {
-    $initialOwnedObjectsUri = "https://graph.microsoft.com/beta/user/$EducatorUPN/ownedObjects?$groupSelectClause"
+    $initialOwnedObjectsUri = "https://graph.microsoft.com/beta/users/$EducatorUPN/ownedObjects?$groupSelectClause"
     $unfilteredOwnedGroups = PageAll-GraphRequest $initialOwnedObjectsUri $logFilePath
-    $filteredOwnedGroups =  $unfilteredOwnedGroups | Where-Object { Check-Team $_}
+    $i = 0
+    $filteredOwnedGroups =  $unfilteredOwnedGroups | Where-Object { (Write-Progress "Validating groups..." -Status "Progress" -PercentComplete (($i++ / $unfilteredOwnedGroups.count) * 100)) -or (Check-Team $_) }
     return $filteredOwnedGroups
 }
 
@@ -158,27 +160,33 @@ function Execute($EducatorUPN, $recordedGroups, $logFilePath) {
     Initialize
     
     if ($EducatorUPN -eq "") {
-        Write-Output "Obtaining list of SDS Created Teams. Please wait..."
+        Write-Host "Obtaining list of SDS Created Teams. Please wait..."
+        Write-Output "Obtaining list of SDS Created Teams. Please wait..." | out-file $logFilePath -append
 
         $SDSTeams = Get-SDSTeams $logFilePath
 
+        Write-Host "Identified $($SDSTeams.count) teams that are provisioned."
         Write-Output "Identified $($SDSTeams.count) teams that are provisioned." | Out-File $logFilePath -Append
 
         # Process Removal and addition of all team owners
 
         Write-Output "Processing addition of all owners for $($SDSTeams.count) Teams, please wait as this could take several hours..." | Out-File $logFilePath -Append
+        Write-Host "Processing addition of all owners for $($SDSTeams.count) Teams, please wait as this could take several hours..."
 
         $processedTeams = Refresh-AllTeamsOwners $SDSTeams $logFilePath
     }
     else {
         Write-Output "Obtaining list of SDS Teams for user $($EducatorUPN), Please wait..." | Out-File $logFilePath -Append
+        Write-Host "Obtaining list of SDS Teams for user $($EducatorUPN), Please wait..."
         $SDSTeams = Get-SDSTeams-ForUser $EducatorUPN $logFilePath
 
         Write-Output "Identified $($SDSTeams.count) teams that are provisioned." | Out-File $logFilePath -Append
+        Write-Host "Identified $($SDSTeams.count) teams that are provisioned."
 
         # Process addition of all team owners
 
         Write-Output "Processing addition of all owners for $($SDSTeams.count) Teams, please wait as this could take several hours..." | Out-File $logFilePath -Append
+        Write-Host "Processing addition of all owners for $($SDSTeams.count) Teams, please wait as this could take several hours..."
 
         $processedTeams = Refresh-AllTeamsOwners $SDSTeams $logFilePath
     }
@@ -186,6 +194,7 @@ function Execute($EducatorUPN, $recordedGroups, $logFilePath) {
     $processedTeams | Export-Csv -Path $recordedGroups -NoTypeInformation
 
     Write-Output "Script Complete." | Out-File $logFilePath -Append
+    Write-Host "Script Complete."
 }
 
 $logFilePath = ".\Add-Group-Owners-To-Teams.log"
@@ -196,6 +205,7 @@ try {
 }
 catch {
     Write-Error "Terminal Error occurred in processing."
+    write-error $_
     Write-output "Terminal error: exception: $($_.Exception)" | out-file $logFilePath -append
 }
 

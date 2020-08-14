@@ -66,11 +66,12 @@ function Remove-OwnersFromMembers($members, $groupOwners) {
 function Refresh-TeamMembers($groupId, $groupOwners, $logFilePath) {
     $members = Get-Members-ForGroup $groupId
     $filteredMembers = Remove-OwnersFromMembers $members $groupOwners
-    Write-output "Processing $($filteredMembers.Count) members."
+    Write-host "Processing $($filteredMembers.Count) members."
     Refresh-TeamUsers $groupId $filteredMembers "member" $logFilePath
 }
 
 function Set-TeamOwners($groupId, $groupOwners, $logFilePath) {
+    Write-host "Processing $($groupOwners.Count) members."
     Refresh-TeamUsers $groupId $groupOwners "owner" $logFilePath
 }
 
@@ -177,21 +178,21 @@ function Execute($sisId, $emailAddress, $mailNickname, $groupId, $logFilePath) {
         write-error "Specified group $groupId is not a Team"
         exit
     }
-    Write-output "Processing '$($teamResult.displayName).'"
+    Write-host "Processing '$($teamResult.displayName).'"
 
-    Write-output "Retrieving group owners."
+    Write-host "Retrieving group owners."
     $groupOwners = Get-Owners-ForGroup $groupId
-    Write-output "Processing $($groupOwners.Count) owners."
+    Write-host "Processing $($groupOwners.Count) owners."
     Set-TeamOwners $groupId $groupOwners $logFilePath
 
     if (Check-IsTeamUnlocked $teamResult) {
         Refresh-TeamMembers $groupId $groupOwners $logFilePath
     }
     else {
-        Write-Output "Team $($team.displayName) is not unlocked; only owners have been synchronized."
+        Write-host "Team $($team.displayName) is not unlocked; only owners have been synchronized."
     }
     
-    Write-Output "Script Complete."
+    Write-host "Script Complete."
 }
 
 $logFilePath = ".\Sync-GroupMembership-To-Team.log"
@@ -206,6 +207,7 @@ try {
 }
 catch {
     Write-Error "Terminal Error occurred in processing."
+    write-error $_
     Write-output "Terminal error: exception: $($_.Exception)" | out-file $logFilePath -append
 }
 
