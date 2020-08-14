@@ -133,7 +133,8 @@ function Get-SDSTeams($logFilePath) {
     $initialSDSGroupUri = "https://graph.microsoft.com/beta/groups?`$filter=groupTypes/any(c:c+eq+'Unified')+and+startswith(mailNickname,'Section_')+and+resourceProvisioningOptions/Any(x:x+eq+'Team')&$groupSelectClause"
     $unfilteredSDSGroups = PageAll-GraphRequest $initialSDSGroupUri $logFilePath
     write-output "Retrieve $($unfilteredSDSGroups.Count) groups." | out-file $logFilePath -Append
-    $filteredSDSTeams = $unfilteredSDSGroups | Where-Object { Check-Team $_ }
+    $i = 0
+    $filteredSDSTeams = $unfilteredSDSGroups | Where-Object { (Write-Progress "Validating groups..." -Status "Progress" -PercentComplete (($i++ / $unfilteredSDSGroups.count) * 100)) -or (Check-Team $_) }
     write-output "Filtered to $($filteredSDSTeams.Count) groups." | out-file $logFilePath -Append
     return $filteredSDSTeams
 }
@@ -141,7 +142,8 @@ function Get-SDSTeams($logFilePath) {
 function Get-SDSTeams-ForUser($EducatorUPN, $logFilePath) {
     $initialOwnedObjectsUri = "https://graph.microsoft.com/beta/users/$EducatorUPN/ownedObjects?$groupSelectClause"
     $unfilteredOwnedGroups = PageAll-GraphRequest $initialOwnedObjectsUri $logFilePath
-    $filteredOwnedGroups =  $unfilteredOwnedGroups | Where-Object { Check-Team $_}
+    $i = 0
+    $filteredOwnedGroups =  $unfilteredOwnedGroups | Where-Object { (Write-Progress "Validating groups..." -Status "Progress" -PercentComplete (($i++ / $unfilteredOwnedGroups.count) * 100)) -or (Check-Team $_) }
     return $filteredOwnedGroups
 }
 
