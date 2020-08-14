@@ -71,7 +71,7 @@ function Refresh-TeamMembers($groupId, $groupOwners, $logFilePath) {
 }
 
 function Set-TeamOwners($groupId, $groupOwners, $logFilePath) {
-    Write-host "Processing $($groupOwners.Count) members."
+    Write-host "Processing $($groupOwners.Count) owners."
     Refresh-TeamUsers $groupId $groupOwners "owner" $logFilePath
 }
 
@@ -182,7 +182,6 @@ function Execute($sisId, $emailAddress, $mailNickname, $groupId, $logFilePath) {
 
     Write-host "Retrieving group owners."
     $groupOwners = Get-Owners-ForGroup $groupId
-    Write-host "Processing $($groupOwners.Count) owners."
     Set-TeamOwners $groupId $groupOwners $logFilePath
 
     if (Check-IsTeamUnlocked $teamResult) {

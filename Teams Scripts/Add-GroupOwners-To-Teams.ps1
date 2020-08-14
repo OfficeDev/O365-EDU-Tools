@@ -67,7 +67,8 @@ function Refresh-TeamOwners($groupId, $logFilePath) {
             Start-Sleep -Seconds 0.5
         }
         Catch {
-            $owner.id | Out-File $logFilePath -Append
+            write-output "Owner $($owner.id) failed." | Out-File $logFilePath -Append
+            write-output $_ | out-file $logFilePath -Append
             Write-Output ($_.Exception) | Format-List -force | Out-File $logFilePath -Append
         }
     }
