@@ -45,7 +45,7 @@ function Initialize() {
 #        "user@odata.bind":"https://graph.microsoft.com/beta/users/{userId}"
 #        } '
 #    -Headers @{"Content-Type"="application/json"}
-function Add-TeamUser($groupId, $memberId, $role) {
+function Add-TeamUser($groupId, $memberId, $role, $logFilePath) {
     $uri = "https://graph.microsoft.com/beta/teams/$groupId/members"
     $requestBody = '{
         "@odata.type":"#microsoft.graph.aadUserConversationMember",
@@ -80,7 +80,7 @@ function Refresh-TeamUsers($groupId, $users, $role, $logFilePath) {
         Try {
             Write-Output "Attempting to add $role $($user.displayName), $($user.id)" | Out-File $logFilePath -Append
 
-            Add-TeamUser $groupId $user.id $role
+            Add-TeamUser $groupId $user.id $role $logFilePath
 
             Start-Sleep -Seconds 0.5
         }

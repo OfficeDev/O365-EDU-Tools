@@ -45,7 +45,7 @@ function Refresh-Token() {
 #        "user@odata.bind":"https://graph.microsoft.com/beta/users/{userId}"
 #        } '
 #    -Headers @{"Content-Type"="application/json"}
-function Add-TeamOwner($groupId, $memberId, $role) {
+function Add-TeamUser($groupId, $memberId, $role, $logFilePath) {
     $uri = "https://graph.microsoft.com/beta/teams/$groupId/members"
     $requestBody = '{
         "@odata.type":"#microsoft.graph.aadUserConversationMember",
@@ -62,7 +62,7 @@ function Refresh-TeamOwners($groupId, $logFilePath) {
         Try {
             Write-Output "Attempting to add owner $($owner.displayName), $($owner.id)" | Out-File $logFilePath -Append
 
-            Add-TeamOwner $groupId $owner.id "owner"
+            Add-TeamUser $groupId $owner.id "owner" $logFilePath
 
             Start-Sleep -Seconds 0.5
         }
