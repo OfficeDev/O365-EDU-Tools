@@ -32,8 +32,8 @@ Param (
 
 function Initialize() {
     import-module Microsoft.Graph.Authentication -MinimumVersion 0.9.1
-    Write-Output "If prompted, please use a tenant admin-account to grant access to 'TeamMember.ReadWrite.All' and 'Group.Read.All' privileges"
-    connect-graph -scopes TeamMember.ReadWrite.All,Group.Read.All
+    Write-Output "If prompted, please use a tenant admin-account to grant access to 'TeamMember.ReadWrite.All', 'Group.Read.All' and 'Directory.AccessAsUser.All' privileges"
+    connect-graph -scopes TeamMember.ReadWrite.All,Group.Read.All,Directory.AccessAsUser.All
 }
 
 # invoke-GraphRequest
@@ -121,7 +121,7 @@ function PageAll-GraphRequest($initialUrl, $logFilePath) {
 $groupSelectClause = "`$select=id,mailNickname,emailAddress,displayName,resourceProvisioningOptions"
 
 function Get-TeamByGroupId($groupId) {
-    $result = invoke-graphrequest -Method GET -Uri "https://graph.microsoft.com/beta/teams/$groupId/?`$select=id,isMembershipLimitedToOwners" -ContentType "application/json" -SkipHttpErrorCheck
+    $result = invoke-graphrequest -Method GET -Uri "https://graph.microsoft.com/beta/teams/$groupId/?`$select=id,isMembershipLimitedToOwners,displayName" -ContentType "application/json" -SkipHttpErrorCheck
     return $result
 }
 
