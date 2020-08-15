@@ -27,14 +27,14 @@ Param (
 
 function Initialize() {
     import-module Microsoft.Graph.Authentication -MinimumVersion 0.9.1
-    Write-Output "If prompted, please use a tenant admin-account to grant access to 'TeamMember.ReadWrite.All' and 'Group.Read.All' privileges"
+    Write-Output "If prompted, please use a tenant admin-account to grant access to 'TeamMember.ReadWrite.All', 'Group.Read.All' and 'Directory.AccessAsUser.All' privileges"
     Refresh-Token
 }
 
 $lastRefreshed = $null
 function Refresh-Token() {
     if ($lastRefreshed -eq $null -or (get-date - $lastRefreshed).Minutes -gt 10) {
-        connect-graph -scopes TeamMember.ReadWrite.All,Group.Read.All
+        connect-graph -scopes TeamMember.ReadWrite.All,Group.Read.All,Directory.AccessAsUser.All
         $lastRefreshed = get-date
     }
 }
