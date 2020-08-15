@@ -121,7 +121,7 @@ function PageAll-GraphRequest($initialUrl, $logFilePath) {
 $groupSelectClause = "`$select=id,mailNickname,emailAddress,displayName,resourceProvisioningOptions"
 
 function Get-TeamByGroupId($groupId) {
-    $result = invoke-graphrequest -Method GET -Uri "https://graph.microsoft.com/beta/teams/$groupId/?`$select=id,isMembershipLimitedToOwners" -ContentType "application/json" -SkipHttpErrorCheck
+    $result = invoke-graphrequest -Method GET -Uri "https://graph.microsoft.com/beta/teams/$groupId/?`$select=id,isMembershipLimitedToOwners,displayName" -ContentType "application/json" -SkipHttpErrorCheck
     return $result
 }
 
