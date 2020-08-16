@@ -17,10 +17,13 @@
     .\Add-Group-Owners-To-Teams.ps1 -EducatorUPN john.smith@school.edu
     -For all SDS Teams
     .\Add-Group-Owners-To-Teams.ps1
+    -Include archived teams.
+    .\Add-Group-Owners-To-Teams.ps1 -includeArchived
 #>
 
 Param (
-    [Parameter(Mandatory = $false)][string]$EducatorUPN)
+    [Parameter(Mandatory = $false)][string]$EducatorUPN,
+    [Parameter(Mandatory = $false)][Switch]$includeArchived)
 
 function Initialize() {
     import-module Microsoft.Graph.Authentication -MinimumVersion 0.9.1
@@ -127,13 +130,13 @@ function PageAll-GraphRequest($initialUrl, $logFilePath) {
 
 $groupSelectClause = "`$select=id,mailNickname,emailAddress,displayName,resourceProvisioningOptions"
 
-function Check-Team($group) {
+function Check-Team($group, $includeArchived) {
     if (($group.resourceProvisioningOptions -ne $null) -and $group.resourceProvisioningOptions.Contains("Team") -and $group.mailNickname.StartsWith("Section_")) {
         try {
             Refresh-Token
             $groupId = $group.id
-            $result = invoke-graphrequest -Method GET -Uri "https://graph.microsoft.com/beta/teams/$groupId/?`$select=id" -ContentType "application/json" -SkipHttpErrorCheck
-            return ($result -ne $null -and (-Not $result.ContainsKey("error")))
+            $result = invoke-graphrequest -Method GET -Uri "https://graph.microsoft.com/beta/teams/$groupId/?`$select=id,isArchived" -ContentType "application/json" -SkipHttpErrorCheck
+            return ($result -ne $null -and (-Not $result.ContainsKey("error")) -and ($result.isArchived -eq $false -or $includeArchived))
         }
         catch {
             return $false
@@ -141,12 +144,12 @@ function Check-Team($group) {
     }
 }
 
-function Get-SDSTeams($logFilePath) {
+function Get-SDSTeams($includeArchived, $logFilePath) {
     $initialSDSGroupUri = "https://graph.microsoft.com/beta/groups?`$filter=groupTypes/any(c:c+eq+'Unified')+and+startswith(mailNickname,'Section_')+and+resourceProvisioningOptions/Any(x:x+eq+'Team')&$groupSelectClause"
     $unfilteredSDSGroups = PageAll-GraphRequest $initialSDSGroupUri $logFilePath
     write-output "Retrieve $($unfilteredSDSGroups.Count) groups." | out-file $logFilePath -Append
     $i = 0
-    $filteredSDSTeams = $unfilteredSDSGroups | Where-Object { (Write-Progress "Validating groups..." -Status "Progress" -PercentComplete (($i++ / $unfilteredSDSGroups.count) * 100)) -or (Check-Team $_) }
+    $filteredSDSTeams = $unfilteredSDSGroups | Where-Object { (Write-Progress "Validating groups..." -Status "Progress" -PercentComplete (($i++ / $unfilteredSDSGroups.count) * 100)) -or (Check-Team $_ $includeArchived) }
     write-output "Filtered to $($filteredSDSTeams.Count) groups." | out-file $logFilePath -Append
     return $filteredSDSTeams
 }
@@ -155,7 +158,7 @@ function Get-SDSTeams-ForUser($EducatorUPN, $logFilePath) {
     $initialOwnedObjectsUri = "https://graph.microsoft.com/beta/users/$EducatorUPN/ownedObjects?$groupSelectClause"
     $unfilteredOwnedGroups = PageAll-GraphRequest $initialOwnedObjectsUri $logFilePath
     $i = 0
-    $filteredOwnedGroups =  $unfilteredOwnedGroups | Where-Object { (Write-Progress "Validating groups..." -Status "Progress" -PercentComplete (($i++ / $unfilteredOwnedGroups.count) * 100)) -or (Check-Team $_) }
+    $filteredOwnedGroups =  $unfilteredOwnedGroups | Where-Object { (Write-Progress "Validating groups..." -Status "Progress" -PercentComplete (($i++ / $unfilteredOwnedGroups.count) * 100)) -or (Check-Team $_ $includeArchived) }
     return $filteredOwnedGroups
 }
 
@@ -166,7 +169,7 @@ function Get-Owners-ForGroup($groupId) {
     return $filteredOwners
 }
 
-function Execute($EducatorUPN, $recordedGroups, $logFilePath) {
+function Execute($EducatorUPN, $includeArchived, $recordedGroups, $logFilePath) {
     $processedTeams = $null
 
     Initialize
@@ -175,7 +178,7 @@ function Execute($EducatorUPN, $recordedGroups, $logFilePath) {
         Write-Host "Obtaining list of SDS Created Teams. Please wait..."
         Write-Output "Obtaining list of SDS Created Teams. Please wait..." | out-file $logFilePath -append
 
-        $SDSTeams = Get-SDSTeams $logFilePath
+        $SDSTeams = Get-SDSTeams $includeArchived $logFilePath
 
         Write-Host "Identified $($SDSTeams.count) teams that are provisioned."
         Write-Output "Identified $($SDSTeams.count) teams that are provisioned." | Out-File $logFilePath -Append
@@ -190,7 +193,7 @@ function Execute($EducatorUPN, $recordedGroups, $logFilePath) {
     else {
         Write-Output "Obtaining list of SDS Teams for user $($EducatorUPN), Please wait..." | Out-File $logFilePath -Append
         Write-Host "Obtaining list of SDS Teams for user $($EducatorUPN), Please wait..."
-        $SDSTeams = Get-SDSTeams-ForUser $EducatorUPN $logFilePath
+        $SDSTeams = Get-SDSTeams-ForUser $EducatorUPN $includeArchived $logFilePath
 
         Write-Output "Identified $($SDSTeams.count) teams that are provisioned." | Out-File $logFilePath -Append
         Write-Host "Identified $($SDSTeams.count) teams that are provisioned."
@@ -213,7 +216,7 @@ $logFilePath = ".\Add-Group-Owners-To-Teams.log"
 $recordedGroups = ".\Updated-Teams.csv"
 
 try {
-    Execute $EducatorUPN $recordedGroups $logFilePath
+    Execute $EducatorUPN $includeArchived $recordedGroups $logFilePath
 }
 catch {
     Write-Error "Terminal Error occurred in processing."
