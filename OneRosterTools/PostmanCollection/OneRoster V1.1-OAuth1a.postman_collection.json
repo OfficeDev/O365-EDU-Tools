@@ -1362,7 +1362,65 @@
 			"name": "APIs required for GradeSync",
 			"item": [
 				{
-					"name": "Get Teacher",
+					"name": "Get User by Email",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "eeb871b9-733f-40d2-be10-17060729c645",
+								"exec": [
+									"// Expects Teacher Email to be provided as environment variable\r",
+									"if (!pm.environment.get(\"TeacherEmailAddress\"))\r",
+									"{\r",
+									"    console.log(\"Missing Teacher Email Address, It is required to be added in pm.environment\");\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "b56eea01-dd56-4c61-8c89-dd788311fa06",
+								"exec": [
+									"tests[\"Get User from Email\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/users?filter=email='{{TeacherEmailAddress}}'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"users"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "email='{{TeacherEmailAddress}}'"
+								}
+							]
+						},
+						"description": "Gets a user by email"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Teacher by Email",
 					"event": [
 						{
 							"listen": "test",
