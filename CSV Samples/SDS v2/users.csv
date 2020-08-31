@@ -1,0 +1,26 @@
+sourcedId,orgSourcedIds,username,role,familyName,givenName,password,grade
+2632426650,50001,Opalina.Barense@cdsync31.onmicrosoft.com,Administrator,Barense,Opalina,Pass@word01,
+8937553775,50003,Thomasina.Grangier@cdsync31.onmicrosoft.com,Faculty,Grangier,Thomasina,Pass@word01,
+2761489993,"50003,50004, 50005",Cordey.Rainer@cdsync31.onmicrosoft.com,Faculty,Rainer,Cordey,Pass@word01,
+2945602423,"50003,50004, 50005",Marylee.Turvey@cdsync31.onmicrosoft.com,instructor,Turvey,Marylee,Pass@word01,
+4085442821,"50004, 50005",Annabelle.Menicomb@cdsync31.onmicrosoft.com,instructor,Menicomb,Annabelle,Pass@word01,
+6543852496,"50004, 50005",Jon.Owers@cdsync31.onmicrosoft.com,instructor,Owers,Jon,Pass@word01,
+8283007432,"50004, 50005",Brocky.Hulme@cdsync31.onmicrosoft.com,professor,Hulme,Brocky,Pass@word01,
+6834640711,"50004, 50005",Aindrea.Waine@cdsync31.onmicrosoft.com,professor,Waine,Aindrea,Pass@word01,
+6564537190,50005,Jeremias.Petto@cdsync31.onmicrosoft.com,professor,Petto,Jeremias,Pass@word01,
+2443194043,50005,Hollis.Wilderspoon@cdsync31.onmicrosoft.com,professor,Wilderspoon,Hollis,Pass@word01,
+5135282920,50005,Geneva.Dinan@cdsync31.onmicrosoft.com,professor,Dinan,Geneva,Pass@word01,
+6701568696,"50001,50003, 50004",Drucy.Simak@cdsync31.onmicrosoft.com,student,Simak,Drucy,Pass@word01,undergraduate
+9181804407,"50001,50003, 50004",Ross.McGerr@cdsync31.onmicrosoft.com,student,McGerr,Ross,Pass@word01,undergraduate
+8904173078,"50001,50003, 50004",Bastien.Gronou@cdsync31.onmicrosoft.com,student,Gronou,Bastien,Pass@word01,undergraduate
+9198023810,"50001,50003, 50004",Stavro.Drury@cdsync31.onmicrosoft.com,student,Drury,Stavro,Pass@word01,undergraduate
+4511881111,"50001,50003, 50004",Gui.Gouldthorp@cdsync31.onmicrosoft.com,student,Gouldthorp,Gui,Pass@word01,undergraduate
+3805531583,"50001,50003, 50004",Bert.Crannis@cdsync31.onmicrosoft.com,student,Crannis,Bert,Pass@word01,undergraduate
+1317157435,"50001,50003, 50004",Jamal.Ghion@cdsync31.onmicrosoft.com,student,Ghion,Jamal,Pass@word01,undergraduate
+6950500610,"50001,50003, 50004",Rachele.Hrihorovich@cdsync31.onmicrosoft.com,student,Hrihorovich,Rachele,Pass@word01,undergraduate
+9070065711,"50001,50003, 50004,50005",Arvin.Swetenham@cdsync31.onmicrosoft.com,student,Swetenham,Arvin,Pass@word01,graduate
+2707623792,"50001,50003, 50004,50005",Marietta.Been@cdsync31.onmicrosoft.com,student,Been,Marietta,Pass@word01,graduate
+1010072846,"50001,50003, 50004,50005",Beatrisa.Maleham@cdsync31.onmicrosoft.com,student,Maleham,Beatrisa,Pass@word01,graduate
+5047443124,"50001,50003, 50004,50005",Ediva.Humberston@cdsync31.onmicrosoft.com,student,Humberston,Ediva,Pass@word01,postgraduate
+9578151551,50001,Justina.Olery@cdsync31.onmicrosoft.com,student,Olery,Justina,Pass@word01,alumni
+8878151567,50001,Terry.Marris@cdsync31.onmicrosoft.com,student,Marris,Terry,Pass@word01,alumni
