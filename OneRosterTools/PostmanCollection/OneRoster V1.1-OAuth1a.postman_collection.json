@@ -1357,6 +1357,1050 @@
 					}
 				}
 			]
+		},
+		{
+			"name": "APIs required for GradeSync",
+			"item": [
+				{
+					"name": "Get User by Email",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "eeb871b9-733f-40d2-be10-17060729c645",
+								"exec": [
+									"// Expects Teacher Email to be provided as environment variable\r",
+									"if (!pm.environment.get(\"TeacherEmailAddress\"))\r",
+									"{\r",
+									"    console.log(\"Missing Teacher Email Address, It is required to be added in pm.environment\");\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "b56eea01-dd56-4c61-8c89-dd788311fa06",
+								"exec": [
+									"tests[\"Get User from Email\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/users?filter=email='{{TeacherEmailAddress}}'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"users"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "email='{{TeacherEmailAddress}}'"
+								}
+							]
+						},
+						"description": "Gets a user by email"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Teacher by Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "339ede44-7e5e-4d6c-b391-57e5ffa4f0e5",
+								"exec": [
+									"tests[\"Get Teacher from Email\"] = responseCode.code === 200;",
+									"var data = JSON.parse(responseBody);",
+									"if(responseCode.code === 200)",
+									"{",
+									"    tests[\"Parse Teacher ID\"] = false;",
+									"    if (data.teachers)",
+									"    {",
+									"        pm.environment.set(\"teacher_id\", data.teachers[0].sourcedId);",
+									"        console.log(\"Teacher ID set to: \" + pm.variables.get(\"teacher_id\"));",
+									"        tests[\"Parse Teacher ID\"] = true;",
+									"    }",
+									"    else if (data.users)",
+									"    {",
+									"        pm.environment.set(\"teacher_id\", data.users[0].sourcedId);",
+									"        console.log(\"Teacher ID set to: \" + pm.variables.get(\"teacher_id\"));",
+									"        tests[\"Parse Teacher ID\"] = true;",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "c232bfed-23e6-452f-8315-d70c6549fac0",
+								"exec": [
+									"// Expects Teacher Email to be provided as environment variable\r",
+									"if (!pm.environment.get(\"TeacherEmailAddress\"))\r",
+									"{\r",
+									"    console.log(\"Missing Teacher Email Address, It is required to be added in pm.environment\");\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/teachers?filter=email='{{TeacherEmailAddress}}'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"teachers"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "email='{{TeacherEmailAddress}}'"
+								}
+							]
+						},
+						"description": "Gets a teacher based on their email."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Classes For Teacher",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cf27e668-9d02-4688-afba-4aef467686ed",
+								"exec": [
+									"tests[\"Get Classes for Teacher\"] = responseCode.code === 200;",
+									"",
+									"var data = JSON.parse(responseBody);",
+									"if(responseCode.code === 200)",
+									"{",
+									"    tests[\"Parse Class ID\"] = false;",
+									"    if(data.classes)",
+									"    {",
+									"        pm.environment.set(\"class_id\", data.classes[0].sourcedId);",
+									"        console.log(\"Class ID set to: \" + pm.variables.get(\"class_id\"));        ",
+									"        tests[\"Parse Class ID\"] = true;",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "f1ec2668-dd3b-48b3-9b1f-1c74fa1605d1",
+								"exec": [
+									"if (pm.environment.get(\"teacher_id\"))\r",
+									"{\r",
+									"    console.log(\"Missing Teacher Id, Please execute GradeSync Collection Requests in order to ensure it is set\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/teachers/{{teacher_id}}/classes",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"teachers",
+								"{{teacher_id}}",
+								"classes"
+							]
+						},
+						"description": "Gets a page of classes for a given teacher id."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Class For Teacher by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cf27e668-9d02-4688-afba-4aef467686ed",
+								"exec": [
+									"tests[\"Get Class for Teacher by ID\"] = responseCode.code === 200;",
+									"",
+									"const jsonData = JSON.parse(responseBody);",
+									"pm.test(\"Classes contain Class Id\", () => {    ",
+									"    pm.expect(jsonData).to.have.key('classes');",
+									"    pm.expect(jsonData.classes)",
+									"        .to.be.an('array')",
+									"        .to.have.lengthOf(1);",
+									"    ",
+									"    const classId = pm.environment.get(\"class_id\");",
+									"    pm.expect(jsonData.classes[0].sourcedId).to.eql(classId);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "3aeb060d-e8ee-484c-b21a-f736ef51440d",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/teachers/{{teacher_id}}/classes?filter=sourcedId='{{class_id}}'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"teachers",
+								"{{teacher_id}}",
+								"classes"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "sourcedId='{{class_id}}'"
+								}
+							]
+						},
+						"description": "Get details for a specific class for a teacher based on class_id."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Teachers For Class",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cf27e668-9d02-4688-afba-4aef467686ed",
+								"exec": [
+									"tests[\"Get Teachers For Class\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "5e8d3b87-ccbf-4711-aff9-1b790093411a",
+								"exec": [
+									"if (pm.environment.get(\"class_id\"))\r",
+									"{\r",
+									"    console.log(\"Missing Class Id, Please execute GradeSync Collection Requests in order to ensure it is set\");\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/classes/{{class_id}}/teachers",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"classes",
+								"{{class_id}}",
+								"teachers"
+							]
+						},
+						"description": "Gets a page of teachers for a class_id"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Students For Class",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cf27e668-9d02-4688-afba-4aef467686ed",
+								"exec": [
+									"tests[\"Get Students For Class\"] = responseCode.code === 200;\r",
+									"var data = JSON.parse(responseBody);\r",
+									"if(responseCode.code === 200)\r",
+									"{\r",
+									"    tests[\"Parse Student ID\"] = false;\r",
+									"    if (data.students)\r",
+									"    {\r",
+									"        pm.environment.set(\"student_id\", data.students[0].sourcedId);\r",
+									"        console.log(\"Student ID set to: \" + pm.variables.get(\"student_id\"));\r",
+									"        tests[\"Parse Student ID\"] = true;\r",
+									"    }\r",
+									"    else if (data.users)\r",
+									"    {\r",
+									"        pm.environment.set(\"student_id\", data.users[0].sourcedId);\r",
+									"        console.log(\"Student ID set to: \" + pm.variables.get(\"student_id\"));\r",
+									"        tests[\"Parse Student ID\"] = true;\r",
+									"    }\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "52cb3eef-b11a-4c02-883a-190f4ffd1b53",
+								"exec": [
+									"if (pm.environment.get(\"class_id\"))\r",
+									"{\r",
+									"    console.log(\"Missing Class Id, Please execute GradeSync Collection Requests in order to ensure it is set\");\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/classes/{{class_id}}/students",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"classes",
+								"{{class_id}}",
+								"students"
+							]
+						},
+						"description": "Gets a page of teachers for a class_id"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Class by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3a9208ca-13b1-45e9-beda-014b27c2be67",
+								"exec": [
+									"tests[\"Get Class by ID\"] = responseCode.code === 200;\r",
+									"\r",
+									"const jsonData = JSON.parse(responseBody);\r",
+									"if (responseCode.code == 200)\r",
+									"{\r",
+									"    tests[\"Parse Term ID\"] = false;\r",
+									"    if (jsonData[\"class\"] && jsonData[\"class\"].terms)\r",
+									"    {\r",
+									"        pm.environment.set(\"term_id\", jsonData[\"class\"].terms[0].sourcedId);\r",
+									"        console.log(\"Term ID set to: \" + pm.variables.get(\"term_id\"));\r",
+									"        tests[\"Parse Term ID\"] = true;\r",
+									"    }\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4690260c-fc5b-4943-8319-9021d833bf84",
+								"exec": [
+									"if (pm.environment.get(\"class_id\"))\r",
+									"{\r",
+									"    console.log(\"Missing Class Id, Please execute GradeSync Collection Requests in order to ensure it is set\");\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/classes/{{class_id}}",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"classes",
+								"{{class_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Term by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "339ede44-7e5e-4d6c-b391-57e5ffa4f0e5",
+								"exec": [
+									"tests[\"Get Term\"] = responseCode.code === 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"if(responseCode.code === 200)",
+									"{",
+									"    tests[\"Parse Grading Period\"] = false;",
+									"    if (jsonData.academicSession)",
+									"    {",
+									"        const { status, startDate, endDate } = jsonData.academicSession;",
+									"        tests[\"Check Active Status\"] = (status === \"active\");",
+									"",
+									"        pm.environment.set(\"term_start_date\", startDate);",
+									"        console.log(\"Term Start Date set to: \" + pm.variables.get(\"term_start_date\"));",
+									"",
+									"        pm.environment.set(\"term_end_date\", endDate);",
+									"        console.log(\"Term End Date set to: \" + pm.variables.get(\"term_end_date\"));",
+									"",
+									"        tests[\"Parse Grading Period\"] = true;",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "07e9f8d6-c8ae-4a21-a89c-fae5ee711f45",
+								"exec": [
+									"if (!pm.environment.get(\"term_id\"))\r",
+									"{\r",
+									"    console.log(\"Missing Term Id, Please execute GradeSync Collection Requests in order to ensure it is set\");\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/terms/{{term_id}}",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"terms",
+								"{{term_id}}"
+							]
+						},
+						"description": "Gets a term by term_id"
+					},
+					"response": []
+				},
+				{
+					"name": "Put LineItem for Class",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cf27e668-9d02-4688-afba-4aef467686ed",
+								"exec": [
+									"pm.test(\"Put LineItem For Class\", function () {\r",
+									"    pm.expect(pm.response.code).to.eql(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1c461993-18e5-47e0-8e94-b5205234ba26",
+								"exec": [
+									"const moment = require('moment');\r",
+									"const uuid = require('uuid');\r",
+									"\r",
+									"const utcNow = moment.utc();\r",
+									"\r",
+									"// create a unique lineItem title, based on utcNow\r",
+									"pm.environment.set(\"lineitem_title\", `GradeSync Postman - ${utcNow.format()}`);\r",
+									"\r",
+									"// set assign date to lie inside grading period\r",
+									"const termStartDate = moment.utc(pm.environment.get(\"term_start_date\"));\r",
+									"const termEndDate = moment.utc(pm.environment.get(\"term_end_date\"));\r",
+									"const lineItemAssignDate = moment.max([ termStartDate, moment.min([ utcNow, termEndDate ]) ]);\r",
+									"pm.environment.set(\"lineitem_assign_date\", lineItemAssignDate.format());\r",
+									"\r",
+									"// set dueDate for 1 week after assign date\r",
+									"const lineItemDueDate = lineItemAssignDate.add(1, 'week');\r",
+									"pm.environment.set(\"lineitem_due_date\", lineItemDueDate.format());\r",
+									"\r",
+									"// create a unique lineItemId\r",
+									"pm.environment.set(\"lineitem_id\", uuid());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"lineItem\": {\r\n        \"title\": \"{{lineitem_title}}\",\r\n        \"description\": \"Test Assignment created by GradeSync Postman Collection\",\r\n        \"dueDate\": \"{{lineitem_due_date}}\",\r\n        \"assignDate\": \"{{lineitem_assign_date}}\",\r\n        \"resultValueMin\": 0.0,\r\n        \"resultValueMax\": 100.0,\r\n        \"class\": {\r\n            \"type\": \"class\",\r\n            \"sourcedId\": \"{{class_id}}\"\r\n        },\r\n        \"gradingPeriod\": {\r\n            \"type\": \"academicSession\",\r\n            \"sourcedId\": \"{{term_id}}\"\r\n        },\r\n        \"sourcedId\": \"{{lineitem_id}}\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/lineitems/{{lineitem_id}}",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"lineitems",
+								"{{lineitem_id}}"
+							]
+						},
+						"description": "Create a lineitem or update the existing one for a class"
+					},
+					"response": []
+				},
+				{
+					"name": "Get LineItem For Class by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cf27e668-9d02-4688-afba-4aef467686ed",
+								"exec": [
+									"pm.test(\"Get LineItems For Class\", () => {\r",
+									"    pm.expect(responseCode.code).to.eql(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"LineItems contain new LineItem\", () => {\r",
+									"    const jsonData = JSON.parse(responseBody);\r",
+									"    pm.expect(jsonData).to.have.key('lineItems');\r",
+									"    pm.expect(jsonData.lineItems)\r",
+									"        .to.be.an('array')\r",
+									"        .to.have.lengthOf(1);\r",
+									"        \r",
+									"    const lineItemId = pm.environment.get('lineitem_id');\r",
+									"    pm.expect(jsonData.lineItems[0].sourcedId).to.eql(lineItemId);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d8aacdfc-ef24-428c-82bf-85260ffd622b",
+								"exec": [
+									"if (pm.environment.get(\"class_id\"))\r",
+									"{\r",
+									"    console.log(\"Missing Class Id, Please execute GradeSync Collection Requests in order to ensure it is set\");\r",
+									"}\r",
+									"\r",
+									"if (pm.environment.get(\"lineitem_id\"))\r",
+									"{\r",
+									"    console.log(\"Missing LineItem Id, Please execute GradeSync Collection Requests in order to ensure it is set\");\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/classes/{{class_id}}/lineitems?filter=sourcedId='{{lineitem_id}}'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"classes",
+								"{{class_id}}",
+								"lineitems"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "sourcedId='{{lineitem_id}}'"
+								}
+							]
+						},
+						"description": "Gets a page of lineitem by ID for a Class"
+					},
+					"response": []
+				},
+				{
+					"name": "Put Result for LineItem for Student",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cf27e668-9d02-4688-afba-4aef467686ed",
+								"exec": [
+									"pm.test(\"Put Result for LineItem for Student\", function () {\r",
+									"    pm.expect(pm.response.code).to.eql(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1c461993-18e5-47e0-8e94-b5205234ba26",
+								"exec": [
+									"const moment = require('moment');\r",
+									"const uuid = require('uuid');\r",
+									"\r",
+									"// set score date to UtcNow\r",
+									"const utcNow = moment.utc();\r",
+									"pm.environment.set(\"result_score_date\", utcNow.format());\r",
+									"\r",
+									"// Set a random score between 0-100 (for GradeType = \"Points\")\r",
+									"pm.environment.set(\"result_score\", (Math.random(0, 1) * 100).toFixed(1));\r",
+									"\r",
+									"// Create a unique resultId, if one is not created.\r",
+									"pm.environment.set(\"result_id\", `result-${uuid()}`);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"result\": {\r\n        \"score\": {{result_score}},\r\n        \"lineItem\": {\r\n            \"sourcedId\": \"{{lineitem_id}}\"\r\n        },\r\n        \"student\": {\r\n            \"sourcedId\": \"{{student_id}}\"\r\n        },\r\n        \"scoreDate\": \"{{result_score_date}}\",\r\n        \"scoreStatus\": \"fully graded\",\r\n        \"sourcedId\": \"{{result_id}}\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/results/{{result_id}}",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"results",
+								"{{result_id}}"
+							]
+						},
+						"description": "Puts a result for a student into a lineItem."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Results For LineItem For Class",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cf27e668-9d02-4688-afba-4aef467686ed",
+								"exec": [
+									"pm.test(\"Get Results For LineItems For Class\", () => {\r",
+									"    pm.expect(responseCode.code).to.eql(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Results contain new Result\", () => {\r",
+									"    const jsonData = JSON.parse(responseBody);\r",
+									"    pm.expect(jsonData).to.have.key('results');\r",
+									"    pm.expect(jsonData.results)\r",
+									"        .to.be.an('array')\r",
+									"        .to.have.lengthOf(1);   // should only contain newly added result \r",
+									"    \r",
+									"    const resultId = pm.environment.get(\"result_id\");\r",
+									"    pm.expect(jsonData.results[0].sourcedId).to.eql(resultId);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "faf43b57-a352-4ba6-90f7-e2b5a20091a9",
+								"exec": [
+									"if (pm.environment.get(\"class_id\"))\r",
+									"{\r",
+									"    console.log(\"Missing Class Id, Please execute GradeSync Collection Requests in order to ensure it is set\");\r",
+									"}\r",
+									"\r",
+									"if (pm.environment.get(\"lineitem_id\"))\r",
+									"{\r",
+									"    console.log(\"Missing LineItem Id, Please execute GradeSync Collection Requests in order to ensure it is set\");\r",
+									"}\r",
+									"\r",
+									"if (pm.environment.get(\"result_id\"))\r",
+									"{\r",
+									"    console.log(\"Missing Result Id, Please execute GradeSync Collection Requests in order to ensure it is set\");\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/classes/{{class_id}}/lineitems/{{lineitem_id}}/results",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"classes",
+								"{{class_id}}",
+								"lineitems",
+								"{{lineitem_id}}",
+								"results"
+							]
+						},
+						"description": "Gets a page of results for a lineitem_id for a class_id"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Results For Student For Class",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cf27e668-9d02-4688-afba-4aef467686ed",
+								"exec": [
+									"tests[\"Get LineItems For Class\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "0e6b5c03-de4b-422a-80fe-ddfc513421ab",
+								"exec": [
+									"if (pm.environment.get(\"class_id\"))\r",
+									"{\r",
+									"    console.log(\"Missing Class Id, Please execute GradeSync Collection Requests in order to ensure it is set\");\r",
+									"}\r",
+									"\r",
+									"if (pm.environment.get(\"student_id\"))\r",
+									"{\r",
+									"    console.log(\"Missing Student Id, Please execute GradeSync Collection Requests in order to ensure it is set\");\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/classes/{{class_id}}/students/{{student_id}}/results",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"classes",
+								"{{class_id}}",
+								"students",
+								"{{student_id}}",
+								"results"
+							]
+						},
+						"description": "Gets a page of results for a student_id for a class_id"
+					},
+					"response": []
+				},
+				{
+					"name": "[Optional][CleanUp] Delete Result by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cf27e668-9d02-4688-afba-4aef467686ed",
+								"exec": [
+									"pm.test(\"Delete Result by ID\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([204]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Not a required API for GradeSync\", () => {});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1c461993-18e5-47e0-8e94-b5205234ba26",
+								"exec": [
+									"if (pm.environment.get(\"result_id\"))\r",
+									"{\r",
+									"    console.log(\"Missing Result Id, Please execute GradeSync Collection Requests in order to ensure it is set\");\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/results/{{result_id}}",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"results",
+								"{{result_id}}"
+							]
+						},
+						"description": "- **OPTIONAL** and not required for GradeSync to function\r\n- Deletes the result which is created / updated before\r\n- Added here to ensure we do necessary cleanup"
+					},
+					"response": []
+				},
+				{
+					"name": "[Optional][CleanUp] Delete LineItem by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cf27e668-9d02-4688-afba-4aef467686ed",
+								"exec": [
+									"pm.test(\"Delete LineItem by ID\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([204]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Not a required API for GradeSync\", () => {});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1c461993-18e5-47e0-8e94-b5205234ba26",
+								"exec": [
+									"if (pm.environment.get(\"lineitem_id\"))\r",
+									"{\r",
+									"    console.log(\"Missing LineItem Id, Please execute GradeSync Collection Requests in order to ensure it is set\");\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/lineitems/{{lineitem_id}}",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"lineitems",
+								"{{lineitem_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "fe1ade4d-9d87-45e6-99a0-5adf7b6cf669",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "666dd8db-1bd4-46ba-8f90-1a8ecb0832e5",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
 		}
 	],
 	"auth": {
