@@ -18,7 +18,7 @@ Setting up a sync profile with CSV files is a 4step process:
 |------	                                    |---	        |---	                                        |
 | [Create Profile ](../api/educationsynchronizationprofile_post.md) (Mandatory)	                        |   POST	    |   Setup a profile for SDS Sync	            |   
 | [Monitor Provisioning ](../api/educationsynchronizationprofile_get.md) (Mandatory)	                        |   GET	    |   Verify profile is provisioned by checking the state property   |
-| [Get URL to upload CSV files](../api/educationsyncrhonizationprofile_uploadurl.md) (Mandatory)         |   GET	        |   Gets the SDS url to upload the files   |
+| [Get URL to upload CSV files](../api/educationsynchronizationprofile_uploadurl.md) (Mandatory)         |   GET	        |   Gets the SDS url to upload the files   |
 | [Start sync after uploading files](../api/educationsynchronizationprofile_start.md) (Mandatory)                               |   POST        |   Verify files are valid and trigger sync	    |   	
 | [Get Status](../api/educationsynchronizationprofilestatus_get.md)    (Optional)                           |   GET	        |   Gets the status of the ongoing sync	        |   
 
