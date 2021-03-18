@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c7148d24-1bd1-4293-969a-f2fa5c0f4c09",
+		"_postman_id": "760a65f9-34fd-488f-91d6-b61eca719c4f",
 		"name": "SDS OneRoster V1.1-OAuth2",
 		"description": "OneRoster� API version 1.1 spec is availble here: \nhttps://www.imsglobal.org/oneroster-v11-final-specification",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -753,112 +753,6 @@
 								"oneroster",
 								"v1p1",
 								"classes"
-							]
-						},
-						"description": "Gets a page of classes"
-					},
-					"response": []
-				},
-				{
-					"name": "Get Classes - No Records",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var retArray = undefined;",
-									"var maxResponseTime = 30000; //30 seconds",
-									"",
-									"pm.test(\"Classes - No Records Success response / 200\", function () {",
-									"\tpm.expect(responseCode.code).to.be.eql(200);",
-									"});",
-									"",
-									"// test content-type",
-									"pm.test(\"Content-Type header is present\", () => {",
-									"  pm.response.to.have.header(\"Content-Type\");",
-									"});",
-									"",
-									"pm.test(\"Content-Type header is application/json\", () => {",
-									"  pm.expect(pm.response.headers.get('Content-Type')).to.contain('application/json');",
-									"});",
-									"",
-									"pm.test(\"Response time is less than \" + (maxResponseTime/1000) + \" seconds\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.lessThan(maxResponseTime);",
-									"});",
-									"",
-									"/*",
-									"pm.test(\"X-Total-Count header is present\", () => {",
-									"  pm.response.to.have.header(\"X-Total-Count\");",
-									"});",
-									"*/",
-									"",
-									"//if not 200, don't continue",
-									"if (responseCode.code === 200) {",
-									"",
-									"\tvar data = JSON.parse(responseBody);",
-									"",
-									"\t// get the array ",
-									"\tswitch (true) {",
-									"",
-									"\t\tcase (data.classes !== null && data.classes !== undefined):",
-									"\t\t\t{",
-									"\t\t\t\tif (Array.isArray(data.classes)) {",
-									"\t\t\t\t\tretArray = data.classes;",
-									"\t\t\t\t\ttests[\"Classes is Array\"] = true;",
-									"\t\t\t\t} else {",
-									"\t\t\t\t\ttests[\"Classes is Array\"] = false;",
-									"\t\t\t\t}",
-									"\t\t\t\tbreak;",
-									"\t\t\t}",
-									"",
-									"",
-									"\t\tdefault:",
-									"",
-									"\t} // switch",
-									"",
-									"",
-									"\t// array must exist",
-									"\tpm.test(\"Require array of classes\", function () {",
-									"\t\tpm.expect(retArray).to.be.an('array');",
-									"\t});",
-									"",
-									"",
-									"\t// array must be empty",
-									"\tif (retArray != undefined) {",
-									"\t\tpm.test(\"Class Array is empty\", function () {",
-									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.empty;",
-									"\t\t});",
-									"\t}\t",
-									"} // 200"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/classes?filter=title='active'",
-							"host": [
-								"{{OneRosterHost}}"
-							],
-							"path": [
-								"ims",
-								"oneroster",
-								"v1p1",
-								"classes"
-							],
-							"query": [
-								{
-									"key": "filter",
-									"value": "title='active'"
-								}
 							]
 						},
 						"description": "Gets a page of classes"
@@ -1940,7 +1834,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/users?filter=status='test'",
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/users?filter=status='norecords'",
 							"host": [
 								"{{OneRosterHost}}"
 							],
@@ -1953,7 +1847,7 @@
 							"query": [
 								{
 									"key": "filter",
-									"value": "status='test'"
+									"value": "status='norecords'"
 								}
 							]
 						},
@@ -2289,7 +2183,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/students?filter=status='test'",
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/students?filter=username='norecords'",
 							"host": [
 								"{{OneRosterHost}}"
 							],
@@ -2302,7 +2196,7 @@
 							"query": [
 								{
 									"key": "filter",
-									"value": "status='test'"
+									"value": "username='norecords'"
 								}
 							]
 						},
@@ -3341,7 +3235,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/teachers?offset=0&limit=10000&filter=status='test'",
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/teachers?offset=0&limit=10000&filter=username='norecords'",
 							"host": [
 								"{{OneRosterHost}}"
 							],
@@ -3364,7 +3258,7 @@
 								},
 								{
 									"key": "filter",
-									"value": "status='test'",
+									"value": "username='norecords'",
 									"description": "Filters for active records"
 								}
 							]
@@ -5743,7 +5637,7 @@
 					"response": []
 				},
 				{
-					"name": "Get lineItems",
+					"name": "Get AcademicSessions by Term",
 					"event": [
 						{
 							"listen": "test",
