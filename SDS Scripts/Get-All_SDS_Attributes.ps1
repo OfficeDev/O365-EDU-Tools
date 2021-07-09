@@ -13,6 +13,7 @@ TJ Vering
 
 Change Log:
 Version 1.0, 12/06/2016 - First Draft
+Version 2.0, 04/06/2021 - Change to MS Graph Moddule - Ayron Johnson
 
 #>
 
@@ -23,18 +24,15 @@ Param (
     [string] $ExportSections = $true,
     [string] $ExportStudentEnrollments = $true,
     [string] $ExportTeacherRosters = $true,
-    [string] $OutFolder = ".",
+    [string] $OutFolder = "./SDSAttributesExport",
     [switch] $PPE = $false,
-    [switch] $AppendTenantIdToFileName = $false
+    [switch] $AppendTenantIdToFileName = $false,
+    [Parameter(Mandatory=$false)]
+    [string] $skipToken= "."
 )
 
-$GraphEndpointProd = "https://graph.windows.net"
-$AuthEndpointProd = "https://login.windows.net"
 
-$GraphEndpointPPE = "https://graph.ppe.windows.net"
-$AuthEndpointPPE = "https://login.windows-ppe.net"
-
-$NugetClientLatest = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+$logFilePath = $OutFolder
 
 $eduObjSchool = "School"
 $eduObjSection = "Section"
@@ -51,140 +49,74 @@ function Get-PrerequisiteHelp
  Required Prerequisites
 ========================
 
-1. Install Microsoft Online Services Sign-In Assistant v7.0 from http://www.microsoft.com/en-us/download/details.aspx?id=39267
-
-2. Install the AAD PowerShell Module from http://msdn.microsoft.com/en-us/library/azure/jj151815.aspx#bkmk_installmodule
+1. Install Microsoft Graph Powershell Module with command 'Install-Module Microsoft.Graph'
 
 3. Check that you can connect to your tenant directory from the PowerShell module to make sure everything is set up correctly.
 
     a. Open a separate PowerShell session
     
-    b. Execute: "Connect-MsolService" to bring up a sign in UI 
+    b. Execute: "connect-graph -scopes AdministrativeUnit.ReadWrite.All,User.Read.All" to bring up a sign in UI. 
     
     c. Sign in with any tenant administrator credentials
     
     d. If you are returned to the PowerShell sesion without error, you are correctly set up
 
-5. Retry this script.  If you still get an error about failing to load the MSOnline module, troubleshoot why "Import-Module MSOnline" isn't working
+5. Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working
 
 (END)
 ========================
 "@
 }
 
-function Load-ActiveDirectoryAuthenticationLibrary 
-{
-	$moduleDirPath = ($ENV:PSModulePath -split ';')[0]
-	$modulePath = $moduleDirPath + "\AADGraph"
-	if(-not (Test-Path ($modulePath+"\Nugets"))) {New-Item -Path ($modulePath+"\Nugets") -ItemType "Directory" | out-null}
-	$adalPackageDirectories = (Get-ChildItem -Path ($modulePath+"\Nugets") -Filter "Microsoft.IdentityModel.Clients.ActiveDirectory*" -Directory)
-	if($adalPackageDirectories.Length -eq 0){
-        # Get latest nuget client
-        $nugetClientPath = $modulePath + "\Nugets\nuget.exe"
-        Remove-Item -Path $nugetClientPath -Force -ErrorAction Ignore
-		Write-Verbose "Downloading latest nuget client from $NugetClientLatest"
-		$wc = New-Object System.Net.WebClient
-		$wc.DownloadFile($NugetClientLatest, $nugetClientPath);
-		
-        # Install ADAL nuget package
-		$nugetDownloadExpression = $nugetClientPath + " install Microsoft.IdentityModel.Clients.ActiveDirectory -source https://www.nuget.org/api/v2/ -Version 2.19.208020213 -OutputDirectory " + $modulePath + "\Nugets"
-        Write-Verbose "Active Directory Authentication Library Nuget doesn't exist. Downloading now: `n$nugetDownloadExpression"
-		Invoke-Expression $nugetDownloadExpression
-	}
 
-	$adalPackageDirectories = (Get-ChildItem -Path ($modulePath+"\Nugets") -Filter "Microsoft.IdentityModel.Clients.ActiveDirectory*" -Directory)
-    if ($adalPackageDirectories -eq $null -or $adalPackageDirectories.length -le 0)
-    {
-        Write-Error "Unable to download ADAL nuget package"
-        return $false
+function Initialize() {
+    import-module Microsoft.Graph.Authentication -MinimumVersion 0.9.1
+    Write-Output "If prompted, please use a tenant admin-account to grant access to User.Read.All, GroupMember.Read.All, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All"
+    Refresh-Token
+}
+
+$lastRefreshed = $null
+function Refresh-Token() {
+    if ($lastRefreshed -eq $null -or (get-date - $lastRefreshed).Minutes -gt 10) {
+        connect-graph -scopes User.Read.All, GroupMember.Read.All, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All
+        $lastRefreshed = get-date
     }
-
-    $adal4_5Directory = Join-Path $adalPackageDirectories[$adalPackageDirectories.length-1].FullName -ChildPath "lib\net45"
-	$ADAL_Assembly = Join-Path $adal4_5Directory -ChildPath "Microsoft.IdentityModel.Clients.ActiveDirectory.dll"
-	$ADAL_WindowsForms_Assembly = Join-Path $adal4_5Directory -ChildPath "Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll"
-
-	if($ADAL_Assembly.Length -gt 0 -and $ADAL_WindowsForms_Assembly.Length -gt 0){
-		Write-Verbose "Loading ADAL Assemblies: `n`t$ADAL_Assembly `n`t$ADAL_WindowsForms_Assembly"
-        Write-Debug "file path length for $ADAL_Assembly is $($ADAL_Assembly.Length)"
-		[System.Reflection.Assembly]::LoadFrom($ADAL_Assembly) | out-null
-		[System.Reflection.Assembly]::LoadFrom($ADAL_WindowsForms_Assembly) | out-null
-		return $true
-	}
-	else{
-		Write-Verbose "Fixing Active Directory Authentication Library package directories ..."
-		$adalPackageDirectories | Remove-Item -Recurse -Force | Out-Null
-		Write-Error "Not able to load ADAL assembly. Delete the Nugets folder under" $modulePath ", restart PowerShell session and try again ..."
-	}
-
-    return $false
 }
 
-<#
-.Synopsis
-    Get authentication result. This is to acquire an OAuth2token for graph API calls.
-#>
-function Get-AuthenticationResult()
-{
-  $clientId = "1950a258-227b-4e31-a9cf-717495945fc2"
-  $redirectUri = [Uri] "urn:ietf:wg:oauth:2.0:oob"
-  $resourceClientId = "00000002-0000-0000-c000-000000000000"
-  $resourceAppIdURI = $graphEndPoint
-  $authority = $authEndPoint + "/common"
- 
-  $authContext = New-Object "Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext" -ArgumentList $authority,$false
-  $promptBehavior = [Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior]::Always
-  $platformParameter = New-Object "Microsoft.IdentityModel.Clients.ActiveDirectory.PlatformParameters" -ArgumentList $promptBehavior
-  $authResult = $authContext.AcquireTokenAsync([string] $resourceAppIdURI, [string] $clientId, [Uri] $redirectUri, $platformParameter).Result
-  
-  Write-Output $authResult
+# Gets data from all pages
+function PageAll-GraphRequest($initialUri, $logFilePath) {
+
+    # Connect to the tenant
+    #Write-Progress -Activity $activityName -Status "Connecting to tenant"
+
+    $result = @()
+
+    $currentUrl = $initialUri
+    $i = 1
+    
+    while (($currentUrl -ne $null) -and ($i -ile 4999)) {
+        Refresh-Token
+        $response = invoke-graphrequest -Method GET -Uri $currentUrl -ContentType "application/json"
+        $result += $response.value
+        $currentUrl = $response.'@odata.nextLink'
+        $i++
+    }
+    $global:nextLink = $response.'@odata.nextLink'
+    return $result
 }
 
-<#
-.Synopsis
-    Invoke web request. Based on http request method, it constructs request headers using global $authToken.
-    Response is in json format. If token expired, it will ask user to refresh token. Max retry time is 5.
-.Parameter method
-    Http request method
-.Parameter uri
-    Http request uri
-.Parameter payload
-    Http request payload. Not used if method is Get.
-#>
-function Send-WebRequest
+
+
+function TokenSkipCheck ($uriToCheck, $logFilePath)
 {
-    Param
-    (
-        $method,
-        $uri,
-        $payload
-    )
-
-    $response = ""
-    $tokenExpiredRetryCount = 0
-    Do {
-        if ($tokenExpiredRetryCount -gt 0) {
-            $authToken = Get-AuthenticationResult
-        }
-
-        if ($method -ieq "get") {
-            $headers = @{ "Authorization" = "Bearer " + $authToken.AccessToken }
-			Write-Output $uri
-            $response = Invoke-WebRequest -Method $method -Uri $uri -Headers $headers
-        }
-        else {
-            $headers = @{ 
-                "Authorization" = "Bearer " + $authToken.AccessToken
-                "Accept" = "application/json;odata=minimalmetadata"
-                "Content-Type" = "application/json"
-            }
-
-            $response = Invoke-WebRequest -Method $method -Uri $uri -Headers $headers -Body $payload
-        }
-
-        $tokenExpiredRetryCount++
-    } While (($response -contains "Authentication_ExpiredToken") -and  ($tokenExpiredRetryCount -lt 5))
-
-    Write-Output $response
+    if ($skipToken -eq "." ) {
+        $checkedUri = $uriToCheck
+    }
+    else {
+        $checkedUri = $skipToken
+    }
+    
+    return $checkedUri
 }
 
 function Export-SdsSchools
@@ -214,6 +146,7 @@ function Get-SdsSchools
 {
     $list = Get-Schools
     $data = @()
+
     foreach($au in $list)
     {
         #SIS ID,Name,School Number,School NCES_ID,State ID,Grade Low,Grade High,Principal SIS ID,Principal Name,Principal Secondary Email,Address,City,State,Zip,Phone,Zone,Country
@@ -237,6 +170,7 @@ function Get-SdsSchools
             "Country" = $au.extension_fe2174665583431c953114ff7268b7b3_Education_Country
         }
     }
+
     return $data
 }
 
@@ -254,30 +188,20 @@ function Get-AdministrativeUnits
 
     $list = @()
 
-    $firstPage = $true
-    Do
-    {
-        if ($firstPage)
-        {
-            $uri = $graphEndPoint + "/" + $authToken.TenantId + "/administrativeUnits?api-version=beta&`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
-            #extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource%20eq%20'SIS'%20and%20
-            $firstPage = $false
-        }
-        else
-        {
-            $uri = $graphEndPoint + "/" + $authToken.TenantId + "/" + $responseObject.odatanextLink + "&api-version=beta"
-        }
+    $initialUri = "https://graph.microsoft.com/beta/directory/administrativeUnits?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
 
-        $response = Send-WebRequest "Get" $uri
-        $responseString = $response.Content.Replace("odata.", "odata")
-        $responseObject = $responseString | ConvertFrom-Json
-        foreach ($au in $responseObject.value)
+    #getting AUs for all schools
+    $checkedUri = TokenSkipCheck $initialUri $logFilePath
+    $allSchoolAUs = PageAll-GraphRequest $checkedUri $logFilePath
+    
+    foreach ($au in $allSchoolAUs)
+    {
+        if ($au.id -ne $null)
         {
             $list += $au
         }
     }
-    While ($responseObject.odatanextLink -ne $null)
-
+    
     return $list
 }
 
@@ -331,7 +255,7 @@ function Get-SdsSections
             "Periods" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_Period
             "Status" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_Status
 
-            "ObjectID" = $group.objectID
+            "ObjectID" = $group.id
         }
     }
 
@@ -352,34 +276,21 @@ function Get-Groups
 
     $list = @()
 
-    $firstPage = $true
-    Do
-    {
-        if ($firstPage)
-        {
-            $uri = $graphEndPoint + "/" + $authToken.TenantId + "/groups?api-version=1.6&`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
-            #extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource%20eq%20'SIS'%20and%20
-            #"ObjectId, DisplayName, Mail, Source ID" | Out-File $filePath -Append
-            $firstPage = $false
-        }
-        else
-        {
-            $uri = $graphEndPoint + "/" + $authToken.TenantId + "/" + $responseObject.odatanextLink + "&api-version=1.6"
-        }
-        # Write-Host "GET: $uri"
-
-        $response = Send-WebRequest "Get" $uri
-        $responseString = $response.Content.Replace("odata.", "odata")
-        $responseObject = $responseString | ConvertFrom-Json
-        foreach ($group in $responseObject.value)
-        {
-            $list += $group
+    $initialUri = "https://graph.microsoft.com/beta/groups?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
 
 
+    $checkedUri = TokenSkipCheck $initialUri $logFilePath
+    $groups = PageAll-GraphRequest $checkedUri $logFilePath
+
+        foreach ($group in $groups)
+        {
+            if ($group.id -ne $null)
+            {
+                $list += $group
+            }
             #$group.ObjectId + ", " + $group.DisplayName + ", " + $group.Mail + ", " + $group.extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId | Out-File $filePath -Append
         }
-    }
-    While ($responseObject.odatanextLink -ne $null)
+
 
     return $list
 }
@@ -393,9 +304,10 @@ function Export-SdsTeacherRosters
     $list = Get-Sections
 
     $data = @()   
+
     foreach($item in $list)
     {
-       $data += Format-SdsTeacherRoster $item (Get-TeacherRoster $item.ObjectID)
+        $data += Format-SdsTeacherRoster $item (Get-TeacherRoster $item.id)
     }
 
     $cnt = ($data | Measure-Object).Count
@@ -420,7 +332,7 @@ function Get-SdsTeacherRoster
         $sectionId
     )
     $section = Get-SdsSection $sectionId
-    $members = Get-TeacherRoster $section.ObjectID
+    $members = Get-TeacherRoster $section.id
     return Format-SdsTeacherRoster $section $members
 }
 
@@ -456,7 +368,9 @@ function Get-TeacherRoster
     (
         $objectId
     )
+
     $group = Get-Section $objectId
+
     if ($group -ne $null)
     {
         return Get-GroupMembership $objectId $eduObjTeacher
@@ -476,9 +390,10 @@ function Export-SdsStudentEnrollments
     $list = Get-Sections
 
     $data = @()
+
     foreach($item in $list)
     {
-       $data += Format-SdsStudentEnrollment $item (Get-StudentEnrollment $item.ObjectID)
+       $data += Format-SdsStudentEnrollment $item (Get-StudentEnrollment $item.id)
     }
 
     $cnt = ($data | Measure-Object).Count
@@ -503,7 +418,7 @@ function Get-SdsStudentEnrollment
         $sectionId
     )
     $section = Get-SdsSection $sectionId
-    $members = Get-StudentEnrollment $section.ObjectID
+    $members = Get-StudentEnrollment $section.id
     return Format-SdsStudentEnrollment $section $members
 }
 
@@ -538,7 +453,9 @@ function Get-StudentEnrollment
     (
         $objectId
     )
+
     $group = Get-Section $objectId
+
     if ($group -ne $null)
     {
         return Get-GroupMembership $objectId $eduObjStudent
@@ -555,13 +472,15 @@ function Get-SdsSection
     (
         $sectionId
     )
-    $uri = $graphEndPoint + "/" + $authToken.TenantId + "/groups?api-version=1.6&`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SectionId%20eq%20'$sectionId'"
+
+    $initialUri = "https://graph.microsoft.com/beta/groups?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SectionId%20eq%20'$sectionId'"
+
+    $checkedUri = TokenSkipCheck $initialUri $logFilePath
+    $groups = PageAll-GraphRequest $checkedUri $logFilePath
+    
     #extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource%20eq%20'SIS'%20and%20
-    #Write-Host $uri
-    $response = Send-WebRequest "Get" $uri
-    $responseString = $response.Content.Replace("odata.", "odata")
-    $responseObject = $responseString | ConvertFrom-Json
-    foreach ($group in $responseObject.value)
+    
+    foreach ($group in $groups)
     {
         return $group
     }
@@ -574,19 +493,20 @@ function Get-Section
     (
         $objectId
     )
-    $uri = $graphEndPoint + "/" + $authToken.TenantId + "/groups/" + $objectId + "?api-version=1.6"
-    #Write-Host $uri
-    $response = Send-WebRequest "Get" $uri
-    $responseString = $response.Content.Replace("odata.", "odata")
-    $responseObject = $responseString | ConvertFrom-Json
-    foreach ($group in $responseObject)
-    {
-        if ($group.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType = $eduObjSection)
-        {
+
+    $initialUri = "https://graph.microsoft.com/beta/groups/$objectId"
+
+    $checkedUri = TokenSkipCheck $initialUri $logFilePath
+    $group = PageAll-GraphRequest $checkedUri $logFilePath
+    
+    # foreach ($group in $groups) #not necessary since specifying single group
+    # {
+        #if ($group.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType -eq $eduObjSection) #object type not working
+        #{
             return $group
-        }
-    }
-    return $null
+        #}
+    # }
+    #return $null
 }
 
 function Get-GroupMembership
@@ -599,42 +519,31 @@ function Get-GroupMembership
 
     $list = @()
 
-    $firstPage = $true
-    Do
+  
+            
+    if ($eduObjectType -eq $eduObjTeacher) 
     {
-        if ($firstPage)
-        {
-            $uri = $graphEndPoint + "/" + $authToken.TenantId + "/groups/" + $groupObjectId + "/"
-            if ($eduObjectType -eq $eduObjTeacher) 
-            {
-                $uri += "owners"
-            }
-            else
-            {
-                $uri += "members"
-            }
-            $uri += "?api-version=1.6"
+        #$filterClause = "?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjTeacher'"
+         $initialUri = "https://graph.microsoft.com/beta/groups/" + $groupObjectId + '/owners'
+    }
+    else
+    {
+        #$filterClause = "?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjStudent'"
+         $initialUri = "https://graph.microsoft.com/beta/groups/" + $groupObjectId + '/members'
+    }
+    
+    #$initialUri = "https://graph.microsoft.com/beta/groups/" + $groupObjectId + '/members' + "$filterClause" # filter not working
 
-            $firstPage = $false
-        }
-        else
-        {
-            $uri = $graphEndPoint + "/" + $authToken.TenantId + "/" + $responseObject.odatanextLink + "&api-version=1.6"
-        }
+    $checkedUri = TokenSkipCheck $initialUri $logFilePath
+    $groupMembers = PageAll-GraphRequest $checkedUri $logFilePath
 
-        $response = Send-WebRequest "Get" $uri
-        $responseString = $response.Content.Replace("odata.", "odata")
-        $responseObject = $responseString | ConvertFrom-Json
-        foreach ($member in $responseObject.value)
+    foreach ($member in $groupMembers)
+    {
+        if ($member.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType -eq $eduObjectType)
         {
-           if ($member.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType -eq $eduObjectType)
-           {
-                $list += $member
-           }
+            $list += $member
         }
     }
-    While ($responseObject.odatanextLink -ne $null)
-
 
     return $list
 }
@@ -666,6 +575,7 @@ function Get-SdsTeachers
 {
     $users = Get-Teachers
     $data = @()
+    
     foreach($user in $users)
     {
         #SIS ID,School SIS ID,Username,First Name,Last Name,Middle Name,Teacher Number,State ID,Status,Secondary Email,Title,Qualification,Password
@@ -720,6 +630,7 @@ function Get-SdsStudents
 {
     $users = Get-Students
     $data = @()
+
     foreach($user in $users)
     {
         #SIS ID,School SIS ID,Username,First Name,Last Name,Middle Name,Student Number,Status,State ID,Mailing Address,Mailing City,Mailing State,Mailing Zip,Mailing Latitude,Mailing Longitude,Mailing Country
@@ -776,57 +687,37 @@ function Get-Users
 
     $list = @()
 
-    $firstPage = $true
-    Do
-    {
-        if ($firstPage)
-        {
-            $uri = $graphEndPoint + "/" + $authToken.TenantId + "/users?api-version=1.6&`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
+    $initialUri = "https://graph.microsoft.com/beta/users?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
             #extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource%20eq%20'SIS'%20and%20
-            $firstPage = $false
-        }
-        else
-        {
-            $uri = $graphEndPoint + "/" + $authToken.TenantId + "/" + $responseObject.odatanextLink + "&api-version=1.6"
-        }
-        # Write-Host "GET: $uri"
 
-        $response = Send-WebRequest "Get" $uri
-        $responseString = $response.Content.Replace("odata.", "odata")
-        $responseObject = $responseString | ConvertFrom-Json
 
-        foreach ($user in $responseObject.value)
+    $checkedUri = TokenSkipCheck $initialUri $logFilePath
+    $users = PageAll-GraphRequest $checkedUri $logFilePath
+
+
+    foreach ($user in $users)
+    {
+        if ($user.id -ne $null)
         {
             $list += $user
         }
     }
-    While ($responseObject.odatanextLink -ne $null)
+
 
     return $list
 }
 
 # Main
-$graphEndPoint = $GraphEndpointProd
-$authEndPoint = $AuthEndpointProd
-if ($PPE)
-{
-    Write-Host "Switching to PPE endpoints"
-    $graphEndPoint = $GraphEndpointPPE
-    $authEndPoint = $AuthEndpointPPE
-}
-else {
-    Write-Host "Using PROD endpoints"
-}
 
 $activityName = "Reading SDS objects in the directory"
 
 try
 {
-    Import-Module MSOnline | Out-Null
+    Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1 | Out-Null
 }
 catch
 {
-    Write-Error "Failed to load MSOnline PowerShell Module."
+    Write-Error "Failed to load Microsoft Graph PowerShell Module."
     Get-PrerequisiteHelp | Out-String | Write-Error
     throw
 }
@@ -834,40 +725,12 @@ catch
 # Connect to the tenant
 Write-Progress -Activity $activityName -Status "Connecting to tenant"
 
-Get-MsolDomain -ErrorAction SilentlyContinue | Out-Null
-if(-Not $?)
-{
-    if ($PPE)
-    {
-        Connect-MsolService -AzureEnvironment AzurePPE  -ErrorAction Stop
-    }
-    else {
-        Connect-MsolService -ErrorAction Stop    
-    }
-}
-
-$adalLoaded = Load-ActiveDirectoryAuthenticationLibrary
-if ($adalLoaded)
-{
-    $authToken = Get-AuthenticationResult
-    if ($authToken -eq $null)
-    {
-        Write-Error "Could not authenticate and obtain token from AAD tenant."
-        Get-PrerequisiteHelp | Out-String | Write-Error
-        Exit
-    }
-}
-else
-{
-    Write-Error "Could not load dependent libraries required by the script."
-    Get-PrerequisiteHelp | Out-String | Write-Error
-    Exit
-}
+Initialize
 
 Write-Progress -Activity $activityName -Status "Connected. Discovering tenant information"
-$tenantInfo = Get-MsolCompanyInformation
-$tenantId =  $tenantInfo.ObjectId
-$tenantDisplayName = $tenantInfo.DisplayName
+# $tenantInfo = Get-MgOrganization
+# $tenantId =  $tenantInfo.ObjectId
+# $tenantDisplayName = $tenantInfo.DisplayName
 
 # Create output folder if it does not exist
 if ((Test-Path $OutFolder) -eq 0)
@@ -899,3 +762,5 @@ if ((Test-Path $OutFolder) -eq 0)
     Export-SdsStudentEnrollments | Out-Null
 
 Write-Output "`nDone.`n"
+
+Write-Output "Please run 'disconnect-graph' if you are finished making changes.`n"
