@@ -1,0 +1,9 @@
+sourcedId,username,givenName,familyName,password,activeDirectoryMatchId,email,phone,sms
+114001,jcraig@classrmtest31.org,Jack,Craig,P@ssword123,jcraig@classrmtest31.org,,,
+114002,jean.craig@outlook.com,Jean,Craig,P@ssword123,,jean.craig@outlook.com,1234567890,1234567890
+114003,fhutch@classrmtest31.org,Fred,Hutch,P@ssword123,fhutch@classrmtest31.org,,,
+114004,asmithee@classrmtest31.org,Alice,Smithee,P@ssword123,asmithee@classrmtest31.org,,,
+114005,bobsmithee@outlook.com,Bob,Smithee,P@ssword123,,bobsmithee@outlook.com,10273841983,10273841983
+114006,jjonzer@classrmtest31.org,Jason,Jonzer,P@ssword123,jjonzer@classrmtest31.org,,,
+114007,kfein@classrmtest31.org,Kristen,Fein,P@ssword123,kfein@classrmtest31.org,,,
+114008,smiller@classrmtest31.org,Simon,Miller,P@ssword123,smiller@classrmtest31.org,,,
