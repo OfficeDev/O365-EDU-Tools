@@ -21,8 +21,29 @@ Param (
     [Parameter(Mandatory=$false)]
     [string] $skipToken= ".",
     [Parameter(Mandatory=$false)]
-    [string] $OutFolder = ".\SDSSchoolSGMemberships"
+    [string] $OutFolder = ".\SDSSchoolSGMemberships",
+    [Parameter(Mandatory=$false)]
+    [string] $downloadFcns = "n"
 )
+
+$GraphEndpointProd = "https://graph.microsoft.com"
+$GraphEndpointPPE = "https://graph.microsoft-ppe.com"
+
+#checking parameter to download common.ps1 file for required common functions
+if ($downloadFcns -ieq "y" -or $downloadFcns -ieq "yes"){
+
+# Downloading file with latest common functions
+    try {
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
+        "Grabbed 'common.ps1' to currrent directory"
+    } 
+    catch {
+            throw "Unable to download common.ps1"
+        }
+}
+
+#import file with common functions
+. .\common.ps1    
 
 function Get-PrerequisiteHelp
 {
@@ -33,74 +54,26 @@ function Get-PrerequisiteHelp
 
 1. Install Microsoft Graph Powershell Module with command 'Install-Module Microsoft.Graph'
 
+2.  Make sure to download common.ps1 to the same folder of the script which has common functions needed.  https://github.com/OfficeDev/O365-EDU-Tools/blob/master/SDS%20Scripts/common.ps1
+
 3. Check that you can connect to your tenant directory from the PowerShell module to make sure everything is set up correctly.
 
     a. Open a separate PowerShell session
     
-    b. Execute: "connect-graph -scopes AdministrativeUnit.ReadWrite.All,User.Read.All" to bring up a sign in UI. 
+    b. Execute: "connect-graph -scopes GroupMember.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All" to bring up a sign in UI. 
     
     c. Sign in with any tenant administrator credentials
     
     d. If you are returned to the PowerShell sesion without error, you are correctly set up
 
-5. Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working
+4. Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working
 
 (END)
 ========================
 "@
 }
 
-function Initialize() {
-    import-module Microsoft.Graph.Authentication -MinimumVersion 0.9.1
-    Write-Output "If prompted, please use a tenant admin-account to grant access to GroupMember.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All privileges"
-    Refresh-Token
-}
-
-$lastRefreshed = $null
-function Refresh-Token() {
-    if ($lastRefreshed -eq $null -or (get-date - $lastRefreshed).Minutes -gt 10) {
-        connect-graph -scopes GroupMember.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All
-        $lastRefreshed = get-date
-    }
-}
-
-# Gets data from all pages
-function PageAll-GraphRequest($initialUri, $logFilePath) {
-
-    # Connect to the tenant
-    #Write-Progress -Activity $activityName -Status "Connecting to tenant"
-
-    $result = @()
-
-    $currentUrl = $initialUri
-    $i = 1
-    
-    while (($currentUrl -ne $null) -and ($i -ile 4999)) {
-        Refresh-Token
-        $response = invoke-graphrequest -Method GET -Uri $currentUrl -ContentType "application/json"
-        $result += $response.value
-        $currentUrl = $response.'@odata.nextLink'
-        $i++
-    }
-    $global:nextLink = $response.'@odata.nextLink'
-    return $result
-}
-
-
-
-function TokenSkipCheck ($uriToCheck, $logFilePath)
-{
-    if ($skipToken -eq "." ) {
-        $checkedUri = $uriToCheck
-    }
-    else {
-        $checkedUri = $skipToken
-    }
-    
-    return $checkedUri
-}
-
-function Get-SecurityGroupMemberships($logFilePath) {
+function Get-SecurityGroupMemberships($refreshToken, $graphscopes, $logFilePath) {
 
     #preparing uri string
     $grpMemberTeacherSelectClause = "?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'SchoolTeachersSG'&`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
@@ -118,11 +91,11 @@ function Get-SecurityGroupMemberships($logFilePath) {
         $grpSelectClause = $grpMemberStudentSelectClause
     }
 
-    $initialSDSSchoolSGsUri = "https://graph.microsoft.com/beta/groups$grpSelectClause"
+    $initialSDSSchoolSGsUri = "$graphEndPoint/beta/groups$grpSelectClause"
     
     #getting SGs for all schools
     $checkedSDSSchoolSGsUri = TokenSkipCheck $initialSDSSchoolSGsUri $logFilePath
-    $schoolSGs = PageAll-GraphRequest $checkedSDSSchoolSGsUri $logFilePath
+    $schoolSGs = PageAll-GraphRequest $checkedSDSSchoolSGsUri $refreshToken 'GET' $graphscopes $logFilePath
 
     #write to school SG count to log
     write-output "Retrieve $($schoolSGs.Count) school SGs." | out-file $logFilePath -Append
@@ -138,13 +111,9 @@ function Get-SecurityGroupMemberships($logFilePath) {
         {
 
             #getting members of each school SG
-            $grpMembershipUri = 'https://graph.microsoft.com/beta/groups/' + $grp.id + '/members' + "$grpMemberSelectClause"
+            $grpMembershipUri = $graphEndPoint + '/beta/groups/' + $grp.id + '/members' + $grpMemberSelectClause
             $checkedSGMembershipUri = TokenSkipCheck $grpMembershipUri $logFilePath
-            $schoolSGMembers = PageAll-GraphRequest $checkedSGMembershipUri $logFilePath
-            #$schoolSGMembers = invoke-graphrequest -Method GET -Uri $grpMembershipUri -ContentType "application/json"
-
-            #write member count to log
-            #write-output "Retrieve $($schoolSGMembers.Count) school SG memberships." | out-file $logFilePath -Append
+            $schoolSGMembers = PageAll-GraphRequest $checkedSGMembershipUri $refreshToken 'GET' $graphscopes $logFilePath
 
             #getting info for each SG member
             foreach ($grpMember in $schoolSGMembers)
@@ -153,16 +122,9 @@ function Get-SecurityGroupMemberships($logFilePath) {
                 
                 if ($grpMemberType -eq '#microsoft.graph.user')
                 {
-
-                    #$userUri = "https://graph.microsoft.com/beta/users/" + $grpMember.Id + "?$grpMemberSelectClause"
-                    #$user = invoke-graphrequest -Method GET -Uri $userUri -ContentType "application/json"
-
                     #users created by sds have this extension
                     if ($grpMember.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource -ne $null)
                     {
-                        #write to log
-                        #$grpm = $grp.Id + "," + $grp.DisplayName + "," + $grpMember.Id | Out-File $logFilePath -Append
-
                         #create object required for export-csv and add to array
                         $obj = [pscustomobject]@{"SGObjectId"=$grp.id;"SGDisplayName"=$grp.displayName;"SGMemberObjectId"=$grpMember.id; "SGMemberDisplayName"=$grpMember.displayName}
                         $schoolSGMemberships += $obj
@@ -174,7 +136,7 @@ function Get-SecurityGroupMemberships($logFilePath) {
         Write-Progress -Activity "Retrieving school SG memberships" -Status "Progress ->" -PercentComplete ($i/$schoolSGs.count*100)
     }
 
-    $results = $schoolSGMemberships -ne "Welcome To Microsoft Graph!"
+    $results = $schoolSGMemberships
     return $results
 }
 
@@ -182,6 +144,8 @@ function Remove-AdministrativeUnitMemberships
 {
     Param
     (
+        $refreshToken,
+        $graphscopes,
         $grpMemberListFileName
     )
 
@@ -193,22 +157,26 @@ function Remove-AdministrativeUnitMemberships
         Write-Progress -Activity $activityName -Status "Deleting Administrative Unit Memberships"
         $grpMemberList = import-csv $grpMemberListFileName
         $grpMemberCount = $grpMemberList.Length
+        
         $index = 1
+
         Foreach ($grpm in $grpMemberList) 
         {
-            Write-Output "[$index/$grpMemberCount] Removing SG Member id [$($grpm.SGMemberObjectId)] of `"$($grpm.SGDisplayName)`" [$($grpm.SGObjectId)] from directory"
-            $removeUrl = 'https://graph.microsoft.com/beta/groups/' + $grpm.SGObjectId + '/members/' + $grpm.SGMemberObjectId +'/$ref'
-            $graphRequest = invoke-graphrequest -Method DELETE -Uri $removeUrl
+            #**********need to test append logfile at end of line below*****************
+            Write-Output "[$index/$grpMemberCount] Removing SG Member id [$($grpm.SGMemberObjectId)] of `"$($grpm.SGDisplayName)`" [$($grpm.SGObjectId)] from directory" | Out-File $logFilePath -Append 
+            $removeUrl = $graphEndPoint + '/beta/groups/' + $grpm.SGObjectId + '/members/' + $grpm.SGMemberObjectId +'/$ref'
+            #invoke-graphrequest -Method DELETE -Uri $removeUrl
+            PageAll-GraphRequest $removeUrl $refreshToken 'DELETE' $graphscopes $logFilePath
             $index++
         }
     }
 }
 
-Function Format-ResultsAndExport($logFilePath) {
-
-    Initialize
+Function Format-ResultsAndExport($graphscopes, $logFilePath) {
     
-    $allSchoolSGMemberships = Get-SecurityGroupMemberships $logFilePath
+    $refreshToken = Initialize $graphscopes
+    
+    $allSchoolSGMemberships = Get-SecurityGroupMemberships $refreshToken $graphscopes $logFilePath
 
     #output to file
     if($skipToken -eq "."){
@@ -218,18 +186,24 @@ Function Format-ResultsAndExport($logFilePath) {
         write-output $allSchoolSGMemberships | Export-Csv -Path "$csvfilePath$($skiptoken.Length).csv" -NoTypeInformation
     }
 
-
     Out-File $logFilePath -Append -InputObject $global:nextLink
 }
 
 # Main
+$graphEndPoint = $GraphEndpointProd
 
-$activityName = "Cleaning up SDS Objects in Directory"
+if ($PPE)
+{
+    $graphEndPoint = $GraphEndpointPPE
+}
 
 $logFilePath = "$OutFolder\SchoolSGMemberships.log"
 $csvFilePath = "$OutFolder\SchoolSGMemberships.csv"
 
 $activityName = "Cleaning up SDS Objects in Directory"
+
+#list used to request access to data
+$graphscopes = "GroupMember.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All"
 
 try
 {
@@ -248,15 +222,13 @@ catch
  	mkdir $OutFolder;
  }
 
+# Get all Members of all SG's of Edu Object Type School
+Write-Progress -Activity $activityName -Status "Fetching School Security Group Memberships"
+Format-ResultsAndExport $graphscopes $logFilePath
+Write-Host "`nSchool Security Group Memberships logged to file $csvFilePath `n" -ForegroundColor Green
 
-    # Get all Members of all SG's of Edu Object Type School
-    Write-Progress -Activity $activityName -Status "Fetching School Security Group Memberships"
-    Format-ResultsAndExport $logFilePath
-    Write-Host "`nSchool Security Group Memberships logged to file $csvFilePath `n" -ForegroundColor Green
-    
-
-    # Remove School SG Memberships
-    Remove-AdministrativeUnitMemberships $csvFilePath
+# Remove School SG Memberships
+Remove-AdministrativeUnitMemberships $refreshToken $graphscopes $csvFilePath
 
 
 Write-Output "`nDone.`n"

@@ -13,7 +13,7 @@ TJ Vering
 
 Change Log:
 Version 1.0, 12/06/2016 - First Draft
-Version 2.0, 04/06/2021 - Change to MS Graph Moddule - Ayron Johnson
+Version 2.0, 04/06/2021 - Change to MS Graph Module - Ayron Johnson
 
 #>
 
@@ -28,9 +28,13 @@ Param (
     [switch] $PPE = $false,
     [switch] $AppendTenantIdToFileName = $false,
     [Parameter(Mandatory=$false)]
-    [string] $skipToken= "."
+    [string] $skipToken= ".",
+    [Parameter(Mandatory=$false)]
+    [string] $downloadFcns = "n"
 )
 
+$GraphEndpointProd = "https://graph.microsoft.com"
+$GraphEndpointPPE = "https://graph.microsoft-ppe.com"
 
 $logFilePath = $OutFolder
 
@@ -42,6 +46,21 @@ $eduObjStudent = "Student"
 $eduRelStudentEnrollment = "StudentEnrollment"
 $eduRelTeacherRoster = "TeacherRoster"
 
+#checking parameter to download common.ps1 file for required common functions
+if ($downloadFcns -ieq "y" -or $downloadFcns -ieq "yes"){
+    # Downloading file with latest common functions
+        try {
+            Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
+            "Grabbed 'common.ps1' to currrent directory"
+        } 
+        catch {
+                throw "Unable to download common.ps1"
+            }
+}
+    
+#import file with common functions
+. .\common.ps1 
+
 function Get-PrerequisiteHelp
 {
     Write-Output @"
@@ -51,11 +70,13 @@ function Get-PrerequisiteHelp
 
 1. Install Microsoft Graph Powershell Module with command 'Install-Module Microsoft.Graph'
 
+2.  Make sure to download common.ps1 to the same folder of the script which has common functions needed.  https://github.com/OfficeDev/O365-EDU-Tools/blob/master/SDS%20Scripts/
+
 3. Check that you can connect to your tenant directory from the PowerShell module to make sure everything is set up correctly.
 
     a. Open a separate PowerShell session
     
-    b. Execute: "connect-graph -scopes AdministrativeUnit.ReadWrite.All,User.Read.All" to bring up a sign in UI. 
+    b. Execute: "connect-graph -scopes User.Read.All, GroupMember.Read.All, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All" to bring up a sign in UI. 
     
     c. Sign in with any tenant administrator credentials
     
@@ -66,57 +87,6 @@ function Get-PrerequisiteHelp
 (END)
 ========================
 "@
-}
-
-
-function Initialize() {
-    import-module Microsoft.Graph.Authentication -MinimumVersion 0.9.1
-    Write-Output "If prompted, please use a tenant admin-account to grant access to User.Read.All, GroupMember.Read.All, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All"
-    Refresh-Token
-}
-
-$lastRefreshed = $null
-function Refresh-Token() {
-    if ($lastRefreshed -eq $null -or (get-date - $lastRefreshed).Minutes -gt 10) {
-        connect-graph -scopes User.Read.All, GroupMember.Read.All, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All
-        $lastRefreshed = get-date
-    }
-}
-
-# Gets data from all pages
-function PageAll-GraphRequest($initialUri, $logFilePath) {
-
-    # Connect to the tenant
-    #Write-Progress -Activity $activityName -Status "Connecting to tenant"
-
-    $result = @()
-
-    $currentUrl = $initialUri
-    $i = 1
-    
-    while (($currentUrl -ne $null) -and ($i -ile 4999)) {
-        Refresh-Token
-        $response = invoke-graphrequest -Method GET -Uri $currentUrl -ContentType "application/json"
-        $result += $response.value
-        $currentUrl = $response.'@odata.nextLink'
-        $i++
-    }
-    $global:nextLink = $response.'@odata.nextLink'
-    return $result
-}
-
-
-
-function TokenSkipCheck ($uriToCheck, $logFilePath)
-{
-    if ($skipToken -eq "." ) {
-        $checkedUri = $uriToCheck
-    }
-    else {
-        $checkedUri = $skipToken
-    }
-    
-    return $checkedUri
 }
 
 function Export-SdsSchools
@@ -188,11 +158,11 @@ function Get-AdministrativeUnits
 
     $list = @()
 
-    $initialUri = "https://graph.microsoft.com/beta/directory/administrativeUnits?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
+    $initialUri = "$graphEndPoint/beta/directory/administrativeUnits?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
 
     #getting AUs for all schools
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
-    $allSchoolAUs = PageAll-GraphRequest $checkedUri $logFilePath
+    $allSchoolAUs = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
     
     foreach ($au in $allSchoolAUs)
     {
@@ -276,11 +246,11 @@ function Get-Groups
 
     $list = @()
 
-    $initialUri = "https://graph.microsoft.com/beta/groups?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
+    $initialUri = "$graphEndPoint/beta/groups?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
 
 
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
-    $groups = PageAll-GraphRequest $checkedUri $logFilePath
+    $groups = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
 
         foreach ($group in $groups)
         {
@@ -473,10 +443,10 @@ function Get-SdsSection
         $sectionId
     )
 
-    $initialUri = "https://graph.microsoft.com/beta/groups?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SectionId%20eq%20'$sectionId'"
+    $initialUri = "$graphEndPoint/beta/groups?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SectionId%20eq%20'$sectionId'"
 
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
-    $groups = PageAll-GraphRequest $checkedUri $logFilePath
+    $groups = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
     
     #extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource%20eq%20'SIS'%20and%20
     
@@ -494,10 +464,10 @@ function Get-Section
         $objectId
     )
 
-    $initialUri = "https://graph.microsoft.com/beta/groups/$objectId"
+    $initialUri = "$graphEndPoint/beta/groups/$objectId"
 
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
-    $group = PageAll-GraphRequest $checkedUri $logFilePath
+    $group = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
     
     # foreach ($group in $groups) #not necessary since specifying single group
     # {
@@ -524,18 +494,18 @@ function Get-GroupMembership
     if ($eduObjectType -eq $eduObjTeacher) 
     {
         #$filterClause = "?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjTeacher'"
-         $initialUri = "https://graph.microsoft.com/beta/groups/" + $groupObjectId + '/owners'
+         $initialUri = $graphEndPoint + '/beta/groups/' + $groupObjectId + '/owners'
     }
     else
     {
         #$filterClause = "?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjStudent'"
-         $initialUri = "https://graph.microsoft.com/beta/groups/" + $groupObjectId + '/members'
+         $initialUri = $graphEndPoint + '/beta/groups/' + $groupObjectId + '/members'
     }
     
-    #$initialUri = "https://graph.microsoft.com/beta/groups/" + $groupObjectId + '/members' + "$filterClause" # filter not working
+    #$initialUri = $graphEndPoint + '/beta/groups/' + $groupObjectId + '/members' + "$filterClause" # filter not working
 
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
-    $groupMembers = PageAll-GraphRequest $checkedUri $logFilePath
+    $groupMembers = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
 
     foreach ($member in $groupMembers)
     {
@@ -687,12 +657,12 @@ function Get-Users
 
     $list = @()
 
-    $initialUri = "https://graph.microsoft.com/beta/users?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
+    $initialUri = "$graphEndPoint/beta/users?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
             #extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource%20eq%20'SIS'%20and%20
 
 
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
-    $users = PageAll-GraphRequest $checkedUri $logFilePath
+    $users = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
 
 
     foreach ($user in $users)
@@ -702,14 +672,20 @@ function Get-Users
             $list += $user
         }
     }
-
-
     return $list
 }
 
 # Main
+$graphEndPoint = $GraphEndpointProd
+
+if ($PPE)
+{
+    $graphEndPoint = $GraphEndpointPPE
+}
 
 $activityName = "Reading SDS objects in the directory"
+
+$graphscopes = "User.Read.All, GroupMember.Read.All, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All"
 
 try
 {
@@ -728,9 +704,6 @@ Write-Progress -Activity $activityName -Status "Connecting to tenant"
 Initialize
 
 Write-Progress -Activity $activityName -Status "Connected. Discovering tenant information"
-# $tenantInfo = Get-MgOrganization
-# $tenantId =  $tenantInfo.ObjectId
-# $tenantDisplayName = $tenantInfo.DisplayName
 
 # Create output folder if it does not exist
 if ((Test-Path $OutFolder) -eq 0)
