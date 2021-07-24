@@ -18,6 +18,7 @@ Version 1, 4/6/21 - First Draft
 #>
 
 Param (
+    [switch] $PPE = $false,
     [Parameter(Mandatory=$false)]
     [string] $skipToken= ".",
     [Parameter(Mandatory=$false)]
@@ -31,15 +32,14 @@ $GraphEndpointPPE = "https://graph.microsoft-ppe.com"
 
 #checking parameter to download common.ps1 file for required common functions
 if ($downloadFcns -ieq "y" -or $downloadFcns -ieq "yes"){
-
-# Downloading file with latest common functions
+    # Downloading file with latest common functions
     try {
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
         "Grabbed 'common.ps1' to currrent directory"
     } 
     catch {
-            throw "Unable to download common.ps1"
-        }
+        throw "Unable to download common.ps1"
+    }
 }
 
 #import file with common functions
@@ -98,7 +98,7 @@ function Get-SecurityGroupMemberships($refreshToken, $graphscopes, $logFilePath)
     $schoolSGs = PageAll-GraphRequest $checkedSDSSchoolSGsUri $refreshToken 'GET' $graphscopes $logFilePath
 
     #write to school SG count to log
-    write-output "Retrieve $($schoolSGs.Count) school SGs." | out-file $logFilePath -Append
+    write-output "[$(get-date -Format G)] Retrieve $($schoolSGs.Count) school SGs." | out-file $logFilePath -Append
     
     $schoolSGMemberships = @() #array of objects for memberships
 
@@ -151,21 +151,20 @@ function Remove-AdministrativeUnitMemberships
 
     Write-Host "WARNING: You are about to remove Administrative Unit memberships created from SDS. `nIf you want to skip removing any SG members, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
     Write-Host "Proceed with deleting all the SG memberships logged in $grpMemberListFileName (yes/no)?" -ForegroundColor White
+    
     $choice = Read-Host
     if ($choice -ieq "y" -or $choice -ieq "yes")
     {
         Write-Progress -Activity $activityName -Status "Deleting Administrative Unit Memberships"
         $grpMemberList = import-csv $grpMemberListFileName
-        $grpMemberCount = $grpMemberList.Length
+        $grpMemberCount = (gc $grpMemberListFileName | measure-object).count - 1
         
         $index = 1
 
         Foreach ($grpm in $grpMemberList) 
         {
-            #**********need to test append logfile at end of line below*****************
-            Write-Output "[$index/$grpMemberCount] Removing SG Member id [$($grpm.SGMemberObjectId)] of `"$($grpm.SGDisplayName)`" [$($grpm.SGObjectId)] from directory" | Out-File $logFilePath -Append 
+            Write-Output "[$(get-date -Format G)] [$index/$grpMemberCount] Removing SG Member id [$($grpm.SGMemberObjectId)] of `"$($grpm.SGDisplayName)`" [$($grpm.SGObjectId)] from directory" | Out-File $logFilePath -Append 
             $removeUrl = $graphEndPoint + '/beta/groups/' + $grpm.SGObjectId + '/members/' + $grpm.SGMemberObjectId +'/$ref'
-            #invoke-graphrequest -Method DELETE -Uri $removeUrl
             PageAll-GraphRequest $removeUrl $refreshToken 'DELETE' $graphscopes $logFilePath
             $index++
         }
@@ -229,7 +228,6 @@ Write-Host "`nSchool Security Group Memberships logged to file $csvFilePath `n" 
 
 # Remove School SG Memberships
 Remove-AdministrativeUnitMemberships $refreshToken $graphscopes $csvFilePath
-
 
 Write-Output "`nDone.`n"
 

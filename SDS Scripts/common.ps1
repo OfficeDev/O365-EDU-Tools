@@ -1,12 +1,20 @@
-function Get-AllPageQueried() {
+<#
+Script Name:
+common.ps1
 
-}
+Synopsis:
+Contains functions common to SDS Scripts.  Must be downloaded into same folder where the scripts are run.  
 
+Written By:
+Ayron Johnson
+
+Change Log:
+Version 1.0, 07/26/2021 - First Draft
+#>
 
 function Initialize($graphscopes) {
     import-module Microsoft.Graph.Authentication -MinimumVersion 0.9.1
     Write-Output "If prompted, please use a tenant admin-account to grant access to $graphscopes privileges"
-    #$lastRefreshed = $null
     Refresh-Token $null $graphscopes
 }
 function Refresh-Token($lastRefreshed, $graphscopes) {
@@ -33,8 +41,6 @@ function PageAll-GraphRequest($initialUri, $refreshToken, $method, $graphscopes,
     $global:nextLink = $response.'@odata.nextLink'
     return $result
 }
-
-
 
 function TokenSkipCheck ($uriToCheck, $logFilePath)
 {

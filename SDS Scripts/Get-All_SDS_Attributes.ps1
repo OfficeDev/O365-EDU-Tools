@@ -49,13 +49,13 @@ $eduRelTeacherRoster = "TeacherRoster"
 #checking parameter to download common.ps1 file for required common functions
 if ($downloadFcns -ieq "y" -or $downloadFcns -ieq "yes"){
     # Downloading file with latest common functions
-        try {
-            Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
-            "Grabbed 'common.ps1' to currrent directory"
-        } 
-        catch {
-                throw "Unable to download common.ps1"
-            }
+    try {
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
+        "Grabbed 'common.ps1' to currrent directory"
+    } 
+    catch {
+        throw "Unable to download common.ps1"
+    }
 }
     
 #import file with common functions
@@ -70,7 +70,7 @@ function Get-PrerequisiteHelp
 
 1. Install Microsoft Graph Powershell Module with command 'Install-Module Microsoft.Graph'
 
-2.  Make sure to download common.ps1 to the same folder of the script which has common functions needed.  https://github.com/OfficeDev/O365-EDU-Tools/blob/master/SDS%20Scripts/
+2.  Make sure to download common.ps1 to the same folder of the script which has common functions needed.  https://github.com/OfficeDev/O365-EDU-Tools/blob/master/SDS%20Scripts/common.ps1
 
 3. Check that you can connect to your tenant directory from the PowerShell module to make sure everything is set up correctly.
 
@@ -212,7 +212,6 @@ function Get-SdsSections
             "Section Name" = $group.DisplayName
             #"Name" = $au.DisplayName                    
             "Section Number" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_SectionNumber
- 
             "Term SIS ID" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_TermId
             "Term Name" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_TermName
             "Term StartDate" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_TermStartDate
@@ -224,11 +223,9 @@ function Get-SdsSections
             "Course Subject" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_CourseSubject
             "Periods" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_Period
             "Status" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_Status
-
             "ObjectID" = $group.id
         }
     }
-
     return $data
 }
 
@@ -248,20 +245,17 @@ function Get-Groups
 
     $initialUri = "$graphEndPoint/beta/groups?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
 
-
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
+
     $groups = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
 
-        foreach ($group in $groups)
+    foreach ($group in $groups)
+    {
+        if ($group.id -ne $null)
         {
-            if ($group.id -ne $null)
-            {
-                $list += $group
-            }
-            #$group.ObjectId + ", " + $group.DisplayName + ", " + $group.Mail + ", " + $group.extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId | Out-File $filePath -Append
+            $list += $group
         }
-
-
+    }
     return $list
 }
 
@@ -301,6 +295,7 @@ function Get-SdsTeacherRoster
     (
         $sectionId
     )
+
     $section = Get-SdsSection $sectionId
     $members = Get-TeacherRoster $section.id
     return Format-SdsTeacherRoster $section $members
@@ -314,6 +309,7 @@ function Format-SdsTeacherRoster
         $section,
         $teachers
     )
+
     if ($section -eq $null -or $teachers -eq $null)
     {
         return $null
@@ -387,6 +383,7 @@ function Get-SdsStudentEnrollment
     (
         $sectionId
     )
+
     $section = Get-SdsSection $sectionId
     $members = Get-StudentEnrollment $section.id
     return Format-SdsStudentEnrollment $section $members
@@ -399,6 +396,7 @@ function Format-SdsStudentEnrollment
         $section,
         $students
     )
+
     if ($section -eq $null -or $students -eq $null)
     {
         return $null
@@ -447,13 +445,12 @@ function Get-SdsSection
 
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
     $groups = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
-    
-    #extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource%20eq%20'SIS'%20and%20
-    
+        
     foreach ($group in $groups)
     {
         return $group
     }
+
     return $null
 }
 
@@ -469,14 +466,7 @@ function Get-Section
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
     $group = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
     
-    # foreach ($group in $groups) #not necessary since specifying single group
-    # {
-        #if ($group.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType -eq $eduObjSection) #object type not working
-        #{
-            return $group
-        #}
-    # }
-    #return $null
+    return $group
 }
 
 function Get-GroupMembership
@@ -488,22 +478,16 @@ function Get-GroupMembership
     )
 
     $list = @()
-
-  
             
     if ($eduObjectType -eq $eduObjTeacher) 
     {
-        #$filterClause = "?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjTeacher'"
          $initialUri = $graphEndPoint + '/beta/groups/' + $groupObjectId + '/owners'
     }
     else
     {
-        #$filterClause = "?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjStudent'"
          $initialUri = $graphEndPoint + '/beta/groups/' + $groupObjectId + '/members'
     }
     
-    #$initialUri = $graphEndPoint + '/beta/groups/' + $groupObjectId + '/members' + "$filterClause" # filter not working
-
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
     $groupMembers = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
 
@@ -658,12 +642,9 @@ function Get-Users
     $list = @()
 
     $initialUri = "$graphEndPoint/beta/users?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
-            #extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource%20eq%20'SIS'%20and%20
-
 
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
     $users = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
-
 
     foreach ($user in $users)
     {
@@ -711,28 +692,28 @@ if ((Test-Path $OutFolder) -eq 0)
 	mkdir $OutFolder;
 }
 
-    # Export all User of Edu Object Type Teacher/Student
-    Write-Progress -Activity $activityName -Status "Fetching Teachers ..."
-    Export-SdsTeachers | Out-Null
+# Export all User of Edu Object Type Teacher/Student
+Write-Progress -Activity $activityName -Status "Fetching Teachers ..."
+Export-SdsTeachers | Out-Null
 
-    Write-Progress -Activity $activityName -Status "Fetching Students ..."
-    Export-SdsStudents | Out-Null
+Write-Progress -Activity $activityName -Status "Fetching Students ..."
+Export-SdsStudents | Out-Null
 
-    # Export all AUs of Edu Object Type School
-    Write-Progress -Activity $activityName -Status "Fetching Schools ..."
-    Export-SdsSchools | Out-Null
-    
-    # Export all Groups of Edu Object Type Section
-    Write-Progress -Activity $activityName -Status "Fetching Class Sections ..."
-    Export-SdsSections | Out-Null
- 
-    # Export all Group Owners for Teacher Roster
-    Write-Progress -Activity $activityName -Status "Fetching Teacher Rosters ..."
-    Export-SdsTeacherRosters | Out-Null
+# Export all AUs of Edu Object Type School
+Write-Progress -Activity $activityName -Status "Fetching Schools ..."
+Export-SdsSchools | Out-Null
 
-    # Export all Groups Members for Student Enrollments
-    Write-Progress -Activity $activityName -Status "Fetching Student Enrollments ..."
-    Export-SdsStudentEnrollments | Out-Null
+# Export all Groups of Edu Object Type Section
+Write-Progress -Activity $activityName -Status "Fetching Class Sections ..."
+Export-SdsSections | Out-Null
+
+# Export all Group Owners for Teacher Roster
+Write-Progress -Activity $activityName -Status "Fetching Teacher Rosters ..."
+Export-SdsTeacherRosters | Out-Null
+
+# Export all Groups Members for Student Enrollments
+Write-Progress -Activity $activityName -Status "Fetching Student Enrollments ..."
+Export-SdsStudentEnrollments | Out-Null
 
 Write-Output "`nDone.`n"
 

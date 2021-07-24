@@ -17,6 +17,7 @@ Version 1, 3/26/21 - First Draft
 #>
 
 Param (
+    [switch] $PPE = $false,
     [Parameter(Mandatory=$false)]
     [string] $skipToken= ".",
     [Parameter(Mandatory=$false)]
@@ -36,8 +37,8 @@ if ($downloadFcns -ieq "y" -or $downloadFcns -ieq "yes"){
         "Grabbed 'common.ps1' to currrent directory"
     } 
     catch {
-            throw "Unable to download common.ps1"
-        }
+        throw "Unable to download common.ps1"
+    }
 }
     
 #import file with common functions
@@ -85,7 +86,7 @@ function Get-AdministrativeUnitMemberships($refreshToken, $graphscopes, $logFile
     $allSchoolAUs = PageAll-GraphRequest $checkedSDSSchoolAUsUri $refreshToken 'GET' $graphscopes $logFilePath
 
     #write to school AU count to log
-    write-output "Retrieve $($allSchoolAUs.Count) school AUs." | out-file $logFilePath -Append
+    write-output "[$(get-date -Format G)] Retrieve $($allSchoolAUs.Count) school AUs." | out-file $logFilePath -Append
     
     $schoolAUMemberships = @() #array of objects for memberships
 
@@ -111,10 +112,6 @@ function Get-AdministrativeUnitMemberships($refreshToken, $graphscopes, $logFile
             $auMembershipUri = $graphEndPoint + '/beta/directory/administrativeUnits/' + $au.id + '/members'
             $checkedAUMembershipUri = TokenSkipCheck $auMembershipUri $logFilePath
             $schoolAUMembers = PageAll-GraphRequest $checkedAUMembershipUri $refreshToken 'GET' $graphscopes $logFilePath
-            #$schoolAUMembers = invoke-graphrequest -Method GET -Uri $auMembershipUri -ContentType "application/json"
-
-            #write member count to log
-            #write-output "Retrieve $($schoolAUMembers.Count) school AU memberships." | out-file $logFilePath -Append
 
             #getting info for each au member
             foreach ($auMember in $schoolAUMembers)
@@ -123,18 +120,14 @@ function Get-AdministrativeUnitMemberships($refreshToken, $graphscopes, $logFile
                 
                 if ($auMemberType -eq '#microsoft.graph.user')
                 {
-
                     $userUri = $graphEndPoint + "/beta/users/" + $auMember.Id + "?$auMemberSelectClause"
                     $user = invoke-graphrequest -Method GET -Uri $userUri -ContentType "application/json"
 
                     #users created by sds have this extension
                     if ($user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId -ne $null)
                     {
-                        #write to log
-                        #$aum = $au.Id + "," + $au.DisplayName + "," + $auMember.Id | Out-File $logFilePath -Append
-
                         #create object required for export-csv and add to array
-                        $obj = [pscustomobject]@{"AUObjectId"=$au.Id;"AUDisplayName"=$au.DisplayName;"AUMemberObjectId"=$user.Id; "AUMemberDisplayName"=$user.DisplayName}
+                        $obj = [pscustomobject]@{"AUObjectId"=$au.Id;"AUDisplayName"=$au.DisplayName;"AUMemberObjectId"=$user.Id; "AUMemberDisplayName"=$user.DisplayName;}
                         $schoolAUMemberships += $obj
                     }
                 }
@@ -158,20 +151,19 @@ function Remove-AdministrativeUnitMemberships
 
     Write-Host "WARNING: You are about to remove Administrative Unit memberships created from SDS. `nIf you want to skip removing any AU members, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
     Write-Host "Proceed with deleting all the AU memberships logged in $auMemberListFileName (yes/no)?" -ForegroundColor White
+    
     $choice = Read-Host
     if ($choice -ieq "y" -or $choice -ieq "yes")
     {
         Write-Progress -Activity $activityName -Status "Deleting Administrative Unit Memberships"
         $auMemberList = import-csv $auMemberListFileName
-        $auMemberCount = $auMemberList.Length
+        $auMemberCount = (gc $auMemberListFileName | measure-object).count - 1
         $index = 1
         Foreach ($aum in $auMemberList) 
         {
-            #**********need to test append logfile at end of line below *****************
-            Write-Output "[$index/$auMemberCount] Removing AU Member id [$($aum.AUMemberObjectId)] of `"$($aum.AUDisplayName)`" [$($aum.AUObjectId)] from directory" | Out-File $logFilePath -Append
+            Write-Output "[$(get-date -Format G)] [$index/$auMemberCount] Removing AU Member id [$($aum.AUMemberObjectId)] of `"$($aum.AUDisplayName)`" [$($aum.AUObjectId)] from directory" | Out-File $logFilePath -Append
             $removeUrl = $graphEndPoint + '/beta/directory/administrativeUnits/' + $aum.AUObjectId + '/members/' + $aum.AUMemberObjectId +'/$ref'
-            # invoke-graphrequest -Method DELETE -Uri $removeUrl
-            PageAll-GraphRequest $removeUrl 'DELETE' $logFilePath
+            PageAll-GraphRequest $removeUrl $refreshToken 'DELETE' $graphscopes $logFilePath
             $index++
         }
     }
@@ -190,7 +182,6 @@ Function Format-ResultsAndExport($graphscopes, $logFilePath) {
     else {
         write-output $allSchoolAUMemberships | Export-Csv -Path "$csvfilePath$($skiptoken.Length).csv" -NoTypeInformation
     }
-
 
     Out-File $logFilePath -Append -InputObject $global:nextLink
 }
@@ -237,7 +228,6 @@ Format-ResultsAndExport $graphscopes $logFilePath
 
 # Remove School AU Memberships
 Remove-AdministrativeUnitMemberships $graphscopes $csvFilePath
-
 
 Write-Output "`nDone.`n"
 

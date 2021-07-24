@@ -34,14 +34,14 @@ $logFilePath = $OutFolder
 #checking parameter to download common.ps1 file for required common functions
 if ($downloadFcns -ieq "y" -or $downloadFcns -ieq "yes"){
 
-# Downloading file with latest common functions
+    # Downloading file with latest common functions
     try {
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
         "Grabbed 'common.ps1' to currrent directory"
     } 
     catch {
-            throw "Unable to download common.ps1"
-        }
+        throw "Unable to download common.ps1"
+    }
 }
 
 #import file with common functions
@@ -56,7 +56,7 @@ function Get-PrerequisiteHelp
 
 1. Install Microsoft Graph Powershell Module with command 'Install-Module Microsoft.Graph'
 
-2.  Make sure to download common.ps1 to the same folder of the script which has common functions needed.  https://github.com/OfficeDev/O365-EDU-Tools/blob/master/SDS%20Scripts/
+2.  Make sure to download common.ps1 to the same folder of the script which has common functions needed.  https://github.com/OfficeDev/O365-EDU-Tools/blob/master/SDS%20Scripts/common.ps1
 
 3. Check that you can connect to your tenant directory from the PowerShell module to make sure everything is set up correctly.
 
@@ -90,12 +90,10 @@ function Get-Users
 
     $initialUri = "$graphEndPoint/beta/users$userSelectClause"
 
-
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
     $users = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
     
     $i = 0 #counter for progress
-
 
     foreach ($user in $users)
     {
@@ -108,7 +106,6 @@ function Get-Users
         $i++
         Write-Progress -Activity "Retrieving SDS Users" -Status "Progress ->" -PercentComplete ($i/$users.count*100)
     }
-
 
     return $list
 }
@@ -127,7 +124,6 @@ Function Format-ResultsAndExport($graphscopes, $logFilePath) {
         write-output $users | Export-Csv -Path "$csvfilePath$($skiptoken.Length).csv" -NoTypeInformation
     }
 
-
     Out-File $logFilePath -Append -InputObject $global:nextLink
 }
 
@@ -135,22 +131,23 @@ function Update-SDSUserAttributes
 {
 	Param
 	(
+        $refreshToken,
         $graphscopes,
 		$userListFileName
 	)
 
 	Write-Host "WARNING: You are about to update user anchor id's created from SDS. `nIf you want to skip removing any users, edit the file now and update the corresponding lines before proceeding. `n" -ForegroundColor Yellow
 	Write-Host "Proceed with removing all the SDS user anchor ids in $userListFileName (yes/no)?" -ForegroundColor White
-	$choice = Read-Host
+	
+    $choice = Read-Host
 	if ($choice -ieq "y" -or $choice -ieq "yes")
 	{
-		Write-Progress -Activity $activityName -Status "Updating SDS user anchor ids"
 		$userList = import-csv $userListFileName
-		$userCount = $userList.Length
+		$userCount = (gc $userListFileName | measure-object).count - 1
 		$index = 1
 		Foreach ($user in $userList) 
 		{
-			Write-Output "[$index/$userCount] Updating attribute [$($user.userAnchorId)] from user `"$($user.userDisplayName)`" "
+			Write-Output "[$(get-date -Format G)] [$index/$userCount] Updating attribute [$($user.userAnchorId)] from user `"$($user.userDisplayName)`" " | Out-File $logFilePath -Append 
             
             $updateUrl = $graphEndPoint + '/beta/users/' + $user.userObjectId
             
@@ -159,8 +156,8 @@ function Update-SDSUserAttributes
             $newAnchorId = "User_" + $oldAnchorId.Split("_")[1]
 			            
 			$graphRequest = invoke-graphrequest -Method PATCH -Uri $updateUrl -Body "{`"extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId`": `"$($newAnchorId)`"}" 
-
 			$index++
+            Write-Progress -Activity "Updating SDS user anchor ids" -Status "Progress ->" -PercentComplete ($i/$userlist.count*100)
 		}
 	}
 }
@@ -199,17 +196,15 @@ Initialize
 
 Write-Progress -Activity $activityName -Status "Connected. Discovering tenant information"
 
-
 # Create output folder if it does not exist
 if ((Test-Path $OutFolder) -eq 0)
 {
 	mkdir $OutFolder;
 }
 
-    Format-ResultsAndExport $graphscopes $logFilePath
+Format-ResultsAndExport $graphscopes $logFilePath
 
-    Write-Host "`nSDS users logged to file $csvFilePath `n" -ForegroundColor Green
-
+Write-Host "`nSDS users logged to file $csvFilePath `n" -ForegroundColor Green
 
 # update School AU Memberships
 update-SDSUserAttributes $refreshToken $graphscopes $csvFilePath
