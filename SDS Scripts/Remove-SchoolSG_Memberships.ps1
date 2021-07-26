@@ -24,7 +24,7 @@ Param (
     [Parameter(Mandatory=$false)]
     [string] $OutFolder = ".\SDSSchoolSGMemberships",
     [Parameter(Mandatory=$false)]
-    [string] $downloadFcns = "n"
+    [string] $downloadFcns = "y"
 )
 
 $GraphEndpointProd = "https://graph.microsoft.com"

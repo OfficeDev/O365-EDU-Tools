@@ -23,7 +23,7 @@ Param (
     [Parameter(Mandatory=$false)]
     [string] $OutFolder = ".\SDSSchoolAUMemberships",
     [Parameter(Mandatory=$false)]
-    [string] $downloadFcns = "n"
+    [string] $downloadFcns = "y"
 )
 
 $GraphEndpointProd = "https://graph.microsoft.com"
@@ -76,7 +76,7 @@ function Get-AdministrativeUnitMemberships($refreshToken, $graphscopes, $logFile
 
     #preparing uri string
     $auSelectClause = "`$select=id,displayName"
-    $auMemberAllSelectClause = "`$select=id,DisplayName,@data.type,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId"
+    $auMemberAllSelectClause = "`$select=id,DisplayName,@data.type,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId" #extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_TeacherId
     $auMemberStudentSelectClause = "`$select=id,DisplayName,@data.type,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_StudentId"
 
     $initialSDSSchoolAUsUri = "$graphEndPoint/beta/directory/administrativeUnits?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'School'&$auSelectClause"
@@ -125,10 +125,14 @@ function Get-AdministrativeUnitMemberships($refreshToken, $graphscopes, $logFile
 
                     #users created by sds have this extension
                     if ($user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId -ne $null)
-                    {
-                        #create object required for export-csv and add to array
-                        $obj = [pscustomobject]@{"AUObjectId"=$au.Id;"AUDisplayName"=$au.DisplayName;"AUMemberObjectId"=$user.Id; "AUMemberDisplayName"=$user.DisplayName;}
-                        $schoolAUMemberships += $obj
+                    {   
+                        #checking if retuning students only
+                        if(($choice -ieq "y" -or $choice -ieq "yes") -or ($user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_StudentId -ne $null))
+                        {
+                            #create object required for export-csv and add to array
+                            $obj = [pscustomobject]@{"AUObjectId"=$au.Id;"AUDisplayName"=$au.DisplayName;"AUMemberObjectId"=$user.Id; "AUMemberDisplayName"=$user.DisplayName;}
+                            $schoolAUMemberships += $obj
+                        }
                     }
                 }
             }

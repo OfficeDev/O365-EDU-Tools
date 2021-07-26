@@ -23,7 +23,7 @@ Param (
     [Parameter(Mandatory=$false)]
     [string] $skipToken= ".",
     [Parameter(Mandatory=$false)]
-    [string] $downloadFcns = "n"
+    [string] $downloadFcns = "y"
 )
 
 $GraphEndpointProd = "https://graph.microsoft.com"
