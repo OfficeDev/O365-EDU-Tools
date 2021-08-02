@@ -1,18 +1,19 @@
 <#
 Script Name:
-Remove-All_SchoolAU_Memberships.ps1
+Remove-All_SchoolSG_Memberships.ps1
 
 Synopsis:
-This script is designed to remove all School AU Membershipss created by SDS from an O365 tenant. The script sets up the connection to Azure, and then confirm you want to run the script with a "y". Once the script completes, a file will be created in the same directory as the script itself, and contain an output file which details the school AU memberships removed.
+This script is designed to remove all School SG Membershipss created by SDS from an O365 tenant. The script sets up the connection to Azure, and then confirm you want to run the script with a "y". 
+Once the script completes, a file will be created in the same directory as the script itself, and contain an output file which details the school SG memberships removed.
 
 Syntax Examples and Options:
-.\Remove-SchoolAU_Memberships.ps1
+.\Remove-SchoolSG_Memberships.ps1
 
 Written By: 
 SDS Team, and adapted by Ayron Johnson
 
 Change Log:
-Version 1, 3/26/21 - First Draft
+Version 1, 4/6/21 - First Draft
 
 #>
 
@@ -21,7 +22,7 @@ Param (
     [Parameter(Mandatory=$false)]
     [string] $skipToken= ".",
     [Parameter(Mandatory=$false)]
-    [string] $OutFolder = ".\SDSSchoolAUMemberships",
+    [string] $OutFolder = ".\SDSSchoolSGMemberships",
     [Parameter(Mandatory=$false)]
     [string] $downloadFcns = "y"
 )
@@ -40,9 +41,9 @@ if ($downloadFcns -ieq "y" -or $downloadFcns -ieq "yes"){
         throw "Unable to download common.ps1"
     }
 }
-    
+
 #import file with common functions
-. .\common.ps1 
+. .\common.ps1    
 
 function Get-PrerequisiteHelp
 {
@@ -59,114 +60,111 @@ function Get-PrerequisiteHelp
 
     a. Open a separate PowerShell session
     
-    b. Execute: "connect-graph -scopes AdministrativeUnit.ReadWrite.All, User.Read.All" to bring up a sign in UI. 
+    b. Execute: "connect-graph -scopes GroupMember.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All" to bring up a sign in UI. 
     
     c. Sign in with any tenant administrator credentials
     
     d. If you are returned to the PowerShell sesion without error, you are correctly set up
 
-5. Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working
+4. Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working
 
 (END)
 ========================
 "@
 }
 
-function Get-AdministrativeUnitMemberships($refreshToken, $graphscopes, $logFilePath) {
+function Get-SecurityGroupMemberships($refreshToken, $graphscopes, $logFilePath) {
 
     #preparing uri string
-    $auSelectClause = "`$select=id,displayName"
-    $auMemberAllSelectClause = "`$select=id,DisplayName,@data.type,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId" #extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_TeacherId
-    $auMemberStudentSelectClause = "`$select=id,DisplayName,@data.type,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_StudentId"
+    $grpMemberTeacherSelectClause = "?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'SchoolTeachersSG'&`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
+    $grpMemberStudentSelectClause = "?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'SchoolStudentsSG'&`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
+    $grpMemberSelectClause = "?`$select=id,displayName,@data.type,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource"
 
-    $initialSDSSchoolAUsUri = "$graphEndPoint/beta/directory/administrativeUnits?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'School'&$auSelectClause"
-    
-    #getting AUs for all schools
-    $checkedSDSSchoolAUsUri = TokenSkipCheck $initialSDSSchoolAUsUri $logFilePath
-    $allSchoolAUs = PageAll-GraphRequest $checkedSDSSchoolAUsUri $refreshToken 'GET' $graphscopes $logFilePath
-
-    #write to school AU count to log
-    write-output "[$(get-date -Format G)] Retrieve $($allSchoolAUs.Count) school AUs." | out-file $logFilePath -Append
-    
-    $schoolAUMemberships = @() #array of objects for memberships
-
-    $choice = Write-Host "`nTarget both students and teachers in SDS school created AUs (yes/no)?.  Default: students only" -ForegroundColor White
+    Write-Host "`nTarget students or teachers in SDS school created SGs (teachers/students)?.  Default: students" -ForegroundColor White
     $choice = Read-Host
-    if ($choice -ieq "y" -or $choice -ieq "yes")
+    if ($choice -ieq "teachers")
     {
-        $auMemberSelectClause = $auMemberAllSelectClause
+        $grpSelectClause = $grpMemberTeacherSelectClause
     }
     else
     {
-        $auMemberSelectClause = $auMemberStudentSelectClause
+        $grpSelectClause = $grpMemberStudentSelectClause
     }
 
-    $i = 0 #counter for progress
+    $initialSDSSchoolSGsUri = "$graphEndPoint/beta/groups$grpSelectClause"
     
-    #looping through all school Aus
-    foreach($au in $allSchoolAUs)
+    #getting SGs for all schools
+    $checkedSDSSchoolSGsUri = TokenSkipCheck $initialSDSSchoolSGsUri $logFilePath
+    $schoolSGs = PageAll-GraphRequest $checkedSDSSchoolSGsUri $refreshToken 'GET' $graphscopes $logFilePath
+
+    #write to school SG count to log
+    write-output "[$(get-date -Format G)] Retrieve $($schoolSGs.Count) school SGs." | out-file $logFilePath -Append
+    
+    $schoolSGMemberships = @() #array of objects for memberships
+
+    $i = 0 #counter for progress
+
+    #looping through all school SGs
+    foreach($grp in $schoolSGs)
     {
-        if ($au.id -ne $null)
+        if ($grp.id -ne $null)
         {
-            #getting members of each school au
-            $auMembershipUri = $graphEndPoint + '/beta/directory/administrativeUnits/' + $au.id + '/members'
-            $checkedAUMembershipUri = TokenSkipCheck $auMembershipUri $logFilePath
-            $schoolAUMembers = PageAll-GraphRequest $checkedAUMembershipUri $refreshToken 'GET' $graphscopes $logFilePath
 
-            #getting info for each au member
-            foreach ($auMember in $schoolAUMembers)
+            #getting members of each school SG
+            $grpMembershipUri = $graphEndPoint + '/beta/groups/' + $grp.id + '/members' + $grpMemberSelectClause
+            $checkedSGMembershipUri = TokenSkipCheck $grpMembershipUri $logFilePath
+            $schoolSGMembers = PageAll-GraphRequest $checkedSGMembershipUri $refreshToken 'GET' $graphscopes $logFilePath
+
+            #getting info for each SG member
+            foreach ($grpMember in $schoolSGMembers)
             {
-                $auMemberType = $auMember.'@odata.type' #some members are users and some are groups
+                $grpMemberType = $grpMember.'@odata.type' #some members are users and some are groups
                 
-                if ($auMemberType -eq '#microsoft.graph.user')
+                if ($grpMemberType -eq '#microsoft.graph.user')
                 {
-                    $userUri = $graphEndPoint + "/beta/users/" + $auMember.Id + "?$auMemberSelectClause"
-                    $user = invoke-graphrequest -Method GET -Uri $userUri -ContentType "application/json"
-
                     #users created by sds have this extension
-                    if ($user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId -ne $null)
-                    {   
-                        #checking if retuning students only
-                        if(($choice -ieq "y" -or $choice -ieq "yes") -or ($user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_StudentId -ne $null))
-                        {
-                            #create object required for export-csv and add to array
-                            $obj = [pscustomobject]@{"AUObjectId"=$au.Id;"AUDisplayName"=$au.DisplayName;"AUMemberObjectId"=$user.Id; "AUMemberDisplayName"=$user.DisplayName;}
-                            $schoolAUMemberships += $obj
-                        }
+                    if ($grpMember.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource -ne $null)
+                    {
+                        #create object required for export-csv and add to array
+                        $obj = [pscustomobject]@{"SGObjectId"=$grp.id;"SGDisplayName"=$grp.displayName;"SGMemberObjectId"=$grpMember.id; "SGMemberDisplayName"=$grpMember.displayName}
+                        $schoolSGMemberships += $obj
                     }
                 }
             }
         }
         $i++
-        Write-Progress -Activity "Retrieving school AU memberships" -Status "Progress ->" -PercentComplete ($i/$allSchoolAUs.count*100)
+        Write-Progress -Activity "Retrieving school SG memberships" -Status "Progress ->" -PercentComplete ($i/$schoolSGs.count*100)
     }
 
-    $results = $schoolAUMemberships
+    $results = $schoolSGMemberships
     return $results
 }
 
-function Remove-AdministrativeUnitMemberships
+function Remove-SecurityGroupMemberships
 {
     Param
     (
-        $graphScopes,
-        $auMemberListFileName
+        $refreshToken,
+        $graphscopes,
+        $grpMemberListFileName
     )
 
-    Write-Host "WARNING: You are about to remove Administrative Unit memberships created from SDS. `nIf you want to skip removing any AU members, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
-    Write-Host "Proceed with deleting all the AU memberships logged in $auMemberListFileName (yes/no)?" -ForegroundColor White
+    Write-Host "WARNING: You are about to remove Security Group Memberships created from SDS. `nIf you want to skip removing any SG members, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
+    Write-Host "Proceed with deleting all the SG memberships logged in $grpMemberListFileName (yes/no)?" -ForegroundColor White
     
     $choice = Read-Host
     if ($choice -ieq "y" -or $choice -ieq "yes")
     {
-        Write-Progress -Activity $activityName -Status "Deleting Administrative Unit Memberships"
-        $auMemberList = import-csv $auMemberListFileName
-        $auMemberCount = (gc $auMemberListFileName | measure-object).count - 1
+        Write-Progress -Activity $activityName -Status "Deleting Security Group Memberships"
+        $grpMemberList = import-csv $grpMemberListFileName
+        $grpMemberCount = (gc $grpMemberListFileName | measure-object).count - 1
+        
         $index = 1
-        Foreach ($aum in $auMemberList) 
+
+        Foreach ($grpm in $grpMemberList) 
         {
-            Write-Output "[$(get-date -Format G)] [$index/$auMemberCount] Removing AU Member id [$($aum.AUMemberObjectId)] of `"$($aum.AUDisplayName)`" [$($aum.AUObjectId)] from directory" | Out-File $logFilePath -Append
-            $removeUrl = $graphEndPoint + '/beta/directory/administrativeUnits/' + $aum.AUObjectId + '/members/' + $aum.AUMemberObjectId +'/$ref'
+            Write-Output "[$(get-date -Format G)] [$index/$grpMemberCount] Removing SG Member id [$($grpm.SGMemberObjectId)] of `"$($grpm.SGDisplayName)`" [$($grpm.SGObjectId)] from directory" | Out-File $logFilePath -Append 
+            $removeUrl = $graphEndPoint + '/beta/groups/' + $grpm.SGObjectId + '/members/' + $grpm.SGMemberObjectId +'/$ref'
             PageAll-GraphRequest $removeUrl $refreshToken 'DELETE' $graphscopes $logFilePath
             $index++
         }
@@ -174,17 +172,17 @@ function Remove-AdministrativeUnitMemberships
 }
 
 Function Format-ResultsAndExport($graphscopes, $logFilePath) {
-
+    
     $refreshToken = Initialize $graphscopes
     
-    $allSchoolAUMemberships = Get-AdministrativeUnitMemberships $refreshToken $graphscopes $logFilePath
+    $allSchoolSGMemberships = Get-SecurityGroupMemberships $refreshToken $graphscopes $logFilePath
 
     #output to file
     if($skipToken -eq "."){
-        write-output $allSchoolAUMemberships | Export-Csv -Path "$csvfilePath" -NoTypeInformation
+        write-output $allSchoolSGMemberships | Export-Csv -Path "$csvfilePath" -NoTypeInformation
     }
     else {
-        write-output $allSchoolAUMemberships | Export-Csv -Path "$csvfilePath$($skiptoken.Length).csv" -NoTypeInformation
+        write-output $allSchoolSGMemberships | Export-Csv -Path "$csvfilePath$($skiptoken.Length).csv" -NoTypeInformation
     }
 
     Out-File $logFilePath -Append -InputObject $global:nextLink
@@ -198,13 +196,13 @@ if ($PPE)
     $graphEndPoint = $GraphEndpointPPE
 }
 
+$logFilePath = "$OutFolder\SchoolSGMemberships.log"
+$csvFilePath = "$OutFolder\SchoolSGMemberships.csv"
+
 $activityName = "Cleaning up SDS Objects in Directory"
 
-$logFilePath = "$OutFolder\SchoolAuMemberships.log"
-$csvFilePath = "$OutFolder\SchoolAuMemberships.csv"
-
 #list used to request access to data
-$graphscopes = "AdministrativeUnit.ReadWrite.All, User.Read.All"
+$graphscopes = "GroupMember.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All"
 
 try
 {
@@ -223,15 +221,13 @@ catch
  	mkdir $OutFolder;
  }
 
-
-# Get all Members of all AU's of Edu Object Type School
-Write-Progress -Activity "Reading SDS" -Status "Fetching School Administrative Unit Memberships"
-
-Write-Host "`nSchool Administrative Units Memberships logged to file $csvFilePath `n" -ForegroundColor Green
+# Get all Members of all SG's of Edu Object Type School
+Write-Progress -Activity $activityName -Status "Fetching School Security Group Memberships"
 Format-ResultsAndExport $graphscopes $logFilePath
+Write-Host "`nSchool Security Group Memberships logged to file $csvFilePath `n" -ForegroundColor Green
 
-# Remove School AU Memberships
-Remove-AdministrativeUnitMemberships $graphscopes $csvFilePath
+# Remove School SG Memberships
+Remove-SecurityGroupMemberships $refreshToken $graphscopes $csvFilePath
 
 Write-Output "`nDone.`n"
 
