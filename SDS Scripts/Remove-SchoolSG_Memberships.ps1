@@ -140,7 +140,7 @@ function Get-SecurityGroupMemberships($refreshToken, $graphscopes, $logFilePath)
     return $results
 }
 
-function Remove-AdministrativeUnitMemberships
+function Remove-SecurityGroupMemberships
 {
     Param
     (
@@ -149,13 +149,13 @@ function Remove-AdministrativeUnitMemberships
         $grpMemberListFileName
     )
 
-    Write-Host "WARNING: You are about to remove Administrative Unit memberships created from SDS. `nIf you want to skip removing any SG members, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
+    Write-Host "WARNING: You are about to remove Security Group Memberships created from SDS. `nIf you want to skip removing any SG members, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
     Write-Host "Proceed with deleting all the SG memberships logged in $grpMemberListFileName (yes/no)?" -ForegroundColor White
     
     $choice = Read-Host
     if ($choice -ieq "y" -or $choice -ieq "yes")
     {
-        Write-Progress -Activity $activityName -Status "Deleting Administrative Unit Memberships"
+        Write-Progress -Activity $activityName -Status "Deleting Security Group Memberships"
         $grpMemberList = import-csv $grpMemberListFileName
         $grpMemberCount = (gc $grpMemberListFileName | measure-object).count - 1
         
@@ -227,7 +227,7 @@ Format-ResultsAndExport $graphscopes $logFilePath
 Write-Host "`nSchool Security Group Memberships logged to file $csvFilePath `n" -ForegroundColor Green
 
 # Remove School SG Memberships
-Remove-AdministrativeUnitMemberships $refreshToken $graphscopes $csvFilePath
+Remove-SecurityGroupMemberships $refreshToken $graphscopes $csvFilePath
 
 Write-Output "`nDone.`n"
 
