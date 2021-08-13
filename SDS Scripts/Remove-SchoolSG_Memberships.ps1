@@ -1,6 +1,6 @@
 <#
 Script Name:
-Remove-All_SchoolSG_Memberships.ps1
+Remove-SchoolSG_Memberships.ps1
 
 Synopsis:
 This script is designed to remove all School SG Membershipss created by SDS from an O365 tenant. The script sets up the connection to Azure, and then confirm you want to run the script with a "y". 
@@ -165,7 +165,7 @@ function Remove-SecurityGroupMemberships
         {
             Write-Output "[$(get-date -Format G)] [$index/$grpMemberCount] Removing SG Member id [$($grpm.SGMemberObjectId)] of `"$($grpm.SGDisplayName)`" [$($grpm.SGObjectId)] from directory" | Out-File $logFilePath -Append 
             $removeUrl = $graphEndPoint + '/beta/groups/' + $grpm.SGObjectId + '/members/' + $grpm.SGMemberObjectId +'/$ref'
-            PageAll-GraphRequest $removeUrl $refreshToken 'DELETE' $graphscopes $logFilePath
+            PageAll-GraphRequest $removeUrl $refreshToken 'DELETE' $graphscopes $logFilePath | Out-Null
             $index++
         }
     }

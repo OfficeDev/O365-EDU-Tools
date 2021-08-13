@@ -1,6 +1,6 @@
 <#
 Script Name:
-Remove-All_SchoolAU_Memberships.ps1
+Remove-SchoolAU_Memberships.ps1
 
 Synopsis:
 This script is designed to remove all School AU Membershipss created by SDS from an O365 tenant. The script sets up the connection to Azure, and then confirm you want to run the script with a "y". Once the script completes, a file will be created in the same directory as the script itself, and contain an output file which details the school AU memberships removed.
@@ -167,7 +167,7 @@ function Remove-AdministrativeUnitMemberships
         {
             Write-Output "[$(get-date -Format G)] [$index/$auMemberCount] Removing AU Member id [$($aum.AUMemberObjectId)] of `"$($aum.AUDisplayName)`" [$($aum.AUObjectId)] from directory" | Out-File $logFilePath -Append
             $removeUrl = $graphEndPoint + '/beta/directory/administrativeUnits/' + $aum.AUObjectId + '/members/' + $aum.AUMemberObjectId +'/$ref'
-            PageAll-GraphRequest $removeUrl $refreshToken 'DELETE' $graphscopes $logFilePath
+            PageAll-GraphRequest $removeUrl $refreshToken 'DELETE' $graphscopes $logFilePath | Out-Null
             $index++
         }
     }
