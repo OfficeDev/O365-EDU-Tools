@@ -12,49 +12,36 @@ param
 (
     [Parameter(Mandatory=$true)]
     [string]$UPN,
+    
+    [Parameter(Mandatory=$false)]
+    [string] $OutFolder = ".",
 
-    [Parameter(Mandatory=$true)]
-    [string]$TenantName
+    [Parameter(Mandatory=$false)]
+    [string] $downloadFcns = "y"
 )
 
-# from https://blogs.technet.microsoft.com/cloudlojik/2018/06/29/connecting-to-microsoft-graph-with-a-native-app-using-powershell/
-Function Get-AccessToken ($TenantName, $ClientID, $redirectUri, $resourceAppIdURI, $CredPrompt){
-    Write-Host "Checking for AzureAD module..."
-    if (!$CredPrompt){$CredPrompt = 'Auto'}
-    $AadModule = Get-Module -Name "AzureAD" -ListAvailable
-    if ($AadModule -eq $null) {$AadModule = Get-Module -Name "AzureADPreview" -ListAvailable}
-    if ($AadModule -eq $null) {write-host "AzureAD Powershell module is not installed. The module can be installed by running 'Install-Module AzureAD' or 'Install-Module AzureADPreview' from an elevated PowerShell prompt. Stopping." -f Yellow;exit}
-    if ($AadModule.count -gt 1) {
-        $Latest_Version = ($AadModule | select version | Sort-Object)[-1]
-        $aadModule      = $AadModule | ? { $_.version -eq $Latest_Version.version }
-        $adal           = Join-Path $AadModule.ModuleBase "Microsoft.IdentityModel.Clients.ActiveDirectory.dll"
-        $adalforms      = Join-Path $AadModule.ModuleBase "Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll"
-        }
-    else {
-        $adal           = Join-Path $AadModule.ModuleBase "Microsoft.IdentityModel.Clients.ActiveDirectory.dll"
-        $adalforms      = Join-Path $AadModule.ModuleBase "Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll"
-        }
-    [System.Reflection.Assembly]::LoadFrom($adal) | Out-Null
-    [System.Reflection.Assembly]::LoadFrom($adalforms) | Out-Null
-    $authority          = "https://login.microsoftonline.com/$TenantName"
-    Write-Verbose -Message $authority
-    $authContext        = New-Object "Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext" -ArgumentList $authority
-    $platformParameters = New-Object "Microsoft.IdentityModel.Clients.ActiveDirectory.PlatformParameters"    -ArgumentList $CredPrompt
-    $authResult         = $authContext.AcquireTokenAsync($resourceAppIdURI, $clientId, $redirectUri, $platformParameters).Result
-    return $authResult
+$GraphEndpointProd = "https://graph.microsoft.com"
+$GraphEndpointPPE = "https://graph.microsoft-ppe.com"
+
+$logFilePath = $OutFolder
+
+#checking parameter to download common.ps1 file for required common functions
+if ($downloadFcns -ieq "y" -or $downloadFcns -ieq "yes"){
+    # Downloading file with latest common functions
+    try {
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
+        "Grabbed 'common.ps1' to currrent directory"
+    } 
+    catch {
+        throw "Unable to download common.ps1"
+    }
 }
+    
+#import file with common functions
+. .\common.ps1
 
-$ErrorActionPreference = 'Stop'
-
-# --Get the auth token
-$authResult = Get-AccessToken -TenantName $TenantName -ClientID "12128f48-ec9e-42f0-b203-ea49fb6af367" -redirectUri "https://teamscmdlet.microsoft.com" -resourceAppIdURI "https://graph.microsoft.com/" -CredPrompt "Always"
-
-Write-Verbose -Message $authResult
-
-$headers = @{
-    'Authorization' = ('bearer ' + $authResult.AccessToken)
-}
-
+function Get-GroupsForUser($UPN)
+{
 # --Fetch all groups for the user
 $groupPaginationLimit = 999
 
@@ -63,9 +50,9 @@ $groupsRequestUrl = "https://graph.microsoft.com/edu/users/$UPN/ownedObjects/mic
 $groups = New-Object System.Collections.ArrayList
 try {
     do {    
-        $groupsResponse = Invoke-WebRequest -Uri $groupsRequestUrl -Method Get -Headers $headers
+        $groupsResponse = invoke-graphrequest -Uri $groupsRequestUrl -Method 'GET' -ContentType "application/json"
 
-        $groupsContent = ConvertFrom-Json -InputObject $groupsResponse.Content
+        $groupsContent = $groupsResponse
 
         $groupsCount = $groupsContent.value.Count
 
@@ -89,6 +76,11 @@ $groupsCount = $groups.Count
 
 Write-Verbose -Message "Done fetching groups. Retrieved $groupsCount total groups."
 
+return $groups
+}
+
+function New-TeamsFromGroups ($groups)
+{
 # --Create teams for the groups
 $createTeamUrl = "https://graph.microsoft.com/beta/teams"
 
@@ -125,33 +117,19 @@ foreach ($group in $groups) {
     }'
 
     try {
-        $createTeamResponse = Invoke-WebRequest -Uri $createTeamUrl -Headers $headers -Method Post -Body $createTeamBody -ContentType application/json
-        $statusCode = $createTeamResponse.StatusCode
-        Write-Verbose -Message "Create team request succeded with status code: $statusCode"
+         $createTeamResponse = invoke-graphrequest -Uri $createTeamUrl -Method 'POST' -Body $createTeamBody -ContentType "application/json"
         
-        if ($statusCode -gt 199 -and $statusCode -lt 300) {
-            [void]$results.Add(@($group.displayName, "team created", $success))
-        } else {
-            [void]$results.Add(@($group.displayName, "unknown", $failed))
-        }
-        # Throttling here is necessary to prevent failures caused by too many requests per user
+         $statusCode = $createTeamResponse.StatusCode
+         Write-Verbose -Message "Create team request succeded with status code: $statusCode"        
+         [void]$results.Add(@($group.displayName, "team created", $success))
+
         Start-Sleep -Seconds 1
     } catch {
         $requestError = $_
-        $responseStream = $requestError.Exception.Response.GetResponseStream()
-        $streamReader = New-Object System.IO.StreamReader -ArgumentList $responseStream
-        $readBuffer = [char[]]::new(256)
-        $readCount = $streamReader.Read($readBuffer, 0, 256);
-        $strBuilder = New-Object System.Text.StringBuilder
-        while ($readCount -gt 0) {
-            $str = New-Object System.String -ArgumentList @($readBuffer, 0, $readCount)
-            [void]$strBuilder.Append($str)
-            $readCount = $streamReader.Read($readBuffer, 0, 256)
-        }
+        $resultStr = $requestError.Exception.Response.ToString() 
+        $errorStatusCode = $requestError.Exception.Response.StatusCode.value__
 
-        $resultStr = $strBuilder.ToString()
-
-        if ($resultStr.Contains("Failed to execute request for MiddleTier CreateTeamS2SAsync. Status code: Conflict")) {
+        if ($errorStatusCode -eq 409){
             Write-Verbose -Message "Group is already a team"
             [void]$results.Add(@($group.displayName, "skipped: group is already a team", $skipped))
             continue
@@ -174,3 +152,48 @@ foreach ($result in $results) {
     }
     Write-Host $result[0].Substring(0, (($result[0].length - 1), 10 | Measure-Object -Min).Minimum) "...`t`t" $result[1] -ForegroundColor $foregroundColor -BackgroundColor $backgroundColor
 }
+}
+
+# Main
+$graphEndPoint = $GraphEndpointProd
+
+if ($PPE)
+{
+    $graphEndPoint = $GraphEndpointPPE
+}
+
+$activityName = "Reading SDS objects in the directory"
+
+$graphscopes = "Team.Create, GroupMember.ReadWrite.All, Group.ReadWrite.All, User.Read, User.Read.All, User.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All, Directory.AccessAsUser.All"
+
+try
+{
+    Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1 | Out-Null
+}
+catch
+{
+    Write-Error "Failed to load Microsoft Graph PowerShell Module."
+    Get-PrerequisiteHelp | Out-String | Write-Error
+    throw
+}
+
+# Connect to the tenant
+Write-Progress -Activity $activityName -Status "Connecting to tenant"
+ 
+$refreshToken = Initialize $graphscopes
+
+Write-Progress -Activity $activityName -Status "Connected. Discovering tenant information"
+
+# Create output folder if it does not exist
+if ((Test-Path $OutFolder) -eq 0)
+{
+	mkdir $OutFolder;
+}
+
+$userGroups = Get-GroupsForUser $UPN
+
+New-TeamsFromGroups $userGroups
+
+Write-Output "`nDone.`n"
+
+Write-Output "Please run 'disconnect-graph' if you are finished making changes.`n"
