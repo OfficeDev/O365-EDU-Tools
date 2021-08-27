@@ -6,6 +6,9 @@
 -----------------------------------------------------------------------
 .Synopsis
     Helps create Microsoft Teams teams from previously created Class Team unified groups
+
+Syntax Examples and Options:
+.\Remove-SchoolSG_Memberships.ps1 -UPN "user@contoso.com"
 #>
 
 param
@@ -39,6 +42,34 @@ if ($downloadFcns -ieq "y" -or $downloadFcns -ieq "yes"){
     
 #import file with common functions
 . .\common.ps1
+
+function Get-PrerequisiteHelp
+{
+    Write-Output @"
+========================
+ Required Prerequisites
+========================
+
+1. Install Microsoft Graph Powershell Module with command 'Install-Module Microsoft.Graph'
+
+2.  Make sure to download common.ps1 to the same folder of the script which has common functions needed.  https://github.com/OfficeDev/O365-EDU-Tools/blob/master/SDS%20Scripts/common.ps1
+
+3. Check that you can connect to your tenant directory from the PowerShell module to make sure everything is set up correctly.
+
+    a. Open a separate PowerShell session
+    
+    b. Execute: "connect-graph -scopes "Team.Create, GroupMember.ReadWrite.All, Group.ReadWrite.All, User.Read, User.Read.All, User.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All, Directory.AccessAsUser.All" to bring up a sign in UI. 
+    
+    c. Sign in with any tenant administrator credentials
+    
+    d. If you are returned to the PowerShell sesion without error, you are correctly set up
+
+4. Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working
+
+(END)
+========================
+"@
+}
 
 function Get-GroupsForUser($UPN)
 {
