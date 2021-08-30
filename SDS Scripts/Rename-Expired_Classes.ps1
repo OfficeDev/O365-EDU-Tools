@@ -76,6 +76,8 @@ function Get-PrerequisiteHelp
 }
 function Update-ExpireSingleGroup($groupId, $logFilePath, $team) {
 
+    $updateResultsFilePath = "$OutFolder\renameSectionResults.csv"
+
     $expiredDisplayName = $SDSExpiredPrefix + '_' + $team.Name
     $expiredSectionId = $SDSExpiredPrefix + "_" + $team.SectionId
     $expiredAnchorId = $SDSExpiredPrefix + '_' + 'Section_' + $team.SectionId
@@ -91,6 +93,16 @@ function Update-ExpireSingleGroup($groupId, $logFilePath, $team) {
     }'
 
     $result = invoke-graphrequest -Method Patch -Uri $uri -body $requestBody -ContentType "application/json" -SkipHttpErrorCheck
+
+    if ([string]::IsNullOrEmpty($_.Exception.Message) -eq $true ) {
+        $statusMessage = "success"
+    }
+    else {
+        $statusMessage = "fail"
+    }
+
+    $message = [string]::Format("{0},{1},{2},{3}", $team.Name, $expiredDisplayName, $team.SectionId, $statusMessage)
+    $message | Out-File $updateResultsFilePath -Encoding utf8 -Append
 }
 
 function Update-ExpireAllGroupsLoaded($incomingToken, $graphscopes, $targetGroups, $logFilePath) {
@@ -98,6 +110,11 @@ function Update-ExpireAllGroupsLoaded($incomingToken, $graphscopes, $targetGroup
     $processedTeams = @()
     
     $saveToken = $incomingToken
+
+    $updateResultsFilePath = "$OutFolder\renameSectionResults.csv"
+
+    # Setup update results csv
+    "Old Section Name,New Section Name,SIS Id,Update Status" | Out-File $updateResultsFilePath -Encoding utf8
 
     ForEach ($team in $TargetGroups) {
         $saveToken = Refresh-Token $saveToken $graphscopes
