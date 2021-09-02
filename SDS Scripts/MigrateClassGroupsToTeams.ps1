@@ -13,11 +13,16 @@ Syntax Examples and Options:
 
 param
 (
+    [switch] $PPE = $false,
+    
+    [Parameter(Mandatory=$false)]
+    [string] $skipToken= ".",
+
     [Parameter(Mandatory=$true)]
     [string]$UPN,
     
     [Parameter(Mandatory=$false)]
-    [string] $OutFolder = ".",
+    [string] $OutFolder = ".\MigratedGroupsToTeams",
 
     [Parameter(Mandatory=$false)]
     [string] $downloadFcns = "y"
@@ -26,7 +31,7 @@ param
 $GraphEndpointProd = "https://graph.microsoft.com"
 $GraphEndpointPPE = "https://graph.microsoft-ppe.com"
 
-$logFilePath = $OutFolder
+$logFilePath = "$OutFolder\MigratedGroupsToTeams.log"
 
 #checking parameter to download common.ps1 file for required common functions
 if ($downloadFcns -ieq "y" -or $downloadFcns -ieq "yes"){
@@ -73,116 +78,136 @@ function Get-PrerequisiteHelp
 
 function Get-GroupsForUser($UPN)
 {
-# --Fetch all groups for the user
-$groupPaginationLimit = 999
+    # --Fetch all groups for the user
+    $groupPaginationLimit = 999
 
-$groupsRequestUrl = "https://graph.microsoft.com/edu/users/$UPN/ownedObjects/microsoft.graph.group?`$top=$groupPaginationLimit"
+    $initialGroupsRequestUrl = "https://graph.microsoft.com/edu/users/$UPN/ownedObjects/microsoft.graph.group?`$top=$groupPaginationLimit"
+    $groupsRequestUrl = TokenSkipCheck $initialGroupsRequestUrl $logFilePath
+    $groups = New-Object System.Collections.ArrayList
 
-$groups = New-Object System.Collections.ArrayList
-try {
-    do {    
-        $groupsResponse = invoke-graphrequest -Uri $groupsRequestUrl -Method 'GET' -ContentType "application/json"
+    try {
+        do {    
+            $groupsResponse = invoke-graphrequest -Uri $groupsRequestUrl -Method 'GET' -ContentType "application/json"
 
-        $groupsContent = $groupsResponse
+            $groupsContent = $groupsResponse
 
-        $groupsCount = $groupsContent.value.Count
+            $groupsRespCount = $groupsContent.value.Count
 
-        [void]$groups.AddRange($groupsContent.value)
+            $groupsPageCount = 1
 
-        Write-Verbose -Message "Retrieved $groupsCount groups."
-        if ($groupsContent.'@odata.nextLink'){
-            Write-Verbose -Message "More groups to retrieve..."
-        }
+            [void]$groups.AddRange($groupsContent.value)
+            
+            Write-Output -Message "[$(get-date -Format G)] Retrieved $groupsRespCount groups" | Out-File -FilePath $logFilePath -Append 
+            
+            if ($groupsContent.'@odata.nextLink'){
+                Write-Output -Message "[$(get-date -Format G)] Retrieved $groupsPageCount pages.  More groups to retrieve..." | Out-File -FilePath $logFilePath -Append 
+            }
 
-        $groupsRequestUrl = $groupsContent.'@odata.nextLink'
-    } while ($groupsRequestUrl)
-} catch {
-    $message = $_.Exception.Message
+            $groupsRequestUrl = $groupsContent.'@odata.nextLink'
+            Out-File -FilePath $logFilePath -Append -InputObject "[$(get-date -Format G)] $groupsPageCount page of groups retrieved. nextLink: $groupsRequestUrl"
+            
+            New-TeamsFromGroups $groups
 
-    Write-Host "Error while getting groups for $UPN : $message"
-    return
-}
+            $groupsPageCount += 1
 
-$groupsCount = $groups.Count
+        } while ($groupsRequestUrl)
+    } catch {
+        $message = $_.Exception.Message
 
-Write-Verbose -Message "Done fetching groups. Retrieved $groupsCount total groups."
+        Write-Host "Error while getting groups for $UPN : $message"
+        return
+    }
 
-return $groups
+    $groupsCount = $groups.Count
+
+    Write-Host -Message "Done fetching groups. Retrieved $groupsCount total groups." -ForegroundColor Green
 }
 
 function New-TeamsFromGroups ($groups)
 {
-# --Create teams for the groups
-$createTeamUrl = "https://graph.microsoft.com/beta/teams"
+    # --Create teams for the groups
+    $createTeamUrl = "https://graph.microsoft.com/beta/teams"
 
-$results = New-Object System.Collections.ArrayList
+    $results = New-Object System.Collections.ArrayList
 
-$skipped = 0
-$success = 1
-$failed = 2
-$progressCount = 0
+    $skipped = 0
+    $success = 1
+    $failed = 2
+    $progressCount = 0
 
-foreach ($group in $groups) {
-    $progressCount += 1
-    $i = ($progressCount / $groups.Count) * 100
-    Write-Progress -Activity "Converting groups to teams" -Status "$i% complete" -PercentComplete $i
-    $name = $group.displayName
-    $objectId = $group.objectId
+    foreach ($group in $groups) {
+        $progressCount += 1
+        $i = ($progressCount / $groups.Count) * 100
+        Write-Progress -Activity "Converting groups to teams" -Status "$i% complete" -PercentComplete $i
+        $name = $group.displayName
+        $objectId = $group.objectId
 
-    # NOTE: conditions required for groups to become class teams may change without notice
-    if ($group.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType -ne "Section") {
-        Write-Verbose -Message "Skipping team $name - ObjectType must be 'Section'"
-        [void]$results.Add(@($group.displayName, "skipped: ObjectType must be 'Section'", $skipped))
-        continue
-    }
-
-    if (!$group.creationOptions.Contains("classAssignments")) {
-        Write-Verbose -Message "Skipping team $name - creationOptions must contain 'classAssignments'"
-        [void]$results.Add(@($group.displayName, "skipped: creationOptions must contain 'classAssignments", $skipped))
-        continue
-    }
-
-    $createTeamBody = '{
-        "template@odata.bind": "https://graph.microsoft.com/beta/teamsTemplates(''educationClass'')",
-        "group@odata.bind": "https://graph.microsoft.com/v1.0/groups(''' + $objectId + ''')"
-    }'
-
-    try {
-         $createTeamResponse = invoke-graphrequest -Uri $createTeamUrl -Method 'POST' -Body $createTeamBody -ContentType "application/json"
-        
-         $statusCode = $createTeamResponse.StatusCode
-         Write-Verbose -Message "Create team request succeded with status code: $statusCode"        
-         [void]$results.Add(@($group.displayName, "team created", $success))
-
-        Start-Sleep -Seconds 1
-    } catch {
-        $requestError = $_
-        $resultStr = $requestError.Exception.Response.ToString() 
-        $errorStatusCode = $requestError.Exception.Response.StatusCode.value__
-
-        if ($errorStatusCode -eq 409){
-            Write-Verbose -Message "Group is already a team"
-            [void]$results.Add(@($group.displayName, "skipped: group is already a team", $skipped))
+        # NOTE: conditions required for groups to become class teams may change without notice
+        if ($group.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType -ne "Section") {
+            Write-Verbose -Message "Skipping team $name - ObjectType must be 'Section'"
+            [void]$results.Add(@($group.displayName, "skipped: ObjectType must be 'Section'", $skipped))
             continue
         }
 
-        $message = $requestError.Exception.Message
-        Write-Verbose -Message "Error: $message \n $resultStr"
-        [void]$results.Add(@($group.displayName, "error: " + $request.Exception.Message, $failed))
+        if (!$group.creationOptions.Contains("classAssignments")) {
+            Write-Verbose -Message "Skipping team $name - creationOptions must contain 'classAssignments'"
+            [void]$results.Add(@($group.displayName, "skipped: creationOptions must contain 'classAssignments", $skipped))
+            continue
+        }
+
+        $createTeamBody = '{
+            "template@odata.bind": "https://graph.microsoft.com/beta/teamsTemplates(''educationClass'')",
+            "group@odata.bind": "https://graph.microsoft.com/v1.0/groups(''' + $objectId + ''')"
+        }'
+
+        try {
+            $createTeamResponse = invoke-graphrequest -Uri $createTeamUrl -Method 'POST' -Body $createTeamBody -ContentType "application/json"
+            
+            $statusCode = $createTeamResponse.StatusCode
+            Write-Verbose -Message "Create team request succeded with status code: $statusCode"        
+            [void]$results.Add(@($group.displayName, "team created", $success))
+
+            Start-Sleep -Milliseconds 400
+        } catch {
+            $requestError = $_
+            $resultStr = $requestError.Exception.Response.ToString() 
+            $errorStatusCode = $requestError.Exception.Response.StatusCode.value__
+
+            if ($errorStatusCode -eq 409){
+                Write-Verbose -Message "Group is already a team"
+                [void]$results.Add(@($group.displayName, "skipped: group is already a team", $skipped))
+                continue
+            }
+
+            $message = $requestError.Exception.Message
+            Write-Verbose -Message "Error: $message \n $resultStr"
+            [void]$results.Add(@($group.displayName, "error: " + $request.Exception.Message, $failed))
+        }
+    }
+
+    Write-Host "Finished!"
+    foreach ($result in $results) {
+        $foregroundColor = "Black"
+        $backgroundColor = "Green"
+        if ($result[2] -eq $failed) {
+            $backgroundColor = "Red"
+        } elseif ($result[2] -eq $skipped) {
+            $backgroundColor = "Magenta"
+        }
+        $teamLog = [String]::Join("`t`t",$result,0,2)
+        Out-File -InputObject "[$(get-date -Format G)] $teamLog" -FilePath $logFilePath -Append 
+        Write-Host $result[0].Substring(0, (($result[0].length - 1), 10 | Measure-Object -Min).Minimum) "...`t`t" $result[1] -ForegroundColor $foregroundColor -BackgroundColor $backgroundColor
     }
 }
 
-Write-Host "Finished!"
-foreach ($result in $results) {
-    $foregroundColor = "Black"
-    $backgroundColor = "Green"
-    if ($result[2] -eq $failed) {
-        $backgroundColor = "Red"
-    } elseif ($result[2] -eq $skipped) {
-        $backgroundColor = "Magenta"
-    }
-    Write-Host $result[0].Substring(0, (($result[0].length - 1), 10 | Measure-Object -Min).Minimum) "...`t`t" $result[1] -ForegroundColor $foregroundColor -BackgroundColor $backgroundColor
-}
+Function Format-ResultsAndExport($graphscopes, $logFilePath) {
+    
+    $refreshToken = Initialize $graphscopes
+
+    Write-Progress -Activity $activityName -Status "Connected. Discovering tenant information"
+    
+    Get-GroupsForUser $UPN
+
 }
 
 # Main
@@ -211,19 +236,13 @@ catch
 # Connect to the tenant
 Write-Progress -Activity $activityName -Status "Connecting to tenant"
  
-$refreshToken = Initialize $graphscopes
-
-Write-Progress -Activity $activityName -Status "Connected. Discovering tenant information"
-
 # Create output folder if it does not exist
 if ((Test-Path $OutFolder) -eq 0)
 {
 	mkdir $OutFolder;
 }
 
-$userGroups = Get-GroupsForUser $UPN
-
-New-TeamsFromGroups $userGroups
+Format-ResultsAndExport $graphscopes $logFilePath
 
 Write-Output "`nDone.`n"
 
