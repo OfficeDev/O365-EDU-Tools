@@ -145,8 +145,11 @@ function Update-SDSUserAttributes
 		$userList = import-csv $userListFileName
 		$userCount = (gc $userListFileName | measure-object).count - 1
 		$index = 1
+        $saveToken = $refreshToken
 		Foreach ($user in $userList) 
 		{
+            $saveToken = Refresh-Token $saveToken $graphscopes
+
 			Write-Output "[$(get-date -Format G)] [$index/$userCount] Updating attribute [$($user.userAnchorId)] from user `"$($user.userDisplayName)`" " | Out-File $logFilePath -Append 
             
             $updateUrl = $graphEndPoint + '/beta/users/' + $user.userObjectId
@@ -192,8 +195,6 @@ catch
 # Connect to the tenant
 Write-Progress -Activity $activityName -Status "Connecting to tenant"
 
-Initialize
-
 Write-Progress -Activity $activityName -Status "Connected. Discovering tenant information"
 
 # Create output folder if it does not exist
@@ -207,7 +208,7 @@ Format-ResultsAndExport $graphscopes $logFilePath
 Write-Host "`nSDS users logged to file $csvFilePath `n" -ForegroundColor Green
 
 # update School AU Memberships
-update-SDSUserAttributes $refreshToken $graphscopes $csvFilePath
+Update-SDSUserAttributes $refreshToken $graphscopes $csvFilePath
 
 Write-Output "`nDone.`n"
 
