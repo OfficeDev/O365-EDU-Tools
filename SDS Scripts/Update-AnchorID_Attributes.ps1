@@ -86,7 +86,7 @@ function Get-Users
 
     $list = @()
 
-    $userSelectClause = "?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource%20eq%20'SIS'&`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType,extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId"
+    $userSelectClause = "?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'Student'%20or%20extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'Teacher'&`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType,extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId"
 
     $initialUri = "$graphEndPoint/beta/users$userSelectClause"
 
