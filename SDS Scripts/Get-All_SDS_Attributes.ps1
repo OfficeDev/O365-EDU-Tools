@@ -76,7 +76,7 @@ function Get-PrerequisiteHelp
 
     a. Open a separate PowerShell session
     
-    b. Execute: "connect-graph -scopes User.Read.All, GroupMember.Read.All, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All" to bring up a sign in UI. 
+    b. Execute: "connect-graph -scopes User.Read.All, GroupMember.Read.All, Member.Read.Hidden, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All" to bring up a sign in UI. 
     
     c. Sign in with any tenant administrator credentials
     
@@ -210,7 +210,6 @@ function Get-SdsSections
             "SIS ID" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SectionId
             "School SIS ID" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId
             "Section Name" = $group.DisplayName
-            #"Name" = $au.DisplayName                    
             "Section Number" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_SectionNumber
             "Term SIS ID" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_TermId
             "Term Name" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_TermName
@@ -366,7 +365,7 @@ function Export-SdsStudentEnrollments
     if ($cnt -gt 0)
     {
         Write-Host "Exporting $cnt Student Enrollments ..."
-        $data | Export-Csv $filePath -Force -NotypeInformation
+        $data | Export-Csv $filePath -Force -NotypeInformation -ErrorAction SilentlyContinue
         Write-Host "`nStudent Enrollments exported to file $filePath `n" -ForegroundColor Green
         return $filePath
     }
@@ -666,7 +665,7 @@ if ($PPE)
 
 $activityName = "Reading SDS objects in the directory"
 
-$graphscopes = "User.Read.All, GroupMember.Read.All, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All"
+$graphscopes = "User.Read.All, GroupMember.Read.All, Member.Read.Hidden, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All"
 
 try
 {
