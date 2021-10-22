@@ -92,23 +92,11 @@ function Get-AdministrativeUnits($graphEndPoint, $eduObjectType, $refreshToken, 
     $administrativeUnits = PageAll-GraphRequest $adminstrativeUnitsUri $refreshToken 'GET' $graphScopes $logFilePath
     Write-Output "[$(get-date -Format G)] Retrieve $($administrativeUnits.Count) groups." | out-file $logFilePath -Append
 
-    $auList = @() #array of objects for AdminstrativeUnits
     $fileName = $eduObjectType + "-AUs.csv"
     $filePath = Join-Path $OutFolder $fileName
-
-    foreach ($au in $administrativeUnits) {
-
-        if ($au.Id -ne $null) {
-
-            #create object required for export-csv and add to array
-            $obj = [pscustomobject]@{"Id" = $au.Id; "DisplayName" = $au.DisplayName; "Source ID" = $au.extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId }
-            $auList += $obj
-
-        }           
-    }    
+       
+    $administrativeUnits | select-object -property @{N='Id';E={$_.Id}}, @{N='DisplayName';E={$_.DisplayName}}, @{N='Source ID';E={$_.extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId}} | where-object {$_.Id -ne $null} | export-csv -Path "$filePath" -NoTypeInformation
     
-    Write-Output $auList | Export-Csv -Path "$filePath" -NoTypeInformation
-
     return $filePath
 }
 
@@ -142,20 +130,10 @@ function Get-Groups($graphEndPoint, $eduObjectType, $refreshToken, $graphScopes,
     $groups = PageAll-GraphRequest $groupsUri $refreshToken 'GET' $graphScopes $logFilePath
     Write-Output "[$(get-date -Format G)] Retrieve $($groups.Count) groups." | out-file $logFilePath -Append
     
-    $groupList = @() #array of objects for groups 
     $fileName = $eduObjectType + "-Groups.csv"
-    $filePath = Join-Path $OutFolder $fileName
+    $filePath = Join-Path $OutFolder $fileName 
 
-    #looping through all groups
-    foreach ($grp in $groups) {
-        if ($grp.Id -ne $null) {
-            #create object required for export-csv and add to array
-            $obj = [pscustomobject]@{"Id" = $grp.Id; "DisplayName" = $grp.DisplayName; "Mail" = $grp.Mail; "Source ID" = $grp.extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId }
-            $groupList += $obj
-        }			
-    }
-    
-    Write-Output $groupList | Export-Csv -Path "$filePath" -NoTypeInformation
+    $groups | select-object -property @{N='Id';E={$_.Id}}, @{N='DisplayName';E={$_.DisplayName}}, @{N='Mail';E={$_.Mail}}, @{N='Source ID';E={$_.extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId}} | where-object {$_.Id -ne $null} | export-csv -Path "$filePath" -NoTypeInformation
     
     return $filePath
 }
