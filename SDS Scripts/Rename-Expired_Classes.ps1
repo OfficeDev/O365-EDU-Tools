@@ -20,7 +20,7 @@ Param (
     [Parameter(Mandatory=$false)]
     [string] $OutFolder = ".\RenameExpiredClasses",
     [Parameter(Mandatory=$false)]
-    [string] $downloadFcns = "y",
+    [switch] $downloadCommonFNs = $true,
     [Parameter(Mandatory=$true)]
     [string] $SectionsToUpdateFilePath
 )
@@ -33,7 +33,7 @@ $logFilePath = "$OutFolder\Expired-Classes.log"
 $targetGroups = Import-Csv $SectionsToUpdateFilePath
 
 #checking parameter to download common.ps1 file for required common functions
-if ($downloadFcns -ieq "y" -or $downloadFcns -ieq "yes"){
+if ($downloadCommonFNs){
     # Downloading file with latest common functions
     try {
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
@@ -74,6 +74,7 @@ function Get-PrerequisiteHelp
 ========================
 "@
 }
+
 function Update-ExpireSingleGroup($groupId, $logFilePath, $team) {
 
     $updateResultsFilePath = "$OutFolder\renameSectionResults.csv"
@@ -85,7 +86,7 @@ function Update-ExpireSingleGroup($groupId, $logFilePath, $team) {
 
     #Truncate mailNickname to avoid 64 char limit error when we prefix ExpMMYY_ on long SIS ID's
     if ( $expiredMailNickname.length -ge 64 ) {
-        $expiredMailNickname = $expiredMailNickname.Substring(0, $expiredMailNickname.length-10)
+        $expiredMailNickname = $expiredMailNickname.Substring(0, $expiredMailNickname.length-8)
     }
 
     $uri = "https://graph.microsoft.com/beta/groups/$groupId"
@@ -143,6 +144,7 @@ function Update-ExpireAllGroupsLoaded($incomingToken, $graphscopes, $targetGroup
 
     return $processedTeams
 }
+
 function Retire-Sections($graphscopes, $targetGroups, $logFilePath) {
     $processedTeams = $null
 
