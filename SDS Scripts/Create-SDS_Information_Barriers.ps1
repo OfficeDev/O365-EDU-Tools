@@ -134,7 +134,7 @@ function Create-InformationBarriersFromTeacherSG {
         $graphResponse = Invoke-GraphRequest -Method GET -Uri $teacherSGUri -ContentType "application/json"
         $teacherSG = $graphResponse.value
         
-        #Write to school SG count to log
+        #Write All Teachers security group retrieved to log
         Write-Output "[$(Get-Date -Format G)] Retrieved $($teacherSG.displayName)." | Out-File $logFilePath -Append
     }
     catch{
