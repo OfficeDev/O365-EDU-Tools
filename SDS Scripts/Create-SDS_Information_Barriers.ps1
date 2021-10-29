@@ -17,14 +17,14 @@ Param (
     [Parameter(Mandatory=$false)]
     [string] $OutFolder = ".\SDS_InformationBarriers",
     [Parameter(Mandatory=$false)]
-    [string] $downloadFcns = "y"
+    [switch] $downloadCommonFNs = $true
 )
 
 $GraphEndpointProd = "https://graph.microsoft.com"
 $GraphEndpointPPE = "https://graph.microsoft-ppe.com"
 
 #checking parameter to download common.ps1 file for required common functions
-if ($downloadFcns -ieq "y" -or $downloadFcns -ieq "yes"){
+if ($downloadCommonFNs){
     # Downloading file with latest common functions
     try {
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
@@ -45,7 +45,7 @@ function Get-PrerequisiteHelp
  Required Prerequisites
 ========================
 
-1. Install Microsoft Graph Powershell Module Exchange Online Management Module with commands 'Install-Module Microsoft.Graph' and 'Install-Module ExchangeOnlineManagement'
+1. Install Microsoft Graph Powershell Module and Exchange Online Management Module with commands 'Install-Module Microsoft.Graph' and 'Install-Module ExchangeOnlineManagement'
 
 2. Check that you can connect to your tenant directory from the PowerShell module to make sure everything is set up correctly.
 
@@ -73,9 +73,8 @@ function Create-InformationBarriersFromSchoolAUs {
 
     $initialSDSSchoolAUsUri = "$graphEndPoint/beta/directory/administrativeUnits?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'School'&$auSelectClause"
         
-
     #getting AUs for all schools
-    Write-Output "`nRetreiving SDS School Administrave Units"
+    Write-Output "`nRetreiving SDS School Administrative Units"
     $checkedSDSSchoolAUsUri = TokenSkipCheck $initialSDSSchoolAUsUri
     
     do {
@@ -84,7 +83,7 @@ function Create-InformationBarriersFromSchoolAUs {
         $allSchoolAUs = $graphResponse.value
 
         #write to school AU count to log
-        write-output "[$(get-date -Format G)] Retrieve $($allSchoolAUs.Count) school AUs." | out-file $logFilePath -Append
+        Write-Output "[$(Get-Date -Format G)] Retrieve $($allSchoolAUs.count) school AUs." | Out-File $logFilePath -Append
         
         $i = 0 #counter for progress
         
@@ -93,12 +92,12 @@ function Create-InformationBarriersFromSchoolAUs {
         {
             if ($au.id -ne $null)
             {
-                write-host $au.displayName
+                Write-Host "Processing $($au.displayName)"
 
-                #Creating Ogranization Segment based from SDS School Administrative Unit for Information Barrier
+                #Creating Ogranization Segment from SDS School Administrative Unit for the Information Barrier
                 try {
                     New-OrganizationSegment -Name $au.displayName -UserGroupFilter "AdministrativeUnits -eq '$($au.displayName)'" | Out-Null
-                    write-output "[$(get-date -Format G)] Created organization segment $($au.displayName) from school AUs." | out-file $logFilePath -Append
+                    Write-Output "[$(Get-Date -Format G)] Created organization segment $($au.displayName) from school AUs." | Out-File $logFilePath -Append
                 }
                 catch{
                     throw "Error creating Organization Segment for school au $($au.displayName)" 
@@ -107,17 +106,15 @@ function Create-InformationBarriersFromSchoolAUs {
                 #Creating Information Barrier Policies from SDS School Administrative Unit
                 try {
                     New-InformationBarrierPolicy -Name "$($au.displayName) - IB" -AssignedSegment $au.displayName -SegmentsAllowed $au.displayName -State Active -Force | Out-Null
-                    write-output "[$(get-date -Format G)] Created Information Barrier Policy $($au.displayName) from organizaiton segment" | out-file $logFilePath -Append
+                    Write-Output "[$(Get-Date -Format G)] Created Information Barrier Policy $($au.displayName) from organizaiton segment" | Out-File $logFilePath -Append
                 }
                 catch {
                     throw "Error creating Information Barrier Policy for school au $($au.displayName)"
                 }
-
             }
             $i++
-            write-output "[$(get-date -Format G)] nextLink: $($graphResponse.'@odata.nextLink')" | out-file $logFilePath -Append
+            Write-Output "[$(Get-Date -Format G)] nextLink: $($graphResponse.'@odata.nextLink')" | Out-File $logFilePath -Append
             Write-Progress -Activity "`nCreating Ogranization Segments and Information Barrier Policies based from SDS School Administrative Units" -Status "Progress ->" -PercentComplete ($i/$allSchoolAUs.count*100)
-
         }
     } while($graphResponse.'@odata.nextLink')
 
@@ -137,8 +134,8 @@ function Create-InformationBarriersFromTeacherSG {
         $graphResponse = Invoke-GraphRequest -Method GET -Uri $teacherSGUri -ContentType "application/json"
         $teacherSG = $graphResponse.value
         
-        #write to school SG count to log
-        write-output "[$(get-date -Format G)] Retrieved $($teacherSG.displayName)." | out-file $logFilePath -Append
+        #Write to school SG count to log
+        Write-Output "[$(Get-Date -Format G)] Retrieved $($teacherSG.displayName)." | Out-File $logFilePath -Append
     }
     catch{
         throw "Could not retreive 'All Teachers' Security Group.  Please make sure that it is enabled in SDS."
@@ -146,16 +143,16 @@ function Create-InformationBarriersFromTeacherSG {
 
     try {
         New-OrganizationSegment -Name $teacherSG.displayName -UserGroupFilter "MemberOf -eq '$($teacherSG.id)'" | Out-Null
-        write-output "[$(get-date -Format G)] Created organization segment $($teacherSG.displayName) from security group." | out-file $logFilePath -Append
+        Write-Output "[$(Get-Date -Format G)] Created organization segment $($teacherSG.displayName) from security group." | Out-File $logFilePath -Append
     }
     catch{
         throw "Error creating Organization Segment"
     }
 
-    #Creating Information Barrier Policies from SDS School Administrative Unit
+    #Creating Information Barrier Policies from 'All Teachers' Security Group
     try {
         New-InformationBarrierPolicy -Name "$($teacherSG.displayName) - IB" -AssignedSegment $teacherSG.displayName -SegmentsAllowed $teacherSG.displayName -State Active -Force | Out-Null
-        write-output "[$(get-date -Format G)] Created Information Barrier Policy $($teacherSG.displayName) from organizaiton segment" | out-file $logFilePath -Append
+        Write-Output "[$(Get-Date -Format G)] Created Information Barrier Policy $($teacherSG.displayName) from organization segment" | Out-File $logFilePath -Append
     }
     catch {
         throw "Error creating Information Barrier Policy for security group $($teacherSG.displayName)"
@@ -221,5 +218,5 @@ Create-InformationBarriersFromTeacherSG
 
 Start-InformationBarrierPoliciesApplication | Out-Null
 
-Write-Output "Done.  Please allow ~30 minutes for system to start the process of applying Information Barrier Policies. `nUse Get-InformationBarrierPoliciesApplicationStatus to check the status"
+Write-Output "Done.  Please allow ~30 minutes for the system to start the process of applying Information Barrier Policies. `nUse Get-InformationBarrierPoliciesApplicationStatus to check the status"
 Write-Output "`n`nPlease run 'Disconnect-Graph' and 'Disconnect-ExchangeOnline' if you are finished`n"
