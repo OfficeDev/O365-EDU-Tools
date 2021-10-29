@@ -30,7 +30,7 @@ Param (
     [Parameter(Mandatory=$false)]
     [string] $skipToken= ".",
     [Parameter(Mandatory=$false)]
-    [string] $downloadFcns = "y"
+    [switch] $downloadCommonFNs = $true
 )
 
 $GraphEndpointProd = "https://graph.microsoft.com"
@@ -47,7 +47,7 @@ $eduRelStudentEnrollment = "StudentEnrollment"
 $eduRelTeacherRoster = "TeacherRoster"
 
 #checking parameter to download common.ps1 file for required common functions
-if ($downloadFcns -ieq "y" -or $downloadFcns -ieq "yes"){
+if ($downloadCommonFNs){
     # Downloading file with latest common functions
     try {
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
@@ -365,7 +365,7 @@ function Export-SdsStudentEnrollments
     if ($cnt -gt 0)
     {
         Write-Host "Exporting $cnt Student Enrollments ..."
-        $data | Export-Csv $filePath -Force -NotypeInformation -ErrorAction SilentlyContinue
+        $data | Export-Csv $filePath -Force -NotypeInformation
         Write-Host "`nStudent Enrollments exported to file $filePath `n" -ForegroundColor Green
         return $filePath
     }
