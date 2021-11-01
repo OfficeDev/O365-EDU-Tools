@@ -70,22 +70,22 @@ function Create-InformationBarriersFromSchoolAUs {
 
     #preparing uri string
     $auSelectClause = "`$select=id,displayName,@data.type"
-
     $initialSDSSchoolAUsUri = "$graphEndPoint/beta/directory/administrativeUnits?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'School'&$auSelectClause"
         
     #getting AUs for all schools
-    Write-Output "`nRetreiving SDS School Administrative Units"
+    Write-Output "`nRetreiving SDS School Administrative Units`n"
     $checkedSDSSchoolAUsUri = TokenSkipCheck $initialSDSSchoolAUsUri
     
+    $pageCnt = 1 #Counts the number of pages of school AUs Retrieved
+
     do {
         $graphResponse = Invoke-GraphRequest -Method GET -Uri $checkedSDSSchoolAUsUri -ContentType "application/json"
-
         $allSchoolAUs = $graphResponse.value
 
-        #write to school AU count to log
-        Write-Output "[$(Get-Date -Format G)] Retrieve $($allSchoolAUs.count) school AUs." | Out-File $logFilePath -Append
+        #Write school AU count to log
+        Write-Output "[$(Get-Date -Format G)] Retrieved $($allSchoolAUs.count) school AUs in page $pageCnt" | Out-File $logFilePath -Append
         
-        $i = 0 #counter for progress
+        $i = 0 #Counter for progress of IB creation
         
         #looping through all school Aus
         foreach($au in $allSchoolAUs)
@@ -94,7 +94,7 @@ function Create-InformationBarriersFromSchoolAUs {
             {
                 Write-Host "Processing $($au.displayName)"
 
-                #Creating Ogranization Segment from SDS School Administrative Unit for the Information Barrier
+                 #Creating Ogranization Segment from SDS School Administrative Unit for the Information Barrier
                 try {
                     New-OrganizationSegment -Name $au.displayName -UserGroupFilter "AdministrativeUnits -eq '$($au.displayName)'" | Out-Null
                     Write-Output "[$(Get-Date -Format G)] Created organization segment $($au.displayName) from school AUs." | Out-File $logFilePath -Append
@@ -116,6 +116,9 @@ function Create-InformationBarriersFromSchoolAUs {
             Write-Output "[$(Get-Date -Format G)] nextLink: $($graphResponse.'@odata.nextLink')" | Out-File $logFilePath -Append
             Write-Progress -Activity "`nCreating Ogranization Segments and Information Barrier Policies based from SDS School Administrative Units" -Status "Progress ->" -PercentComplete ($i/$allSchoolAUs.count*100)
         }
+
+        $pageCnt++
+
     } while($graphResponse.'@odata.nextLink')
 
     return 
@@ -125,7 +128,6 @@ function Create-InformationBarriersFromTeacherSG {
 
     #preparing uri string
     $grpTeacherSelectClause = "?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'AllTeachersSecurityGroup'&`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
-
     $teacherSGUri = "$graphEndPoint/beta/groups$grpTeacherSelectClause"
 
     Write-Output "Creating Information Barrier Policy from 'All Teachers' Security Group`n"  
