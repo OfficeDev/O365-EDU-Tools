@@ -15,7 +15,7 @@ Param (
     [Parameter(Mandatory=$false)]
     [string] $skipToken= ".",
     [Parameter(Mandatory=$false)]
-    [string] $OutFolder = ".\SDS_InformationBarriers",
+    [string] $outFolder = ".\SDS_InformationBarriers",
     [Parameter(Mandatory=$false)]
     [switch] $downloadCommonFNs = $true
 )
@@ -66,62 +66,84 @@ function Get-PrerequisiteHelp
 "@
 }
 
-function Create-InformationBarriersFromSchoolAUs {
+function Get-AllSchoolAUs {
+
+    #Remove temp csv file with school AUs
+    if ((Test-Path $csvFilePath))
+    {
+ 	    Remove-Item $csvFilePath;
+    }
 
     #preparing uri string
-    $auSelectClause = "`$select=id,displayName,@data.type"
+    $auSelectClause = "`$select=id,displayName"
     $initialSDSSchoolAUsUri = "$graphEndPoint/beta/directory/administrativeUnits?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'School'&$auSelectClause"
         
     #getting AUs for all schools
     Write-Output "`nRetreiving SDS School Administrative Units`n"
     $checkedSDSSchoolAUsUri = TokenSkipCheck $initialSDSSchoolAUsUri
     
+    $allSchoolAUs = @() #array of objects for pages of school AUs
     $pageCnt = 1 #Counts the number of pages of school AUs Retrieved
 
     do {
         $graphResponse = Invoke-GraphRequest -Method GET -Uri $checkedSDSSchoolAUsUri -ContentType "application/json"
-        $allSchoolAUs = $graphResponse.value
+        $schoolAUs = $graphResponse.value
 
         #Write school AU count to log
-        Write-Output "[$(Get-Date -Format G)] Retrieved $($allSchoolAUs.count) school AUs in page $pageCnt" | Out-File $logFilePath -Append
-        
-        $i = 0 #Counter for progress of IB creation
-        
-        #looping through all school Aus
-        foreach($au in $allSchoolAUs)
+        Write-Output "[$(Get-Date -Format G)] Retrieved $($schoolAUs.count) school AUs in page $pageCnt" | Out-File $logFilePath -Append
+    
+        #Write school Aus found to temp csv file
+        foreach($au in $schoolAUs)
         {
-            if ($au.id -ne $null)
-            {
-                Write-Host "Processing $($au.displayName)"
-
-                 #Creating Ogranization Segment from SDS School Administrative Unit for the Information Barrier
-                try {
-                    New-OrganizationSegment -Name $au.displayName -UserGroupFilter "AdministrativeUnits -eq '$($au.displayName)'" | Out-Null
-                    Write-Output "[$(Get-Date -Format G)] Created organization segment $($au.displayName) from school AUs." | Out-File $logFilePath -Append
-                }
-                catch{
-                    throw "Error creating Organization Segment for school au $($au.displayName)" 
-                }
-
-                #Creating Information Barrier Policies from SDS School Administrative Unit
-                try {
-                    New-InformationBarrierPolicy -Name "$($au.displayName) - IB" -AssignedSegment $au.displayName -SegmentsAllowed $au.displayName -State Active -Force | Out-Null
-                    Write-Output "[$(Get-Date -Format G)] Created Information Barrier Policy $($au.displayName) from organizaiton segment" | Out-File $logFilePath -Append
-                }
-                catch {
-                    throw "Error creating Information Barrier Policy for school au $($au.displayName)"
-                }
-            }
-            $i++
-            Write-Output "[$(Get-Date -Format G)] nextLink: $($graphResponse.'@odata.nextLink')" | Out-File $logFilePath -Append
-            Write-Progress -Activity "`nCreating Ogranization Segments and Information Barrier Policies based from SDS School Administrative Units" -Status "Progress ->" -PercentComplete ($i/$allSchoolAUs.count*100)
+            #Create object required for export-csv and add to array
+            $obj = [pscustomobject]@{"AUObjectId"=$au.id;"AUDisplayName"=$au.displayName;}
+            $allSchoolAUs += $obj
         }
-
+        
+        #Write nextLink to log if need to restart from previous page
+        Write-Output "[$(Get-Date -Format G)] nextLink: $($graphResponse.'@odata.nextLink')" | Out-File $logFilePath -Append
         $pageCnt++
 
     } while($graphResponse.'@odata.nextLink')
+    
+    $allSchoolAUs | Export-Csv -Path "$csvfilePath" -Append -NoTypeInformation
+    return
+}
 
-    return 
+function Create-InformationBarriersFromSchoolAUs {
+    
+    $allSchoolAUs = import-csv $csvfilePath #Import school AUs retrieved.  
+    $i = 0 #Counter for progress of IB creation
+        
+    #Looping through all school AUs
+    foreach($au in $allSchoolAUs)
+    {
+        if ($au.AUObjectId -ne $null)
+        {
+            Write-Host "Processing $($au.AUDisplayName)"
+
+            #Creating Ogranization Segment from SDS School Administrative Unit for the Information Barrier
+            try {
+                New-OrganizationSegment -Name $au.AUDisplayName -UserGroupFilter "AdministrativeUnits -eq '$($au.AUDisplayName)'" | Out-Null
+                Write-Output "[$(Get-Date -Format G)] Created organization segment $($au.AUDisplayName) from school AUs." | Out-File $logFilePath -Append
+            }
+            catch{
+                throw "Error creating Organization Segment for school au $($au.AUDisplayName)" 
+            }
+
+            #Creating Information Barrier Policies from SDS School Administrative Unit
+            try {
+                New-InformationBarrierPolicy -Name "$($au.AUDisplayName) - IB" -AssignedSegment $au.AUDisplayName -SegmentsAllowed $au.AUDisplayName -State Active -Force | Out-Null
+                Write-Output "[$(Get-Date -Format G)] Created Information Barrier Policy $($au.AUDisplayName) from organizaiton segment" | Out-File $logFilePath -Append
+            }
+            catch {
+                throw "Error creating Information Barrier Policy for school au $($au.AUDisplayName)"
+            }
+        }
+        $i++
+        Write-Progress -Activity "`nCreating Ogranization Segments and Information Barrier Policies based from SDS School Administrative Units" -Status "Progress ->" -PercentComplete ($i/$allSchoolAUs.count*100)
+    }
+    return
 }
 
 function Create-InformationBarriersFromTeacherSG {
@@ -173,8 +195,8 @@ if ($PPE)
 
 $activityName = "Creating information barrier policies"
 
-$logFilePath = "$OutFolder\SDS_InformationBarriers.log"
-$csvFilePath = "$OutFolder\SDS_InformationBarriers.csv"
+$logFilePath = "$outFolder\SDS_InformationBarriers.log"
+$csvFilePath = "$outFolder\SDS_SchoolAUs.csv"
 
 #list used to request access to data
 $graphscopes = "AdministrativeUnit.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All"
@@ -202,12 +224,12 @@ catch
 }
 
  # Create output folder if it does not exist
- if ((Test-Path $OutFolder) -eq 0)
+ if ((Test-Path $outFolder) -eq 0)
  {
- 	mkdir $OutFolder;
+ 	mkdir $outFolder;
  }
 
-Write-Host "`nActivity logged to file $csvFilePath `n" -ForegroundColor Green
+Write-Host "`nActivity logged to file $logFilePath `n" -ForegroundColor Green
 
 # Get all AU's of Edu Object Type School
 Write-Progress -Activity "Reading SDS" -Status "Fetching School Administrative Units"
@@ -215,6 +237,7 @@ Write-Progress -Activity "Reading SDS" -Status "Fetching School Administrative U
 Connect-Graph -scopes $graphscopes | Out-Null
 Connect-IPPSSession | Out-Null
 
+Get-AllSchoolAUs    
 Create-InformationBarriersFromSchoolAUs
 Create-InformationBarriersFromTeacherSG
 
