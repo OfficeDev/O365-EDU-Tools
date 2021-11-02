@@ -112,7 +112,7 @@ function Get-AllSchoolAUs {
 
 function Create-InformationBarriersFromSchoolAUs {
     
-    $allSchoolAUs = import-csv $csvfilePath #Import school AUs retrieved.  
+    $allSchoolAUs = Import-Csv $csvfilePath #Import school AUs retrieved.  
     $i = 0 #Counter for progress of IB creation
         
     #Looping through all school AUs
