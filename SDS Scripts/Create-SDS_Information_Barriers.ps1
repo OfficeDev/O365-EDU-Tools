@@ -68,8 +68,8 @@ function Get-PrerequisiteHelp
 
 function Get-AllSchoolAUs {
 
-    #Remove temp csv file with school AUs
-    if ((Test-Path $csvFilePath))
+    #Remove temp csv file with school AUs if not resuming from last token
+    if ((Test-Path $csvFilePath) -and ($skipToken -eq "."))
     {
  	    Remove-Item $csvFilePath;
     }
@@ -112,7 +112,7 @@ function Get-AllSchoolAUs {
 
 function Create-InformationBarriersFromSchoolAUs {
     
-    $allSchoolAUs = Import-Csv $csvfilePath #Import school AUs retrieved.  
+    $allSchoolAUs = Import-Csv $csvfilePath | Sort-Object * -Unique #Import school AUs retrieved and remove dupes if occured from skipToken retry.  
     $i = 0 #Counter for progress of IB creation
         
     #Looping through all school AUs
