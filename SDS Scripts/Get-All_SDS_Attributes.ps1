@@ -30,7 +30,7 @@ Param (
     [Parameter(Mandatory=$false)]
     [string] $skipToken= ".",
     [Parameter(Mandatory=$false)]
-    [string] $downloadFcns = "y"
+    [switch] $downloadCommonFNs = $true
 )
 
 $GraphEndpointProd = "https://graph.microsoft.com"
@@ -47,7 +47,7 @@ $eduRelStudentEnrollment = "StudentEnrollment"
 $eduRelTeacherRoster = "TeacherRoster"
 
 #checking parameter to download common.ps1 file for required common functions
-if ($downloadFcns -ieq "y" -or $downloadFcns -ieq "yes"){
+if ($downloadCommonFNs){
     # Downloading file with latest common functions
     try {
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
@@ -76,7 +76,7 @@ function Get-PrerequisiteHelp
 
     a. Open a separate PowerShell session
     
-    b. Execute: "connect-graph -scopes User.Read.All, GroupMember.Read.All, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All" to bring up a sign in UI. 
+    b. Execute: "connect-graph -scopes User.Read.All, GroupMember.Read.All, Member.Read.Hidden, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All" to bring up a sign in UI. 
     
     c. Sign in with any tenant administrator credentials
     
@@ -210,7 +210,6 @@ function Get-SdsSections
             "SIS ID" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SectionId
             "School SIS ID" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId
             "Section Name" = $group.DisplayName
-            #"Name" = $au.DisplayName                    
             "Section Number" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_SectionNumber
             "Term SIS ID" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_TermId
             "Term Name" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_TermName
@@ -666,7 +665,7 @@ if ($PPE)
 
 $activityName = "Reading SDS objects in the directory"
 
-$graphscopes = "User.Read.All, GroupMember.Read.All, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All"
+$graphscopes = "User.Read.All, GroupMember.Read.All, Member.Read.Hidden, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All"
 
 try
 {

@@ -20,7 +20,7 @@ Param (
     [Parameter(Mandatory=$false)]
     [string] $OutFolder = ".\RenameExpiredClasses",
     [Parameter(Mandatory=$false)]
-    [string] $downloadFcns = "y",
+    [switch] $downloadCommonFNs = $true,
     [Parameter(Mandatory=$true)]
     [string] $SectionsToUpdateFilePath
 )
@@ -33,7 +33,7 @@ $logFilePath = "$OutFolder\Expired-Classes.log"
 $targetGroups = Import-Csv $SectionsToUpdateFilePath
 
 #checking parameter to download common.ps1 file for required common functions
-if ($downloadFcns -ieq "y" -or $downloadFcns -ieq "yes"){
+if ($downloadCommonFNs){
     # Downloading file with latest common functions
     try {
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
@@ -74,6 +74,7 @@ function Get-PrerequisiteHelp
 ========================
 "@
 }
+
 function Update-ExpireSingleGroup($groupId, $logFilePath, $team) {
 
     $updateResultsFilePath = "$OutFolder\renameSectionResults.csv"
@@ -82,6 +83,11 @@ function Update-ExpireSingleGroup($groupId, $logFilePath, $team) {
     $expiredSectionId = $SDSExpiredPrefix + "_" + $team.SectionId
     $expiredAnchorId = $SDSExpiredPrefix + '_' + 'Section_' + $team.SectionId
     $expiredMailNickname = $SDSExpiredPrefix + '_' + 'Section_' + $team.SectionId
+
+    #Truncate mailNickname to avoid 64 char limit error when we prefix ExpMMYY_ on long SIS ID's
+    if ( $expiredMailNickname.length -ge 64 ) {
+        $expiredMailNickname = $expiredMailNickname.Substring(0, $expiredMailNickname.length-8)
+    }
 
     $uri = "https://graph.microsoft.com/beta/groups/$groupId"
     $requestBody = '{
@@ -92,7 +98,10 @@ function Update-ExpireSingleGroup($groupId, $logFilePath, $team) {
         "extension_fe2174665583431c953114ff7268b7b3_Education_Status" : "Expired"
     }'
 
-    $result = invoke-graphrequest -Method Patch -Uri $uri -body $requestBody -ContentType "application/json" -SkipHttpErrorCheck
+    #Force encoding of utf8 as it gets changed for non-English language characters
+    $requestBodyEncoded = ([System.Text.Encoding]::UTF8.GetBytes($requestBody))
+
+    $result = invoke-graphrequest -Method Patch -Uri $uri -body $requestBodyEncoded -ContentType "application/json" -SkipHttpErrorCheck
 
     if ([string]::IsNullOrEmpty($_.Exception.Message) -eq $true ) {
         $statusMessage = "success"
@@ -101,7 +110,7 @@ function Update-ExpireSingleGroup($groupId, $logFilePath, $team) {
         $statusMessage = "fail"
     }
 
-    $message = [string]::Format("{0},{1},{2},{3}", $team.Name, $expiredDisplayName, $team.SectionId, $statusMessage)
+    $message = [string]::Format("{0},{1},{2},{3},{4},{5}", $team.Name, $expiredDisplayName, $team.SectionId, $expiredSectionId, $expiredMailNickname, $statusMessage)
     $message | Out-File $updateResultsFilePath -Encoding utf8 -Append
 }
 
@@ -114,7 +123,7 @@ function Update-ExpireAllGroupsLoaded($incomingToken, $graphscopes, $targetGroup
     $updateResultsFilePath = "$OutFolder\renameSectionResults.csv"
 
     # Setup update results csv
-    "Old Section Name,New Section Name,SIS Id,Update Status" | Out-File $updateResultsFilePath -Encoding utf8
+    "Old Section Name,New Section Name,SIS Id, New SIS Id, New Mail Nickname, Update Status" | Out-File $updateResultsFilePath -Encoding utf8
 
     ForEach ($team in $TargetGroups) {
         $saveToken = Refresh-Token $saveToken $graphscopes
@@ -135,6 +144,7 @@ function Update-ExpireAllGroupsLoaded($incomingToken, $graphscopes, $targetGroup
 
     return $processedTeams
 }
+
 function Retire-Sections($graphscopes, $targetGroups, $logFilePath) {
     $processedTeams = $null
 
