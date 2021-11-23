@@ -3,7 +3,7 @@ Script Name:
 Create-SDS_Information_Barriers.ps1
 
 Synopsis:
-This script is designed to create Information Barrier Policies for each SDS School AU and the 'All Teachers' Security Group created by SDS from an O365 tenant. It will read from Azur, and output the administrative units to a csv.  Afterwards, you are prompted to confirm that you to create the organization segments needed, then create and apply the information barrier policies.  A folder will be created in the same directory as the script itself, and contain a log file which details the organization segments and information barrier policies created.  Nextlink in the log can be used for the skipToken script parameter to continue where the script left off in case it does not finish.  
+This script is designed to create Information Barrier Policies for each SDS School AU and the 'All Teachers' Security Group created by SDS from an O365 tenant. It will read from Azure, and output the administrative units to a csv.  Afterwards, you are prompted to confirm that you want to create the organization segments needed, then create and apply the information barrier policies.  A folder will be created in the same directory as the script itself and contains a log file which details the organization segments and information barrier policies created.  Nextlink in the log can be used for the skipToken script parameter to continue where the script left off in case it does not finish.  
 
 Syntax Examples and Options:
 .\Create-SDS_Information_Barriers.ps1
