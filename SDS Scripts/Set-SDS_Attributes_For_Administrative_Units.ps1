@@ -123,17 +123,15 @@ function Set-SDS_Attributes_For_AUs {
         {
             Write-Output "[$(get-date -Format G)] [$auCtr/$auCount] Removing user $($au.AUObjectId)" | Out-File $logFilePath -Append
             
-            $uri = "https://graph.microsoft.com/beta/administrativeUnits/$AUObjectId"
+            $uri = "$graphEndPoint/$graphVersion/administrativeUnits/" + $au.AUObjectId
             $requestBody = '{
-                "extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId": "School_' + $AUObjectId + '",
-                "extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId": "' + $ + '",
-                "extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType": "' + $ + '",
-                "extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource": "SIS"
+                "extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType": "School",
+                "extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource": "Manual"
             }'
         
             $result = Invoke-GraphRequest -Method Patch -Uri $uri -body $requestBody -ContentType "application/json" -SkipHttpErrorCheck
 
-            Write-Progress -Activity "Removing users." -Status "Progress ->" -PercentComplete ($au/$auCount.count*100)
+            Write-Progress -Activity "Removing users." -Status "Progress ->" -PercentComplete ($auCtr/$auCount.count*100)
             $index++
         }
     }
