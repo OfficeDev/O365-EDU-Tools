@@ -25,12 +25,10 @@ Version 2.0, 09/22/2021 - Updated script to use Graph API instead of ADAL
 
 Param (
     [switch] $PPE,
-    [Parameter(Mandatory = $false)]
     [switch] $RemoveSectionGroupMemberships,
     [switch] $RemoveSectionGroups,
     [switch] $RemoveSchoolAUs,
     [switch] $RemoveSectionAUs,    
-    [Parameter(Mandatory = $false)]
     [string] $OutFolder = ".",
     # Parameter to specify whether to download the script with common functions or not
     [Parameter(Mandatory = $false)]
@@ -68,6 +66,7 @@ function Get-PrerequisiteHelp {
 PowerShell 7 and later is the recommended PowerShell version for use with the Microsoft Graph PowerShell SDK on all platforms (https://docs.microsoft.com/en-us/graph/powershell/installation#supported-powershell-versions).
 
 2. Make sure to download common.ps1 to the same folder of the script which has common functions needed.  https://github.com/OfficeDev/O365-EDU-Tools/blob/master/SDS%20Scripts/common.ps1
+Command to download the function: Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
 
 3. Check that you can connect to your tenant directory from the PowerShell module to make sure everything is set up correctly.
 
@@ -111,14 +110,11 @@ function Remove-AdministrativeUnits($auListFileName, $graphEndPoint) {
         $auCount = $auList.Length
         $index = 1
         Foreach ($au in $auList) {
-
             if ($au.Id -ne $null) {
-
                 Write-Output "[$(get-date -Format G)] [$index/$auCount] Removing AU `"$($au.DisplayName)`" [$($au.Id)] from directory" | out-file $logFilePath -Append			           
                 $removeUrl = $graphEndPoint + '/beta/administrativeUnits/' + $au.Id
                 PageAll-GraphRequest $removeUrl $refreshToken 'DELETE' $graphScopes $logFilePath
                 $index++
-
             }
         }
     }
@@ -179,7 +175,6 @@ function Remove-GroupMembers($groupListFileName, $graphEndPoint) {
             $memberIndex = 1
             Foreach ($member in $groupMembers) {
                 $grpMemberType = $member.'@odata.type' #some members are users and some are groups
-
                 if (($member.Id -ne $null) -and ($grpMemberType -eq '#microsoft.graph.user')) {
                     Write-Output "[$(get-date -Format G)] [$memberIndex/$groupMembersCount] Removing User `"$($member.DisplayName)`" from Group `"$($group.DisplayName)`"" | out-file $logFilePath -Append                
                     $removeUrl = $graphEndPoint + '/beta/groups/' + $group.Id + '/members/' + $member.Id + '/$ref'
