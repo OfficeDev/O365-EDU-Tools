@@ -1,9 +1,12 @@
 <#
 Script Name:
+Set-SDS_Attributes_For_Administrative_Units.ps1
 
 Synopsis:
+This script is designed to add the minimum number of SDS extension attributes to administrative units not created by SDS.  It will use the Graph to pull the administrative units and output them to a csv.  Afterwards, you are prompted to confirm that you want to modify the administrative units.  A folder will be created in the same directory as the script itself and contains a log file and the csv.  Nextlink in the log can be used for the skipToken script parameter to continue where the script left off in case it does not finish.  
 
 Syntax Examples and Options:
+.\Set-SDS_Attributes_For_Administrative_Units.ps1
 
 #>
 
@@ -36,13 +39,13 @@ function Get-PrerequisiteHelp
 
     a. Open a separate PowerShell session
     
-    b. Execute: "Connect-MgGraph" to bring up a sign-in UI. 
+    b. Execute: "Connect-Graph" to bring up a sign-in UI. 
     
     c. Sign in with any tenant administrator credentials.
     
-    d. If you are returned to the PowerShell session without error, you are correctly set up
+    d. If you are returned to the PowerShell session without error, you are correctly set up.
 
-3.  Ensure that you have application setup correctly in Azure Active Directory with the following permission scopes:
+3.  Ensure that you have application setup correctly in Azure Active Directory with the following permission scopes: AdministrativeUnit.Read.All, Directory.Read.All, AdministrativeUnit.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All
 
 4.  Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication" isn't working.
 
@@ -74,7 +77,7 @@ function Get-AdministrativeUnits {
             $lastRefreshed = Get-Date
         }
 
-        $auUri = "$graphEndPoint/$graphVersion/directory/administrativeUnits?`$select=id,displayName"
+        $auUri = "$graphEndPoint/$graphVersion/directory/administrativeUnits?`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource"
 
         if ($skipToken -ne "." ) {
             $auUri = $skipToken
@@ -86,9 +89,11 @@ function Get-AdministrativeUnits {
         $auCtr = 1 # Counter for AUs retrieved
         
         foreach ($au in $aus){
-            $obj = [pscustomobject]@{"AUObjectId"=$au.Id;"AUDisplayName"=$au.DisplayName;}
-            $auList += $obj
-            $auCtr++
+            if ( !($au.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource) ) { # Filtering out AU already with SDS attribute
+                $obj = [pscustomobject]@{"AUObjectId"=$au.Id;"AUDisplayName"=$au.DisplayName;}
+                $auList += $obj
+                $auCtr++
+            }
         }
 
         Write-Progress -Activity "Retrieving AUs..." -Status "Retrieved $auCtr AUs from $pageCnt pages"
@@ -104,20 +109,16 @@ function Get-AdministrativeUnits {
 } 
 
 function Set-SDS_Attributes_For_AUs {
-    Param
-    (
-        $auListFileName
-    ) 
 
     Write-Host "`nWARNING: You are about to modify existing administrative units with SDS school extension attributes. `nIf you want to skip modifying any administrative units, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
-    Write-Host "Proceed with modifying all the administrative units logged in $auListFileName (yes/no)?" -ForegroundColor Yellow
+    Write-Host "Proceed with modifying all the administrative units logged in $csvFilePath (yes/no)?" -ForegroundColor Yellow
     
     $choice = Read-Host
     if ($choice -ieq "y" -or $choice -ieq "yes")
     {
-        $auList = Import-Csv $auListFileName | Sort-Object * -Unique # Import AUs retrieved and remove dupes if occured from skipToken retry.
-        $auCount = (gc $auListFileName | measure-object).count - 1
-        $auCtr = 1 # Counter for 
+        $auList = Import-Csv $csvFilePath | Sort-Object * -Unique # Import AUs retrieved and remove dupes if occured from skipToken retry.
+        $auCount = (gc $csvFilePath | measure-object).count - 1
+        $auCtr = 1 # Counter for progress
 
         Foreach ($au in $auList) 
         {
@@ -132,7 +133,6 @@ function Set-SDS_Attributes_For_AUs {
             $result = Invoke-GraphRequest -Method Patch -Uri $uri -body $requestBody -ContentType "application/json" -SkipHttpErrorCheck
 
             Write-Progress -Activity "Removing users." -Status "Progress ->" -PercentComplete ($auCtr/$auCount.count*100)
-            $index++
         }
     }
 }
@@ -180,6 +180,6 @@ Write-Host "`nActivity logged to file $logFilePath `n" -ForegroundColor Green
 Connect-Graph
 
 Get-AdministrativeUnits
-Set-SDS_Attributes_For_AUs $csvFilePath
+Set-SDS_Attributes_For_AUs
 
 Write-Output "`n`nDone.  Please run 'Disconnect-Graph' if you are finished.`n"
