@@ -12,8 +12,6 @@ Syntax Examples and Options:
 
 Param (
     [Parameter(Mandatory=$false)]
-    [switch] $createAllTeachersIB = $true, #Creates information barrier policy from 'All Teachers' Security Group
-    [Parameter(Mandatory=$false)]
     [string] $skipToken= ".",
     [Parameter(Mandatory=$false)]
     [string] $outFolder = ".\SDS_InformationBarriers",
@@ -245,20 +243,23 @@ Get-AllSchoolAUs
 Write-Host "`nYou are about to create organization segments and information barrier policies from SDS school administrative units. `nIf you want to skip any administrative units, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
 Write-Host "Proceed with creating organziation segments and information barrier policies logged from SDS school administrative units logged in $csvFilePath (yes/no)?" -ForegroundColor Yellow
     
-$choice = Read-Host
-if ($choice -ieq "y" -or $choice -ieq "yes") {
+$choiceSchoolIB = Read-Host
+if ($choiceSchoolIB -ieq "y" -or $choiceSchoolIB -ieq "yes") {
     Create-InformationBarriersFromSchoolAUs
 }
 
-if ($creatAllTeachersIB) {
+Write-Host "`nYou are about to create an organization segment and information barrier policy from the 'All Teachers' Secuirty Group. `nNote: You need to have the group created via a toggle in the SDS profile beforehand.`n" -ForegroundColor Yellow
+Write-Host "Proceed with creating an organziation segments and information barrier policy from the 'All Teachers' Secuirty Group. (yes/no)?" -ForegroundColor Yellow
+$choiceTeachersIB = Read-Host
+if ($choiceTeachersIB -ieq "y" -or $choiceTeachersIB -ieq "yes") {
     Create-InformationBarriersFromTeacherSG
 }
 
 Write-Host "`nProceed with starting the information barrier policies application (yes/no)?" -ForegroundColor Yellow
-$choice = Read-Host
-if ($choice -ieq "y" -or $choice -ieq "yes") {
+$choiceStartIB = Read-Host
+if ($choiceStartIB -ieq "y" -or $choiceStartIB -ieq "yes") {
     Start-InformationBarrierPoliciesApplication | Out-Null
+    Write-Output "Done.  Please allow ~30 minutes for the system to start the process of applying Information Barrier Policies. `nUse Get-InformationBarrierPoliciesApplicationStatus to check the status"
 }
 
-Write-Output "Done.  Please allow ~30 minutes for the system to start the process of applying Information Barrier Policies. `nUse Get-InformationBarrierPoliciesApplicationStatus to check the status"
-Write-Output "`n`nPlease run 'Disconnect-Graph' and 'Disconnect-ExchangeOnline' if you are finished`n"
+Write-Output "`n`nDone.  Please run 'Disconnect-Graph' and 'Disconnect-ExchangeOnline' if you are finished`n"
