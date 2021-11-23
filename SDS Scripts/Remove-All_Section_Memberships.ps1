@@ -29,6 +29,7 @@ Param (
     [switch] $RemoveSectionGroups,
     [switch] $RemoveSchoolAUs,
     [switch] $RemoveSectionAUs,    
+    [Parameter(Mandatory = $false)]
     [string] $OutFolder = ".",
     # Parameter to specify whether to download the script with common functions or not
     [Parameter(Mandatory = $false)]
