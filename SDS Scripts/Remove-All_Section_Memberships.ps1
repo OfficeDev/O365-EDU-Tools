@@ -14,21 +14,20 @@ Version 2.0, 09/22/2021 - Updated script to use Graph API instead of ADAL
 .SYNOPSIS
     Remove-All_Section_Memberships.ps1 script is designed to Remove all Section Memberships created by SDS from an O365 tenant. The script sets up the connection to Azure, and then confirm you want to run the script with a "y". Once the script completes, a file will be created in the folder mentioned in OutFolder parameter (Default is same folder as the script itself).
 .EXAMPLE    
-    .\Remove-All_Section_Memberships.ps1 -RemoveSectionGroupMemberships
+    .\Remove-All_Section_Memberships.ps1 -RemoveObject "SectionGroupMemberships"
 .EXAMPLE
-    .\Remove-All_Section_Memberships.ps1 -RemoveSectionGroups
+    .\Remove-All_Section_Memberships.ps1 -RemoveObject "SectionGroups"
 .EXAMPLE
-    .\Remove-All_Section_Memberships.ps1 -RemoveSchoolAUs
+    .\Remove-All_Section_Memberships.ps1 -RemoveObject "SchoolAUs"
 .EXAMPLE
-    .\Remove-All_Section_Memberships.ps1 -RemoveSectionAUs
+    .\Remove-All_Section_Memberships.ps1 -RemoveObject "SectionAUs"
 #>
 
 Param (
     [switch] $PPE,
-    [switch] $RemoveSectionGroupMemberships,
-    [switch] $RemoveSectionGroups,
-    [switch] $RemoveSchoolAUs,
-    [switch] $RemoveSectionAUs,    
+    [Parameter(Mandatory = $true)]
+    [ValidateSet("SectionGroupMemberships","SectionGroups","SchoolAUs","SectionAUs")]
+    [string] $RemoveObject,
     [Parameter(Mandatory = $false)]
     [string] $OutFolder = ".",
     # Parameter to specify whether to download the script with common functions or not
@@ -100,7 +99,7 @@ function Get-AdministrativeUnits($graphEndPoint, $eduObjectType, $refreshToken, 
     return $filePath
 }
 
-function Remove-AdministrativeUnits($auListFileName, $graphEndPoint) {
+function Remove-AdministrativeUnits($auListFileName, $graphEndPoint, $refreshToken, $graphscopes) {
     Write-Host "WARNING: You are about to remove Administrative Units and its memberships created from SDS. `nIf you want to skip removing any AUs, edit $auListFileName file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
     Write-Host "Proceed with deleting all the AUs logged in $auListFileName (yes/no)?" -ForegroundColor White
     $choice = Read-Host
@@ -112,9 +111,10 @@ function Remove-AdministrativeUnits($auListFileName, $graphEndPoint) {
         $index = 1
         Foreach ($au in $auList) {
             if ($au.Id -ne $null) {
+                Refresh-Token $refreshToken $graphscopes
                 Write-Output "[$(get-date -Format G)] [$index/$auCount] Removing AU `"$($au.DisplayName)`" [$($au.Id)] from directory" | out-file $logFilePath -Append			           
                 $removeUrl = $graphEndPoint + '/beta/administrativeUnits/' + $au.Id
-                PageAll-GraphRequest $removeUrl $refreshToken 'DELETE' $graphScopes $logFilePath
+                invoke-graphrequest -Method 'DELETE' -Uri $removeUrl -ContentType "application/json"
                 $index++
             }
         }
@@ -135,7 +135,7 @@ function Get-Groups($graphEndPoint, $eduObjectType, $refreshToken, $graphScopes,
     return $filePath
 }
 
-function Remove-Groups($groupListFileName, $graphEndPoint) {
+function Remove-Groups($groupListFileName, $graphEndPoint, $refreshToken, $graphScopes, $logFilePath) {
     Write-Host "WARNING: You are about to remove Groups and its memberships created from SDS. `nIf you want to skip removing any Groups, edit $groupListFileName file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
     Write-Host "Proceed with deleting all the Groups logged in $groupListFileName (yes/no)?" -ForegroundColor White
     $choice = Read-Host
@@ -154,7 +154,7 @@ function Remove-Groups($groupListFileName, $graphEndPoint) {
     }
 }
 
-function Remove-GroupMembers($groupListFileName, $graphEndPoint) {
+function Remove-GroupMembers($groupListFileName, $graphEndPoint, $refreshToken, $graphScopes, $logFilePath) {
     Write-Host "WARNING: You are about to remove Groups memberships created from SDS. `nIf you want to skip processing any Groups, edit $groupListFileName file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
     Write-Host "Proceed with deleting all Group Memberships logged in $groupListFileName (yes/no)?" -ForegroundColor White
     $choice = Read-Host
@@ -217,39 +217,38 @@ if ((Test-Path $OutFolder) -eq 0) {
  
 $refreshToken = Initialize $graphScopes
  
-if ($RemoveSchoolAUs) {
+if ($RemoveObject -eq "SchoolAUs") {
     # Get all AUs of Edu Object Type School
     Write-Progress -Activity $activityName -Status "Fetching School Administrative Units"
     $OutputFileName = Get-AdministrativeUnits $graphEndPoint 'School' $refreshToken $graphScopes $logFilePath    
     Write-Host "`nSchool Administrative Units logged to file $OutputFileName `n" -ForegroundColor Green
 
     # Delete School AUs
-    Remove-AdministrativeUnits $OutputFileName $graphEndPoint
+    Remove-AdministrativeUnits $OutputFileName $graphEndPoint $refreshToken $graphScopes
 }
 
-if ($RemoveSectionAUs) {
+if ($RemoveObject -eq "SectionAUs") {
     # Get all AUs of Edu Object Type Section
     Write-Progress -Activity $activityName -Status "Fetching Section Administrative Units"
     $OutputFileName = Get-AdministrativeUnits $graphEndPoint 'Section' $refreshToken $graphScopes $logFilePath	
     Write-Host "`nSection Administrative Units logged to file $OutputFileName `n" -ForegroundColor Green
 
     # Delete Section AUs
-    Remove-AdministrativeUnits $OutputFileName $graphEndPoint
+    Remove-AdministrativeUnits $OutputFileName $graphEndPoint $refreshToken $graphScopes
 }
 
-if ($RemoveSectionGroupMemberships -or $RemoveSectionGroups) {
+if ($RemoveObject -eq "SectionGroupMemberships" -or $RemoveObject -eq "SectionGroups") {
     # Get all Groups of Edu Object Type Section
     Write-Progress -Activity $activityName -Status "Fetching Section Groups"
     $OutputFileName = Get-Groups $graphEndPoint 'Section' $refreshToken $graphScopes $logFilePath	
     Write-Host "`nSection Groups logged to file $OutputFileName `n" -ForegroundColor Green
     
-    if ($RemoveSectionGroupMemberships) {
-        Remove-GroupMembers $OutputFileName $graphEndPoint
+    if ($RemoveObject -eq "SectionGroupMemberships") {
+        Remove-GroupMembers $OutputFileName $graphEndPoint $refreshToken $graphScopes $logFilePath
     }
 
-    # Currently hardcoded to "false" to avoid unintended consequences
-    if ($RemoveSectionGroups) {
-        Remove-Groups $OutputFileName $graphEndPoint
+    if ($RemoveObject -eq "SectionGroups") {
+        Remove-Groups $OutputFileName $graphEndPoint $refreshToken $graphScopes $logFilePath
     }
 }
 
