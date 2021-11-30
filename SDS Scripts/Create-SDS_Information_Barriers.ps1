@@ -3,7 +3,7 @@ Script Name:
 Create-SDS_Information_Barriers.ps1
 
 Synopsis:
-This script is designed to create Information Barrier Policies for each SDS School AU and the 'All Teachers' Security Group created by SDS from an O365 tenant. It will read from Azure, create the organization segments needed, then create and apply the information barrier policies.  A folder will be created in the same directory as the script itself, and contain a log file which details the organization segments and information barrier policies created.  Nextlink in the log can be used for the skipToken script parameter to continue where the script left off in case it does not finish.  
+This script is designed to create Information Barrier Policies for each SDS School AU and the 'All Teachers' Security Group created by SDS from an O365 tenant. It will read from Azure, and output the administrative units to a csv.  Afterwards, you are prompted to confirm that you want to create the organization segments needed, then create and apply the information barrier policies.  A folder will be created in the same directory as the script itself and contains a log file which details the organization segments and information barrier policies created.  Nextlink in the log can be used for the skipToken script parameter to continue where the script left off in case it does not finish.  
 
 Syntax Examples and Options:
 .\Create-SDS_Information_Barriers.ps1
@@ -11,21 +11,22 @@ Syntax Examples and Options:
 #>
 
 Param (
-    [switch] $PPE = $false,
     [Parameter(Mandatory=$false)]
     [string] $skipToken= ".",
     [Parameter(Mandatory=$false)]
     [string] $outFolder = ".\SDS_InformationBarriers",
     [Parameter(Mandatory=$false)]
-    [switch] $downloadCommonFNs = $true
+    [switch] $downloadCommonFNs = $true,
+    [Parameter(Mandatory=$false)]
+    [switch] $PPE = $false
 )
 
 $GraphEndpointProd = "https://graph.microsoft.com"
 $GraphEndpointPPE = "https://graph.microsoft-ppe.com"
 
-#checking parameter to download common.ps1 file for required common functions
+#Checking parameter to download common.ps1 file for required common functions
 if ($downloadCommonFNs){
-    # Downloading file with latest common functions
+    #Downloading file with latest common functions
     try {
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
         "Grabbed 'common.ps1' to currrent directory"
@@ -35,7 +36,7 @@ if ($downloadCommonFNs){
     }
 }
     
-#import file with common functions
+#Import file with common functions
 . .\common.ps1 
 
 function Get-PrerequisiteHelp
@@ -74,11 +75,11 @@ function Get-AllSchoolAUs {
  	    Remove-Item $csvFilePath;
     }
 
-    #preparing uri string
+    #Preparing uri string
     $auSelectClause = "`$select=id,displayName"
     $initialSDSSchoolAUsUri = "$graphEndPoint/beta/directory/administrativeUnits?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'School'&$auSelectClause"
         
-    #getting AUs for all schools
+    #Getting AUs for all schools
     Write-Output "`nRetreiving SDS School Administrative Units`n"
     $checkedSDSSchoolAUsUri = TokenSkipCheck $initialSDSSchoolAUsUri
     
@@ -198,7 +199,7 @@ $activityName = "Creating information barrier policies"
 $logFilePath = "$outFolder\SDS_InformationBarriers.log"
 $csvFilePath = "$outFolder\SDS_SchoolAUs.csv"
 
-#list used to request access to data
+#List used to request access to data
 $graphscopes = "AdministrativeUnit.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All"
 
 try 
@@ -223,7 +224,7 @@ catch
     throw
 }
 
- # Create output folder if it does not exist
+ #Create output folder if it does not exist
  if ((Test-Path $outFolder) -eq 0)
  {
  	mkdir $outFolder;
@@ -231,17 +232,34 @@ catch
 
 Write-Host "`nActivity logged to file $logFilePath `n" -ForegroundColor Green
 
-# Get all AU's of Edu Object Type School
+#Get all AU's of Edu Object Type School
 Write-Progress -Activity "Reading SDS" -Status "Fetching School Administrative Units"
 
 Connect-Graph -scopes $graphscopes | Out-Null
 Connect-IPPSSession | Out-Null
 
-Get-AllSchoolAUs    
-Create-InformationBarriersFromSchoolAUs
-Create-InformationBarriersFromTeacherSG
+Get-AllSchoolAUs
 
-Start-InformationBarrierPoliciesApplication | Out-Null
+Write-Host "`nYou are about to create organization segments and information barrier policies from SDS school administrative units. `nIf you want to skip any administrative units, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
+Write-Host "Proceed with creating organziation segments and information barrier policies logged from SDS school administrative units logged in $csvFilePath (yes/no)?" -ForegroundColor Yellow
+    
+$choiceSchoolIB = Read-Host
+if ($choiceSchoolIB -ieq "y" -or $choiceSchoolIB -ieq "yes") {
+    Create-InformationBarriersFromSchoolAUs
+}
 
-Write-Output "Done.  Please allow ~30 minutes for the system to start the process of applying Information Barrier Policies. `nUse Get-InformationBarrierPoliciesApplicationStatus to check the status"
-Write-Output "`n`nPlease run 'Disconnect-Graph' and 'Disconnect-ExchangeOnline' if you are finished`n"
+Write-Host "`nYou are about to create an organization segment and information barrier policy from the 'All Teachers' Secuirty Group. `nNote: You need to have the group created via a toggle in the SDS profile beforehand.`n" -ForegroundColor Yellow
+Write-Host "Proceed with creating an organziation segments and information barrier policy from the 'All Teachers' Secuirty Group. (yes/no)?" -ForegroundColor Yellow
+$choiceTeachersIB = Read-Host
+if ($choiceTeachersIB -ieq "y" -or $choiceTeachersIB -ieq "yes") {
+    Create-InformationBarriersFromTeacherSG
+}
+
+Write-Host "`nProceed with starting the information barrier policies application (yes/no)?" -ForegroundColor Yellow
+$choiceStartIB = Read-Host
+if ($choiceStartIB -ieq "y" -or $choiceStartIB -ieq "yes") {
+    Start-InformationBarrierPoliciesApplication | Out-Null
+    Write-Output "Done.  Please allow ~30 minutes for the system to start the process of applying Information Barrier Policies. `nUse Get-InformationBarrierPoliciesApplicationStatus to check the status"
+}
+
+Write-Output "`n`nDone.  Please run 'Disconnect-Graph' and 'Disconnect-ExchangeOnline' if you are finished`n"
