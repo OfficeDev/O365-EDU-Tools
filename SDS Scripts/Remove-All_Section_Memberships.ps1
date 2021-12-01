@@ -32,7 +32,7 @@ Param (
     [string] $OutFolder = ".",
     # Parameter to specify whether to download the script with common functions or not
     [Parameter(Mandatory = $false)]
-    [string] $downloadCommonFunctions = "y"
+    [string] $downloadCommonFunctions = "n"
 )
 
 $GraphEndpointProd = "https://graph.microsoft.com"
@@ -88,13 +88,14 @@ Command to download the function: Invoke-WebRequest -Uri "https://raw.githubuser
 function Get-AdministrativeUnits($graphEndPoint, $eduObjectType, $refreshToken, $graphScopes, $logFilePath) {
     
     $adminstrativeUnitsUri = "$graphEndPoint/beta/directory/administrativeUnits?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"   
-    $administrativeUnits = PageAll-GraphRequest $adminstrativeUnitsUri $refreshToken 'GET' $graphScopes $logFilePath
-    Write-Output "[$(get-date -Format G)] Retrieve $($administrativeUnits.Count) groups." | out-file $logFilePath -Append
-
+    
     $fileName = $eduObjectType + "-AUs.csv"
     $filePath = Join-Path $OutFolder $fileName
-       
-    $administrativeUnits | select-object -property @{N='Id';E={$_.Id}}, @{N='DisplayName';E={$_.DisplayName}}, @{N='Source ID';E={$_.extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId}} | where-object {$_.Id -ne $null} | export-csv -Path "$filePath" -NoTypeInformation
+    
+    $objectProperties = @()
+    $objectProperties += @{N='Id';E={$_.Id}}, @{N='DisplayName';E={$_.DisplayName}}, @{N='Source ID';E={$_.extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId}}
+    
+    PageAll-GraphRequest-WriteToFile $adminstrativeUnitsUri $refreshToken 'GET' $graphScopes $logFilePath $filePath $objectProperties $eduObjectType | out-null
     
     return $filePath
 }
@@ -121,16 +122,17 @@ function Remove-AdministrativeUnits($auListFileName, $graphEndPoint, $refreshTok
     }
 }
 
-function Get-Groups($graphEndPoint, $eduObjectType, $refreshToken, $graphScopes, $logFilePath) {    
+function Get-Groups($graphEndPoint, $eduObjectType, $refreshToken, $graphScopes, $logFilePath) {
+
     $groupsUri = "$graphEndPoint/beta/groups?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource%20eq%20'SIS'%20and%20extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
     
-    $groups = PageAll-GraphRequest $groupsUri $refreshToken 'GET' $graphScopes $logFilePath
-    Write-Output "[$(get-date -Format G)] Retrieve $($groups.Count) groups." | out-file $logFilePath -Append
-    
     $fileName = $eduObjectType + "-Groups.csv"
-    $filePath = Join-Path $OutFolder $fileName 
-
-    $groups | select-object -property @{N='Id';E={$_.Id}}, @{N='DisplayName';E={$_.DisplayName}}, @{N='Mail';E={$_.Mail}}, @{N='Source ID';E={$_.extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId}} | where-object {$_.Id -ne $null} | export-csv -Path "$filePath" -NoTypeInformation
+    $filePath = Join-Path $OutFolder $fileName    
+    
+    $objectProperties = @()
+    $objectProperties += @{N='Id';E={$_.Id}}, @{N='DisplayName';E={$_.DisplayName}}, @{N='Mail';E={$_.Mail}}, @{N='Source ID';E={$_.extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId}}
+    
+    PageAll-GraphRequest-WriteToFile $groupsUri $refreshToken 'GET' $graphScopes $logFilePath $filePath $objectProperties $eduObjectType | out-null
     
     return $filePath
 }
