@@ -32,7 +32,7 @@ Param (
     [string] $OutFolder = ".",
     # Parameter to specify whether to download the script with common functions or not
     [Parameter(Mandatory = $false)]
-    [string] $downloadCommonFunctions = "n"
+    [string] $downloadCommonFunctions = "y"
 )
 
 $GraphEndpointProd = "https://graph.microsoft.com"
