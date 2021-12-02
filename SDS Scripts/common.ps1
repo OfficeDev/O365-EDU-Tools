@@ -44,6 +44,25 @@ function PageAll-GraphRequest($initialUri, $refreshToken, $method, $graphscopes,
     return $result
 }
 
+function PageAll-GraphRequest-WriteToFile($initialUri, $refreshToken, $method, $graphscopes, $logFilePath, $filePath, $objectProperties, $eduObjectType) {   
+
+    Remove-ExistingFile $filePath
+
+    $currentUrl = $initialUri
+    $recordCount = 0
+    
+    while ($currentUrl -ne $null) {
+        Refresh-Token $refreshToken $graphscopes
+        $response = invoke-graphrequest -Method $method -Uri $currentUrl -ContentType "application/json"
+        $response.value | select-object -property $objectProperties | where-object {$_.Id -ne $null} | export-csv -Path "$filePath" -Append -NoTypeInformation
+        
+        $currentUrl = $response.'@odata.nextLink'
+        $recordCount += $response.value.Count
+    }
+    $global:nextLink = $response.'@odata.nextLink'
+    Write-Output "[$(get-date -Format G)] Retrieve $($recordCount) $($eduObjectType)s." | out-file $logFilePath -Append    
+}
+
 function TokenSkipCheck ($uriToCheck, $logFilePath)
 {
     if ($skipToken -eq "." ) {
@@ -54,4 +73,11 @@ function TokenSkipCheck ($uriToCheck, $logFilePath)
     }
     
     return $checkedUri
+}
+
+function Remove-ExistingFile ($filePath)
+{
+    if (Test-Path $filePath) {
+        Remove-Item $filePath
+    }
 }
