@@ -125,20 +125,20 @@ function Create-InformationBarriersFromSchoolAUs {
 
             #Creating Ogranization Segment from SDS School Administrative Unit for the Information Barrier
             try {
-                New-OrganizationSegment -Name $au.AUDisplayName -UserGroupFilter "AdministrativeUnits -eq '$($au.AUDisplayName)'" | Out-Null
+                New-OrganizationSegment -Name $au.AUDisplayName -UserGroupFilter "AdministrativeUnits -eq '$($au.AUDisplayName)'" -ErrorAction Stop | Out-Null
                 Write-Output "[$(Get-Date -Format G)] Created organization segment $($au.AUDisplayName) from school AUs." | Out-File $logFilePath -Append
             }
-            catch{
-                throw "Error creating Organization Segment for school au $($au.AUDisplayName)" 
+            catch {
+                Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
             }
 
             #Creating Information Barrier Policies from SDS School Administrative Unit
             try {
-                New-InformationBarrierPolicy -Name "$($au.AUDisplayName) - IB" -AssignedSegment $au.AUDisplayName -SegmentsAllowed $au.AUDisplayName -State Active -Force | Out-Null
+                New-InformationBarrierPolicy -Name "$($au.AUDisplayName) - IB" -AssignedSegment $au.AUDisplayName -SegmentsAllowed $au.AUDisplayName -State Active -Force -ErrorAction Stop | Out-Null
                 Write-Output "[$(Get-Date -Format G)] Created Information Barrier Policy $($au.AUDisplayName) from organizaiton segment" | Out-File $logFilePath -Append
             }
             catch {
-                throw "Error creating Information Barrier Policy for school au $($au.AUDisplayName)"
+                Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
             }
         }
         $i++
