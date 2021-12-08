@@ -31,8 +31,7 @@ Param (
     [Parameter(Mandatory = $false)]
     [string] $OutFolder = ".",
     # Parameter to specify whether to download the script with common functions or not
-    [Parameter(Mandatory = $false)]
-    [string] $downloadCommonFunctions = "y"
+    [switch] $skipDownloadCommonFunctions
 )
 
 $GraphEndpointProd = "https://graph.microsoft.com"
@@ -40,7 +39,7 @@ $GraphEndpointPPE = "https://graph.microsoft-ppe.com"
 
 $logFilePath = "$OutFolder\SDSSectionMemberships.log"
 
-if ($downloadCommonFunctions -ieq "y" -or $downloadCommonFunctions -ieq "yes") {
+if ($skipDownloadCommonFunctions -eq $false) {
     # Downloading file with latest common functions
     try {
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
