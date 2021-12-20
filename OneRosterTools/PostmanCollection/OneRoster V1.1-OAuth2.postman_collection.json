@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "760a65f9-34fd-488f-91d6-b61eca719c4f",
+		"_postman_id": "d234753e-b349-411f-8dad-b505a7444f27",
 		"name": "SDS OneRoster V1.1-OAuth2",
 		"description": "OneRoster� API version 1.1 spec is availble here: \nhttps://www.imsglobal.org/oneroster-v11-final-specification",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -10489,6 +10489,3541 @@
 							""
 						]
 					}
+				}
+			]
+		},
+		{
+			"name": "APIs required for SDS-ComingSoon",
+			"item": [
+				{
+					"name": "Get OAuth2 Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"tests[\"Get OAuth 2 Access Token\"] = responseCode.code === 200;",
+									"",
+									"var data = JSON.parse(responseBody);",
+									"if(responseCode.code === 200)",
+									"{",
+									"    pm.environment.set(\"OAuth2AccessToken\", data.access_token);   // \"Bearer \" + ",
+									"    pm.environment.set(\"OAuth2RefreshToken\", data.refresh_token);",
+									"    tests[\"Parse access token\"] = true;",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{OneRosterConsumerSecret}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{OneRosterConsumerKey}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{OneRosterConsumerKey}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_secret",
+									"value": "{{OneRosterConsumerSecret}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "scope",
+									"value": "{{Scopes}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "scope",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{Oauth2TokenAddress}}",
+							"host": [
+								"{{Oauth2TokenAddress}}"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "status='active'",
+									"description": "Filters for active records",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Gets a page of schools"
+					},
+					"response": []
+				},
+				{
+					"name": "Get AcademicSessions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;\r",
+									"var ret0 = undefined;\r",
+									"var moment = require('moment');\r",
+									"var maxResponseTime = 30000; //30 seconds\r",
+									"var dtFormatValid = false;\r",
+									"var dt = \"\";\r",
+									"\r",
+									"// response 200\r",
+									"pm.test(\"Academic sessions success response / 200\", function () {\r",
+									"\tpm.expect(responseCode.code).to.be.eql(200);\r",
+									"});\r",
+									" \r",
+									"// test content-type\r",
+									"pm.test(\"Content-Type header is present\", () => {\r",
+									"  pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.contain('application/json');\r",
+									"});\r",
+									"\r",
+									"//X-Total-Count is optional\r",
+									"pm.test(\"X-Total-Count header is present\", () => {\r",
+									"  pm.response.to.have.header(\"X-Total-Count\");\r",
+									"});\r",
+									"\t\r",
+									"pm.test(\"Response time is less than \" + (maxResponseTime/1000) + \" seconds\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.lessThan(maxResponseTime);\r",
+									"});\r",
+									"\r",
+									"//if not 200, don't continue\r",
+									"if (responseCode.code === 200) {\r",
+									"\r",
+									"\tvar data = JSON.parse(responseBody);\r",
+									"\r",
+									"\tif (data.academicSessions !== null && \r",
+									"        data.academicSessions !== undefined && \r",
+									"        Array.isArray(data.academicSessions)) {\r",
+									"\t\tretArray = data.academicSessions;\r",
+									"\t\ttests[\"academicSessions is array\"] = true;\r",
+									"\t} else {\r",
+									"\t\ttests[\"academicSessions is array\"] = false;\r",
+									"\t}\r",
+									"\t\t\r",
+									"\t// array must exist\r",
+									"\tpm.test(\"Require array of academicSessions\", function () {\r",
+									"\t\tpm.expect(retArray).to.be.an('array');\r",
+									"\t});\r",
+									"\r",
+									"\r",
+									"\t// array must have values\r",
+									"\tif (retArray != undefined) {\r",
+									"\t\tif (retArray.length >= 0)\r",
+									"\t\t\tret0 = retArray[0]\r",
+									"\r",
+									"\t\tpm.test(\"academicSessions array is not empty\", function () {\r",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"\t}\r",
+									"\r",
+									"\t// validations\r",
+									"\tif (ret0 != undefined) {\r",
+									"\r",
+									"\t\tpm.test(\"Require academicSession.sourcedId\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('sourcedId');\r",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"        pm.test(\"Require academicSession.sourcedId to be string\", function () {\r",
+									"\t\t\tpm.expect(ret0.sourcedId).to.be.a('string');\r",
+									"\t\t});\r",
+									"\r",
+									"\t\tpm.test(\"Require academicSession.status\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('status');\r",
+									"\t\t\tpm.expect(ret0.status).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"\t\tpm.test(\"Require academicSession.status valid values\", function () {\r",
+									"\t\t\tpm.expect(ret0.status).to.be.oneOf(['active', 'tobedeleted']);\r",
+									"\t\t});\r",
+									"\r",
+									"\t\tpm.test(\"Require academicSession.title\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('title');\r",
+									"\t\t\tpm.expect(ret0.name).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"\t\tpm.test(\"Require academicSession.type\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('type');\r",
+									"\t\t\tpm.expect(ret0.type).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"        //Customers who use SDS LOVs will be able to edit these values\r",
+									"        pm.test(\"Require academicSession.type valid values\", function () {\r",
+									"\t\t\tpm.expect(ret0.type).to.be.oneOf(['gradingPeriod','semester','schoolYear','term']);\r",
+									"\t\t});\r",
+									"\r",
+									"\t\tpm.test(\"Require academicSession.schoolYear\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('schoolYear');\r",
+									"\t\t\tpm.expect(ret0.type).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"        pm.test(\"Require academicSession.schoolYear to be string\", function () {\r",
+									"\t\t\tpm.expect(ret0.schoolYear).to.be.a('string');\r",
+									"\t\t});\r",
+									"\r",
+									"\t\tpm.test(\"Require academicSession.schoolYear to be numeric\", function () {\r",
+									"\t\t\tpm.expect(isNaN(ret0.schoolYear)).is.false;\r",
+									"\t\t\tpm.expect(ret0.schoolYear.toString()).to.have.length(4);\r",
+									"\t\t});\r",
+									"\r",
+									"\t\tpm.test(\"Require academicSession.startDate\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('startDate');\r",
+									"\t\t\tpm.expect(ret0.startDate).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"        if (ret0.startDate !== null && ret0.startDate !== undefined)\r",
+									"        {\r",
+									"           \tpm.test(\"Require academicSession.startDate format\", function () {\r",
+									"                pm.expect(moment(ret0.startDate.substring(0,10), 'YYYY-MM-DD', true).isValid()).is.true;\r",
+									"\t\t    });\r",
+									"        }\r",
+									"\r",
+									"        pm.test(\"Require academicSession.endDate\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('endDate');\r",
+									"\t\t\tpm.expect(ret0.endDate).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"        if (ret0.endDate !== null && ret0.endDate !== undefined)\r",
+									"        {\r",
+									"           \tpm.test(\"Require academicSession.endDate format\", function () {\r",
+									"                  pm.expect(moment(ret0.endDate.substring(0,10), 'YYYY-MM-DD', true).isValid()).is.true;\r",
+									"\t\t    });\r",
+									"        }\r",
+									"\r",
+									"        pm.test(\"Require academicSession.dateLastModified\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('dateLastModified');\r",
+									"\t\t\tpm.expect(ret0.dateLastModified).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"        if (ret0.dateLastModified !== null && ret0.dateLastModified !== undefined)\r",
+									"        {    \r",
+									"           \tpm.test(\"Require academicSession.dateLastModified format\", function () {\r",
+									"                pm.expect(moment(ret0.dateLastModified.substring(0,19), 'YYYY-MM-DDTHH:mm:ss', true).isValid()).is.true;\r",
+									"\t\t    });\r",
+									"        }\r",
+									"\r",
+									"        // set session id env variable for paging test\r",
+									"\t\tpm.environment.set(\"session_id\", ret0.sourcedId);\r",
+									"\t} // validations\r",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/academicSessions?offset=0&limit=5000&filter=status='active'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"academicSessions"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0",
+									"description": "The index of the first record to return. (zero indexed)"
+								},
+								{
+									"key": "limit",
+									"value": "5000",
+									"description": "Number of results to return from selected index"
+								},
+								{
+									"key": "filter",
+									"value": "status='active'"
+								}
+							]
+						},
+						"description": "Gets a page of academic sessions. Academic sessions can be of type \"School Year\", Term\", \"Semester\", \"GradingPeriod\""
+					},
+					"response": []
+				},
+				{
+					"name": "Get AcademicSessions - Paging",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;\r",
+									"var ret0 = undefined;\r",
+									"\r",
+									"// response 200\r",
+									"pm.test(\"Academic sessions Paging success response / 200\", function () {\r",
+									"\tpm.expect(responseCode.code).to.be.eql(200);\r",
+									"});\r",
+									"\r",
+									"//if not 200, don't continue\r",
+									"if (responseCode.code === 200) {\r",
+									"\r",
+									"\tvar data = JSON.parse(responseBody);\r",
+									"\r",
+									"\tif (data.academicSessions !== null && \r",
+									"        data.academicSessions !== undefined && \r",
+									"        Array.isArray(data.academicSessions)) {\r",
+									"\t\tretArray = data.academicSessions;\r",
+									"\t\ttests[\"academicSessions is array\"] = true;\r",
+									"\t} else {\r",
+									"\t\ttests[\"academicSessions is array\"] = false;\r",
+									"\t}\r",
+									"\t\t\r",
+									"\t// array must exist\r",
+									"\tpm.test(\"Require array of academicSessions\", function () {\r",
+									"\t\tpm.expect(retArray).to.be.an('array');\r",
+									"\t});\r",
+									"\r",
+									"\r",
+									"\t// array must have values\r",
+									"\tif (retArray != undefined) {\r",
+									"\t\tif (retArray.length >= 0)\r",
+									"\t\t\tret0 = retArray[0]\r",
+									"\r",
+									"\t\tpm.test(\"academicSessions array is not empty\", function () {\r",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"\t}\r",
+									"\r",
+									"\t// validations\r",
+									"\tif (ret0 != undefined) { \r",
+									"\r",
+									"\t\tpm.test(\"Require academicSession.sourcedId\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('sourcedId');\r",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"\t\tpm.test(\"academicSession Paging Check -- sourcedId repeats on subsequent pages\", function () {\r",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql(pm.variables.get(\"session_id\"));\r",
+									"\t\t});\r",
+									"\t} // validations\r",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/academicSessions?offset=2&limit=1&filter=status='active'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"academicSessions"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "2",
+									"description": "The index of the first record to return. (zero indexed)"
+								},
+								{
+									"key": "limit",
+									"value": "1",
+									"description": "Number of results to return from selected index"
+								},
+								{
+									"key": "filter",
+									"value": "status='active'"
+								}
+							]
+						},
+						"description": "Gets a page of academic sessions. Academic sessions can be of type \"School Year\", Term\", \"Semester\", \"GradingPeriod\""
+					},
+					"response": []
+				},
+				{
+					"name": "Get AcademicSessions - No Records",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;\r",
+									"\r",
+									"// response 200\r",
+									"pm.test(\"Academic No Records Paging success response / 200\", function () {\r",
+									"\tpm.expect(responseCode.code).to.be.eql(200);\r",
+									"});\r",
+									"\r",
+									"//if not 200, don't continue\r",
+									"if (responseCode.code === 200) {\r",
+									"\r",
+									"\tvar data = JSON.parse(responseBody);\r",
+									"\r",
+									"\tif (data.academicSessions !== null && \r",
+									"        data.academicSessions !== undefined && \r",
+									"        Array.isArray(data.academicSessions)) {\r",
+									"\t\tretArray = data.academicSessions;\r",
+									"\t\ttests[\"academicSessions is array\"] = true;\r",
+									"\t} else {\r",
+									"\t\ttests[\"academicSessions is array\"] = false;\r",
+									"\t}\r",
+									"\t\t\r",
+									"\t// array must exist\r",
+									"\tpm.test(\"Require array of academicSessions\", function () {\r",
+									"\t\tpm.expect(retArray).to.be.an('array');\r",
+									"\t});\r",
+									"\r",
+									"    // array must be empty\r",
+									"\tif (retArray != undefined) {\r",
+									"\t\tpm.test(\"academicSessions array is empty\", function () {\r",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.empty;\r",
+									"\t\t});\r",
+									"\t}\t\r",
+									"\t\r",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/academicSessions?filter=sourcedId='norecords'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"academicSessions"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "sourcedId='norecords'"
+								}
+							]
+						},
+						"description": "Gets a page of academic sessions. Academic sessions can be of type \"School Year\", Term\", \"Semester\", \"GradingPeriod\""
+					},
+					"response": []
+				},
+				{
+					"name": "Get AcademicSessions - Delta",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;\r",
+									"var retLength = 10;\r",
+									"var moment = require('moment');\r",
+									"\r",
+									"// response 200\r",
+									"pm.test(\"Academic sessions success response / 200\", function () {\r",
+									"\tpm.expect(responseCode.code).to.be.eql(200);\r",
+									"});\r",
+									" \r",
+									"//if not 200, don't continue\r",
+									"if (responseCode.code === 200) {\r",
+									"\r",
+									"\tvar data = JSON.parse(responseBody);\r",
+									"\r",
+									"\tif (data.academicSessions !== null && \r",
+									"        data.academicSessions !== undefined && \r",
+									"        Array.isArray(data.academicSessions)) {\r",
+									"\t\tretArray = data.academicSessions;\r",
+									"\t\ttests[\"academicSessions is array\"] = true;\r",
+									"\t} else {\r",
+									"\t\ttests[\"academicSessions is array\"] = false;\r",
+									"\t}\r",
+									"\t\t\r",
+									"\t// array must exist\r",
+									"\tpm.test(\"Require array of academicSessions\", function () {\r",
+									"\t\tpm.expect(retArray).to.be.an('array');\r",
+									"\t});\r",
+									"\r",
+									"\t// array must have values\r",
+									"\tif (retArray != undefined) {\r",
+									"\t\tpm.test(\"academicSessions array is not empty\", function () {\r",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"\r",
+									"        if (retArray.length < 10) retLength = retArray.length;\r",
+									"\t}\r",
+									"\r",
+									"    paramModifiedDate = pm.variables.get(\"DeltaDateTime\");\r",
+									"    pm.test(\"environment variable DeltaDateTime must be set\", function() {\r",
+									"        //pm.expect(paramModifiedDate).isValid();\r",
+									"        pm.expect(paramModifiedDate.isNaN);\r",
+									"        pm.expect(paramModifiedDate).to.not.be.eql('');\r",
+									"    });\r",
+									"\r",
+									"        if (paramModifiedDate !== null && paramModifiedDate !== undefined)\r",
+									"        {    \r",
+									"           \tpm.test(\"environment variable DeltaDateTime must be format: YYYY-MM-DDTHH:mm:ssZ\", function () {\r",
+									"                pm.expect(moment(paramModifiedDate.substring(0,19), 'YYYY-MM-DDTHH:mm:ss', true).isValid()).is.true;\r",
+									"\t\t    });\r",
+									"        }\r",
+									"\r",
+									"    pm.test(\"Returns records only if academicSession.dateLastModified filter less than now\", function () {\r",
+									"        pm.expect(new Date(paramModifiedDate) <= new Date());\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Require environment variable delta_datetime is format YYYY-MM-DDTHH:mm:ssZ\", function () {\r",
+									"        var testDate = moment(paramModifiedDate);\r",
+									"         pm.expect(testDate.isValid()).is.true;\r",
+									"\t});\r",
+									"if (retLength != undefined && retLength >=0 && retArray != undefined)\r",
+									"{\r",
+									"    for (var i=0; i<retLength; i++) {\r",
+									"\t    var retI = retArray[i];\r",
+									"        if (retI != undefined) {\r",
+									"            pm.test(\"Require academicSessions.dateLastModified for delta\", function () {\r",
+									"                pm.expect(retI).to.have.property('dateLastModified');\r",
+									"                pm.expect(retI.dateLastModified).to.not.be.eql('');\r",
+									"            });\r",
+									"\r",
+									"            pm.test(\"Require delta academicSession.dateLastModified to be at least filter dateLastModified\", function () {\r",
+									"                pm.expect(new Date(retI.dateLastModified) >= new Date(paramModifiedDate));\r",
+									"            });\r",
+									"        } \r",
+									"    }\r",
+									"}\r",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/academicSessions?filter=dateLastModified>'{{DeltaDateTime}}'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"academicSessions"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "dateLastModified>'{{DeltaDateTime}}'"
+								}
+							]
+						},
+						"description": "Gets a page of academic sessions. Academic sessions can be of type \"School Year\", Term\", \"Semester\", \"GradingPeriod\""
+					},
+					"response": []
+				},
+				{
+					"name": "Get Orgs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;",
+									"var ret0 = undefined;",
+									"var moment = require('moment');",
+									"var maxResponseTime = 30000; //30 seconds",
+									"",
+									"// response 200",
+									"pm.test(\"Orgs success response / 200\", function () {",
+									"\tpm.expect(responseCode.code).to.be.eql(200);",
+									"});",
+									"",
+									"// test content-type",
+									"pm.test(\"Content-Type header is present\", () => {",
+									"  pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"",
+									"pm.test(\"Content-Type header is application/json\", () => {",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.contain('application/json');",
+									"});",
+									"",
+									"pm.test(\"X-Total-Count header is present\", () => {",
+									"  pm.response.to.have.header(\"X-Total-Count\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than \" + (maxResponseTime/1000) + \" seconds\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.lessThan(maxResponseTime); //pm.environment.get(\"maxResponseTime\") needs to be int",
+									"});",
+									"",
+									"//if not 200, don't continue",
+									"if (responseCode.code === 200) {",
+									"",
+									"\tvar data = JSON.parse(responseBody);",
+									"",
+									"\tif (data.orgs !== null && ",
+									"        data.orgs !== undefined && ",
+									"        Array.isArray(data.orgs)) {",
+									"\t\tretArray = data.orgs;",
+									"\t\ttests[\"orgs is array\"] = true;",
+									"\t} else {",
+									"\t\ttests[\"orgs is array\"] = false;",
+									"\t}",
+									"\t\t",
+									"\t// array must exist",
+									"\tpm.test(\"Require array of orgs\", function () {",
+									"\t\tpm.expect(retArray).to.be.an('array');",
+									"\t});",
+									"",
+									"",
+									"\t// array must have values",
+									"\tif (retArray != undefined) {",
+									"\t\tif (retArray.length >= 0)",
+									"\t\t\tret0 = retArray[0]",
+									"",
+									"\t\tpm.test(\"orgs array is not empty\", function () {",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;",
+									"\t\t});",
+									"\t}",
+									"",
+									"\t// validations",
+									"\tif (ret0 != undefined) {",
+									"",
+									"\t\tpm.test(\"Require org.sourcedId\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('sourcedId');",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"        pm.test(\"Require org.sourcedId to be string\", function () {",
+									"\t\t\tpm.expect(ret0.sourcedId).to.be.a('string');",
+									"\t\t});",
+									"",
+									"\t\tpm.test(\"Require org.status\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('status');",
+									"\t\t\tpm.expect(ret0.status).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"\t\tpm.test(\"Require org.status valid values\", function () {",
+									"\t\t\tpm.expect(ret0.status).to.be.oneOf(['active', 'tobedeleted']);",
+									"\t\t});",
+									"",
+									"\t\tpm.test(\"Require org.name\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('name');",
+									"\t\t\tpm.expect(ret0.name).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"\t\tpm.test(\"Require org.type\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('type');",
+									"\t\t\tpm.expect(ret0.type).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"\t\tpm.test(\"Require org org.type valid values\", function () {",
+									"\t\t\tpm.expect(ret0.type).to.be.oneOf(['department', 'school', 'district', 'local', 'state', 'national']);",
+									"\t\t});",
+									"",
+									"\t\tpm.test(\"Require org.identifier\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('identifier');",
+									"\t\t\tpm.expect(ret0.identifier).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"        pm.test(\"Require org.dateLastModified\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('dateLastModified');",
+									"\t\t\tpm.expect(ret0.dateLastModified).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"        if (ret0.dateLastModified !== null && ret0.dateLastModified !== undefined)",
+									"        {    ",
+									"           \tpm.test(\"Require orgs.dateLastModified format\", function () {",
+									"                pm.expect(moment(ret0.dateLastModified.substring(0,19), 'YYYY-MM-DDTHH:mm:ss', true).isValid()).is.true;",
+									"\t\t    });",
+									"        }",
+									"",
+									"        // set org id env variable",
+									"\t\tpm.environment.set(\"org_id\", ret0.sourcedId);",
+									"\t} // validations",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/orgs?offset=0&limit=5000&filter=status='active'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"orgs"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0",
+									"description": "The index of the first record to return. (zero indexed)"
+								},
+								{
+									"key": "limit",
+									"value": "5000",
+									"description": "Number of results to return from selected index"
+								},
+								{
+									"key": "filter",
+									"value": "status='active'"
+								}
+							]
+						},
+						"description": "Gets a page of schools"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Orgs - Paging",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;",
+									"var ret0 = undefined;",
+									"",
+									"// response 200",
+									"pm.test(\"Orgs Paging success response / 200\", function () {",
+									"\tpm.expect(responseCode.code).to.be.eql(200);",
+									"});",
+									"",
+									"//if not 200, don't continue",
+									"if (responseCode.code === 200) {",
+									"",
+									"\tvar data = JSON.parse(responseBody);",
+									"",
+									"\tif (data.orgs !== null && ",
+									"        data.orgs !== undefined && ",
+									"        Array.isArray(data.orgs)) {",
+									"\t\tretArray = data.orgs;",
+									"\t\ttests[\"orgs is array\"] = true;",
+									"\t} else {",
+									"\t\ttests[\"orgs is array\"] = false;",
+									"\t}",
+									"\t\t",
+									"\t// array must exist",
+									"\tpm.test(\"Require array of orgs\", function () {",
+									"\t\tpm.expect(retArray).to.be.an('array');",
+									"\t});",
+									"",
+									"",
+									"\t// array must have values",
+									"\tif (retArray != undefined) {",
+									"\t\tif (retArray.length >= 0)",
+									"\t\t\tret0 = retArray[0]",
+									"",
+									"\t\tpm.test(\"orgs array is not empty\", function () {",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;",
+									"\t\t});",
+									"\t}",
+									"",
+									"\t// validations",
+									"\tif (ret0 != undefined) {",
+									"",
+									"\t\tpm.test(\"Require sourcedId\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('sourcedId');",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"",
+									"\t\tpm.test(\"Org Paging Check -- sourcedId repeats on subsequent pages\", function () {",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql(pm.variables.get(\"org_id\"));",
+									"\t\t});",
+									"\t} // validations",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/orgs?offset=2&limit=1&filter=status='active'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"orgs"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "2",
+									"description": "The index of the first record to return. (zero indexed)"
+								},
+								{
+									"key": "limit",
+									"value": "1",
+									"description": "Number of results to return from selected index"
+								},
+								{
+									"key": "filter",
+									"value": "status='active'"
+								}
+							]
+						},
+						"description": "Gets a page of schools"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Orgs - No Records",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;",
+									"",
+									"// response 200",
+									"pm.test(\"Orgs No Records success response / 200\", function () {",
+									"\tpm.expect(responseCode.code).to.be.eql(200);",
+									"});",
+									"",
+									"//if not 200, don't continue",
+									"if (responseCode.code === 200) {",
+									"",
+									"\tvar data = JSON.parse(responseBody);",
+									"",
+									"\tif (data.orgs !== null && ",
+									"        data.orgs !== undefined && ",
+									"        Array.isArray(data.orgs)) {",
+									"\t\tretArray = data.orgs;",
+									"\t\ttests[\"orgs is array\"] = true;",
+									"\t} else {",
+									"\t\ttests[\"orgs is array\"] = false;",
+									"\t}",
+									"\t\t",
+									"\t// array must exist",
+									"\tpm.test(\"Require array of orgs\", function () {",
+									"\t\tpm.expect(retArray).to.be.an('array');",
+									"\t});",
+									"",
+									"\t// array must be empty",
+									"\tif (retArray != undefined) {",
+									"\t\tpm.test(\"Orgs array is empty\", function () {",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.empty;",
+									"\t\t});",
+									"\t}",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/orgs?filter=sourcedId='norecords'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"orgs"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "sourcedId='norecords'"
+								}
+							]
+						},
+						"description": "Gets a page of schools"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Orgs - Delta",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;",
+									"var retLength = 10;",
+									"var moment = require('moment');",
+									"",
+									"// response 200",
+									"pm.test(\"Orgs success response / 200\", function () {",
+									"\tpm.expect(responseCode.code).to.be.eql(200);",
+									"});",
+									"",
+									"//if not 200, don't continue",
+									"if (responseCode.code === 200) {",
+									"",
+									"\tvar data = JSON.parse(responseBody);",
+									"",
+									"\tif (data.orgs !== null && ",
+									"        data.orgs !== undefined && ",
+									"        Array.isArray(data.orgs)) {",
+									"\t\tretArray = data.orgs;",
+									"\t\ttests[\"orgs is array\"] = true;",
+									"\t} else {",
+									"\t\ttests[\"orgs is array\"] = false;",
+									"\t}",
+									"\t// array must exist",
+									"\tpm.test(\"Require array of orgs\", function () {",
+									"\t\tpm.expect(retArray).to.be.an('array');",
+									"\t});",
+									"",
+									"\t// array must have values",
+									"\tif (retArray != undefined) {",
+									"\t\tpm.test(\"orgs array is not empty\", function () {",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;",
+									"\t\t});",
+									"        if (retArray.length < 10) retLength = retArray.length;",
+									"\t}",
+									"",
+									"    paramModifiedDate = pm.variables.get(\"DeltaDateTime\");",
+									"    pm.test(\"environment variable DeltaDateTime must be set\", function() {",
+									"        //pm.expect(paramModifiedDate).isValid();",
+									"        pm.expect(paramModifiedDate.isNaN);",
+									"        pm.expect(paramModifiedDate).to.not.be.eql('');",
+									"    });",
+									"",
+									"        if (paramModifiedDate !== null && paramModifiedDate !== undefined)",
+									"        {    ",
+									"           \tpm.test(\"environment variable DeltaDateTime must be format: YYYY-MM-DDTHH:mm:ssZ\", function () {",
+									"                pm.expect(moment(paramModifiedDate.substring(0,19), 'YYYY-MM-DDTHH:mm:ss', true).isValid()).is.true;",
+									"\t\t    });",
+									"        }",
+									"",
+									"    pm.test(\"Returns records only if org.dateLastModified filter less than now\", function () {",
+									"        pm.expect(new Date(paramModifiedDate) <= new Date());",
+									"    });",
+									"",
+									"  ",
+									"    pm.test(\"Require environment variable DeltaDateTime is format YYYY-MM-DDTHH:mm:ssZ\", function () {",
+									"        var testDate = moment(paramModifiedDate);",
+									"         pm.expect(testDate.isValid()).is.true;",
+									"\t});",
+									"",
+									"if (retLength != undefined && retLength >=0 && retArray != undefined)",
+									"{",
+									"    for (var i=0; i<retLength; i++) {",
+									"\t    var retI = retArray[i];",
+									"        if (retI != undefined) {",
+									"            pm.test(\"Require orgs.dateLastModified for delta\", function () {",
+									"                pm.expect(retI).to.have.property('dateLastModified');",
+									"                pm.expect(retI.dateLastModified).to.not.be.eql('');",
+									"            });",
+									"",
+									"            pm.test(\"Require delta org.dateLastModified to be at least filter dateLastModified\", function () {",
+									"                pm.expect(new Date(retI.dateLastModified) >= new Date(paramModifiedDate));",
+									"            });",
+									"        } ",
+									"    }",
+									"}",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/orgs?filter=dateLastModified>'{{DeltaDateTime}}'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"orgs"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "dateLastModified>'{{DeltaDateTime}}'"
+								}
+							]
+						},
+						"description": "Gets a page of schools"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;",
+									"var ret0 = undefined;",
+									"var moment = require('moment');",
+									"var maxResponseTime = 30000; //30 seconds",
+									"var retOrgsarray = undefined;",
+									"var retOrg = undefined;",
+									"var retMetadata = undefined;",
+									"var retFlags = undefined;",
+									"var arrFlags = undefined;",
+									"",
+									"// response 200",
+									"pm.test(\"Users success response / 200\", function () {",
+									"\tpm.expect(responseCode.code).to.be.eql(200);",
+									"});",
+									"",
+									"// test content-type",
+									"pm.test(\"Content-Type header is present\", () => {",
+									"  pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"",
+									"pm.test(\"Content-Type header is application/json\", () => {",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.contain('application/json');",
+									"});",
+									"",
+									"pm.test(\"X-Total-Count header is present\", () => {",
+									"  pm.response.to.have.header(\"X-Total-Count\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than \" + (maxResponseTime/1000) + \" seconds\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.lessThan(maxResponseTime);",
+									"});",
+									"",
+									"//if not 200, don't continue",
+									"if (responseCode.code === 200) {",
+									"",
+									"\tvar data = JSON.parse(responseBody);",
+									"",
+									"\tif (data.users !== null && ",
+									"        data.users !== undefined && ",
+									"        Array.isArray(data.users)) {",
+									"\t\tretArray = data.users;",
+									"\t\ttests[\"users is array\"] = true;",
+									"\t} else {",
+									"\t\ttests[\"users is array\"] = false;",
+									"\t}",
+									"\t\t",
+									"\t// array must exist",
+									"\tpm.test(\"Require array of users\", function () {",
+									"\t\tpm.expect(retArray).to.be.an('array');",
+									"\t});",
+									"",
+									"",
+									"\t// array must have values",
+									"\tif (retArray != undefined) {",
+									"\t\tif (retArray.length >= 0)",
+									"\t\t\tret0 = retArray[0]",
+									"",
+									"\t\tpm.test(\"users array is not empty\", function () {",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;",
+									"\t\t});",
+									"\t}",
+									"",
+									"\t// validations",
+									"\tif (ret0 != undefined) {",
+									"",
+									"\t\tpm.test(\"Require user.sourcedId\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('sourcedId');",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"        pm.test(\"Require user.sourcedId to be string\", function () {",
+									"\t\t\tpm.expect(ret0.sourcedId).to.be.a('string');",
+									"\t\t});",
+									"",
+									"\t\tpm.test(\"Require user.status\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('status');",
+									"\t\t\tpm.expect(ret0.status).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"\t\tpm.test(\"Require user.status valid values\", function () {",
+									"\t\t\tpm.expect(ret0.status).to.be.oneOf(['active', 'tobedeleted']);",
+									"\t\t});",
+									"",
+									"\t\tpm.test(\"Require user.username\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('username');",
+									"\t\t\tpm.expect(ret0.username).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"        // email is not required",
+									"        //  pm.test(\"Require email\", function () {",
+									"\t\t//\tpm.expect(ret0).to.have.property('email');",
+									"\t\t//\tpm.expect(ret0.rmail).to.not.be.eql('');",
+									"\t\t//});",
+									"",
+									"\t\tpm.test(\"Require user.givenName\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('givenName');",
+									"\t\t\tpm.expect(ret0.type).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"\t\tpm.test(\"Require user.identifier\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('identifier');",
+									"\t\t\tpm.expect(ret0.identifier).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"        // orgs is a nested array",
+									"\t\tpm.test(\"Require user.orgs\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('orgs');",
+									"\t\t\tretOrgsarray = ret0.orgs;",
+									"\t\t});",
+									"",
+									"\t\t// orgs is array",
+									"\t\tpm.test(\"Require array of user.orgs\", function () {",
+									"\t\t\tpm.expect(retOrgsarray).to.be.an('array');",
+									"\t\t});",
+									"",
+									"\t\tpm.test(\"User.orgs array is not empty\", function () {",
+									"\t\t\tpm.expect(retOrgsarray).to.be.an('array').that.is.not.empty;",
+									"\t\t});",
+									"",
+									"\t\tif (retArray != undefined) {",
+									"\t\t\tif (retOrgsarray.length >= 0)",
+									"\t\t\t\tretOrg = retOrgsarray[0]",
+									"\t\t}",
+									"",
+									"\t",
+									"\t    // org validations",
+									"\t    if (retOrg != undefined) {",
+									"",
+									"\t\t  // user org is a nested array ",
+									"\t\t  pm.test(\"Require user.orgs[0].sourcedId\", function () {",
+									"\t\t  \tpm.expect(retOrg).to.have.property('sourcedId');",
+									"\t\t\tpm.expect(retOrg.sourcedId).to.not.be.eql('');",
+									"\t  \t  });",
+									"",
+									"\t\t  // school is a nested object -- type",
+									"\t\t  pm.test(\"Require user.orgs[0].sourcedId\", function () {",
+									"\t\t\tpm.expect(retOrg).to.have.property('type');",
+									"\t\t\tpm.expect(retOrg.type).to.not.be.eql('');",
+									"\t\t  });",
+									"",
+									"          pm.test(\"Require user.orgs[0].sourcedId to be string\", function () {",
+									"\t\t\tpm.expect(retOrg.sourcedId).to.be.a('string');",
+									"\t\t  });",
+									"",
+									"\t\t  // validate org type",
+									"\t\t  pm.test(\"Require org user.orgs[0].type valid values\", function () {",
+									"\t\t\tpm.expect(retOrg.type).to.be.oneOf(['department', 'school', 'district', 'local', 'state', 'national','org']);",
+									"\t\t  });",
+									"",
+									"        } // orgs",
+									"",
+									"        pm.test(\"Require user.dateLastModified\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('dateLastModified');",
+									"\t\t\tpm.expect(ret0.dateLastModified).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"        if (ret0.dateLastModified !== null && ret0.dateLastModified !== undefined)",
+									"        {    ",
+									"           \tpm.test(\"Require user.dateLastModified format\", function () {",
+									"                pm.expect(moment(ret0.dateLastModified.substring(0,19), 'YYYY-MM-DDTHH:mm:ss', true).isValid()).is.true;",
+									"\t\t    });",
+									"        }",
+									"",
+									"// OPTIONAL metadata.userflags",
+									"//\t\t\t\"metadata\" : {",
+									"//\t\t\t\t\"microsoft.userFlags\" : \" freeLunch,homeless,giftedOrTalented\"",
+									"//\t\t\t}",
+									"// Full default flag enum list: freeLunch, reducedLunch,homeless,giftedOrTalented,504,ELL,LEP,IEP",
+									"",
+									"",
+									"",
+									"        if (ret0.metadata != undefined)",
+									"        {",
+									"            retMetadata = ret0.metadata;",
+									"",
+									"            if (retMetadata[\"microsoft.userFlags\"] != undefined)            ",
+									"            {",
+									"                retFlags = retMetadata[\"microsoft.userFlags\"];",
+									"            }",
+									"            if (retFlags != undefined)",
+									"            {",
+									"                arrFlags = retFlags.split(\",\");",
+									"                for (var i=0; i<(arrFlags.length); i++) ",
+									"                {",
+									"                    pm.test(\"metadata.microsoft.userFlags type valid values\", function () {",
+									"\t\t\t        pm.expect(arrFlags[i]).to.be.oneOf(['freeLunch', 'homeless', 'giftedOrTalented', '504', 'ELL', 'LEP','IEP','']);",
+									"\t\t            });",
+									"                }",
+									"            }",
+									"        }",
+									"        pm.test(\"User.orgs array is not empty\", function () {",
+									"\t\t\tpm.expect(retOrgsarray).to.be.an('array').that.is.not.empty;",
+									"\t\t});",
+									"",
+									"        // set user id env variable for paging test",
+									"\t\tpm.environment.set(\"user_id\", ret0.sourcedId);",
+									"\t} // validations",
+									"} // 200",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/users?offset=0&limit=5000&filter=status='active'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"users"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "5000"
+								},
+								{
+									"key": "filter",
+									"value": "status='active'"
+								}
+							]
+						},
+						"description": "Gets a page of students."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users - Paging",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;",
+									"var ret0 = undefined;",
+									"",
+									"// response 200",
+									"pm.test(\"Users success response / 200\", function () {",
+									"\tpm.expect(responseCode.code).to.be.eql(200);",
+									"});",
+									"",
+									"//if not 200, don't continue",
+									"if (responseCode.code === 200) {",
+									"",
+									"\tvar data = JSON.parse(responseBody);",
+									"",
+									"\tif (data.users !== null && ",
+									"        data.users !== undefined && ",
+									"        Array.isArray(data.users)) {",
+									"\t\tretArray = data.users;",
+									"\t\ttests[\"users is array\"] = true;",
+									"\t} else {",
+									"\t\ttests[\"users is array\"] = false;",
+									"\t}",
+									"\t\t",
+									"\t// array must exist",
+									"\tpm.test(\"Require array of users\", function () {",
+									"\t\tpm.expect(retArray).to.be.an('array');",
+									"\t});",
+									"",
+									"",
+									"\t// array must have values",
+									"\tif (retArray != undefined) {",
+									"\t\tif (retArray.length >= 0)",
+									"\t\t\tret0 = retArray[0]",
+									"",
+									"\t\tpm.test(\"users array is not empty\", function () {",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;",
+									"\t\t});",
+									"\t}",
+									"",
+									"\t// validations",
+									"\tif (ret0 != undefined) {",
+									"",
+									"\t\tpm.test(\"Require user.sourcedId\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('sourcedId');",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"        pm.test(\"user Paging Check --sourcedId repeats on subsequent pages\", function () {",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql(pm.variables.get(\"user_id\"));",
+									"\t\t});",
+									"\t} // validations",
+									"} // 200",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/users?offset=2&limit=1&filter=status='active'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"users"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "2"
+								},
+								{
+									"key": "limit",
+									"value": "1"
+								},
+								{
+									"key": "filter",
+									"value": "status='active'"
+								}
+							]
+						},
+						"description": "Gets a page of students."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users - No Records",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;",
+									"",
+									"// response 200",
+									"pm.test(\"Users No Records response / 200\", function () {",
+									"\tpm.expect(responseCode.code).to.be.eql(200);",
+									"});",
+									"",
+									"//if not 200, don't continue",
+									"if (responseCode.code === 200) {",
+									"",
+									"\tvar data = JSON.parse(responseBody);",
+									"",
+									"\tif (data.users !== null && ",
+									"        data.users !== undefined && ",
+									"        Array.isArray(data.users)) {",
+									"\t\tretArray = data.users;",
+									"\t\ttests[\"users is array\"] = true;",
+									"\t} else {",
+									"\t\ttests[\"users is array\"] = false;",
+									"\t}",
+									"\t\t",
+									"\t// array must exist",
+									"\tpm.test(\"Require array of users\", function () {",
+									"\t\tpm.expect(retArray).to.be.an('array');",
+									"\t});",
+									"",
+									"\t// array must be empty",
+									"\tif (retArray != undefined) {",
+									"\t\tpm.test(\"Users array is empty\", function () {",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.empty;",
+									"\t\t});",
+									"\t}\t",
+									"} // 200",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/users?filter=sourcedId='norecords'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"users"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "sourcedId='norecords'"
+								}
+							]
+						},
+						"description": "Gets a page of students."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users - Delta",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;",
+									"var retLength = 10;",
+									"var moment = require('moment');",
+									"",
+									"// response 200",
+									"pm.test(\"Users success response / 200\", function () {",
+									"\tpm.expect(responseCode.code).to.be.eql(200);",
+									"});",
+									"",
+									"//if not 200, don't continue",
+									"if (responseCode.code === 200) {",
+									"",
+									"\tvar data = JSON.parse(responseBody);",
+									"",
+									"\tif (data.users !== null && ",
+									"        data.users !== undefined && ",
+									"        Array.isArray(data.users)) {",
+									"\t\tretArray = data.users;",
+									"\t\ttests[\"users is array\"] = true;",
+									"\t} else {",
+									"\t\ttests[\"users is array\"] = false;",
+									"\t}",
+									"\t\t",
+									"\t// array must exist",
+									"\tpm.test(\"Require array of users\", function () {",
+									"\t\tpm.expect(retArray).to.be.an('array');",
+									"\t});",
+									"",
+									"",
+									"\t// array must have values",
+									"\tif (retArray != undefined) {",
+									"\t\tpm.test(\"users array is not empty\", function () {",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;",
+									"\t\t});",
+									"        if (retArray.length < 10) retLength = retArray.length;",
+									"\t}",
+									"",
+									"\t",
+									"    paramModifiedDate = pm.variables.get(\"DeltaDateTime\");",
+									"    pm.test(\"environment variable DeltaDateTime must be set\", function() {",
+									"        //pm.expect(paramModifiedDate).isValid();",
+									"        pm.expect(paramModifiedDate.isNaN);",
+									"        pm.expect(paramModifiedDate).to.not.be.eql('');",
+									"    });",
+									"",
+									"        if (paramModifiedDate !== null && paramModifiedDate !== undefined)",
+									"        {    ",
+									"           \tpm.test(\"environment variable DeltaDateTime must be format: YYYY-MM-DDTHH:mm:ssZ\", function () {",
+									"                pm.expect(moment(paramModifiedDate.substring(0,19), 'YYYY-MM-DDTHH:mm:ss', true).isValid()).is.true;",
+									"\t\t    });",
+									"        }",
+									"",
+									"    pm.test(\"Returns records only if user.dateLastModified filter less than now\", function () {",
+									"        pm.expect(new Date(paramModifiedDate) <= new Date());",
+									"    });",
+									"",
+									"    pm.test(\"Require environment variable DeltaDateTime is format YYYY-MM-DDTHH:mm:ssZ\", function () {",
+									"        var testDate = moment(paramModifiedDate);",
+									"         pm.expect(testDate.isValid()).is.true;",
+									"\t});",
+									"",
+									"if (retLength != undefined && retLength >=0 && retArray != undefined)",
+									"{",
+									"    for (var i=0; i<retLength; i++) {",
+									"\t    var retI = retArray[i];",
+									"        if (retI != undefined) {",
+									"            pm.test(\"Require delta user.dateLastModified\", function () {",
+									"                pm.expect(retI).to.have.property('dateLastModified');",
+									"                pm.expect(retI.dateLastModified).to.not.be.eql('');",
+									"            });",
+									"",
+									"            pm.test(\"Require delta user.dateLastModified to be at least filter dateLastModified\", function () {",
+									"                pm.expect(new Date(retI.dateLastModified) >= new Date(paramModifiedDate));",
+									"            });",
+									"        } ",
+									"    }",
+									"}",
+									"} // 200",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/users?filter=dateLastModified>'{{DeltaDateTime}}'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"users"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "dateLastModified>'{{DeltaDateTime}}'"
+								}
+							]
+						},
+						"description": "Gets a page of students."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Classes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;",
+									"var ret0 = undefined;",
+									"var moment = require('moment');",
+									"var maxResponseTime = 30000; //30 seconds",
+									"var retSchool = undefined;",
+									"var retTermsarray = undefined;",
+									"var retTerm = undefined;",
+									"",
+									"pm.test(\"Classes success response / 200\", function () {",
+									"\tpm.expect(responseCode.code).to.be.eql(200);",
+									"});",
+									"",
+									"// test content-type",
+									"pm.test(\"Content-Type header is present\", () => {",
+									"  pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"",
+									"pm.test(\"Content-Type header is application/json\", () => {",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.contain('application/json');",
+									"});",
+									"",
+									"pm.test(\"X-Total-Count header is present\", () => {",
+									"  pm.response.to.have.header(\"X-Total-Count\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than \" + (maxResponseTime/1000) + \" seconds\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.lessThan(maxResponseTime);",
+									"});",
+									"",
+									"//if not 200, don't continue",
+									"if (responseCode.code === 200) {",
+									"",
+									"\tvar data = JSON.parse(responseBody);",
+									"",
+									"    if (data.classes !== null && ",
+									"        data.classes !== undefined && ",
+									"        Array.isArray(data.classes)) {",
+									"\t\tretArray = data.classes;",
+									"\t\ttests[\"classes is array\"] = true;",
+									"\t} else {",
+									"\t\ttests[\"classes is array\"] = false;",
+									"    }",
+									"",
+									"\t// array must exist",
+									"\tpm.test(\"Require array of classes\", function () {",
+									"\t\tpm.expect(retArray).to.be.an('array');",
+									"\t});",
+									"",
+									"\t// array must have values",
+									"\tif (retArray != undefined) {",
+									"\t\tif (retArray.length >= 0)",
+									"\t\t\tret0 = retArray[0]",
+									"",
+									"\t\tpm.test(\"Class array is not empty\", function () {",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;",
+									"\t\t});",
+									"\t}",
+									"",
+									"\t// validations",
+									"\tif (ret0 != undefined) {",
+									"",
+									"\t\tpm.test(\"Require class.sourcedId\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('sourcedId');",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"        pm.test(\"Require class.sourcedId to be string\", function () {",
+									"\t\t\tpm.expect(ret0.sourcedId).to.be.a('string');",
+									"\t\t});",
+									"",
+									"\t\tpm.test(\"Require class.status\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('status');",
+									"\t\t\tpm.expect(ret0.status).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"\t\tpm.test(\"Require class.status valid values\", function () {",
+									"\t\t\tpm.expect(ret0.status).to.be.oneOf(['active', 'tobedeleted']);",
+									"\t\t});",
+									"",
+									"\t\tpm.test(\"Require class.title\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('title');",
+									"\t\t\tpm.expect(ret0.title).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"\t\t// school is a nested object",
+									"\t\tpm.test(\"Require class.school\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('school');",
+									"\t\t\tretSchool = ret0.school;",
+									"\t\t});",
+									"",
+									"\t\t// school is a nested object -- schoolSourcedId",
+									"\t\tpm.test(\"Require class.school.sourcedId\", function () {",
+									"\t\t\tpm.expect(retSchool).to.have.property('sourcedId');",
+									"\t\t\tpm.expect(retSchool.sourcedId).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"        pm.test(\"Require class.school.sourcedId to be string\", function () {",
+									"\t\t\tpm.expect(retSchool.sourcedId).to.be.a('string');",
+									"\t\t});",
+									"",
+									"\t\t// school is a nested object -- type",
+									"\t\tpm.test(\"Require class.school.type\", function () {",
+									"\t\t\tpm.expect(retSchool).to.have.property('type');",
+									"\t\t\tpm.expect(retSchool.type).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"\t\t// validate org type",
+									"\t\tpm.test(\"Require class.school.type valid values\", function () {",
+									"\t\t\tpm.expect(retSchool.type).to.be.oneOf(['department', 'school', 'district', 'local', 'state', 'national', 'org']);",
+									"\t\t});",
+									"",
+									"",
+									"\t\t// terms is a nested array",
+									"\t\tpm.test(\"Require class.terms\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('terms');",
+									"\t\t\tretTermsarray = ret0.terms;",
+									"\t\t});",
+									"",
+									"\t\t// terms is array",
+									"\t\tpm.test(\"Require array of class.terms\", function () {",
+									"\t\t\tpm.expect(retTermsarray).to.be.an('array');",
+									"\t\t});",
+									"",
+									"\t\tpm.test(\"class.terms array is not empty\", function () {",
+									"\t\t\tpm.expect(retTermsarray).to.be.an('array').that.is.not.empty;",
+									"\t\t});",
+									"",
+									"\t\tif (retTermsarray != undefined) {",
+									"\t\t\tif (retTermsarray.length >= 0)",
+									"\t\t\t\tretTerm = retTermsarray[0]",
+									"\t\t}",
+									"",
+									"        // terms validations",
+									"        if (retTerm != undefined) {",
+									"",
+									"            // terms is a nested array -- termSourcedId",
+									"            pm.test(\"Require class.terms[0].sourcedId\", function () {",
+									"                pm.expect(retTerm).to.have.property('sourcedId');",
+									"                pm.expect(retTerm.sourcedId).to.not.be.eql('');",
+									"            });",
+									"",
+									"            pm.test(\"Require class.terms[0].sourcedId to be string\", function () {",
+									"                pm.expect(retTerm.sourcedId).to.be.a('string');",
+									"            });",
+									"",
+									"            // school is a nested object -- type",
+									"            pm.test(\"Require class.terms[0].sourcedId\", function () {",
+									"                pm.expect(retTerm).to.have.property('type');",
+									"                pm.expect(retTerm.type).to.not.be.eql('');",
+									"            });",
+									"",
+									"            // validate term type",
+									"            pm.test(\"Require class.terms[0].type valid values\", function () {",
+									"                pm.expect(retTerm.type).to.be.oneOf(['academicSession', 'term', 'gradingPeriod', 'semester', 'schoolYear']);",
+									"            });",
+									"        } // terms",
+									"",
+									"        pm.test(\"Require class.dateLastModified\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('dateLastModified');",
+									"\t\t\tpm.expect(ret0.dateLastModified).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"        if (ret0.dateLastModified !== null && ret0.dateLastModified !== undefined)",
+									"        {    ",
+									"           \tpm.test(\"Require class.dateLastModified format\", function () {",
+									"                pm.expect(moment(ret0.dateLastModified.substring(0,19), 'YYYY-MM-DDTHH:mm:ss', true).isValid()).is.true;",
+									"\t\t    });",
+									"        }",
+									"",
+									"\t\t// set class id env variable",
+									"\t\tpm.environment.set(\"class_id\", ret0.sourcedId);",
+									"\t} // validations",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/classes?offset=0&limit=5000&filter=status='active'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"classes"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "5000"
+								},
+								{
+									"key": "filter",
+									"value": "status='active'"
+								}
+							]
+						},
+						"description": "Gets a page of classes"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Classes - Paging",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;",
+									"var ret0 = undefined;",
+									"",
+									"//response 200",
+									"pm.test(\"Classes Paging success response / 200\", function () {",
+									"\tpm.expect(responseCode.code).to.be.eql(200);",
+									"});",
+									"",
+									"//if not 200, don't continue",
+									"if (responseCode.code === 200) {",
+									"",
+									"\tvar data = JSON.parse(responseBody);",
+									"",
+									"\tif (data.classes !== null && ",
+									"        data.classes !== undefined && ",
+									"        Array.isArray(data.classes)) {",
+									"\t\tretArray = data.classes;",
+									"\t\ttests[\"classes is array\"] = true;",
+									"\t} else {",
+									"\t\ttests[\"classes is array\"] = false;",
+									"    }",
+									"",
+									"\t// array must exist",
+									"\tpm.test(\"Require array of classes\", function () {",
+									"\t\tpm.expect(retArray).to.be.an('array');",
+									"\t});",
+									"",
+									"\t// array must have values",
+									"\tif (retArray != undefined) {",
+									"\t\tif (retArray.length >= 0)",
+									"\t\t\tret0 = retArray[0]",
+									"",
+									"\t\tpm.test(\"Class array is not empty\", function () {",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;",
+									"\t\t});",
+									"\t}",
+									"",
+									"\t// validations",
+									"\tif (ret0 != undefined) {",
+									"",
+									"\t\tpm.test(\"Require sourcedId\", function () {",
+									"\t\t\tpm.expect(ret0).to.have.property('sourcedId');",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql('');",
+									"\t\t});",
+									"",
+									"\t\tpm.test(\"Class Paging Check -- sourcedId repeats on subsequent pages\", function () {",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql(pm.variables.get(\"class_id\"));",
+									"\t\t});\t",
+									"\t} // validations",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/classes?offset=2&limit=1",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"classes"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "2"
+								},
+								{
+									"key": "limit",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Gets a page of classes"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Classes - No Records",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;",
+									"",
+									"//response 200",
+									"pm.test(\"Classes No Records success response / 200\", function () {",
+									"\tpm.expect(responseCode.code).to.be.eql(200);",
+									"});",
+									"",
+									"//if not 200, don't continue",
+									"if (responseCode.code === 200) {",
+									"",
+									"\tvar data = JSON.parse(responseBody);",
+									"",
+									"\tif (data.classes !== null && ",
+									"        data.classes !== undefined && ",
+									"        Array.isArray(data.classes)) {",
+									"\t\tretArray = data.classes;",
+									"\t\ttests[\"classes is array\"] = true;",
+									"\t} else {",
+									"\t\ttests[\"classes is array\"] = false;",
+									"    }",
+									"",
+									"\t// array must be empty",
+									"\tif (retArray != undefined) {",
+									"\t\tpm.test(\"Class array is empty\", function () {",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.empty;",
+									"\t\t});",
+									"\t}\t",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/classes?filter=sourcedId='norecords'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"classes"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "sourcedId='norecords'"
+								}
+							]
+						},
+						"description": "Gets a page of classes"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Classes - Delta",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;",
+									"var retLength = 10;",
+									"var moment = require('moment');",
+									"",
+									"pm.test(\"Classes success response / 200\", function () {",
+									"\tpm.expect(responseCode.code).to.be.eql(200);",
+									"});",
+									"",
+									"//if not 200, don't continue",
+									"if (responseCode.code === 200) {",
+									"",
+									"\tvar data = JSON.parse(responseBody);",
+									"",
+									"    if (data.classes !== null && ",
+									"        data.classes !== undefined && ",
+									"        Array.isArray(data.classes)) {",
+									"\t\tretArray = data.classes;",
+									"\t\ttests[\"classes is array\"] = true;",
+									"\t} else {",
+									"\t\ttests[\"classes is array\"] = false;",
+									"    }",
+									"",
+									"\t// array must exist",
+									"\tpm.test(\"Require array of classes\", function () {",
+									"\t\tpm.expect(retArray).to.be.an('array');",
+									"\t});",
+									"",
+									"\t// array must have values",
+									"\tif (retArray != undefined) {",
+									"\t\tpm.test(\"Class array is not empty\", function () {",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;",
+									"\t\t});",
+									"        if (retArray.length < 10) retLength = retArray.length;",
+									"\t}",
+									"",
+									"",
+									"",
+									"",
+									"    paramModifiedDate = pm.variables.get(\"DeltaDateTime\");",
+									"    pm.test(\"environment variable DeltaDateTime must be set\", function() {",
+									"        //pm.expect(paramModifiedDate).isValid();",
+									"        pm.expect(paramModifiedDate.isNaN);",
+									"        pm.expect(paramModifiedDate).to.not.be.eql('');",
+									"    });",
+									"",
+									"        if (paramModifiedDate !== null && paramModifiedDate !== undefined)",
+									"        {    ",
+									"           \tpm.test(\"environment variable DeltaDateTime must be format: YYYY-MM-DDTHH:mm:ssZ\", function () {",
+									"                pm.expect(moment(paramModifiedDate.substring(0,19), 'YYYY-MM-DDTHH:mm:ss', true).isValid()).is.true;",
+									"\t\t    });",
+									"        }",
+									"",
+									"    pm.test(\"Returns records only if class.dateLastModified filter less than now\", function () {",
+									"        pm.expect(new Date(paramModifiedDate) <= new Date());",
+									"    });",
+									"",
+									"    pm.test(\"Require environment variable DeltaDateTime is format YYYY-MM-DDTHH:mm:ssZ\", function () {",
+									"        var testDate = moment(paramModifiedDate);",
+									"         pm.expect(testDate.isValid()).is.true;",
+									"\t});",
+									"if (retLength != undefined && retLength >=0 && retArray != undefined)",
+									"{",
+									"    for (var i=0; i<retLength; i++) {",
+									"\t    var retI = retArray[i];",
+									"        if (retI != undefined) {",
+									"            pm.test(\"Require delta class.dateLastModified\", function () {",
+									"                pm.expect(retI).to.have.property('dateLastModified');",
+									"                pm.expect(retI.dateLastModified).to.not.be.eql('');",
+									"            });",
+									"",
+									"            pm.test(\"Require delta class.dateLastModified to be at least filter dateLastModified\", function () {",
+									"                pm.expect(new Date(retI.dateLastModified) >= new Date(paramModifiedDate));",
+									"            });",
+									"        } ",
+									"    }",
+									"}",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/classes?filter=dateLastModified>'{{DeltaDateTime}}'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"classes"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "dateLastModified>'{{DeltaDateTime}}'"
+								}
+							]
+						},
+						"description": "Gets a page of classes"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Enrollments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;\r",
+									"var ret0 = undefined;\r",
+									"var moment = require('moment');\r",
+									"var maxResponseTime = 30000; //30 seconds\r",
+									"var retSchool = undefined;\r",
+									"var retClass = undefined;\r",
+									"var retUser = undefined;\r",
+									"\r",
+									"pm.test(\"Enrollments success response/ 200\", function () {\r",
+									"\tpm.expect(responseCode.code).to.be.eql(200);\r",
+									"});\r",
+									"\r",
+									"// test content-type\r",
+									"pm.test(\"Content-Type header is present\", () => {\r",
+									"  pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.contain('application/json');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"X-Total-Count header is present\", () => {\r",
+									"  pm.response.to.have.header(\"X-Total-Count\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" + (maxResponseTime/1000) + \" seconds\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.lessThan(maxResponseTime);\r",
+									"});\r",
+									"\r",
+									"//if not 200, don't continue\r",
+									"if (responseCode.code === 200) {\r",
+									"\r",
+									"\tvar data = JSON.parse(responseBody);\r",
+									"\r",
+									"\tif (data.enrollments !== null && \r",
+									"        data.enrollments !== undefined && \r",
+									"        Array.isArray(data.enrollments)) {\r",
+									"\t\tretArray = data.enrollments;\r",
+									"\t\ttests[\"enrollments is array\"] = true;\r",
+									"\t} else {\r",
+									"\t\ttests[\"enrollments is array\"] = false;\r",
+									"\t}\r",
+									"\r",
+									"\t// array must exist\r",
+									"\tpm.test(\"Require array of User Enrollments\", function () {\r",
+									"\t\tpm.expect(retArray).to.be.an('array');\r",
+									"\t});\r",
+									"\r",
+									"\r",
+									"\t// array must have values\r",
+									"\tif (retArray != undefined) {\r",
+									"\t\tif (retArray.length >= 0)\r",
+									"\t\t\tret0 = retArray[0]\r",
+									"\r",
+									"\t\tpm.test(\"Enrollment array is not empty\", function () {\r",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"\t}\r",
+									"\r",
+									"\r",
+									"\r",
+									"\t// validations\r",
+									"\tif (ret0 != undefined) {\r",
+									"\r",
+									"\t\tpm.test(\"Require enrollment.sourcedId\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('sourcedId');\r",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"        pm.test(\"Require enrollment.sourcedId to be string\", function () {\r",
+									"\t\t\tpm.expect(ret0.sourcedId).to.be.a('string');\r",
+									"\t\t});\r",
+									"\r",
+									"\t\tpm.test(\"Require enrollment.role\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('role');\r",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"        //validate Role\r",
+									"\t\tpm.test(\"Require user enrollment.role.valid values\", function () {\r",
+									"\t\t\tpm.expect(ret0.role).to.be.oneOf(['administrator', 'aide', 'guardian', 'parent', 'proctor', 'relative', 'student', 'teacher']);\r",
+									"\t\t});\r",
+									"\r",
+									"\t\tpm.test(\"Require enrollment.status\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('status');\r",
+									"\t\t\tpm.expect(ret0.status).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"\t\tpm.test(\"Require enrollment.status valid values\", function () {\r",
+									"\t\t\tpm.expect(ret0.status).to.be.oneOf(['active', 'tobedeleted']);\r",
+									"\t\t});\r",
+									"\r",
+									"        // school is a nested object\r",
+									"\t\tpm.test(\"Require enrollment.school\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('school');\r",
+									"\t\t\tretSchool = ret0.school;\r",
+									"\t\t});\r",
+									"\r",
+									"\t\t// school is a nested object -- schoolSourcedId\r",
+									"\t\tpm.test(\"Require enrollment.school.sourcedId\", function () {\r",
+									"\t\t\tpm.expect(retSchool).to.have.property('sourcedId');\r",
+									"\t\t\tpm.expect(retSchool.sourcedId).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"        pm.test(\"Require enrollment.school.sourcedId to be string\", function () {\r",
+									"\t\t\tpm.expect(retSchool.sourcedId).to.be.a('string');\r",
+									"\t\t});\r",
+									"\r",
+									"\t\t// school is a nested object -- type\r",
+									"\t\tpm.test(\"Require enrollment.type\", function () {\r",
+									"\t\t\tpm.expect(retSchool).to.have.property('type');\r",
+									"\t\t\tpm.expect(retSchool.type).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"\t\t// validate org type\r",
+									"\t\tpm.test(\"Require school.enrollment.type valid values\", function () {\r",
+									"\t\t\tpm.expect(retSchool.type).to.be.oneOf(['department', 'school', 'district', 'local', 'state', 'national', 'org']);\r",
+									"\t\t});\r",
+									"\r",
+									"        // class is a nested object\r",
+									"\t\tpm.test(\"Require enrollment.class\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('class');\r",
+									"\t\t\tretClass = ret0.class;\r",
+									"\t\t});\r",
+									"\t\t// class is a nested object -- classSourcedId\r",
+									"\t\tpm.test(\"Require enrollment.class.sourcedId\", function () {\r",
+									"\t\t\tpm.expect(retClass).to.have.property('sourcedId');\r",
+									"\t\t\tpm.expect(retClass.sourcedId).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"        pm.test(\"Require enrollment.class.sourcedId to be string\", function () {\r",
+									"\t\t\tpm.expect(retClass.sourcedId).to.be.a('string');\r",
+									"\t\t});\r",
+									"\r",
+									"\t\t// class is a nested object -- type\r",
+									"\t\tpm.test(\"Require enrollment.class.type\", function () {\r",
+									"\t\t\tpm.expect(retClass).to.have.property('type');\r",
+									"\t\t\tpm.expect(retClass.type).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"\t\t// validate org type\r",
+									"\t\tpm.test(\"Require class enrollment.type valid values\", function () {\r",
+									"\t\t\tpm.expect(retClass.type).to.be.oneOf(['class']);\r",
+									"\t\t});\r",
+									"\r",
+									"        // user is a nested object\r",
+									"\t\tpm.test(\"Require enrollment.user\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('user');\r",
+									"\t\t\tretUser = ret0.user;\r",
+									"\t\t});\r",
+									"\r",
+									"\t\t// user is a nested object -- userSourcedId\r",
+									"\t\tpm.test(\"Require enrollment.user.sourcedId\", function () {\r",
+									"\t\t\tpm.expect(retUser).to.have.property('sourcedId');\r",
+									"\t\t\tpm.expect(retUser.sourcedId).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"        pm.test(\"Require enrollment.user.sourcedId to be string\", function () {\r",
+									"\t\t\tpm.expect(retUser.sourcedId).to.be.a('string');\r",
+									"\t\t});\r",
+									"\r",
+									"\t\t// user is a nested object -- type\r",
+									"\t\tpm.test(\"Require enrollment.user.type\", function () {\r",
+									"\t\t\tpm.expect(retUser).to.have.property('type');\r",
+									"\t\t\tpm.expect(retUser.type).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"\t\t// validate user type\r",
+									"\t\tpm.test(\"Require enrollment.type valid values\", function () {\r",
+									"\t\t\tpm.expect(retUser.type).to.be.oneOf(['user']);\r",
+									"\t\t});\r",
+									"\r",
+									"        pm.test(\"Require enrollment.dateLastModified\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('dateLastModified');\r",
+									"\t\t\tpm.expect(ret0.dateLastModified).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"        if (ret0.dateLastModified !== null && ret0.dateLastModified !== undefined)\r",
+									"        {    \r",
+									"           \tpm.test(\"Require enrollment.dateLastModified format\", function () {\r",
+									"                pm.expect(moment(ret0.dateLastModified.substring(0,19), 'YYYY-MM-DDTHH:mm:ss', true).isValid()).is.true;\r",
+									"\t\t    });\r",
+									"        }\r",
+									"\r",
+									"        // set session id env variable for paging test\r",
+									"\t\tpm.environment.set(\"enrollment_id\", ret0.sourcedId);\t\t\r",
+									"\t} // validations\r",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/enrollments?offset=0&limit=5000&filter=status='active'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"enrollments"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0",
+									"description": "The index of the first record to return. (zero indexed)"
+								},
+								{
+									"key": "limit",
+									"value": "5000",
+									"description": "Number of results to return from selected index"
+								},
+								{
+									"key": "filter",
+									"value": "status='active'"
+								}
+							]
+						},
+						"description": "Gets a page of enrollments"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Enrollments - Paging",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;\r",
+									"var ret0 = undefined;\r",
+									"\r",
+									"pm.test(\"Enrollments success response/ 200\", function () {\r",
+									"\tpm.expect(responseCode.code).to.be.eql(200);\r",
+									"});\r",
+									"\r",
+									"//if not 200, don't continue\r",
+									"if (responseCode.code === 200) {\r",
+									"\r",
+									"\tvar data = JSON.parse(responseBody);\r",
+									"\r",
+									"\tif (data.enrollments !== null && \r",
+									"        data.enrollments !== undefined && \r",
+									"        Array.isArray(data.enrollments)) {\r",
+									"\t\tretArray = data.enrollments;\r",
+									"\t\ttests[\"enrollments is array\"] = true;\r",
+									"\t} else {\r",
+									"\t\ttests[\"enrollments is array\"] = false;\r",
+									"\t}\r",
+									"\r",
+									"\t// array must exist\r",
+									"\tpm.test(\"Require array of User Enrollments\", function () {\r",
+									"\t\tpm.expect(retArray).to.be.an('array');\r",
+									"\t});\r",
+									"\r",
+									"    // array must have values\r",
+									"\tif (retArray != undefined) {\r",
+									"\t\tif (retArray.length >= 0)\r",
+									"\t\t\tret0 = retArray[0]\r",
+									"\r",
+									"\t\tpm.test(\"Enrollments array is not empty\", function () {\r",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"\t}\r",
+									"\r",
+									"\t// validations\r",
+									"\tif (ret0 != undefined) { \r",
+									"\r",
+									"\t\tpm.test(\"Require enrollment.sourcedId\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('sourcedId');\r",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"\t\tpm.test(\"Enrollments Paging Check -- sourcedId repeats on subsequent pages\", function () {\r",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql(pm.variables.get(\"enrollment_id\"));\r",
+									"\t\t});\r",
+									"\t} // validations\r",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/enrollments?offset=2&limit=1",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"enrollments"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "2"
+								},
+								{
+									"key": "limit",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Gets a page of enrollments"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Enrollments - No Records",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;\r",
+									"\r",
+									"pm.test(\"Enrollments success response/ 200\", function () {\r",
+									"\tpm.expect(responseCode.code).to.be.eql(200);\r",
+									"});\r",
+									"\r",
+									"//if not 200, don't continue\r",
+									"if (responseCode.code === 200) {\r",
+									"\r",
+									"\tvar data = JSON.parse(responseBody);\r",
+									"\r",
+									"\tif (data.enrollments !== null && \r",
+									"        data.enrollments !== undefined && \r",
+									"        Array.isArray(data.enrollments)) {\r",
+									"\t\tretArray = data.enrollments;\r",
+									"\t\ttests[\"enrollments is array\"] = true;\r",
+									"\t} else {\r",
+									"\t\ttests[\"enrollments is array\"] = false;\r",
+									"\t}\r",
+									"\r",
+									"\t// array must exist\r",
+									"\tpm.test(\"Require array of User Enrollments\", function () {\r",
+									"\t\tpm.expect(retArray).to.be.an('array');\r",
+									"\t});\r",
+									"\r",
+									"\t// array must be empty\r",
+									"\tif (retArray != undefined) {\r",
+									"\t\tpm.test(\"Enrollments array is empty\", function () {\r",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.empty;\r",
+									"\t\t});\r",
+									"\t}\t\r",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/enrollments?filter=sourcedId='norecords'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"enrollments"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "sourcedId='norecords'"
+								}
+							]
+						},
+						"description": "Gets a page of enrollments"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Enrollments - Delta",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;\r",
+									"var retLength = 10;\r",
+									"var moment = require('moment');\r",
+									"\r",
+									"pm.test(\"Enrollments success response/ 200\", function () {\r",
+									"\tpm.expect(responseCode.code).to.be.eql(200);\r",
+									"});\r",
+									"\r",
+									"//if not 200, don't continue\r",
+									"if (responseCode.code === 200) {\r",
+									"\r",
+									"\tvar data = JSON.parse(responseBody);\r",
+									"\r",
+									"\tif (data.enrollments !== null && \r",
+									"        data.enrollments !== undefined && \r",
+									"        Array.isArray(data.enrollments)) {\r",
+									"\t\tretArray = data.enrollments;\r",
+									"\t\ttests[\"enrollments is array\"] = true;\r",
+									"\t} else {\r",
+									"\t\ttests[\"enrollments is array\"] = false;\r",
+									"\t}\r",
+									"\r",
+									"\t// array must exist\r",
+									"\tpm.test(\"Require array of Enrollments\", function () {\r",
+									"\t\tpm.expect(retArray).to.be.an('array');\r",
+									"\t});\r",
+									"\r",
+									"\r",
+									"\t// array must have values\r",
+									"\tif (retArray != undefined) {\r",
+									"\t\tpm.test(\"Enrollment array is not empty\", function () {\r",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"        if (retArray.length < 10) retLength = retArray.length;\r",
+									"\t}\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"    paramModifiedDate = pm.variables.get(\"DeltaDateTime\");\r",
+									"    pm.test(\"environment variable DeltaDateTime must be set\", function() {\r",
+									"        //pm.expect(paramModifiedDate).isValid();\r",
+									"        pm.expect(paramModifiedDate.isNaN);\r",
+									"        pm.expect(paramModifiedDate).to.not.be.eql('');\r",
+									"    });\r",
+									"\r",
+									"        if (paramModifiedDate !== null && paramModifiedDate !== undefined)\r",
+									"        {    \r",
+									"           \tpm.test(\"environment variable DeltaDateTime must be format: YYYY-MM-DDTHH:mm:ssZ\", function () {\r",
+									"                pm.expect(moment(paramModifiedDate.substring(0,19), 'YYYY-MM-DDTHH:mm:ss', true).isValid()).is.true;\r",
+									"\t\t    });\r",
+									"        }\r",
+									"\r",
+									"    pm.test(\"Returns records only if enrollment.dateLastModified filter less than now\", function () {\r",
+									"        pm.expect(new Date(paramModifiedDate) <= new Date());\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Require environment variable DeltaDateTime is format YYYY-MM-DDTHH:mm:ssZ\", function () {\r",
+									"        var testDate = moment(paramModifiedDate);\r",
+									"         pm.expect(testDate.isValid()).is.true;\r",
+									"\t});\r",
+									"\r",
+									"if (retLength != undefined && retLength >=0 && retArray != undefined)\r",
+									"{\r",
+									"    for (var i=0; i<retLength; i++) {\r",
+									"\t    var retI = retArray[i];\r",
+									"        if (retI != undefined) {\r",
+									"            pm.test(\"Require delta enrollment.dateLastModified\", function () {\r",
+									"                pm.expect(retI).to.have.property('dateLastModified');\r",
+									"                pm.expect(retI.dateLastModified).to.not.be.eql('');\r",
+									"            });\r",
+									"\r",
+									"            pm.test(\"Require delta enrollment.dateLastModified to be at least filter dateLastModified\", function () {\r",
+									"                pm.expect(new Date(retI.dateLastModified) >= new Date(paramModifiedDate));\r",
+									"            });\r",
+									"        } \r",
+									"    }\r",
+									"}\r",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/enrollments?filter=dateLastModified>'{{DeltaDateTime}}'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"enrollments"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "dateLastModified>'{{DeltaDateTime}}'"
+								}
+							]
+						},
+						"description": "Gets a page of enrollments"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Courses",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;\r",
+									"var ret0 = undefined;\r",
+									"var moment = require('moment');\r",
+									"var maxResponseTime = 30000; //30 seconds\r",
+									"var retOrg = undefined;\r",
+									"\r",
+									"pm.test(\"Courses success response/ 200\", function () {\r",
+									"\tpm.expect(responseCode.code).to.be.eql(200);\r",
+									"});\r",
+									"\r",
+									"// test content-type\r",
+									"pm.test(\"Content-Type header is present\", () => {\r",
+									"  pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.contain('application/json');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"X-Total-Count header is present\", () => {\r",
+									"  pm.response.to.have.header(\"X-Total-Count\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" + (maxResponseTime/1000) + \" seconds\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.lessThan(maxResponseTime);\r",
+									"});\r",
+									"\r",
+									"//if not 200, don't continue\r",
+									"if (responseCode.code === 200) {\r",
+									"\r",
+									"\tvar data = JSON.parse(responseBody);\r",
+									"\r",
+									"\tif (data.courses !== null && \r",
+									"        data.courses !== undefined && \r",
+									"        Array.isArray(data.courses)) {\r",
+									"\t\tretArray = data.courses;\r",
+									"\t\ttests[\"courses is array\"] = true;\r",
+									"\t} else {\r",
+									"\t\ttests[\"courses is array\"] = false;\r",
+									"\t}\r",
+									"\r",
+									"\t// array must exist\r",
+									"\tpm.test(\"Require array of courses\", function () {\r",
+									"\t\tpm.expect(retArray).to.be.an('array');\r",
+									"\t});\r",
+									"\r",
+									"\r",
+									"\t// array must have values\r",
+									"\tif (retArray != undefined) {\r",
+									"\t\tif (retArray.length >= 0)\r",
+									"\t\t\tret0 = retArray[0]\r",
+									"\r",
+									"\t\tpm.test(\"courses array is not empty\", function () {\r",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"\t}\r",
+									"\r",
+									"\t// validations\r",
+									"\tif (ret0 != undefined) {\r",
+									"\r",
+									"\t\tpm.test(\"Require course.sourcedId\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('sourcedId');\r",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"        pm.test(\"Require course.sourcedId to be string\", function () {\r",
+									"\t\t\tpm.expect(ret0.sourcedId).to.be.a('string');\r",
+									"\t\t});\r",
+									"\r",
+									"\t\tpm.test(\"Require courses.status\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('status');\r",
+									"\t\t\tpm.expect(ret0.status).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"\t\tpm.test(\"Require courses.status valid values\", function () {\r",
+									"\t\t\tpm.expect(ret0.status).to.be.oneOf(['active', 'tobedeleted']);\r",
+									"\t\t});\r",
+									"\r",
+									"        pm.test(\"Require courses.title\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('title');\r",
+									"\t\t\tpm.expect(ret0.name).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"        // org is a nested object\r",
+									"\t\tpm.test(\"Require courses.org\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('org');\r",
+									"\t\t\tretOrg = ret0.org;\r",
+									"\t\t});\r",
+									"\r",
+									"\t\t// school is a nested object -- schoolSourcedId\r",
+									"\t\tpm.test(\"Require courses.org.sourcedId\", function () {\r",
+									"\t\t\tpm.expect(retOrg).to.have.property('sourcedId');\r",
+									"\t\t\tpm.expect(retOrg.sourcedId).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"        pm.test(\"Require courses.org.sourcedId to be string\", function () {\r",
+									"\t\t\tpm.expect(retOrg.sourcedId).to.be.a('string');\r",
+									"\t\t});\r",
+									"\r",
+									"        pm.test(\"Require courses.dateLastModified\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('dateLastModified');\r",
+									"\t\t\tpm.expect(ret0.dateLastModified).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"        if (ret0.dateLastModified !== null && ret0.dateLastModified !== undefined)\r",
+									"        {    \r",
+									"           \tpm.test(\"Require academicSession.dateLastModified format\", function () {\r",
+									"                pm.expect(moment(ret0.dateLastModified.substring(0,19), 'YYYY-MM-DDTHH:mm:ss', true).isValid()).is.true;\r",
+									"\t\t    });\r",
+									"        }\r",
+									"\r",
+									"        // set course id env variable for paging test\r",
+									"\t\tpm.environment.set(\"course_id\", ret0.sourcedId);\t\t\r",
+									"\t} // validations\r",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/courses?offset=0&limit=5000&filter=status='active'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"courses"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0",
+									"description": "The index of the first record to return. (zero indexed)"
+								},
+								{
+									"key": "limit",
+									"value": "5000",
+									"description": "Number of results to return from selected index"
+								},
+								{
+									"key": "filter",
+									"value": "status='active'"
+								}
+							]
+						},
+						"description": "Gets a page of enrollments"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Courses - Paging",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;\r",
+									"var ret0 = undefined;\r",
+									"\r",
+									"pm.test(\"Courses success response/ 200\", function () {\r",
+									"\tpm.expect(responseCode.code).to.be.eql(200);\r",
+									"});\r",
+									"\r",
+									"//if not 200, don't continue\r",
+									"if (responseCode.code === 200) {\r",
+									"\r",
+									"\tvar data = JSON.parse(responseBody);\r",
+									"\r",
+									"\tif (data.courses !== null && \r",
+									"        data.courses !== undefined && \r",
+									"        Array.isArray(data.courses)) {\r",
+									"\t\tretArray = data.courses;\r",
+									"\t\ttests[\"courses is array\"] = true;\r",
+									"\t} else {\r",
+									"\t\ttests[\"courses is array\"] = false;\r",
+									"\t}\r",
+									"\r",
+									"\t// array must exist\r",
+									"\tpm.test(\"Require array of courses\", function () {\r",
+									"\t\tpm.expect(retArray).to.be.an('array');\r",
+									"\t});\r",
+									"\r",
+									"    // array must have values\r",
+									"\tif (retArray != undefined) {\r",
+									"\t\tif (retArray.length >= 0)\r",
+									"\t\t\tret0 = retArray[0]\r",
+									"\r",
+									"\t\tpm.test(\"course array is not empty\", function () {\r",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"\t}\r",
+									"\r",
+									"\t// validations\r",
+									"\tif (ret0 != undefined) { \r",
+									"\r",
+									"\t\tpm.test(\"Require course.sourcedId\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('sourcedId');\r",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"\t\tpm.test(\"courses Paging Check -- sourcedId repeats on subsequent pages\", function () {\r",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql(pm.variables.get(\"course_id\"));\r",
+									"\t\t});\r",
+									"\t} // validations\r",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/courses?offset=2&limit=1",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"courses"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "2"
+								},
+								{
+									"key": "limit",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Gets a page of enrollments"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Courses - No Records",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;\r",
+									"\r",
+									"pm.test(\"Courses success response/ 200\", function () {\r",
+									"\tpm.expect(responseCode.code).to.be.eql(200);\r",
+									"});\r",
+									"\r",
+									"//if not 200, don't continue\r",
+									"if (responseCode.code === 200) {\r",
+									"\r",
+									"\tvar data = JSON.parse(responseBody);\r",
+									"\r",
+									"\tif (data.courses !== null && \r",
+									"        data.courses !== undefined && \r",
+									"        Array.isArray(data.courses)) {\r",
+									"\t\tretArray = data.courses;\r",
+									"\t\ttests[\"courses is array\"] = true;\r",
+									"\t} else {\r",
+									"\t\ttests[\"courses is array\"] = false;\r",
+									"\t}\r",
+									"\r",
+									"\t// array must exist\r",
+									"\tpm.test(\"Require array of courses\", function () {\r",
+									"\t\tpm.expect(retArray).to.be.an('array');\r",
+									"\t});\r",
+									"\r",
+									"\t// array must be empty\r",
+									"\tif (retArray != undefined) {\r",
+									"\t\tpm.test(\"courses array is empty\", function () {\r",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.empty;\r",
+									"\t\t});\r",
+									"\t}\t\r",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/courses?filter=sourcedId='norecords'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"courses"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "sourcedId='norecords'"
+								}
+							]
+						},
+						"description": "Gets a page of enrollments"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Courses - Delta",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;\r",
+									"var retLength = 10;\r",
+									"var moment = require('moment');\r",
+									"\r",
+									"pm.test(\"Courses success response/ 200\", function () {\r",
+									"\tpm.expect(responseCode.code).to.be.eql(200);\r",
+									"});\r",
+									"\r",
+									"//if not 200, don't continue\r",
+									"if (responseCode.code === 200) {\r",
+									"\r",
+									"\tvar data = JSON.parse(responseBody);\r",
+									"\r",
+									"\tif (data.courses !== null && \r",
+									"        data.courses !== undefined && \r",
+									"        Array.isArray(data.courses)) {\r",
+									"\t\tretArray = data.courses;\r",
+									"\t\ttests[\"courses is array\"] = true;\r",
+									"\t} else {\r",
+									"\t\ttests[\"courses is array\"] = false;\r",
+									"\t}\r",
+									"\r",
+									"\t// array must exist\r",
+									"\tpm.test(\"Require array of courses\", function () {\r",
+									"\t\tpm.expect(retArray).to.be.an('array');\r",
+									"\t});\r",
+									"\r",
+									"\r",
+									"\t// array must have values\r",
+									"\tif (retArray != undefined) {\r",
+									"\t\tpm.test(\"courses array is not empty\", function () {\r",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"        if (retArray.length < 10) retLength = retArray.length;\r",
+									"\t}\r",
+									"\r",
+									"    \r",
+									"\r",
+									"\r",
+									"    paramModifiedDate = pm.variables.get(\"DeltaDateTime\");\r",
+									"    pm.test(\"environment variable DeltaDateTime must be set\", function() {\r",
+									"        //pm.expect(paramModifiedDate).isValid();\r",
+									"        pm.expect(paramModifiedDate.isNaN);\r",
+									"        pm.expect(paramModifiedDate).to.not.be.eql('');\r",
+									"    });\r",
+									"\r",
+									"        if (paramModifiedDate !== null && paramModifiedDate !== undefined)\r",
+									"        {    \r",
+									"           \tpm.test(\"environment variable DeltaDateTime must be format: YYYY-MM-DDTHH:mm:ssZ\", function () {\r",
+									"                pm.expect(moment(paramModifiedDate.substring(0,19), 'YYYY-MM-DDTHH:mm:ss', true).isValid()).is.true;\r",
+									"\t\t    });\r",
+									"        }\r",
+									"\r",
+									"    pm.test(\"Returns records only if course.dateLastModified filter less than now\", function () {\r",
+									"        pm.expect(new Date(paramModifiedDate) <= new Date());\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Require environment variable DeltaDateTime is format YYYY-MM-DDTHH:mm:ssZ\", function () {\r",
+									"        var testDate = moment(paramModifiedDate);\r",
+									"         pm.expect(testDate.isValid()).is.true;\r",
+									"\t});\r",
+									"\r",
+									"if (retLength != undefined && retLength >=0 && retArray != undefined)\r",
+									"{\r",
+									"    for (var i=0; i<retLength; i++) {\r",
+									"\t    var retI = retArray[i];\r",
+									"        if (retI != undefined) {\r",
+									"            pm.test(\"Require delta course.dateLastModified\", function () {\r",
+									"                pm.expect(retI).to.have.property('dateLastModified');\r",
+									"                pm.expect(retI.dateLastModified).to.not.be.eql('');\r",
+									"            });\r",
+									"\r",
+									"            pm.test(\"Require delta course.dateLastModified to be at least filter dateLastModified\", function () {\r",
+									"                pm.expect(new Date(retI.dateLastModified) >= new Date(paramModifiedDate));\r",
+									"            });\r",
+									"        } \r",
+									"    }\r",
+									"}\r",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/courses?filter=dateLastModified>'{{DeltaDateTime}}'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"courses"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "dateLastModified>'{{DeltaDateTime}}'"
+								}
+							]
+						},
+						"description": "Gets a page of enrollments"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Demographics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;\r",
+									"var ret0 = undefined;\r",
+									"var moment = require('moment');\r",
+									"var maxResponseTime = 30000; //30 seconds\r",
+									"\r",
+									"pm.test(\"demographics success response/ 200\", function () {\r",
+									"\tpm.expect(responseCode.code).to.be.eql(200);\r",
+									"});\r",
+									"\r",
+									"// test content-type\r",
+									"pm.test(\"Content-Type header is present\", () => {\r",
+									"  pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.contain('application/json');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"X-Total-Count header is present\", () => {\r",
+									"  pm.response.to.have.header(\"X-Total-Count\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" + (maxResponseTime/1000) + \" seconds\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.lessThan(maxResponseTime);\r",
+									"});\r",
+									"\r",
+									"//if not 200, don't continue\r",
+									"if (responseCode.code === 200) {\r",
+									"\r",
+									"\tvar data = JSON.parse(responseBody);\r",
+									"\r",
+									"\tif (data.demographics !== null && \r",
+									"        data.demographics !== undefined && \r",
+									"        Array.isArray(data.demographics)) {\r",
+									"\t\tretArray = data.demographics;\r",
+									"\t\ttests[\"demographics is array\"] = true;\r",
+									"\t} else {\r",
+									"\t\ttests[\"demographics is array\"] = false;\r",
+									"\t}\r",
+									"\r",
+									"\t// array must exist\r",
+									"\tpm.test(\"Require array of demographics\", function () {\r",
+									"\t\tpm.expect(retArray).to.be.an('array');\r",
+									"\t});\r",
+									"\r",
+									"\t// array must have values\r",
+									"\tif (retArray != undefined) {\r",
+									"\t\tif (retArray.length >= 0)\r",
+									"\t\t\tret0 = retArray[0]\r",
+									"\r",
+									"\t\tpm.test(\"demographics array is not empty\", function () {\r",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"\t}\r",
+									"\r",
+									"\t// validations\r",
+									"\tif (ret0 != undefined) {\r",
+									"\r",
+									"\t\tpm.test(\"Require demographics.sourcedId\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('sourcedId');\r",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"        pm.test(\"Require demographics.sourcedId to be string\", function () {\r",
+									"\t\t\tpm.expect(ret0.sourcedId).to.be.a('string');\r",
+									"\t\t});\r",
+									"\r",
+									"        pm.test(\"Require demographics.dateLastModified\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('dateLastModified');\r",
+									"\t\t\tpm.expect(ret0.dateLastModified).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"        if (ret0.dateLastModified !== null && ret0.dateLastModified !== undefined)\r",
+									"        {    \r",
+									"           \tpm.test(\"Require demographics.dateLastModified format\", function () {\r",
+									"                pm.expect(moment(ret0.dateLastModified.substring(0,19), 'YYYY-MM-DDTHH:mm:ss', true).isValid()).is.true;\r",
+									"\t\t    });\r",
+									"        }\r",
+									"        \r",
+									"        // set course id env variable for paging test\r",
+									"\t\tpm.environment.set(\"demographics_id\", ret0.sourcedId);\t\t\r",
+									"\t} // validations\r",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/demographics?offset=0&limit=5000&filter=status='active'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"demographics"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0",
+									"description": "The index of the first record to return. (zero indexed)"
+								},
+								{
+									"key": "limit",
+									"value": "5000",
+									"description": "Number of results to return from selected index"
+								},
+								{
+									"key": "filter",
+									"value": "status='active'"
+								}
+							]
+						},
+						"description": "Gets a page of enrollments"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Demographics - Paging Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;\r",
+									"var ret0 = undefined;\r",
+									"\r",
+									"pm.test(\"Demographics success response/ 200\", function () {\r",
+									"\tpm.expect(responseCode.code).to.be.eql(200);\r",
+									"});\r",
+									"\r",
+									"//if not 200, don't continue\r",
+									"if (responseCode.code === 200) {\r",
+									"\r",
+									"\tvar data = JSON.parse(responseBody);\r",
+									"\r",
+									"\tif (data.demographics !== null && \r",
+									"        data.demographics !== undefined && \r",
+									"        Array.isArray(data.demographics)) {\r",
+									"\t\tretArray = data.demographics;\r",
+									"\t\ttests[\"demographics is array\"] = true;\r",
+									"\t} else {\r",
+									"\t\ttests[\"demographics is array\"] = false;\r",
+									"\t}\r",
+									"\r",
+									"\t// array must exist\r",
+									"\tpm.test(\"Require array of demographics\", function () {\r",
+									"\t\tpm.expect(retArray).to.be.an('array');\r",
+									"\t});\r",
+									"\r",
+									"    // array must have values\r",
+									"\tif (retArray != undefined) {\r",
+									"\t\tif (retArray.length >= 0)\r",
+									"\t\t\tret0 = retArray[0]\r",
+									"\r",
+									"\t\tpm.test(\"demographics array is not empty\", function () {\r",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"\t}\r",
+									"\r",
+									"\t// validations\r",
+									"\tif (ret0 != undefined) { \r",
+									"\r",
+									"\t\tpm.test(\"Require demographics.sourcedId\", function () {\r",
+									"\t\t\tpm.expect(ret0).to.have.property('sourcedId');\r",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql('');\r",
+									"\t\t});\r",
+									"\r",
+									"\t\tpm.test(\"demographics Paging Check -- sourcedId repeats on subsequent pages\", function () {\r",
+									"\t\t\tpm.expect(ret0.sourcedId).to.not.be.eql(pm.variables.get(\"demographics_id\"));\r",
+									"\t\t});\r",
+									"\t} // validations\r",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/demographics?offset=2&limit=1",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"demographics"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "2"
+								},
+								{
+									"key": "limit",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Gets a page of enrollments"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Demographics - No Records",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;\r",
+									"\r",
+									"pm.test(\"Demographics success response/ 200\", function () {\r",
+									"\tpm.expect(responseCode.code).to.be.eql(200);\r",
+									"});\r",
+									"\r",
+									"//if not 200, don't continue\r",
+									"if (responseCode.code === 200) {\r",
+									"\r",
+									"\tvar data = JSON.parse(responseBody);\r",
+									"\r",
+									"\tif (data.demographics !== null && \r",
+									"        data.demographics !== undefined && \r",
+									"        Array.isArray(data.demographics)) {\r",
+									"\t\tretArray = data.demographics;\r",
+									"\t\ttests[\"demographics is array\"] = true;\r",
+									"\t} else {\r",
+									"\t\ttests[\"demographics is array\"] = false;\r",
+									"\t}\r",
+									"\r",
+									"\t// array must exist\r",
+									"\tpm.test(\"Require array of User demographics\", function () {\r",
+									"\t\tpm.expect(retArray).to.be.an('array');\r",
+									"\t});\r",
+									"\r",
+									"\t// array must be empty\r",
+									"\tif (retArray != undefined) {\r",
+									"\t\tpm.test(\"demographics array is empty\", function () {\r",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.empty;\r",
+									"\t\t});\r",
+									"\t}\t\r",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/demographics?filter=sourcedId='norecords'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"demographics"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "sourcedId='norecords'"
+								}
+							]
+						},
+						"description": "Gets a page of enrollments"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Demographics - Delta",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var retArray = undefined;\r",
+									"var retLength = 10;\r",
+									"var moment = require('moment');\r",
+									"\r",
+									"pm.test(\"demographics success response/ 200\", function () {\r",
+									"\tpm.expect(responseCode.code).to.be.eql(200);\r",
+									"});\r",
+									"\r",
+									"//if not 200, don't continue\r",
+									"if (responseCode.code === 200) {\r",
+									"\r",
+									"\tvar data = JSON.parse(responseBody);\r",
+									"\r",
+									"\tif (data.demographics !== null && \r",
+									"        data.demographics !== undefined && \r",
+									"        Array.isArray(data.demographics)) {\r",
+									"\t\tretArray = data.demographics;\r",
+									"\t\ttests[\"demographics is array\"] = true;\r",
+									"\t} else {\r",
+									"\t\ttests[\"demographics is array\"] = false;\r",
+									"\t}\r",
+									"\r",
+									"\t// array must exist\r",
+									"\tpm.test(\"Require array of demographics\", function () {\r",
+									"\t\tpm.expect(retArray).to.be.an('array');\r",
+									"\t});\r",
+									"\r",
+									"\t// array must have values\r",
+									"\tif (retArray != undefined) {\r",
+									"\t\tpm.test(\"demographics array is not empty\", function () {\r",
+									"\t\t\tpm.expect(retArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"        if (retArray.length < 10) retLength = retArray.length;\r",
+									"\t}\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"    paramModifiedDate = pm.variables.get(\"DeltaDateTime\");\r",
+									"    pm.test(\"environment variable DeltaDateTime must be set\", function() {\r",
+									"        //pm.expect(paramModifiedDate).isValid();\r",
+									"        pm.expect(paramModifiedDate.isNaN);\r",
+									"        pm.expect(paramModifiedDate).to.not.be.eql('');\r",
+									"    });\r",
+									"\r",
+									"        if (paramModifiedDate !== null && paramModifiedDate !== undefined)\r",
+									"        {    \r",
+									"           \tpm.test(\"environment variable DeltaDateTime must be format: YYYY-MM-DDTHH:mm:ssZ\", function () {\r",
+									"                pm.expect(moment(paramModifiedDate.substring(0,19), 'YYYY-MM-DDTHH:mm:ss', true).isValid()).is.true;\r",
+									"\t\t    });\r",
+									"        }\r",
+									"\r",
+									"    pm.test(\"Returns records only if demographics.dateLastModified filter less than now\", function () {\r",
+									"        pm.expect(new Date(paramModifiedDate) <= new Date());\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Require environment variable DeltaDateTime is format YYYY-MM-DDTHH:mm:ssZ\", function () {\r",
+									"        var testDate = moment(paramModifiedDate);\r",
+									"         pm.expect(testDate.isValid()).is.true;\r",
+									"\t});\r",
+									"\r",
+									"if (retLength != undefined && retLength >=0 && retArray != undefined)\r",
+									"{\r",
+									"    for (var i=0; i<retLength; i++) {\r",
+									"\t    var retI = retArray[i];\r",
+									"        if (retI != undefined) {\r",
+									"            pm.test(\"Require delta demographics.dateLastModified\", function () {\r",
+									"                pm.expect(retI).to.have.property('dateLastModified');\r",
+									"                pm.expect(retI.dateLastModified).to.not.be.eql('');\r",
+									"            });\r",
+									"\r",
+									"            pm.test(\"Require delta demographics.dateLastModified to be at least filter dateLastModified\", function () {\r",
+									"                pm.expect(new Date(retI.dateLastModified) >= new Date(paramModifiedDate));\r",
+									"            });\r",
+									"        } \r",
+									"    }\r",
+									"}\r",
+									"} // 200"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/demographics?filter=dateLastModified>'{{DeltaDateTime}}'",
+							"host": [
+								"{{OneRosterHost}}"
+							],
+							"path": [
+								"ims",
+								"oneroster",
+								"v1p1",
+								"demographics"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "dateLastModified>'{{DeltaDateTime}}'"
+								}
+							]
+						},
+						"description": "Gets a page of enrollments"
+					},
+					"response": []
 				}
 			]
 		}
