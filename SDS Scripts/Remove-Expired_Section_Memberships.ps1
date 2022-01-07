@@ -16,7 +16,7 @@ Version 1.0, 8/08/206 - First Draft
 #>
 
 Connect-AzureAD
-$Groups = Get-AzureADGroup -All:$true | ? {$_.DisplayName -like "Exp*"}
+$Groups = Get-AzureADGroup -All:$true | Where-Object {$_.DisplayName -match '^Exp[0-9]{4}'}
 $Count = $Groups.count
 Write-host -ForegroundColor Green "Found $Count Classes Marked Expired. Starting Cleanup - Remove Members"
 
