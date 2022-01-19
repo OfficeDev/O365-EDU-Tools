@@ -46,9 +46,12 @@ function Get-PrerequisiteHelp
  Required Prerequisites
 ========================
 
-1. Install Microsoft Graph Powershell Module and Exchange Online Management Module with commands 'Install-Module Microsoft.Graph' and 'Install-Module ExchangeOnlineManagement'
+1. Verify all prior Infomration Barrier segment/policies are removed from environment. 
+1a. Verify IB version  has been uplifted to IBv3.
 
-2. Check that you can connect to your tenant directory from the PowerShell module to make sure everything is set up correctly.
+2. Install Microsoft Graph Powershell Module and Exchange Online Management Module with commands 'Install-Module Microsoft.Graph' and 'Install-Module ExchangeOnlineManagement'
+
+3. Check that you can connect to your tenant directory from the PowerShell module to make sure everything is set up correctly.
 
     a. Open a separate PowerShell session
     
@@ -58,9 +61,9 @@ function Get-PrerequisiteHelp
     
     d. If you are returned to the PowerShell session without error, you are correctly set up
 
-3.  Ensure that All Teachers security group is enabled in SDS and exists in Azure Active Directory.  
+4.  Ensure that All Teachers security group is enabled in SDS and exists in Azure Active Directory.  
 
-4.  Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working and do the same for the Exchange Online Management Module.
+5.  Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working and do the same for the Exchange Online Management Module.
 
 (END)
 ========================
