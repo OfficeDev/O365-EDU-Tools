@@ -1,13 +1,15 @@
 <#
-Script Name:
-Create-SDS_Information_Barriers.ps1
+.SYNOPSIS
+This script is designed to create Information Barrier Policies for each SDS School AU and the 'All Teachers' Security Group created by SDS from an O365 tenant. 
 
-Synopsis:
-This script is designed to create Information Barrier Policies for each SDS School AU and the 'All Teachers' Security Group created by SDS from an O365 tenant. It will read from Azure, and output the administrative units to a csv.  Afterwards, you are prompted to confirm that you want to create the organization segments needed, then create and apply the information barrier policies.  A folder will be created in the same directory as the script itself and contains a log file which details the organization segments and information barrier policies created.  Nextlink in the log can be used for the skipToken script parameter to continue where the script left off in case it does not finish.  
+.DESCRIPTION
+This script will read from Azure, and output the administrative units to a csv.  Afterwards, you are prompted to confirm that you want to create the organization segments needed, then create and apply the information barrier policies.  A folder will be created in the same directory as the script itself and contains a log file which details the organization segments and information barrier policies created.  Nextlink in the log can be used for the skipToken script parameter to continue where the script left off in case it does not finish.  
 
-Syntax Examples and Options:
-.\Create-SDS_Information_Barriers.ps1
+.EXAMPLE
+PS> .\Create-SDS_Information_Barriers.ps1
 
+.NOTES
+This script uses features required by Information Barriers version 3 or above enabled in your tenant.  Existing Organization Segments and Information Barriers created by a legacy version should be removed prior to upgrading.
 #>
 
 Param (
@@ -46,8 +48,9 @@ function Get-PrerequisiteHelp
  Required Prerequisites
 ========================
 
-1. Verify all prior Infomration Barrier segment/policies are removed from environment. 
-1a. Verify IB version  has been uplifted to IBv3.
+1. This script uses features required by Information Barriers version 3 or above enabled in your tenant.  
+
+    a.  Existing Organization Segments and Information bBrriers created by a legacy version should be removed prior to upgrading.
 
 2. Install Microsoft Graph Powershell Module and Exchange Online Management Module with commands 'Install-Module Microsoft.Graph' and 'Install-Module ExchangeOnlineManagement'
 
