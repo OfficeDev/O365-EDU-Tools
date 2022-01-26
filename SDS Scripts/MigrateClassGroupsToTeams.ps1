@@ -8,7 +8,7 @@
     Helps create Microsoft Teams teams from previously created Class Team unified groups
 
 Syntax Examples and Options:
-.\Remove-SchoolSG_Memberships.ps1 -UPN "user@contoso.com"
+.\MigrateClassGroupsToTeams.ps1 -UPN "user@contoso.com"
 #>
 
 param
