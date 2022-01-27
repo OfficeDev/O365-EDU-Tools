@@ -72,10 +72,10 @@ function Remove-IntuneLicenses {
     Foreach ($user in $intuneUsers) {
         Write-Output "[$(Get-Date -Format G)] Adding the Intune EDU license to  $($user.userPrincipalName) from school AUs." | Out-File $logFilePath -Append
         try {
-            $setLicenseResponse = Set-MgUserLicense -UserId $user.userId -AddLicenses @{} -RemoveLicenses @($intuneSkuId) -ErrorAction Stop | Out-Null
+            Set-MgUserLicense -UserId $user.userId -AddLicenses @{} -RemoveLicenses @($intuneSkuId) -ErrorAction Stop | Out-Null
         }
         catch {
-            $errorMessage = $_.Exception.Response.ToString()
+            $errorMessage = $_.ToString()
             "[$(Get-Date -Format G)] Error removing the Intune EDU license from $($user.userPrincipalName)`n$errorMessage" | Tee-Object -FilePath $logFilePath -Append | Write-Host -ForegroundColor Red
         }
         $userCnt++
