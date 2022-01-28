@@ -1,10 +1,10 @@
-<# 
-.Synopsis 
-This script is designed to get all users who don't have Intune for Education licenses currently, and adds them. 
+<#
+.Synopsis
+This script is designed to get all users who do not have Intune for Education licenses currently, and adds them.
 
 .Description
 The script will interact with Microsoft online resources using the Graph module.  Once connected, the script will pull the users' license information. A folder will be created in the same directory as the script itself containing log file and a csv file with the data previously mentioned.  Once the data is pulled, you are prompted to confirm that you want to update users' licenses contained in the csv.
-  
+
 .Example
 .\Add-Intune_Licenses.ps1
 
@@ -25,13 +25,13 @@ The script will interact with Microsoft online resources using the Graph module.
 
     c. Sign in with any tenant administrator credentials.
 
-    d. If you are returned to the PowerShell session without error, you are correctly set up
+    d. If you are returned to the PowerShell session without error, you are correctly set up.
 
 3.  Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication" isn't working.
 
-4.  Please visit the following link if a message is received that the license cannot be assigned.  
+4.  Please visit the following link if a message is received that the license cannot be assigned.
     https://docs.microsoft.com/en-us/azure/active-directory/enterprise-users/licensing-groups-resolve-problems
-#> 
+#>
 
 $outFolder = ".\AddIntuneLicenses"
 $logFilePath = "$outFolder\addIntuneLicenses.log"
@@ -45,7 +45,7 @@ function Get-NonIntuneUsers {
         Remove-Item $csvFilePath;
     }
 
-    # Get all users 
+    # Get all users
     Write-Progress -Activity "Reading AAD" -Status "Fetching users"
     $users = Get-MgUser -All | Select-Object id, userPrincipalName
     $nonIntuneUsers = @() # Array of objects for user
@@ -56,8 +56,7 @@ function Get-NonIntuneUsers {
         $userLicenseSkus = (Get-MgUserLicenseDetail -UserId $user.id).SkuPartNumber
         $userLicenseSkuList = $userLicenseSkus -join ","
 
-        if ($userLicenseSkuList -notlike "*INTUNE_EDU*") {   
-
+        if ($userLicenseSkuList -notlike "*INTUNE_EDU*") {
             # Create object required for export-csv and add to array
             $nonIntuneUsers += [pscustomobject]@{"UserId"=$user.id;"UserPrincipalName"=$user.userPrincipalName;"LicenseSkus"=$userLicenseSkuList}
         }
@@ -72,7 +71,7 @@ function Add-IntuneLicenses {
     $nonIntuneUsers = Import-Csv $csvfilePath
     $userCnt = 0 # Counter for users
 
-    # Add the Intune License for any users that dont currently have it
+    # Add the Intune License for any users that do not currently have it
     Foreach ($user in $nonIntuneUsers) {
         Write-Output "[$(Get-Date -Format G)] Adding the Intune EDU license to $($user.userPrincipalName) from school AUs." | Out-File $logFilePath -Append
         try {
@@ -108,7 +107,7 @@ if ((Test-Path $outFolder) -eq 0)
 
 Connect-MgGraph
 
-# Get the Intnue sku and set a string variable
+# Get the Intune sku and set a string variable
 $intuneSkuId = (Get-MgSubscribedSku | ? {$_.SkuPartNumber -match "INTUNE_EDU"}).skuId
 
 Write-Host "`nActivity logged to file $logFilePath `n" -ForegroundColor Green

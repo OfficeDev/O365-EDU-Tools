@@ -1,11 +1,11 @@
-<# 
+<#
 .Synopsis
-This script is designed to get all users who have Intune for Education licenses currently, and removes them. 
+This script is designed to get all users who have Intune for Education licenses currently, and removes them.
 
 .Description
 The script will interact with Microsoft online resources using the Graph module.  Once connected, the script will pull the users' license information. A folder will be created in the same directory as the script itself containing log file and a csv file with the data previously mentioned.  Once the data is pulled, you are prompted to confirm that you want to update users' licenses contained in the csv.
 
-.Example 
+.Example
 .\Remove-Intune_Licenses.ps1
 
 .Notes
@@ -21,14 +21,14 @@ The script will interact with Microsoft online resources using the Graph module.
 
     a. Open a separate PowerShell session
 
-    b. Execute: "Connect-MgGraph" to bring up a sign-in UI. 
+    b. Execute: "Connect-MgGraph" to bring up a sign-in UI.
 
     c. Sign in with any tenant administrator credentials.
 
     d. If you are returned to the PowerShell session without error, you are correctly set up
 
 3.  Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication" isn't working.
-#> 
+#>
 
 $outFolder = ".\RemoveIntuneLicenses"
 $logFilePath = "$outFolder\removeIntuneLicenses.log"
@@ -43,7 +43,7 @@ function Get-IntuneUsers {
     }
 
     # Get all users
-    Write-Progress -Activity "Reading AAD" -Status "Fetching users" 
+    Write-Progress -Activity "Reading AAD" -Status "Fetching users"
     $users = Get-MgUser -All | Select-Object id, userPrincipalName
     $intuneUsers = @() # Array of objects for user
     $userCnt = 0 # Counter for license retrieval progress
@@ -52,8 +52,7 @@ function Get-IntuneUsers {
         # Check if user has Intune License
         $userLicenseSkuId = (Get-MgUserLicenseDetail -UserId $user.id | ? {$_.SkuPartNumber -match "INTUNE_EDU"}).skuId
         
-        if ($userLicenseSkuId -eq $intuneSkuId) {   
-
+        if ($userLicenseSkuId -eq $intuneSkuId) {
             # Create object required for export-csv and add to array
             $intuneUsers += [pscustomobject]@{"UserId"=$user.id;"UserPrincipalName"=$user.userPrincipalName}
         }
@@ -104,7 +103,7 @@ if ((Test-Path $outFolder) -eq 0)
 
 Connect-MgGraph
 
-# Get the Intnue sku and set a string variable
+# Get the Intune sku and set a string variable
 $intuneSkuId = (Get-MgSubscribedSku | ? {$_.SkuPartNumber -match "INTUNE_EDU"}).skuId
 
 Write-Host "`nActivity logged to file $logFilePath `n" -ForegroundColor Green
