@@ -31,7 +31,7 @@ if ($downloadCommonFNs){
     #Downloading file with latest common functions
     try {
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
-        "Grabbed 'common.ps1' to currrent directory"
+        "Grabbed 'common.ps1' to current directory"
     } 
     catch {
         throw "Unable to download common.ps1"
@@ -119,7 +119,7 @@ function Get-AllSchoolAUs {
 
 function Create-InformationBarriersFromSchoolAUs {
     
-    $allSchoolAUs = Import-Csv $csvfilePath | Sort-Object * -Unique #Import school AUs retrieved and remove dupes if occured from skipToken retry.  
+    $allSchoolAUs = Import-Csv $csvfilePath | Sort-Object * -Unique #Import school AUs retrieved and remove dupes if occurred from skipToken retry.  
     $i = 0 #Counter for progress of IB creation
         
     #Looping through all school AUs
@@ -129,7 +129,7 @@ function Create-InformationBarriersFromSchoolAUs {
         {
             Write-Host "Processing $($au.AUDisplayName)"
 
-            #Creating Ogranization Segment from SDS School Administrative Unit for the Information Barrier
+            #Creating Organization Segment from SDS School Administrative Unit for the Information Barrier
             try {
                 New-OrganizationSegment -Name $au.AUDisplayName -UserGroupFilter "AdministrativeUnits -eq '$($au.AUDisplayName)'" -ErrorAction Stop | Out-Null
                 Write-Output "[$(Get-Date -Format G)] Created organization segment $($au.AUDisplayName) from school AUs." | Out-File $logFilePath -Append
@@ -141,7 +141,7 @@ function Create-InformationBarriersFromSchoolAUs {
             #Creating Information Barrier Policies from SDS School Administrative Unit
             try {
                 New-InformationBarrierPolicy -Name "$($au.AUDisplayName) - IB" -AssignedSegment $au.AUDisplayName -SegmentsAllowed $au.AUDisplayName -State Active -Force -ErrorAction Stop | Out-Null
-                Write-Output "[$(Get-Date -Format G)] Created Information Barrier Policy $($au.AUDisplayName) from organizaiton segment" | Out-File $logFilePath -Append
+                Write-Output "[$(Get-Date -Format G)] Created Information Barrier Policy $($au.AUDisplayName) from Organization Segment" | Out-File $logFilePath -Append
             }
             catch {
                 Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
@@ -169,7 +169,7 @@ function Create-InformationBarriersFromTeacherSG {
         Write-Output "[$(Get-Date -Format G)] Retrieved $($teacherSG.displayName)." | Out-File $logFilePath -Append
     }
     catch{
-        throw "Could not retreive 'All Teachers' Security Group.  Please make sure that it is enabled in SDS."
+        throw "Could not retrieve 'All Teachers' Security Group.  Please make sure that it is enabled in SDS."
     }
 
     try {
@@ -247,7 +247,7 @@ Connect-IPPSSession | Out-Null
 Get-AllSchoolAUs
 
 Write-Host "`nYou are about to create organization segments and information barrier policies from SDS school administrative units. `nIf you want to skip any administrative units, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
-Write-Host "Proceed with creating organization segments and information barrier policies logged from SDS school administrative units logged in $csvFilePath (yes/no)?" -ForegroundColor Yellow
+Write-Host "Proceed with creating organization segments and information barrier policies from SDS school administrative units logged in $csvFilePath (yes/no)?" -ForegroundColor Yellow
     
 $choiceSchoolIB = Read-Host
 if ($choiceSchoolIB -ieq "y" -or $choiceSchoolIB -ieq "yes") {
