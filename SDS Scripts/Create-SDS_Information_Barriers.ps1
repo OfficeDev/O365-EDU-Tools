@@ -86,7 +86,7 @@ function Get-AllSchoolAUs {
     $initialSDSSchoolAUsUri = "$graphEndPoint/beta/directory/administrativeUnits?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'School'&$auSelectClause"
         
     #Getting AUs for all schools
-    Write-Output "`nRetreiving SDS School Administrative Units`n"
+    Write-Output "`nRetrieving SDS School Administrative Units`n"
     $checkedSDSSchoolAUsUri = TokenSkipCheck $initialSDSSchoolAUsUri
     
     $allSchoolAUs = @() #array of objects for pages of school AUs
