@@ -50,7 +50,7 @@ function Get-PrerequisiteHelp
 
 1. This script uses features required by Information Barriers version 3 or above enabled in your tenant.  
 
-    a.  Existing Organization Segments and Information bBrriers created by a legacy version should be removed prior to upgrading.
+    a.  Existing Organization Segments and Information Barriers created by a legacy version should be removed prior to upgrading.
 
 2. Install Microsoft Graph Powershell Module and Exchange Online Management Module with commands 'Install-Module Microsoft.Graph' and 'Install-Module ExchangeOnlineManagement'
 
