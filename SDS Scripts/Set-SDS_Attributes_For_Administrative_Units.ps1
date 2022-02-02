@@ -63,11 +63,11 @@ function Get-AdministrativeUnits {
     }
 
     $auList = @() # Array of objects for AUs
-    $pageCnt = 1 # Counts the number of pages of users retrieved
+    $pageCnt = 1 # Counts the number of pages of AUs retrieved
     $lastRefreshed = $null # Used for refreshing connection
 
     # Get all AU's of Edu Object Type School
-    Write-Progress -Activity "Reading AAD" -Status "Fetching users"
+    Write-Progress -Activity "Reading AAD" -Status "Fetching AU's"
 
     do {
         # Check if need to renew connection
