@@ -93,8 +93,7 @@ catch{
 if ( !($grp.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType) ) { # Filtering out group already with SDS attribute
     $uri = "$graphEndPoint/$graphVersion/groups/" + $groupId
     $requestBody = '{
-        "extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType": "AllTeachersSecurityGroup",
-        "extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource": "Manual"
+        "extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType": "AllTeachersSecurityGroup"
     }'
 
     $result = Invoke-GraphRequest -Method Patch -Uri $uri -body $requestBody -ContentType "application/json" -SkipHttpErrorCheck
