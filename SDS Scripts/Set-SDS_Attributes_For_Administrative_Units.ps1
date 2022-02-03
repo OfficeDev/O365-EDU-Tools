@@ -132,7 +132,7 @@ function Set-SDS_Attributes_For_AUs {
         
             $result = Invoke-GraphRequest -Method Patch -Uri $uri -body $requestBody -ContentType "application/json" -SkipHttpErrorCheck
 
-            Write-Progress -Activity "Removing users." -Status "Progress ->" -PercentComplete ($auCtr/$auCount.count*100)
+            Write-Progress -Activity "Adding SDS attributes to administrative units" -Status "Progress ->" -PercentComplete ($auCtr/$auCount.count*100)
         }
     }
 }
