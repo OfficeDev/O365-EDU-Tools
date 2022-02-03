@@ -157,17 +157,6 @@ catch
     throw
 }
 
-try 
-{
-    Import-Module ExchangeOnlineManagement | Out-Null
-}
-catch
-{
-    Write-Error "Failed to load Exchange Online Management Module for creating Information Barriers"
-    Get-PrerequisiteHelp | Out-String | Write-Error
-    throw
-}
-
 # Create output folder if it does not exist
 if ((Test-Path $outFolder) -eq 0)
 {
