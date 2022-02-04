@@ -89,22 +89,22 @@ function Get-SecurityGroups {
             $grpUri = $skipToken
         }
 
-        $graphResponse = Invoke-Graphrequest -Uri $grpUri -Method GET
-        $grps = $graphResponse.value
+        $grpResponse = Invoke-Graphrequest -Uri $grpUri -Method GET
+        $grps = $grpResponse.value
         
         $grpCtr = 1 # Counter for security groups retrieved
         
         foreach ($grp in $grps){
-            # if ( !($grp.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource) ) { # Filtering out security groups already with SDS attribute
-                $grpList += [pscustomobject]@{"GroupObjectId"=$grp.Id;"GroupDisplayName"=$grp.DisplayName;"SyncSource"=$grp.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource;"Type"=$grp.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType}
+            if ( !($grp.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType) ) { # Filtering out security groups already with SDS attribute
+                $grpList += [pscustomobject]@{"GroupObjectId"=$grp.Id;"GroupDisplayName"=$grp.DisplayName}
                 $grpCtr++
-            # }
+            }
         }
 
         Write-Progress -Activity "Retrieving security groups..." -Status "Retrieved $grpCtr security groups from $pageCnt pages"
         
         # Write nextLink to log if need to restart from previous page
-        Write-Output "[$(Get-Date -Format G)] Retrieved $pageCnt security group pages. nextLink: $($graphResponse.'@odata.nextLink')" | Out-File $logFilePath -Append
+        Write-Output "[$(Get-Date -Format G)] Retrieved $pageCnt security group pages. nextLink: $($grpResponse.'@odata.nextLink')" | Out-File $logFilePath -Append
         $pageCnt++
 
     } while ($grpResponse.'@odata.nextLink')  
