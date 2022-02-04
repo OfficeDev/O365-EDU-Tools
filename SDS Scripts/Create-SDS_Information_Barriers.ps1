@@ -148,7 +148,7 @@ function Create-InformationBarriersFromSchoolAUs {
             }
         }
         $i++
-        Write-Progress -Activity "`nCreating Ogranization Segments and Information Barrier Policies based from SDS School Administrative Units" -Status "Progress ->" -PercentComplete ($i/$allSchoolAUs.count*100)
+        Write-Progress -Activity "`nCreating Organization Segments and Information Barrier Policies based from SDS School Administrative Units" -Status "Progress ->" -PercentComplete ($i/$allSchoolAUs.count*100)
     }
     return
 }
