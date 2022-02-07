@@ -73,7 +73,7 @@ function Get-AdministrativeUnits {
         # Check if need to renew connection
         $currentDT = Get-Date
         if ($lastRefreshed -eq $null -or (New-TimeSpan -Start $currentDT -End $lastRefreshed).Minutes -gt 10) {
-            Connect-Graph -scope "AdministrativeUnit.Read.All, Directory.Read.All, AdministrativeUnit.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All" | Out-Null
+            Connect-Graph -scopes "AdministrativeUnit.Read.All, Directory.Read.All, AdministrativeUnit.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All" | Out-Null
             $lastRefreshed = Get-Date
         }
 
@@ -166,7 +166,7 @@ if ((Test-Path $outFolder) -eq 0)
 Write-Host "`nActivity logged to file $logFilePath `n" -ForegroundColor Green
 
 # Connecting to resources
-Connect-Graph -scope "AdministrativeUnit.Read.All, Directory.Read.All, AdministrativeUnit.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All"
+Connect-Graph -scopes "AdministrativeUnit.Read.All, Directory.Read.All, AdministrativeUnit.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All"
 
 Get-AdministrativeUnits
 Set-SDS_Attributes_For_AUs
