@@ -18,8 +18,8 @@ Param (
     [Parameter(Mandatory=$false)]
     [string] $outFolder = ".\non_SDS_InformationBarriers",
     [Parameter(Mandatory=$false)]
+    [string] $graphVersion = "beta",
     [switch] $downloadCommonFNs = $true,
-    [Parameter(Mandatory=$false)]
     [switch] $PPE = $false
 )
 
@@ -83,27 +83,26 @@ function Get-AdministrativeUnits {
 
     $pageCnt = 1 # Counts the number of pages of AUs retrieved
     $lastRefreshed = $null # Used for refreshing connection
+    $auUri = "$graphEndPoint/$graphVersion/directory/administrativeUnits?`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource"
 
     # Get all AU's
     Write-Progress -Activity "Reading AAD" -Status "Fetching AU's"
 
     do {
+        if ($skipToken -ne "." ) {
+            $auUri = $skipToken
+        }
+
         $auList = @() # Array of objects for AUs
 
         # Check if need to renew connection
         $currentDT = Get-Date
         if ($lastRefreshed -eq $null -or (New-TimeSpan -Start $currentDT -End $lastRefreshed).Minutes -gt 10) {
-            Connect-Graph -scope $graphScopes | Out-Null
+            Connect-Graph -scopes $graphScopes | Out-Null
             $lastRefreshed = Get-Date
         }
 
-        $auUri = "$graphEndPoint/$graphVersion/directory/administrativeUnits?`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource"
-
-        if ($skipToken -ne "." ) {
-            $auUri = $skipToken
-        }
-
-        $auResponse = Invoke-Graphrequest -Uri $auUri -Method GET
+        $auResponse = Invoke-GraphRequest -Uri $auUri -Method GET
         $aus = $auResponse.value
         
         $auCtr = 1 # Counter for AUs retrieved
@@ -115,16 +114,14 @@ function Get-AdministrativeUnits {
             }
         }
 
+        $auList | Export-Csv $csvFilePathAU -Append -NotypeInformation
         Write-Progress -Activity "Retrieving AUs..." -Status "Retrieved $auCtr AUs from $pageCnt pages"
         
         # Write nextLink to log if need to restart from previous page
         Write-Output "[$(Get-Date -Format G)] Retrieved $pageCnt AU pages. nextLink: $($auResponse.'@odata.nextLink')" | Out-File $logFilePath -Append
         $pageCnt++
-
+        $skipToken = $auResponse.'@odata.nextLink'
     } while ($auResponse.'@odata.nextLink')  
-
-    $auList | Export-Csv $csvFilePathAU -Append -NotypeInformation
-
 }
 
 function Create-InformationBarriersFromAUs {
@@ -170,33 +167,32 @@ function Get-SecurityGroups {
     {
  	    Remove-Item $csvFilePathSG;
     }
-
  
     $pageCnt = 1 # Counts the number of pages of SGs retrieved
     $lastRefreshed = $null # Used for refreshing connection
+
+    #preparing uri string
+    $grpSelectClause = "`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
+    $grpUri = "$graphEndPoint/$graphVersion/groups?`$filter=securityEnabled%20eq%20true&$grpSelectClause"
 
     # Get all SG's
     Write-Progress -Activity "Reading AAD" -Status "Fetching security groups"
 
     do {
+        if ($skipToken -ne "." ) {
+            $grpUri = $skipToken
+        }
+
         $grpList = @() # Array of objects for SGs
         
         # Check if need to renew connection
         $currentDT = Get-Date
         if ($lastRefreshed -eq $null -or (New-TimeSpan -Start $currentDT -End $lastRefreshed).Minutes -gt 10) {
-            Connect-Graph -scope $graphScopes | Out-Null
+            Connect-Graph -scopes $graphScopes | Out-Null
             $lastRefreshed = Get-Date
         }
 
-        #preparing uri string
-        $grpSelectClause = "`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
-        $grpUri = "$graphEndPoint/$graphVersion/groups?`$filter=securityEnabled%20eq%20true&$grpSelectClause"
-
-        if ($skipToken -ne "." ) {
-            $grpUri = $skipToken
-        }
-
-        $grpResponse = Invoke-Graphrequest -Uri $grpUri -Method GET
+        $grpResponse = Invoke-GraphRequest -Uri $grpUri -Method GET
         $grps = $grpResponse.value
         
         $grpCtr = 1 # Counter for security groups retrieved
@@ -208,16 +204,14 @@ function Get-SecurityGroups {
             }
         }
 
+        $grpList | Export-Csv $csvFilePathSG -Append -NotypeInformation
         Write-Progress -Activity "Retrieving security groups..." -Status "Retrieved $grpCtr security groups from $pageCnt pages"
         
         # Write nextLink to log if need to restart from previous page
         Write-Output "[$(Get-Date -Format G)] Retrieved $pageCnt security group pages. nextLink: $($grpResponse.'@odata.nextLink')" | Out-File $logFilePath -Append
         $pageCnt++
-
+        $skipToken = $grpResponse.'@odata.nextLink'
     } while ($grpResponse.'@odata.nextLink')  
-
-    $grpList | Export-Csv $csvFilePathSG -Append -NotypeInformation
-
 } 
 
 function Create-InformationBarriersFromSG {
@@ -268,7 +262,7 @@ if ($PPE)
 
 $activityName = "Creating information barrier policies"
 
-$logFilePath = "$outFolder\SDS_InformationBarriers.log"
+$logFilePath = "$outFolder\create_non_SDS_InformationBarriers.log"
 $csvFilePathAU = "$outFolder\AdministrativeUnits.csv"
 $csvFilePathSG = "$outFolder\SecurityGroups.csv"
 
@@ -322,6 +316,7 @@ Get-SecurityGroups
 
 Write-Host "`nYou are about to create an organization segment and information barrier policy from security groups. `nIf you want to skip any security groups, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
 Write-Host "Proceed with creating an organization segments and information barrier policy from security groups logged in $csvFilePathSG (yes/no)?" -ForegroundColor Yellow
+
 $choiceSGtoIB = Read-Host
 if ($choiceSGtoIB -ieq "y" -or $choiceSGtoIB -ieq "yes") {
     Create-InformationBarriersFromSG
