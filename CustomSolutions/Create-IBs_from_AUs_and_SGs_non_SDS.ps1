@@ -19,24 +19,11 @@ Param (
     [string] $outFolder = ".\non_SDS_InformationBarriers",
     [Parameter(Mandatory=$false)]
     [string] $graphVersion = "beta",
-    [switch] $downloadCommonFNs = $true,
     [switch] $PPE = $false
 )
 
 $GraphEndpointProd = "https://graph.microsoft.com"
 $GraphEndpointPPE = "https://graph.microsoft-ppe.com"
-
-#Checking parameter to download common.ps1 file for required common functions
-if ($downloadCommonFNs){
-    #Downloading file with latest common functions
-    try {
-        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
-        "Grabbed 'common.ps1' to current directory"
-    } 
-    catch {
-        throw "Unable to download common.ps1"
-    }
-}
     
 #Import file with common functions
 . .\common.ps1 
@@ -105,10 +92,10 @@ function Get-AdministrativeUnits {
         $auResponse = Invoke-GraphRequest -Uri $auUri -Method GET
         $aus = $auResponse.value
         
-        $auCtr = 1 # Counter for AUs retrieved
+        $auCtr = 0 # Counter for AUs retrieved
         
         foreach ($au in $aus){
-            if ( !($au.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource) ) { # Filtering out AU already with SDS attribute
+            if ( $au.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource -eq $null ) { # Filtering out AU already with SDS attribute
                 $auList += [pscustomobject]@{"AUObjectId"=$au.Id;"AUDisplayName"=$au.DisplayName;}
                 $auCtr++
             }
@@ -195,7 +182,7 @@ function Get-SecurityGroups {
         $grpResponse = Invoke-GraphRequest -Uri $grpUri -Method GET
         $grps = $grpResponse.value
         
-        $grpCtr = 1 # Counter for security groups retrieved
+        $grpCtr = 0 # Counter for security groups retrieved
         
         foreach ($grp in $grps){
             if ( !($grp.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType) ) { # Filtering out security groups already with SDS attribute *note: SG's don't have sync source attribute
@@ -230,7 +217,7 @@ function Create-InformationBarriersFromSG {
 
             #Creating Organization Segment from Security Groups for the Information Barrier
             try {
-                New-OrganizationSegment -Name $grp.displayName -UserGroupFilter "MemberOf -eq '$($grp.id)'" | Out-Null
+                New-OrganizationSegment -Name $grp.GroupDisplayName -UserGroupFilter "MemberOf -eq '$($grp.GroupObjectId)'" | Out-Null
                 Write-Output "[$(Get-Date -Format G)] Created organization segment $($grp.displayName) from security group." | Out-File $logFilePath -Append
             }
             catch{
@@ -239,8 +226,8 @@ function Create-InformationBarriersFromSG {
 
             #Creating Information Barrier Policies from Security Groups
             try {
-                New-InformationBarrierPolicy -Name "$($grp.displayName) - IB" -AssignedSegment $grp.displayName -SegmentsAllowed $sgrp.displayName -State Active -Force | Out-Null
-                Write-Output "[$(Get-Date -Format G)] Created Information Barrier Policy $($grp.displayName) from organization segment" | Out-File $logFilePath -Append
+                New-InformationBarrierPolicy -Name "$($grp.GroupDisplayName) - IB" -AssignedSegment $grp.GroupDisplayName -SegmentsAllowed $grp.GroupDisplayName -State Active -Force | Out-Null
+                Write-Output "[$(Get-Date -Format G)] Created Information Barrier Policy $($grp.GroupDisplayName) from organization segment" | Out-File $logFilePath -Append
             }
             catch {
                 Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
