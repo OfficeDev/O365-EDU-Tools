@@ -1,7 +1,7 @@
 #Connect to Azure AD and establish a session
 $session = Connect-AzureAD
 
-#set the PowerShell App ID as a variable
+#set the Graph App ID as a variable
 $appId = "14d82eec-204b-4c2f-b7e8-296a70dab67e"
 
 #Ensure the service principal is present in the tenant, and if not add it
@@ -10,7 +10,7 @@ if (-not $sp) {
     $sp = New-AzureADServicePrincipal -AppId $appId
 }
 
-#Require user assignment for the PowerShell app
+#Require user assignment for the Graph app
 Set-AzureADServicePrincipal -ObjectId $sp.ObjectId -AppRoleAssignmentRequired $true
 
 # Assign the default app role (0-Guid) to the current user
