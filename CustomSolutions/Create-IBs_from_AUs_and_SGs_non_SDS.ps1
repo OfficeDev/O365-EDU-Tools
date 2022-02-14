@@ -24,9 +24,6 @@ Param (
 
 $GraphEndpointProd = "https://graph.microsoft.com"
 $GraphEndpointPPE = "https://graph.microsoft-ppe.com"
-    
-#Import file with common functions
-. .\common.ps1 
 
 function Get-PrerequisiteHelp
 {
