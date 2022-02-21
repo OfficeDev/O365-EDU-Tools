@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "d234753e-b349-411f-8dad-b505a7444f27",
+		"_postman_id": "f785c7eb-a4d0-4b64-9ba2-f7b5ea0369fc",
 		"name": "SDS OneRoster V1.1-OAuth2",
 		"description": "OneRoster� API version 1.1 spec is availble here: \nhttps://www.imsglobal.org/oneroster-v11-final-specification",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -9284,28 +9284,22 @@
 					"response": []
 				},
 				{
-					"name": "Get Students For Class by Class ID",
+					"name": "Get Classes For Student",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"tests[\"Get Students For Class\"] = responseCode.code === 200;\r",
+									"tests[\"Get Classes for Student\"] = responseCode.code === 200;\r",
 									"var data = JSON.parse(responseBody);\r",
 									"if(responseCode.code === 200)\r",
 									"{\r",
-									"    tests[\"Parse Student ID\"] = false;\r",
-									"    if (data.students)\r",
+									"    tests[\"Parse Class ID\"] = false;\r",
+									"    if (data.classes)\r",
 									"    {\r",
-									"        pm.environment.set(\"student_id\", data.students[0].sourcedId);\r",
-									"        console.log(\"Student ID set to: \" + pm.variables.get(\"student_id\"));\r",
-									"        tests[\"Parse Student ID\"] = true;\r",
-									"    }\r",
-									"    else if (data.users)\r",
-									"    {\r",
-									"        pm.environment.set(\"student_id\", data.users[0].sourcedId);\r",
-									"        console.log(\"Student ID set to: \" + pm.variables.get(\"student_id\"));\r",
-									"        tests[\"Parse Student ID\"] = true;\r",
+									"        pm.environment.set(\"class_id\", data.classes[0].sourcedId);\r",
+									"        console.log(\"Class ID set to: \" + pm.variables.get(\"class_id\"));\r",
+									"        tests[\"Parse Class ID\"] = true;\r",
 									"    }\r",
 									"}"
 								],
@@ -9334,7 +9328,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/classes/{{class_id}}/students",
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/student/{{student_id}}/classes",
 							"host": [
 								"{{OneRosterHost}}"
 							],
@@ -9342,9 +9336,9 @@
 								"ims",
 								"oneroster",
 								"v1p1",
-								"classes",
-								"{{class_id}}",
-								"students"
+								"student",
+								"{{student_id}}",
+								"classes"
 							]
 						},
 						"description": "Gets a page of teachers for a class_id"
