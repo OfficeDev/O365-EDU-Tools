@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS
-This script is designed to create Information Barrier Policies for each Administrative Units and Security Group not created by SDS from an O365 tenant. 
+This script is designed to create Information Barrier Policies for each Administrative Units and Security Group not created by SDS from an O365 tenant.
 
 .DESCRIPTION
-This script will read from Azure, and output the administrative units and security groups to CSVs.  Afterwards, you are prompted to confirm that you want to create the organization segments needed, then create and apply the information barrier policies.  A folder will be created in the same directory as the script itself and contains a log file which details the organization segments and information barrier policies created.  The rows of the csv files can be reduced to only target specific administrative units and security groups.  Nextlink in the log can be used for the skipToken script parameter to continue where the script left off in case it does not finish.  
+This script will read from Azure, and output the administrative units and security groups to CSVs.  Afterwards, you are prompted to confirm that you want to create the organization segments needed, then create and apply the information barrier policies.  A folder will be created in the same directory as the script itself and contains a log file which details the organization segments and information barrier policies created.  The rows of the csv files can be reduced to only target specific administrative units and security groups.  Nextlink in the log can be used for the skipToken script parameter to continue where the script left off in case it does not finish. 
 
 .EXAMPLE
 PS> .\Create-IBs_from_AUs_and_SGs_non_SDS.ps1
@@ -32,7 +32,7 @@ function Get-PrerequisiteHelp
  Required Prerequisites
 ========================
 
-1. This script uses features required by Information Barriers version 3 or above enabled in your tenant.  
+1. This script uses features required by Information Barriers version 3 or above enabled in your tenant.
 
     a.  Existing Organization Segments and Information Barriers created by a legacy version should be removed prior to upgrading.
 
@@ -46,9 +46,9 @@ function Get-PrerequisiteHelp
     
     c. Sign in with any tenant administrator credentials
     
-    d. If you are returned to the PowerShell session without error, you are correctly set up
+    d. If you are returned to the PowerShell session without error, you are correctly set up.
 
-4.  Ensure that All Teachers security group is enabled in SDS and exists in Azure Active Directory.  
+4.  Ensure that All Teachers security group is enabled in SDS and exists in Azure Active Directory.
 
 5.  Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working and do the same for the Exchange Online Management Module.
 
@@ -100,19 +100,19 @@ function Get-AdministrativeUnits {
 
         $auList | Export-Csv $csvFilePathAU -Append -NotypeInformation
         Write-Progress -Activity "Retrieving AUs..." -Status "Retrieved $auCtr AUs from $pageCnt pages"
-        
+
         # Write nextLink to log if need to restart from previous page
         Write-Output "[$(Get-Date -Format G)] Retrieved $pageCnt AU pages. nextLink: $($auResponse.'@odata.nextLink')" | Out-File $logFilePath -Append
         $pageCnt++
         $skipToken = $auResponse.'@odata.nextLink'
-    } while ($auResponse.'@odata.nextLink')  
+    } while ($auResponse.'@odata.nextLink')
 }
 
 function Create-InformationBarriersFromAUs {
     
-    $allAUs = Import-Csv $csvfilePathAU | Sort-Object * -Unique #Import school AUs retrieved and remove dupes if occurred from skipToken retry.  
-    $i = 0 #Counter for progress of IB creation
-        
+    $allAUs = Import-Csv $csvfilePathAU | Sort-Object * -Unique #Import school AUs retrieved and remove dupes if occurred from skipToken retry.
+    $i = 0 # Counter for progress of IB creation
+
     #Looping through all school AUs
     foreach($au in $allAUs)
     {
@@ -120,7 +120,7 @@ function Create-InformationBarriersFromAUs {
         {
             Write-Host "Processing $($au.AUDisplayName)"
 
-            #Creating Organization Segment from SDS School Administrative Unit for the Information Barrier
+            # Creating Organization Segment from SDS School Administrative Unit for the Information Barrier
             try {
                 New-OrganizationSegment -Name $au.AUDisplayName -UserGroupFilter "AdministrativeUnits -eq '$($au.AUDisplayName)'" -ErrorAction Stop | Out-Null
                 Write-Output "[$(Get-Date -Format G)] Created organization segment $($au.AUDisplayName) from school AUs." | Out-File $logFilePath -Append
@@ -129,7 +129,7 @@ function Create-InformationBarriersFromAUs {
                 Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
             }
 
-            #Creating Information Barrier Policies from SDS School Administrative Unit
+            # Creating Information Barrier Policies from SDS School Administrative Unit
             try {
                 New-InformationBarrierPolicy -Name "$($au.AUDisplayName) - IB" -AssignedSegment $au.AUDisplayName -SegmentsAllowed $au.AUDisplayName -State Active -Force -ErrorAction Stop | Out-Null
                 Write-Output "[$(Get-Date -Format G)] Created Information Barrier Policy $($au.AUDisplayName) from Organization Segment" | Out-File $logFilePath -Append
@@ -151,11 +151,11 @@ function Get-SecurityGroups {
     {
  	    Remove-Item $csvFilePathSG;
     }
- 
+
     $pageCnt = 1 # Counts the number of pages of SGs retrieved
     $lastRefreshed = $null # Used for refreshing connection
 
-    #preparing uri string
+    # Preparing uri string
     $grpSelectClause = "`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
     $grpUri = "$graphEndPoint/$graphVersion/groups?`$filter=securityEnabled%20eq%20true&$grpSelectClause"
 
@@ -195,24 +195,24 @@ function Get-SecurityGroups {
         Write-Output "[$(Get-Date -Format G)] Retrieved $pageCnt security group pages. nextLink: $($grpResponse.'@odata.nextLink')" | Out-File $logFilePath -Append
         $pageCnt++
         $skipToken = $grpResponse.'@odata.nextLink'
-    } while ($grpResponse.'@odata.nextLink')  
-} 
+    } while ($grpResponse.'@odata.nextLink')
+}
 
 function Create-InformationBarriersFromSG {
 
-    $allSGs = Import-Csv $csvfilePathSG | Sort-Object * -Unique #Import school SGs retrieved and remove dupes if occurred from skipToken retry.  
-    $i = 0 #Counter for progress of IB creation
+    $allSGs = Import-Csv $csvfilePathSG | Sort-Object * -Unique # Import school SGs retrieved and remove dupes if occurred from skipToken retry.
+    $i = 0 # Counter for progress of IB creation
 
-    Write-Output "Creating Information Barrier Policy from Security Groups`n"  
+    Write-Output "Creating Information Barrier Policy from Security Groups`n"
 
-    #Looping through all SGs
+    # Looping through all SGs
     foreach($grp in $allSGs)
     {
         if ($grp.GroupObjectId -ne $null)
         {
             Write-Host "Processing $($grp.AUDisplayName)"
 
-            #Creating Organization Segment from Security Groups for the Information Barrier
+            # Creating Organization Segment from Security Groups for the Information Barrier
             try {
                 New-OrganizationSegment -Name $grp.GroupDisplayName -UserGroupFilter "MemberOf -eq '$($grp.GroupObjectId)'" | Out-Null
                 Write-Output "[$(Get-Date -Format G)] Created organization segment $($grp.displayName) from security group." | Out-File $logFilePath -Append
@@ -221,7 +221,7 @@ function Create-InformationBarriersFromSG {
                 Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
             }
 
-            #Creating Information Barrier Policies from Security Groups
+            # Creating Information Barrier Policies from Security Groups
             try {
                 New-InformationBarrierPolicy -Name "$($grp.GroupDisplayName) - IB" -AssignedSegment $grp.GroupDisplayName -SegmentsAllowed $grp.GroupDisplayName -State Active -Force | Out-Null
                 Write-Output "[$(Get-Date -Format G)] Created Information Barrier Policy $($grp.GroupDisplayName) from organization segment" | Out-File $logFilePath -Append
@@ -250,7 +250,7 @@ $logFilePath = "$outFolder\create_non_SDS_InformationBarriers.log"
 $csvFilePathAU = "$outFolder\AdministrativeUnits.csv"
 $csvFilePathSG = "$outFolder\SecurityGroups.csv"
 
-#List used to request access to data
+# List used to request access to data
 $graphScopes = "AdministrativeUnit.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All"
 
 try 
@@ -275,7 +275,7 @@ catch
     throw
 }
 
- #Create output folder if it does not exist
+ # Create output folder if it does not exist
  if ((Test-Path $outFolder) -eq 0)
  {
  	mkdir $outFolder;
@@ -290,7 +290,7 @@ Get-AdministrativeUnits
 
 Write-Host "`nYou are about to create organization segments and information barrier policies from administrative units. `nIf you want to skip any administrative units, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
 Write-Host "Proceed with creating organization segments and information barrier policies from administrative units logged in $csvFilePathAU (yes/no)?" -ForegroundColor Yellow
-    
+
 $choiceAUtoIB = Read-Host
 if ($choiceAUtoIB -ieq "y" -or $choiceAUtoIB -ieq "yes") {
     Create-InformationBarriersFromAUs
