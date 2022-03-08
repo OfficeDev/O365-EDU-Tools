@@ -59,7 +59,7 @@ if(!(Test-Path $outFolder)) {
 }
 
 #Get all exchange recipients with mailboxes
-$recipients = Get-Recipient -RecipientType UserMailbox -ResultSize Unlimited  
+$recipients = Get-Recipient -RecipientType UserMailbox -ResultSize Unlimited
 $rCtr = 0
 
 #Start foreach loop
