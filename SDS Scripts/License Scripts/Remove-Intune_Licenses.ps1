@@ -21,7 +21,7 @@ The script will interact with Microsoft online resources using the Graph module.
 
     a. Open a separate PowerShell session
 
-    b. Execute: "Connect-MgGraph" to bring up a sign-in UI.
+    b. Execute: "Connect-MgGraph -scopes Organization.Read.All, Directory.Read.All, Organization.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All" to bring up a sign-in UI.
 
     c. Sign in with any tenant administrator credentials.
 
@@ -101,7 +101,7 @@ if ((Test-Path $outFolder) -eq 0)
 	mkdir $outFolder;
 }
 
-Connect-MgGraph
+Connect-MgGraph -scopes Organization.Read.All, Directory.Read.All, Organization.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All
 
 # Get the Intune sku and set a string variable
 $intuneSkuId = (Get-MgSubscribedSku | ? {$_.SkuPartNumber -match "INTUNE_EDU"}).skuId
