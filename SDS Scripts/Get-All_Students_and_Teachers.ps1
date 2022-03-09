@@ -13,6 +13,7 @@ Orginal/Full Script written by TJ Vering. This script was adapted from the orgin
 
 Change Log:
 Version 1.0, 12/06/2016 - First Draft
+Version 2.0, 03/09/2022 - Change to MS Graph Module - Tim McCall
 
 #>
 
@@ -22,27 +23,29 @@ Param (
     [string] $ExportTeachers = $true,
     [string] $ExportSections = $true,
     [string] $ExportStudentEnrollments = $true,
+
     [string] $ExportTeacherRosters = $true,
-    [string] $OutFolder = ".",
+    [string] $OutFolder = "./StudentsTeachersExport",
     [switch] $PPE = $false,
-    [switch] $AppendTenantIdToFileName = $false
+    [switch] $AppendTenantIdToFileName = $false,
+    [Parameter(Mandatory=$false)]
+    [string] $skipToken= ".",
+    [Parameter(Mandatory=$false)]
+    [switch] $downloadCommonFNs = $true
+
+    # [string] $ExportTeacherRosters = $true,
+    # [string] $OutFolder = ".",
+    # [switch] $PPE = $false,
+    # [switch] $AppendTenantIdToFileName = $false
 )
 
 $GraphEndpointProd = "https://graph.windows.net"
-$AuthEndpointProd = "https://login.windows.net"
-
 $GraphEndpointPPE = "https://graph.ppe.windows.net"
-$AuthEndpointPPE = "https://login.windows-ppe.net"
 
-$NugetClientLatest = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+$logFilePath = $OutFolder
 
-$eduObjSchool = "School"
-$eduObjSection = "Section"
 $eduObjTeacher = "Teacher"
 $eduObjStudent = "Student"
-
-$eduRelStudentEnrollment = "StudentEnrollment"
-$eduRelTeacherRoster = "TeacherRoster"
 
 function Get-PrerequisiteHelp
 {
@@ -51,28 +54,29 @@ function Get-PrerequisiteHelp
  Required Prerequisites
 ========================
 
-1. Install Microsoft Online Services Sign-In Assistant v7.0 from http://www.microsoft.com/en-us/download/details.aspx?id=39267
+1. Install Microsoft Graph Powershell Module with command 'Install-Module Microsoft.Graph'
 
-2. Install the AAD PowerShell Module from http://msdn.microsoft.com/en-us/library/azure/jj151815.aspx#bkmk_installmodule
+2. Make sure to download common.ps1 to the same folder of the script which has common functions needed.  https://github.com/OfficeDev/O365-EDU-Tools/blob/master/SDS%20Scripts/common.ps1
 
 3. Check that you can connect to your tenant directory from the PowerShell module to make sure everything is set up correctly.
-
+    
     a. Open a separate PowerShell session
     
-    b. Execute: "Connect-MsolService" to bring up a sign in UI 
+    b. Execute: "connect-graph -scopes User.Read.All, GroupMember.Read.All, Member.Read.Hidden, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All" to bring up a sign in UI. 
     
     c. Sign in with any tenant administrator credentials
     
     d. If you are returned to the PowerShell sesion without error, you are correctly set up
 
-5. Retry this script.  If you still get an error about failing to load the MSOnline module, troubleshoot why "Import-Module MSOnline" isn't working
+4. Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working
+
+5. Please visit the following link if a message is received that the license cannot be assigned.
+   https://docs.microsoft.com/en-us/azure/active-directory/enterprise-users/licensing-groups-resolve-problems
 
 (END)
 ========================
 "@
 }
-
-
 
 function Export-SdsTeachers
 {
@@ -83,7 +87,6 @@ function Export-SdsTeachers
     $data = Get-SdsTeachers
 
     $cnt = ($data | Measure-Object).Count
-    $TeacherCount = ($data | Measure-Object).Count
     if ($cnt -gt 0)
     {
         Write-Host "Exporting $cnt Teachers ..."
@@ -102,17 +105,19 @@ function Get-SdsTeachers
 {
     $users = Get-Teachers
     $data = @()
+    
     foreach($user in $users)
     {
+        #DisplayName,UserPrincipalName,SIS ID,School SIS ID,Teacher Number,Status,Secondary Email
         $data += [pscustomobject]@{
-	    "DisplayName" = $user.DisplayName  
-            "UserPrincipalName" = $user.userPrincipalName          
-	    "SIS ID" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_TeacherId
+            "DisplayName" = $user.DisplayName  
+            "UserPrincipalName" = $user.userPrincipalName  
+            "SIS ID" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_TeacherId
             "School SIS ID" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId
             "Teacher Number" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_TeacherNumber
             "Status" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_TeacherStatus
             "Secondary Email" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_Email
-	    "ObjectID" = $user.objectID
+            "ObjectID" = $user.objectID
         }
     }
     return $data
@@ -132,7 +137,6 @@ function Export-SdsStudents
     $data = Get-SdsStudents
 
     $cnt = ($data | Measure-Object).Count
-    $StudentCount = ($data | Measure-Object).Count
     if ($cnt -gt 0)
     {
         Write-Host "Exporting $cnt Students ..."
@@ -146,22 +150,23 @@ function Export-SdsStudents
         return $null
     }
 }
-
 function Get-SdsStudents
 {
     $users = Get-Students
     $data = @()
+
     foreach($user in $users)
     {
+        #DisplayName,UserPrincipalName,SIS ID,School SIS ID,Student Number,Status,Secondary Email
         $data += [pscustomobject]@{
-	    "DisplayName" = $user.displayname
-	    "UserPrincipalName" = $user.userPrincipalName        
-	    "SIS ID" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_StudentId
+            "DisplayName" = $user.displayname
+            "UserPrincipalName" = $user.userPrincipalName 
+            "SIS ID" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_StudentId
             "School SIS ID" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId
             "Student Number" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_StudentNumber
             "Status" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_StudentStatus
             "Secondary Email" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_Email
-	    "ObjectID" = $user.ObjectID
+            "ObjectID" = $user.ObjectID
         }
     }
 
@@ -182,53 +187,40 @@ function Get-Users
 
     $list = @()
 
-    $firstPage = $true
-    Do
+    $initialUri = "$graphEndPoint/beta/users?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
+
+    $checkedUri = TokenSkipCheck $initialUri $logFilePath
+    $users = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
+
+    foreach ($user in $users)
     {
-        if ($firstPage)
-        {
-            $uri = $graphEndPoint + "/" + $authToken.TenantId + "/users?api-version=1.6&`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
-            #extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource%20eq%20'SIS'%20and%20
-            $firstPage = $false
-        }
-        else
-        {
-            $uri = $graphEndPoint + "/" + $authToken.TenantId + "/" + $responseObject.odatanextLink + "&api-version=1.6"
-        }
-        # Write-Host "GET: $uri"
-
-        $response = Send-WebRequest "Get" $uri
-        $responseString = $response.Content.Replace("odata.", "odata")
-        $responseObject = $responseString | ConvertFrom-Json
-
-        foreach ($user in $responseObject.value)
+        if ($null -ne $user.id)
         {
             $list += $user
         }
     }
-    While ($responseObject.odatanextLink -ne $null)
-
     return $list
 }
 
 # Main
 $graphEndPoint = $GraphEndpointProd
-$authEndPoint = $AuthEndpointProd
+
 if ($PPE)
 {
     $graphEndPoint = $GraphEndpointPPE
-    $authEndPoint = $AuthEndpointPPE
 }
 
 $activityName = "Reading SDS objects in the directory"
 
+$graphscopes = "User.Read.All, GroupMember.Read.All, Member.Read.Hidden, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All"
+
 try
 {
-    Import-Module MSOnline | Out-Null
+    Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1 | Out-Null
 }
 catch
 {
-    Write-Error "Failed to load MSOnline PowerShell Module."
+    Write-Error "Failed to load Microsoft Graph PowerShell Module."
     Get-PrerequisiteHelp | Out-String | Write-Error
     throw
 }
@@ -236,39 +228,18 @@ catch
 # Connect to the tenant
 Write-Progress -Activity $activityName -Status "Connecting to tenant"
 
-Get-MsolDomain -ErrorAction SilentlyContinue | Out-Null
-if(-Not $?)
-{
-    Connect-MsolService -ErrorAction Stop
-}
-
-$adalLoaded = Load-ActiveDirectoryAuthenticationLibrary
-if ($adalLoaded)
-{
-    $authToken = Get-AuthenticationResult
-    if ($authToken -eq $null)
-    {
-        Write-Error "Could not authenticate and obtain token from AAD tenant."
-        Get-PrerequisiteHelp | Out-String | Write-Error
-        Exit
-    }
-}
-else
-{
-    Write-Error "Could not load dependent libraries required by the script."
-    Get-PrerequisiteHelp | Out-String | Write-Error
-    Exit
-}
+Initialize
 
 Write-Progress -Activity $activityName -Status "Connected. Discovering tenant information"
-$tenantInfo = Get-MsolCompanyInformation
-$tenantId =  $tenantInfo.ObjectId
+$tenantDomain = Get-MgDomain
+$tenantInfo = Get-MgOrganization
+$tenantId =  $tenantInfo.Id
 $tenantDisplayName = $tenantInfo.DisplayName
-$tenantdd = (get-msoldomain | ? {$_.name -like "*onmicrosoft*"}).name
-$ClassLicenses = get-msolaccountsku | ? {$_.accountskuid -like "*CLASSDASH*"}
-$StudentLicenses = (Get-MsolAccountSku | ? {$_.accountskuid -like "*Student*"}).consumedunits
+$tenantdd =  $tenantDomain.Id
+
+$StudentLicenses = (Get-MgSubscribedSku | Where-Object {$_.SkuPartNumber -match "STANDARDWOFFPACK_IW_STUDENT"}).consumedunits
 $StudentLicensesApplied = ($StudentLicenses | Measure-Object -Sum).sum
-$TeacherLicenses = (Get-MsolAccountSku | ? {$_.accountskuid -like "*Faculty*"}).consumedunits
+$TeacherLicenses = (Get-MgSubscribedSku | Where-Object {$_.SkuPartNumber -match "STANDARDWOFFPACK_IW_FACULTY"}).consumedunits
 $TeacherLicensesApplied = ($TeacherLicenses | Measure-Object -Sum).sum
 
 # Create output folder if it does not exist
@@ -277,28 +248,21 @@ if ((Test-Path $OutFolder) -eq 0)
 	mkdir $OutFolder;
 }
 
-    # Export all User of Edu Object Type Teacher/Student
-    Write-Progress -Activity $activityName -Status "Fetching Teachers ..."
-    Export-SdsTeachers | out-null
+# Export all User of Edu Object Type Teacher/Student
+Write-Progress -Activity $activityName -Status "Fetching Teachers ..."
+Export-SdsTeachers | Out-Null
 
-    Write-Progress -Activity $activityName -Status "Fetching Students ..."
-    Export-SdsStudents | out-null
-
+Write-Progress -Activity $activityName -Status "Fetching Students ..."
+Export-SdsStudents | Out-Null
     
+
 #Write Tenant Details to the PS screen
-write-host -foregroundcolor green "Tenant Name is $tenantDisplayName"
-write-host -foregroundcolor green "TenantID is $tenantId"
-write-host -foregroundcolor green "Tenant default domain is $tenantdd"
+Write-Host -foregroundcolor green "Tenant Name is $tenantDisplayName"
+Write-Host -foregroundcolor green "TenantID is $tenantId"
+Write-Host -foregroundcolor green "Tenant default domain is $tenantdd"
 
-If ($ClassLicenses) {
-write-host -foregroundcolor green "Tenant does contain Classroom Licenses"
-$CRLicensesApplied = ($ClassLicenses).consumedunits
-write-host -foregroundcolor green "The number of classroom licenses currently applied is $CRLicensesApplied"
-}
-Else {
-write-host -foregroundcolor red "Tenant does not contain Classroom Licenses"
-}
 
-write-host -foregroundcolor green "The number of student licenses currently applied is $StudentLicensesApplied"
-write-host -foregroundcolor green "The number of teacher licenses currently applied is $TeacherLicensesApplied"
-Write-Output "`nDone.`n"
+Write-Host "The number of student licenses currently applied is $StudentLicensesApplied"
+Write-Host "The number of teacher licenses currently applied is $TeacherLicensesApplied"
+
+Write-Output "`n`nDone.  Please run 'Disconnect-Graph' if you are finished.`n"
