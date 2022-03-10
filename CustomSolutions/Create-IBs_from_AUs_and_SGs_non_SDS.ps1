@@ -9,32 +9,13 @@ This script will read from Azure, and output the administrative units and securi
 PS> .\Create-IBs_from_AUs_and_SGs_non_SDS.ps1
 
 .NOTES
-This script uses features required by Information Barriers version 3 or above enabled in your tenant.  Existing Organization Segments and Information Barriers created by a legacy version should be removed prior to upgrading.
-#>
-
-Param (
-    [Parameter(Mandatory=$false)]
-    [string] $skipToken= ".",
-    [Parameter(Mandatory=$false)]
-    [string] $outFolder = ".\non_SDS_InformationBarriers",
-    [Parameter(Mandatory=$false)]
-    [string] $graphVersion = "beta",
-    [switch] $PPE = $false
-)
-
-$GraphEndpointProd = "https://graph.microsoft.com"
-$GraphEndpointPPE = "https://graph.microsoft-ppe.com"
-
-function Get-PrerequisiteHelp
-{
-    Write-Output @"
 ========================
  Required Prerequisites
 ========================
 
-1. This script uses features required by Information Barriers version 3 or above enabled in your tenant.
+1. This script uses features that require Information Barriers version 3 or above to be enabled in your tenant.
 
-    a.  Existing Organization Segments and Information Barriers created by a legacy version should be removed prior to upgrading.
+    a. Existing Organization Segments and Information Barriers created by a legacy version should be removed prior to upgrading.
 
 2. Install Microsoft Graph Powershell Module and Exchange Online Management Module with commands 'Install-Module Microsoft.Graph' and 'Install-Module ExchangeOnlineManagement'
 
@@ -51,16 +32,25 @@ function Get-PrerequisiteHelp
 4.  Ensure that All Teachers security group is enabled in SDS and exists in Azure Active Directory.
 
 5.  Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working and do the same for the Exchange Online Management Module.
+#>
 
-(END)
-========================
-"@
-}
+Param (
+    [Parameter(Mandatory=$false)]
+    [string] $skipToken= "",
+    [Parameter(Mandatory=$false)]
+    [string] $outFolder = ".\non_SDS_InformationBarriers",
+    [Parameter(Mandatory=$false)]
+    [string] $graphVersion = "beta",
+    [switch] $PPE = $false
+)
+
+$GraphEndpointProd = "https://graph.microsoft.com"
+$GraphEndpointPPE = "https://graph.microsoft-ppe.com"
 
 function Get-AdministrativeUnits {
 
     # Removes csv file unless link is provided to resume
-    if ((Test-Path $csvFilePathAU) -and ($skipToken -eq "."))
+    if ((Test-Path $csvFilePathAU) -and ($skipToken -eq ""))
     {
  	    Remove-Item $csvFilePathAU;
     }
@@ -73,7 +63,7 @@ function Get-AdministrativeUnits {
     Write-Progress -Activity "Reading AAD" -Status "Fetching AU's"
 
     do {
-        if ($skipToken -ne "." ) {
+        if ($skipToken -ne "" ) {
             $auUri = $skipToken
         }
 
@@ -98,7 +88,7 @@ function Get-AdministrativeUnits {
             }
         }
 
-        $auList | Export-Csv $csvFilePathAU -Append -NotypeInformation
+        $auList | Export-Csv $csvFilePathAU -Append -NoTypeInformation
         Write-Progress -Activity "Retrieving AUs..." -Status "Retrieved $auCtr AUs from $pageCnt pages"
 
         # Write nextLink to log if need to restart from previous page
@@ -147,7 +137,7 @@ function Create-InformationBarriersFromAUs {
 function Get-SecurityGroups {
 
     # Removes csv file unless link is provided to resume
-    if ((Test-Path $csvFilePathSG) -and ($skipToken -eq "."))
+    if ((Test-Path $csvFilePathSG) -and ($skipToken -eq ""))
     {
  	    Remove-Item $csvFilePathSG;
     }
@@ -163,7 +153,7 @@ function Get-SecurityGroups {
     Write-Progress -Activity "Reading AAD" -Status "Fetching security groups"
 
     do {
-        if ($skipToken -ne "." ) {
+        if ($skipToken -ne "" ) {
             $grpUri = $skipToken
         }
 
@@ -188,7 +178,7 @@ function Get-SecurityGroups {
             }
         }
 
-        $grpList | Export-Csv $csvFilePathSG -Append -NotypeInformation
+        $grpList | Export-Csv $csvFilePathSG -Append -NoTypeInformation
         Write-Progress -Activity "Retrieving security groups..." -Status "Retrieved $grpCtr security groups from $pageCnt pages"
         
         # Write nextLink to log if need to restart from previous page
@@ -260,7 +250,7 @@ try
 catch
 {
     Write-Error "Failed to load Microsoft Graph PowerShell Module."
-    Get-PrerequisiteHelp | Out-String | Write-Error
+    Get-Help -Name .\Create-IBs_from_AUs_and_SGs_non_SDS.ps1 -Full | Out-String | Write-Error
     throw
 }
 
@@ -271,7 +261,7 @@ try
 catch
 {
     Write-Error "Failed to load Exchange Online Management Module for creating Information Barriers"
-    Get-PrerequisiteHelp | Out-String | Write-Error
+    Get-Help -Name .\Create-IBs_from_AUs_and_SGs_non_SDS.ps1 -Full | Out-String | Write-Error
     throw
 }
 
