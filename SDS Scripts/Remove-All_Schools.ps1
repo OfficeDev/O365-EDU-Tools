@@ -2,18 +2,30 @@
 .SYNOPSIS
 This script is designed to remove all Schools created by SDS from an O365 tenant. You will need to enter your credentials 2 times as the script sets up the connection to Azure, and then confirm you want to run the script with a "y". Once the script completes, a folder called "true" will be created in the same directory as the script itself, and contain an output file which details the schools removed.
 
+.PARAMETER skipToken
+
+Used to start where the script left off fetching the users in case of interruption.  The value used is nextLink in the log file, otherwise use default value of "" to start from the beginning.
+
+.PARAMETER outFolder
+
+Path where to put the log and csv file with the fetched users.
+
+.PARAMETER graphVersion
+
+The version of the Graph API.
+
 .EXAMPLE
-.\Remove-All_Schools.ps1 -RemoveSchoolAUs $true
+.\Remove-All_Schools.ps1
 
 #>
 
 Param (
     [Parameter(Mandatory=$false)]
-    [string] $outFolder = ".\Remove-All_Schools",
+    [string] $outFolder = ".\SDS_Schools",
     [Parameter(Mandatory=$false)]
     [string] $graphVersion = "beta",
     [Parameter(Mandatory=$false)]
-    [string] $skipToken= ".",
+    [string] $skipToken= "",
     [switch] $PPE = $false
 )
 
@@ -82,17 +94,16 @@ function Get-AdministrativeUnits
 
         $auUri = "$graphEndPoint/$graphVersion/directory/administrativeUnits?`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
 
-        if ($skipToken -ne "." ) {
+        if ($skipToken -ne "" ) {
             $auUri = $skipToken
         }
 
-        $auResponse = 
-         -Uri $auUri -Method GET
+        $auResponse = Invoke-GraphRequest -Method GET -Uri $auUri
         $aus = $auResponse.value
-        
+
         $auCtr = 1 # Counter for AUs retrieved
-        
-        foreach ($au in $aus){
+
+        foreach ($au in $aus) {
             if ( ($au.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType -eq $eduObjectType) ) { # Filtering out AU already with SDS attribute
                 $obj = [pscustomobject]@{"ObjectId"=$au.Id;"DisplayName"=$au.DisplayName;}
                 $auList += $obj
@@ -101,16 +112,16 @@ function Get-AdministrativeUnits
         }
 
         Write-Progress -Activity "Retrieving School Administrative Units..." -Status "Retrieved $auCtr AUs from $pageCnt pages"
-        
+
         # Write nextLink to log if need to restart from previous page
         Write-Output "[$(Get-Date -Format G)] Retrieved $pageCnt pages. nextLink: $($graphResponse.'@odata.nextLink')" | Out-File $logFilePath -Append
         $pageCnt++
 
     } while ($auResponse.'@odata.nextLink')  
 
-    $auList | Export-Csv $csvFilePath -Append -NotypeInformation
+    $auList | Export-Csv $csvFilePath -Append -NoTypeInformation
 
-    return $filePath
+    return $csvFilePath
 }
 
 function Remove-AdministrativeUnits
@@ -122,20 +133,19 @@ function Remove-AdministrativeUnits
 
     Write-Host "WARNING: You are about to remove Administrative Units and its memberships created from SDS. `nIf you want to skip removing any AUs, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
     Write-Host "Proceed with deleting all the AUs logged in $auListFileName (yes/no)?" -ForegroundColor White
-    
+
     $choice = Read-Host
 
-    if ($choice -ieq "y" -or $choice -ieq "yes")
-    {
+    if ($choice -ieq "y" -or $choice -ieq "yes") {
         Write-Progress -Activity $activityName -Status "Deleting Administrative Units"
         $auList = import-csv $auListFileName
         $auCount = $auList.Length
         $index = 1
 
-        Foreach ($au in $auList) 
-        {
-            Write-Output "[$index/$auCount] Removing AU `"$($au.DisplayName)`" [$($au.ObjectId)] from directory"
-            Remove-MgAdministrativeUnit -AdministrativeUnitId $au.ObjectId -Confirm:$true
+        foreach ($au in $auList) {
+            Write-Output "[$index/$auCount] Removing AU `"$($au.DisplayName)`" [$($au.ObjectId)] from directory" | Out-File $logFilePath -Append
+            Remove-MgDirectoryAdministrativeUnit -AdministrativeUnitId $au.ObjectId -Confirm:$false
+            Write-Progress -Activity "Removing School Administrative Units..." -Status "Progress ->" -PercentComplete ($index/$auList.count*100)
             $index++
         }
     }
@@ -149,8 +159,7 @@ $logFilePath = "$outFolder\Remove-All_Schools.log"
 
 $graphEndPoint = $GraphEndpointProd
 
-if ($PPE)
-{
+if ($PPE) {
     $graphEndPoint = $GraphEndpointPPE
 }
 
@@ -166,8 +175,7 @@ catch
 }
 
 # Create output folder if it does not exist
-if ((Test-Path $outFolder) -eq 0)
-{
+if ((Test-Path $outFolder) -eq 0) {
 	mkdir $outFolder;
 }
 
