@@ -13,17 +13,13 @@ Orginal/Full Script written by TJ Vering. This script was adapted from the orgin
 
 Change Log:
 Version 1.0, 12/06/2016 - First Draft
-Version 2.0, 03/09/2022 - Change to MS Graph Module - Tim McCall
+Version 2.0, 03/11/2022 - Change to MS Graph Module - Tim McCall
 
 #>
 
 Param (
-    [string] $ExportSchools = $true,
     [string] $ExportStudents = $true,
     [string] $ExportTeachers = $true,
-    [string] $ExportSections = $true,
-    [string] $ExportStudentEnrollments = $true,
-
     [string] $ExportTeacherRosters = $true,
     [string] $OutFolder = "./StudentsTeachersExport",
     [switch] $PPE = $false,
@@ -31,12 +27,7 @@ Param (
     [Parameter(Mandatory=$false)]
     [string] $skipToken= ".",
     [Parameter(Mandatory=$false)]
-    [switch] $downloadCommonFNs = $true
-
-    # [string] $ExportTeacherRosters = $true,
-    # [string] $OutFolder = ".",
-    # [switch] $PPE = $false,
-    # [switch] $AppendTenantIdToFileName = $false
+    [switch] $downloadCommonFNs = $false
 )
 
 $GraphEndpointProd = "https://graph.windows.net"
@@ -46,6 +37,21 @@ $logFilePath = $OutFolder
 
 $eduObjTeacher = "Teacher"
 $eduObjStudent = "Student"
+
+#checking parameter to download common.ps1 file for required common functions
+if ($downloadCommonFNs){
+    # Downloading file with latest common functions
+    try {
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
+        "Grabbed 'common.ps1' to currrent directory"
+    } 
+    catch {
+        throw "Unable to download common.ps1"
+    }
+}
+    
+#import file with common functions
+. .\common.ps1 
 
 function Get-PrerequisiteHelp
 {
