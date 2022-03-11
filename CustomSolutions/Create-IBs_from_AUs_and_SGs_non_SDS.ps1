@@ -1,9 +1,29 @@
 <#
 .SYNOPSIS
-This script is designed to create Information Barrier Policies for each Administrative Units and Security Group not created by SDS from an O365 tenant.
+This script is designed to create information barrier policies for each administrative unit and security Group not created by SDS from an O365 tenant.
 
 .DESCRIPTION
 This script will read from Azure, and output the administrative units and security groups to CSVs.  Afterwards, you are prompted to confirm that you want to create the organization segments needed, then create and apply the information barrier policies.  A folder will be created in the same directory as the script itself and contains a log file which details the organization segments and information barrier policies created.  The rows of the csv files can be reduced to only target specific administrative units and security groups.  Nextlink in the log can be used for the skipToken script parameter to continue where the script left off in case it does not finish. 
+
+.PARAMETER csvFilePathAU
+
+The path for the csv file containing the non-SDS administrative units in the tenant.  When provided, the script will attempt to create the organization segments and information barrier policies from the records in the file.  Each record should contain the AAD ObjectId and DisplayName.
+
+.PARAMETER csvFilePathSG
+
+The path for the csv file containing the non-SDS security groups in the tenant.  When provided, the script will attempt to create the organization segments and information barrier policies from the records in the file.  Each record should contain the AAD ObjectId and DisplayName.
+
+.PARAMETER skipToken
+
+Used to start where the script left off fetching the users in case of interruption.  The value used is nextLink in the log file, otherwise use default value of "" to start from the beginning.
+
+.PARAMETER outFolder
+
+Path where to put the log and csv file with the fetched data from Graph.
+
+.PARAMETER graphVersion
+
+The version of the Graph API.
 
 .EXAMPLE
 PS> .\Create-IBs_from_AUs_and_SGs_non_SDS.ps1
@@ -38,6 +58,10 @@ Param (
     [Parameter(Mandatory=$false)]
     [string] $skipToken= "",
     [Parameter(Mandatory=$false)]
+    [string] $csvFilePathAU = "",
+    [Parameter(Mandatory=$false)]
+    [string] $csvFilePathSG = "",
+    [Parameter(Mandatory=$false)]
     [string] $outFolder = ".\non_SDS_InformationBarriers",
     [Parameter(Mandatory=$false)]
     [string] $graphVersion = "beta",
@@ -47,118 +71,45 @@ Param (
 $GraphEndpointProd = "https://graph.microsoft.com"
 $GraphEndpointPPE = "https://graph.microsoft-ppe.com"
 
-function Get-AdministrativeUnits {
+function Get-AUsAndSGs ($aadObjectType) {
+
+    $csvFilePath = "$outFolder\$aadObjectType.csv"
 
     # Removes csv file unless link is provided to resume
-    if ((Test-Path $csvFilePathAU) -and ($skipToken -eq ""))
+    if ((Test-Path $csvFilePath) -and ($skipToken -eq ""))
     {
- 	    Remove-Item $csvFilePathAU;
-    }
-
-    $pageCnt = 1 # Counts the number of pages of AUs retrieved
-    $lastRefreshed = $null # Used for refreshing connection
-    $auUri = "$graphEndPoint/$graphVersion/directory/administrativeUnits?`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource"
-
-    # Get all AU's
-    Write-Progress -Activity "Reading AAD" -Status "Fetching AU's"
-
-    do {
-        if ($skipToken -ne "" ) {
-            $auUri = $skipToken
-        }
-
-        $auList = @() # Array of objects for AUs
-
-        # Check if need to renew connection
-        $currentDT = Get-Date
-        if ($lastRefreshed -eq $null -or (New-TimeSpan -Start $currentDT -End $lastRefreshed).Minutes -gt 10) {
-            Connect-Graph -scopes $graphScopes | Out-Null
-            $lastRefreshed = Get-Date
-        }
-
-        $auResponse = Invoke-GraphRequest -Uri $auUri -Method GET
-        $aus = $auResponse.value
-        
-        $auCtr = 0 # Counter for AUs retrieved
-        
-        foreach ($au in $aus){
-            if ( $au.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource -eq $null ) { # Filtering out AU already with SDS attribute
-                $auList += [pscustomobject]@{"AUObjectId"=$au.Id;"AUDisplayName"=$au.DisplayName;}
-                $auCtr++
-            }
-        }
-
-        $auList | Export-Csv $csvFilePathAU -Append -NoTypeInformation
-        Write-Progress -Activity "Retrieving AUs..." -Status "Retrieved $auCtr AUs from $pageCnt pages"
-
-        # Write nextLink to log if need to restart from previous page
-        Write-Output "[$(Get-Date -Format G)] Retrieved $pageCnt AU pages. nextLink: $($auResponse.'@odata.nextLink')" | Out-File $logFilePath -Append
-        $pageCnt++
-        $skipToken = $auResponse.'@odata.nextLink'
-    } while ($auResponse.'@odata.nextLink')
-}
-
-function Create-InformationBarriersFromAUs {
-    
-    $allAUs = Import-Csv $csvfilePathAU | Sort-Object * -Unique #Import school AUs retrieved and remove dupes if occurred from skipToken retry.
-    $i = 0 # Counter for progress of IB creation
-
-    #Looping through all school AUs
-    foreach($au in $allAUs)
-    {
-        if ($au.AUObjectId -ne $null)
-        {
-            Write-Host "Processing $($au.AUDisplayName)"
-
-            # Creating Organization Segment from SDS School Administrative Unit for the Information Barrier
-            try {
-                New-OrganizationSegment -Name $au.AUDisplayName -UserGroupFilter "AdministrativeUnits -eq '$($au.AUDisplayName)'" -ErrorAction Stop | Out-Null
-                Write-Output "[$(Get-Date -Format G)] Created organization segment $($au.AUDisplayName) from school AUs." | Out-File $logFilePath -Append
-            }
-            catch {
-                Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
-            }
-
-            # Creating Information Barrier Policies from SDS School Administrative Unit
-            try {
-                New-InformationBarrierPolicy -Name "$($au.AUDisplayName) - IB" -AssignedSegment $au.AUDisplayName -SegmentsAllowed $au.AUDisplayName -State Active -Force -ErrorAction Stop | Out-Null
-                Write-Output "[$(Get-Date -Format G)] Created Information Barrier Policy $($au.AUDisplayName) from Organization Segment" | Out-File $logFilePath -Append
-            }
-            catch {
-                Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
-            }
-        }
-        $i++
-        Write-Progress -Activity "`nCreating Organization Segments and Information Barrier Policies based from SDS School Administrative Units" -Status "Progress ->" -PercentComplete ($i/$allAUs.count*100)
-    }
-    return
-}
-
-function Get-SecurityGroups {
-
-    # Removes csv file unless link is provided to resume
-    if ((Test-Path $csvFilePathSG) -and ($skipToken -eq ""))
-    {
- 	    Remove-Item $csvFilePathSG;
+ 	    Remove-Item $csvFilePath;
     }
 
     $pageCnt = 1 # Counts the number of pages of SGs retrieved
     $lastRefreshed = $null # Used for refreshing connection
 
-    # Preparing uri string
+    # Uri string for AU's
+    $auUri = "$graphEndPoint/$graphVersion/directory/administrativeUnits?`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
+
+    # Preparing uri string for groups
     $grpSelectClause = "`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
     $grpUri = "$graphEndPoint/$graphVersion/groups?`$filter=securityEnabled%20eq%20true&$grpSelectClause"
 
-    # Get all SG's
-    Write-Progress -Activity "Reading AAD" -Status "Fetching security groups"
+    # Determine either AU or SG uri to use
+    switch ($aadObjectType) {
+        $aadObjAU {
+            $graphUri = $auUri
+        }
+        $aadObjSG {
+            $graphUri = $grpUri
+        }
+    }
+
+    Write-Progress -Activity "Reading AAD" -Status "Fetching $aadObjectType's"
 
     do {
         if ($skipToken -ne "" ) {
-            $grpUri = $skipToken
+            $graphUri = $skipToken
         }
 
-        $grpList = @() # Array of objects for SGs
-        
+        $recordList = @() # Array of objects for SGs
+
         # Check if need to renew connection
         $currentDT = Get-Date
         if ($lastRefreshed -eq $null -or (New-TimeSpan -Start $currentDT -End $lastRefreshed).Minutes -gt 10) {
@@ -166,63 +117,80 @@ function Get-SecurityGroups {
             $lastRefreshed = Get-Date
         }
 
-        $grpResponse = Invoke-GraphRequest -Uri $grpUri -Method GET
-        $grps = $grpResponse.value
-        
-        $grpCtr = 0 # Counter for security groups retrieved
-        
-        foreach ($grp in $grps){
-            if ( !($grp.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType) ) { # Filtering out security groups already with SDS attribute *note: SG's don't have sync source attribute
-                $grpList += [pscustomobject]@{"GroupObjectId"=$grp.Id;"GroupDisplayName"=$grp.DisplayName}
-                $grpCtr++
+        $response = Invoke-GraphRequest -Uri $graphUri -Method GET
+        $records = $response.value
+
+        $ctr = 0 # Counter for security groups retrieved
+
+        foreach ($record in $records) {
+            if ( !($record.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType) ) {
+                $recordList += [pscustomobject]@{"ObjectId"=$record.Id;"DisplayName"=$record.DisplayName}
+                $ctr++
             }
         }
 
-        $grpList | Export-Csv $csvFilePathSG -Append -NoTypeInformation
-        Write-Progress -Activity "Retrieving security groups..." -Status "Retrieved $grpCtr security groups from $pageCnt pages"
-        
+        $recordList | Export-Csv $csvFilePath -Append -NoTypeInformation
+        Write-Progress -Activity "Retrieving $aadObjectType's..." -Status "Retrieved $ctr $aadObjectType's from $pageCnt pages"
+
         # Write nextLink to log if need to restart from previous page
-        Write-Output "[$(Get-Date -Format G)] Retrieved $pageCnt security group pages. nextLink: $($grpResponse.'@odata.nextLink')" | Out-File $logFilePath -Append
+        Write-Output "[$(Get-Date -Format G)] Retrieved $pageCnt $aadObjectType's. nextLink: $($response.'@odata.nextLink')" | Out-File $logFilePath -Append
         $pageCnt++
-        $skipToken = $grpResponse.'@odata.nextLink'
-    } while ($grpResponse.'@odata.nextLink')
+        $skipToken = $response.'@odata.nextLink'
+
+    } while ($response.'@odata.nextLink')
+
+    return $csvFilePath
 }
 
-function Create-InformationBarriersFromSG {
+function Create-InformationBarriers ($aadObjectType, $csvfilePath) {
 
-    $allSGs = Import-Csv $csvfilePathSG | Sort-Object * -Unique # Import school SGs retrieved and remove dupes if occurred from skipToken retry.
-    $i = 0 # Counter for progress of IB creation
+    Write-Host "`nYou are about to create an organization segment and information barrier policy from $aadObjectType's. `nIf you want to skip any security groups, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
+    Write-Host "Proceed with creating an organization segments and information barrier policy from $aadObjectType' logged in $csvFilePath (yes/no) or ^+c to exit script?" -ForegroundColor Yellow
 
-    Write-Output "Creating Information Barrier Policy from Security Groups`n"
+    $choiceIB = Read-Host
+    if ($choiceIB -ieq "y" -or $choiceIB -ieq "yes") {
 
-    # Looping through all SGs
-    foreach($grp in $allSGs)
-    {
-        if ($grp.GroupObjectId -ne $null)
-        {
-            Write-Host "Processing $($grp.AUDisplayName)"
+        $allRecords = Import-Csv $csvfilePath | Sort-Object * -Unique # Import data retrieved from Graph and remove dupes if occurred from skipToken retry.
+        $i = 0 # Counter for progress of IB creation
 
-            # Creating Organization Segment from Security Groups for the Information Barrier
-            try {
-                New-OrganizationSegment -Name $grp.GroupDisplayName -UserGroupFilter "MemberOf -eq '$($grp.GroupObjectId)'" | Out-Null
-                Write-Output "[$(Get-Date -Format G)] Created organization segment $($grp.displayName) from security group." | Out-File $logFilePath -Append
+        Write-Output "Creating Information Barrier Policy from $aadObjectType's`n"
+
+        # Looping through all records
+        foreach($record in $allRecords) {
+
+            # Determining which organization segment filter to use
+            if ( $record.ObjectId -ne $null ) {
+                switch ($aadObjectType) {
+                    $aadObjAU { 
+                        $segmentFilter = "AdministrativeUnits -eq '$($record.DisplayName)'" 
+                    }
+                    $aadObjSG { 
+                        $segmentFilter = "MemberOf -eq '$($record.ObjectId)'" 
+                    }
+                }
+
+                # Creating organization segments for the information barriers
+                try {
+                    New-OrganizationSegment -Name $record.DisplayName -UserGroupFilter $segmentFilter | Out-Null 
+                    Write-Output "[$(Get-Date -Format G)] Created organization segment $($record.DisplayName) from $($aadObjectType)." | Out-File $logFilePath -Append
+                }
+                catch {
+                    Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
+                }
+
+                # Creating information barrier policies
+                try {
+                    New-InformationBarrierPolicy -Name "$($record.DisplayName) - IB" -AssignedSegment $record.DisplayName -SegmentsAllowed $record.DisplayName -State Active -Force -ErrorAction Stop | Out-Null
+                    Write-Output "[$(Get-Date -Format G)] Created Information Barrier Policy $($record.DisplayName) from organization segment" | Out-File $logFilePath -Append
+                }
+                catch {
+                    Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
+                }
             }
-            catch{
-                Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
-            }
-
-            # Creating Information Barrier Policies from Security Groups
-            try {
-                New-InformationBarrierPolicy -Name "$($grp.GroupDisplayName) - IB" -AssignedSegment $grp.GroupDisplayName -SegmentsAllowed $grp.GroupDisplayName -State Active -Force | Out-Null
-                Write-Output "[$(Get-Date -Format G)] Created Information Barrier Policy $($grp.GroupDisplayName) from organization segment" | Out-File $logFilePath -Append
-            }
-            catch {
-                Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
-            }
+            $i++
+            Write-Progress -Activity "`nCreating Organization Segments and Information Barrier Policies based from $aadObjectType's" -Status "Progress ->" -PercentComplete ($i/$allRecords.count*100)
         }
-        $i++
-        Write-Progress -Activity "`nCreating Organization Segments and Information Barrier Policies based from SDS School Administrative Units" -Status "Progress ->" -PercentComplete ($i/$allSGs.count*100)
-    }
+    }    
     return
 }
 
@@ -234,11 +202,10 @@ if ($PPE)
     $graphEndPoint = $GraphEndpointPPE
 }
 
-$activityName = "Creating information barrier policies"
-
 $logFilePath = "$outFolder\create_non_SDS_InformationBarriers.log"
-$csvFilePathAU = "$outFolder\AdministrativeUnits.csv"
-$csvFilePathSG = "$outFolder\SecurityGroups.csv"
+
+$aadObjAU = "AU"
+$aadObjSG = "SG"
 
 # List used to request access to data
 $graphScopes = "AdministrativeUnit.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All"
@@ -266,8 +233,7 @@ catch
 }
 
  # Create output folder if it does not exist
- if ((Test-Path $outFolder) -eq 0)
- {
+ if ((Test-Path $outFolder) -eq 0) {
  	mkdir $outFolder;
  }
 
@@ -276,28 +242,36 @@ Write-Host "`nActivity logged to file $logFilePath `n" -ForegroundColor Green
 Connect-Graph -scopes $graphScopes | Out-Null
 Connect-IPPSSession | Out-Null
 
-Get-AdministrativeUnits
 
-Write-Host "`nYou are about to create organization segments and information barrier policies from administrative units. `nIf you want to skip any administrative units, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
-Write-Host "Proceed with creating organization segments and information barrier policies from administrative units logged in $csvFilePathAU (yes/no)?" -ForegroundColor Yellow
-
-$choiceAUtoIB = Read-Host
-if ($choiceAUtoIB -ieq "y" -or $choiceAUtoIB -ieq "yes") {
-    Create-InformationBarriersFromAUs
+if ( $csvFilePathAU -eq "" ) {
+    $csvFilePathAU = Get-AUsAndSGs $aadObjAU
 }
 
-Get-SecurityGroups
+if ( $csvFilePathAU -ne "" ) {
+    if (Test-Path $csvFilePathAU) {
+        Create-InformationBarriers $aadObjAU $csvFilePathAU
+    }
+    else {
+        Write-Error "Path for $csvFilePathAU is not found."
+    }
+}
 
-Write-Host "`nYou are about to create an organization segment and information barrier policy from security groups. `nIf you want to skip any security groups, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
-Write-Host "Proceed with creating an organization segments and information barrier policy from security groups logged in $csvFilePathSG (yes/no)?" -ForegroundColor Yellow
+if ( $csvFilePathSG -eq "" ) {
+    $csvFilePathSG = Get-AUsAndSGs $aadObjSG
+}
 
-$choiceSGtoIB = Read-Host
-if ($choiceSGtoIB -ieq "y" -or $choiceSGtoIB -ieq "yes") {
-    Create-InformationBarriersFromSG
+if ( $csvFilePathSG -ne "" ) {
+    if (Test-Path $csvFilePathSG) {
+        Create-InformationBarriers $aadObjSG $csvFilePathSG
+    }
+    else {
+        Write-Error "Path for $csvFilePathSG is not found."
+    }
 }
 
 Write-Host "`nProceed with starting the information barrier policies application (yes/no)?" -ForegroundColor Yellow
 $choiceStartIB = Read-Host
+
 if ($choiceStartIB -ieq "y" -or $choiceStartIB -ieq "yes") {
     Start-InformationBarrierPoliciesApplication | Out-Null
     Write-Output "Done.  Please allow ~30 minutes for the system to start the process of applying Information Barrier Policies. `nUse Get-InformationBarrierPoliciesApplicationStatus to check the status"
