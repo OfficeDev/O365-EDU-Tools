@@ -17,7 +17,7 @@ A folder location defined as an input will include a csv files of all outputs.
 
 .EXAMPLE
 
-PS> .\Get-InformationBarrierSegmentsForUsers.ps1
+PS> .\Get-User_Information_Barrier_Segments.ps1
 
 .NOTES
 
