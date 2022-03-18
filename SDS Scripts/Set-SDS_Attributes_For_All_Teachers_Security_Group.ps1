@@ -9,7 +9,7 @@ This script is designed to add the AllTeachersSecurityGroup SDS extension attrib
 This script will use Graph to check the group then update it with the SDS extension attribute for the 'All Teachers' security group.
 
 .Example
-.\Set-SDS_Attributes_For_AllTeachersSecurityGroup.ps1 -groupId <AAD guid for the group>
+.\Set-SDS_Attributes_For_All_Teachers_Security_Group.ps1 -groupId <AAD guid for the group>
 
 .Notes
 This script is only supposed to be used for a group that contains all teachers.
