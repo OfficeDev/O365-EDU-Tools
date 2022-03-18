@@ -26,7 +26,7 @@ Path where to put the log and csv file with the fetched data from Graph.
 The version of the Graph API.
 
 .EXAMPLE
-PS> .\Create-non_SDS_InformationBarriers.ps1
+PS> .\Create-non_SDS_Information_Barriers.ps1
 
 .NOTES
 ========================
