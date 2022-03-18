@@ -71,18 +71,23 @@ function Add-IntuneLicenses {
     $nonIntuneUsers = Import-Csv $csvfilePath
     $userCnt = 0 # Counter for users
 
-    # Add the Intune License for any users that do not currently have it
-    Foreach ($user in $nonIntuneUsers) {
-        Write-Output "[$(Get-Date -Format G)] Adding the Intune EDU license to $($user.userPrincipalName) from school AUs." | Out-File $logFilePath -Append
-        try {
-            Set-MgUserLicense -UserId $user.userId -AddLicenses @{SkuId = $intuneSkuId} -RemoveLicenses @() -ErrorAction Stop | Out-Null
+    if ($intuneLicenseFree -gt $nonIntuneUsers.count) {
+        # Add the Intune License for any users that do not currently have it
+        Foreach ($user in $nonIntuneUsers) {
+            Write-Output "[$(Get-Date -Format G)] Adding the Intune EDU license to $($user.userPrincipalName) from school AUs." | Out-File $logFilePath -Append
+            try {
+                Set-MgUserLicense -UserId $user.userId -AddLicenses @{SkuId = $intuneSkuId} -RemoveLicenses @() -ErrorAction Stop | Out-Null
+            }
+            catch {
+                $errorMessage = $_.ToString()
+                "[$(Get-Date -Format G)] Error adding the Intune EDU license to $($user.userPrincipalName)`n$errorMessage" | Tee-Object -FilePath $logFilePath -Append | Write-Host -ForegroundColor Red
+            }
+            $userCnt++
+            Write-Progress -Activity "Adding the Intune EDU license to users" -Status "Progress ->" -PercentComplete ($userCnt/$nonIntuneUsers.count*100)
         }
-        catch {
-            $errorMessage = $_.ToString()
-            "[$(Get-Date -Format G)] Error adding the Intune EDU license to $($user.userPrincipalName)`n$errorMessage" | Tee-Object -FilePath $logFilePath -Append | Write-Host -ForegroundColor Red
-        }
-        $userCnt++
-        Write-Progress -Activity "Adding the Intune EDU license to users" -Status "Progress ->" -PercentComplete ($userCnt/$nonIntuneUsers.count*100)
+    }
+    else {
+        Write-Error "`nCannot apply licenses.  Total: $intuneLicenseTotal `t Consumed: $intuneLicenseConsumed"
     }
 }
 
@@ -107,8 +112,12 @@ if ((Test-Path $outFolder) -eq 0)
 
 Connect-MgGraph -scopes Organization.Read.All, Directory.Read.All, Organization.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All
 
-# Get the Intune sku and set a string variable
-$intuneSkuId = (Get-MgSubscribedSku | ? {$_.SkuPartNumber -match "INTUNE_EDU"}).skuId
+# Get the Intune sku and counts
+$intuneLicense = Get-MgSubscribedSku | ? {$_.SkuPartNumber -match "INTUNE_EDU"}
+$intuneSkuId = $intuneLicense.SkuId
+$intuneLicenseTotal = $intuneLicense.PrepaidUnits.Enabled
+$intuneLicenseConsumed = $intuneLicense.ConsumedUnits
+$intuneLicenseFree = $intuneLicenseTotal - $intuneLicenseConsumed
 
 Write-Host "`nActivity logged to file $logFilePath `n" -ForegroundColor Green
 
