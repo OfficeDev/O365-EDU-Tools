@@ -1,6 +1,6 @@
 <#
 Script Name:
-Set-SDS_Attributes_For_AllTeachersSecurityGroup.ps1
+Set-SDS_Attributes_For_All_Teachers_Security_Group.ps1
 
 .Synopsis
 This script is designed to add the AllTeachersSecurityGroup SDS extension attributes to a group not created by SDS.
