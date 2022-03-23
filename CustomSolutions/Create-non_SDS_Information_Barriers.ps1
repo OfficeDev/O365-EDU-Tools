@@ -49,9 +49,7 @@ PS> .\Create-non_SDS_Information_Barriers.ps1
     
     d. If you are returned to the PowerShell session without error, you are correctly set up.
 
-4.  Ensure that All Teachers security group is enabled in SDS and exists in Azure Active Directory.
-
-5.  Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working and do the same for the Exchange Online Management Module.
+4.  Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working and do the same for the Exchange Online Management Module.
 #>
 
 Param (
@@ -217,7 +215,7 @@ try
 catch
 {
     Write-Error "Failed to load Microsoft Graph PowerShell Module."
-    Get-Help -Name .\Create-IBs_from_AUs_and_SGs_non_SDS.ps1 -Full | Out-String | Write-Error
+    Get-Help -Name .\Create-non_SDS_Information_Barriers.ps1 -Full | Out-String | Write-Error
     throw
 }
 
@@ -228,13 +226,13 @@ try
 catch
 {
     Write-Error "Failed to load Exchange Online Management Module for creating Information Barriers"
-    Get-Help -Name .\Create-IBs_from_AUs_and_SGs_non_SDS.ps1 -Full | Out-String | Write-Error
+    Get-Help -Name .\Create-non_SDS_Information_Barriers.ps1 -Full | Out-String | Write-Error
     throw
 }
 
  # Create output folder if it does not exist
  if ((Test-Path $outFolder) -eq 0) {
- 	mkdir $outFolder;
+ 	mkdir $outFolder | Out-Null;
  }
 
 Write-Host "`nActivity logged to file $logFilePath `n" -ForegroundColor Green
