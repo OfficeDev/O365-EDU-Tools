@@ -10,7 +10,7 @@ body:
   - type: input
     id: filepath
     attributes:
-      label: filepaths
+      label: File Path(s)
       description: What file(s) have the issue?
       placeholder: ex. /folderName/fileName.xxx
     validations:
