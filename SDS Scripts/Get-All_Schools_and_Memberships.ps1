@@ -1,13 +1,6 @@
 ﻿<#
-Written By: 
-Bill Sluss, and adapted by Prajitha Chalil Veedu
-
-Change Log:
-Version 1.0, 12/05/2016 - First Draft
-Version 2.0, 3/23/2022 - Updated script to use Graph API instead of ADAL
-
 .SYNOPSIS
-    This script is designed to export all Schools and their respective members. The result of this script is a single CSV export, called Get-All_Schools_and_Memberships.csv.
+This script is designed to export all Schools and their respective members. The result of this script is a single CSV export, called Get-All_Schools_and_Memberships.csv.
 
 .PARAMETER skipToken
 Used to start where the script left off fetching the users in case of interruption.  The value used is nextLink in the log file, otherwise use default value of "" to start from the beginning.
@@ -19,7 +12,7 @@ Path where to put the log and csv file with the fetched users.
 The version of the Graph API. 
 
 .EXAMPLE    
-    .\Get-All_Schools_and_Memberships.ps1
+.\Get-All_Schools_and_Memberships.ps1
 
 .NOTES
 ***This script may take a while.***
@@ -53,7 +46,7 @@ Param (
     [Parameter(Mandatory=$false)]
     [string] $skipToken= ".",
     [Parameter(Mandatory=$false)]
-    [string] $outFolder = ".\SDS_Schools_Memerships",
+    [string] $outFolder = ".\SDS_Schools_Memberships",
     [Parameter(Mandatory=$false)]
     [string] $graphVersion = "beta",
     #Parameter to specify whether to download the script with common functions or not
@@ -100,7 +93,7 @@ function Get-AdministrativeUnitMemberships($refreshToken, $graphscopes, $logFile
     $allSchoolAUs = PageAll-GraphRequest $checkedSDSSchoolAUsUri $refreshToken 'GET' $graphscopes $logFilePath
 
     #Write to school AU count to log
-    Write-Output "[$(get-date -Format G)] Retrieve $($allSchoolAUs.Count) school AUs." | out-file $logFilePath -Append
+    Write-Output "[$(get-date -Format G)] Retrieve school AUs." | out-file $logFilePath -Append
 
     $schoolAUMemberships = @() #Array of objects for memberships
 
