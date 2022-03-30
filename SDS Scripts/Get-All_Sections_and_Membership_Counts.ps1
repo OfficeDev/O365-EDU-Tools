@@ -49,6 +49,11 @@ $GraphEndpointPPE = "https://graph.microsoft-ppe.com"
 
 $logFilePath = "$outFolder\Get-All_Sections_and_Membership_Counts.log"
 
+# Create output folder if it does not exist
+if ((Test-Path $outFolder) -eq 0) {
+    mkdir $outFolder | out-null
+}
+
 if ($skipDownloadCommonFunctions -eq $false) {
     # Downloading file with latest common functions
     try {
@@ -62,10 +67,9 @@ if ($skipDownloadCommonFunctions -eq $false) {
 }
 
 #import file with common functions
-..\common.ps1
+. .\common.ps1
 
 function Get-Groups($graphEndPoint, $refreshToken, $method, $graphScopes, $logFilePath) {
-
     $groupsUri = "$graphEndPoint/$graphVersion/groups"
     $groups = PageAll-GraphRequest $groupsUri $refreshToken $method $graphScopes $logFilePath | Where-Object  {$_.mail -like "*section_*"}
     
@@ -115,11 +119,6 @@ catch {
     Write-Error "Failed to load Microsoft Graph PowerShell Module."
     Get-Help -Name .\Get-All_Sections_and_Membership_Counts.ps1 -Full | Out-String | Write-Error
     throw
-}
-
-# Create output folder if it does not exist
-if ((Test-Path $outFolder) -eq 0) {
-    mkdir $outFolder |out-null
 }
 
 $refreshToken = Initialize $graphScopes
