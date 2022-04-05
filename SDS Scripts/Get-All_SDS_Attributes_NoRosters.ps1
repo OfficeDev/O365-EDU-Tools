@@ -266,7 +266,7 @@ function Get-SdsTeachers
             "Teacher Number" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_TeacherNumber
             "Status" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_TeacherStatus
             "Secondary Email" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_Email
-	        "ObjectID" = $user.objectID
+	        "ObjectID" = $user.id
         }
     }
     return $data
@@ -315,7 +315,7 @@ function Get-SdsStudents
             "Student Number" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_StudentNumber
             "Status" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_StudentStatus
             "Secondary Email" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_Email
-	        "ObjectID" = $user.ObjectID
+	        "ObjectID" = $user.id
         }
     }
 
