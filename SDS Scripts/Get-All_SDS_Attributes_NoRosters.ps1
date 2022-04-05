@@ -1,15 +1,15 @@
 ﻿<#
 .SYNOPSIS
-    This script is designed to get all SDS objects and attributes, except for Rostering. The result is only 4 CSV files in a trimmed down version of the standard SDS format, as detailed on the page https://aka.ms/sdscsvattributes. The 4 CSV files generated are School.CSV, Section.CSV, Student.CSV, and Teacher.CSV. The 2 files not generated are StudentEnrollment.CSV and TeacherRoster.CSV. This reduces the run overall time of the SDS attributes script by about 80%. If you need all SDS attributes run the Get-All_SDS_Attributes.ps1 instead.
+This script is designed to get all SDS objects and attributes, except for Rostering. The result is only 4 CSV files in a trimmed down version of the standard SDS format, as detailed on the page https://aka.ms/sdscsvattributes. The 4 CSV files generated are School.CSV, Section.CSV, Student.CSV, and Teacher.CSV. The 2 files not generated are StudentEnrollment.CSV and TeacherRoster.CSV. This reduces the run overall time of the SDS attributes script by about 80%. If you need all SDS attributes run the Get-All_SDS_Attributes.ps1 instead.
 
 .PARAMETER outFolder
-    Path where to put the log and csv file with the fetched users.
+Path where to put the log and csv file with the fetched users.
 
 .PARAMETER graphVersion
-    The version of the Graph API.
+The version of the Graph API.
 
 .EXAMPLE
-    .\Get-All_SDS_Attributes_NoRosters.ps1
+.\Get-All_SDS_Attributes_NoRosters.ps1
 
 .NOTES
 ***This script may take a while.***
@@ -25,13 +25,12 @@ PowerShell 7 and later is the recommended PowerShell version for use with the Mi
 Command to download the function: Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
 
 3. Check that you can connect to your tenant directory from the PowerShell module to make sure everything is set up correctly.
+a. Open a separate PowerShell session
 
-    a. Open a separate PowerShell session
-    
     b. Execute: "connect-graph -scopes GroupMember.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All" to bring up a sign in UI.
-    
+
     c. Sign in with any tenant administrator credentials
-    
+
     d. If you are returned to the PowerShell session without error, you are correctly set up
 
 4. Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working
@@ -82,7 +81,7 @@ if ($skipDownloadCommonFunctions -eq $false) {
 
 function Export-SdsSchools
 {
-    $fileName = $eduObjSchool.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $authToken.TenantId } else { "" }) +".csv"
+    $fileName = $eduObjSchool.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $tenantId} else { "" }) +".csv"
 	$filePath = Join-Path $outFolder $fileName
     Remove-Item -Path $filePath -Force -ErrorAction Ignore
 
@@ -110,25 +109,12 @@ function Get-SdsSchools
 
     foreach($au in $list)
     {
-        #SIS ID,Name,School Number,School NCES_ID,State ID,Grade Low,Grade High,Principal SIS ID,Principal Name,Principal Secondary Email,Address,City,State,Zip,Phone,Zone,Country
+        #SIS ID,Name,School Number,School NCES_ID
         $data += [pscustomobject]@{
             "SIS ID" = $au.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId
             "Name" = $au.DisplayName
             "School Number" = $au.extension_fe2174665583431c953114ff7268b7b3_Education_SchoolNumber 
             "School NCES_ID" = $au.extension_fe2174665583431c953114ff7268b7b3_Education_SchoolNationalCenterForEducationStatisticsId
-            "State ID" = $au.extension_fe2174665583431c953114ff7268b7b3_Education_StateId
-            "Grade Low" = $au.extension_fe2174665583431c953114ff7268b7b3_Education_LowestGrade
-            "Grade High" = $au.extension_fe2174665583431c953114ff7268b7b3_Education_HighestGrade
-            "Principal SIS ID" = $au.extension_fe2174665583431c953114ff7268b7b3_Education_SchoolPrincipalSyncSourceId
-            "Principal Name" = $au.extension_fe2174665583431c953114ff7268b7b3_Education_SchoolPrincipalName
-            "Principal Secondary Email" = $au.extension_fe2174665583431c953114ff7268b7b3_Education_SchoolPrincipalEmail
-            "Address" = $au.extension_fe2174665583431c953114ff7268b7b3_Education_Address
-            "City" = $au.extension_fe2174665583431c953114ff7268b7b3_Education_City
-            "State" = $au.extension_fe2174665583431c953114ff7268b7b3_Education_State
-            "Zip" = $au.extension_fe2174665583431c953114ff7268b7b3_Education_Zip
-            "Phone" = $au.extension_fe2174665583431c953114ff7268b7b3_Education_Phone
-            "Zone" = $au.extension_fe2174665583431c953114ff7268b7b3_Education_SchoolZone
-            "Country" = $au.extension_fe2174665583431c953114ff7268b7b3_Education_Country
         }
     }
 
@@ -168,7 +154,7 @@ function Get-AdministrativeUnits
 
 function Export-SdsSections
 {
-    $fileName = $eduObjSection.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $authToken.TenantId } else { "" }) +".csv"
+    $fileName = $eduObjSection.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $tenantId } else { "" }) +".csv"
 	$filePath = Join-Path $outFolder $fileName
     Remove-Item -Path $filePath -Force -ErrorAction Ignore
 
@@ -200,19 +186,11 @@ function Get-SdsSections
         $data += [pscustomobject]@{
             "SIS ID" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SectionId
             "School SIS ID" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId
-            "Section Name" = $group.DisplayName
-            #"Name" = $au.DisplayName                    
+            "Section Name" = $group.DisplayName                  
             "Section Number" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_SectionNumber
-            "Term SIS ID" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_TermId
             "Term Name" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_TermName
             "Term StartDate" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_TermStartDate
             "Term EndDate" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_TermEndDate
-            "Course SIS ID" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_CourseId
-            "Course Name" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_CourseName
-            "Course Number" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_CourseNumber
-            "Course Description" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_CourseDescription
-            "Course Subject" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_CourseSubject
-            "Periods" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_Period
             "Status" = $group.extension_fe2174665583431c953114ff7268b7b3_Education_Status
             "ObjectID" = $group.id
         }
@@ -250,49 +228,9 @@ function Get-Groups
     return $list
 }
 
-function Get-SdsSection
-{
-    Param
-    (
-        $sectionId
-    )
-    $uri = $graphEndPoint + "/" + $authToken.TenantId + "/groups?api-version=1.6&`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource%20eq%20'SIS'%20and%20extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SectionId%20eq%20'$sectionId'"
-    #extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource%20eq%20'SIS'%20and%20
-    #Write-Host $uri
-    $response = Send-WebRequest "Get" $uri
-    $responseString = $response.Content.Replace("odata.", "odata")
-    $responseObject = $responseString | ConvertFrom-Json
-    foreach ($group in $responseObject.value)
-    {
-        return $group
-    }
-    return $null
-}
-
-function Get-Section
-{
-    Param
-    (
-        $objectId
-    )
-    $uri = $graphEndPoint + "/" + $authToken.TenantId + "/groups/" + $objectId + "?api-version=1.6"
-    #Write-Host $uri
-    $response = Send-WebRequest "Get" $uri
-    $responseString = $response.Content.Replace("odata.", "odata")
-    $responseObject = $responseString | ConvertFrom-Json
-    foreach ($group in $responseObject)
-    {
-        if ($group.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType = $eduObjSection)
-        {
-            return $group
-        }
-    }
-    return $null
-}
-
 function Export-SdsTeachers
 {
-    $fileName = $eduObjTeacher.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $authToken.TenantId } else { "" }) +".csv"
+    $fileName = $eduObjTeacher.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $tenantId } else { "" }) +".csv"
 	$filePath = Join-Path $outFolder $fileName
     Remove-Item -Path $filePath -Force -ErrorAction Ignore
 
@@ -320,21 +258,15 @@ function Get-SdsTeachers
     
     foreach($user in $users)
     {
-        #SIS ID,School SIS ID,Username,First Name,Last Name,Middle Name,Teacher Number,State ID,Status,Secondary Email,Title,Qualification,Password
         $data += [pscustomobject]@{
-            "SIS ID" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_TeacherId
+            "DisplayName1" = $user.DisplayName  
+            "UserPrincipalName" = $user.userPrincipalName          
+	        "SIS ID" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_TeacherId
             "School SIS ID" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId
-            "Username" = $user.userPrincipalName
-            "First Name" = $user.givenName
-            "Last Name" = $user.surName
-            "Middle Name" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_MiddleName
             "Teacher Number" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_TeacherNumber
-            "State ID" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_StateId
             "Status" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_TeacherStatus
             "Secondary Email" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_Email
-            "Title" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_Title
-            "Qualification" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_TeacherQualification
-            "Password" = ""
+	        "ObjectID" = $user.objectID
         }
     }
     return $data
@@ -347,7 +279,7 @@ function Get-Teachers
 
 function Export-SdsStudents
 {
-    $fileName = $eduObjStudent.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $authToken.TenantId } else { "" }) +".csv"
+    $fileName = $eduObjStudent.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $tenantId } else { "" }) +".csv"
 	$filePath = Join-Path $outFolder $fileName
     Remove-Item -Path $filePath -Force -ErrorAction Ignore
     
@@ -375,40 +307,15 @@ function Get-SdsStudents
 
     foreach($user in $users)
     {
-        #SIS ID,School SIS ID,Username,First Name,Last Name,Middle Name,Student Number,Status,State ID,Mailing Address,Mailing City,Mailing State,Mailing Zip,Mailing Latitude,Mailing Longitude,Mailing Country
-        #Residence Address,Residence City,Residence State,Residence Zip,Residence Latitude,Residence Longitude,Residence Country,Gender,Birthdate,Grade,ELL Status,FederalRace,Secondary Email,Graduation Year,Password
         $data += [pscustomobject]@{
-            "SIS ID" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_StudentId
+            "DisplayName" = $user.displayname
+	        "UserPrincipalName" = $user.userPrincipalName        
+	        "SIS ID" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_StudentId
             "School SIS ID" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId
-            "Username" = $user.userPrincipalName
-            "First Name" = $user.givenName
-            "Last Name" = $user.surName
-            "Middle Name" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_MiddleName
             "Student Number" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_StudentNumber
             "Status" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_StudentStatus
-            "State ID" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_StateId
-            "Mailing Address" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_MailingAddress
-            "Mailing City" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_MailingCity
-            "Mailing State" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_MailingState
-            "Mailing Zip" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_MailingZip
-            "Mailing Latitude" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_MailingLatitude
-            "Mailing Longitude" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_MailingLongitude
-            "Mailing Country" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_MailingCountry
-            "Resident Address" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_ResidentAddress
-            "Resident City" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_ResidentCity
-            "Resident State" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_ResidentState
-            "Resident Zip" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_ResidentZip
-            "Resident Latitude" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_ResidentLatitude
-            "Resident Longitude" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_ResidentLongitude
-            "Resident Country" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_ResidentCountry
-            "Gender" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_Gender
-            "Birthdate" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_DateOfBirth
-            "Grade" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_Grade
-            "ELL Status" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_EnglishLanguageLearnersStatus
-            "FederalRace" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_FederalRace
             "Secondary Email" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_Email
-            "Graduation Year" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_GraduationYear
-            "Password" = ""
+	        "ObjectID" = $user.ObjectID
         }
     }
 
@@ -455,6 +362,9 @@ if ($PPE)
 $activityName = "Reading SDS objects in the directory"
 
 $graphscopes = "User.Read.All, GroupMember.Read.All, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All"
+
+$tenantInfo = Get-MgOrganization
+$tenantId = $tenantInfo.Id
 
 try
 {
