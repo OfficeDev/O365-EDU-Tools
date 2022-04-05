@@ -363,9 +363,6 @@ $activityName = "Reading SDS objects in the directory"
 
 $graphscopes = "User.Read.All, GroupMember.Read.All, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All"
 
-$tenantInfo = Get-MgOrganization
-$tenantId = $tenantInfo.Id
-
 try
 {
     Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1 | Out-Null
@@ -381,6 +378,9 @@ catch
 Write-Progress -Activity $activityName -Status "Connecting to tenant"
 
 Initialize
+
+$tenantInfo = Get-MgOrganization
+$tenantId = $tenantInfo.Id
 
 Write-Progress -Activity $activityName -Status "Connected. Discovering tenant information"
 
