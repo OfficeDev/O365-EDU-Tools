@@ -25,7 +25,8 @@ PowerShell 7 and later is the recommended PowerShell version for use with the Mi
 Command to download the function: Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
 
 3. Check that you can connect to your tenant directory from the PowerShell module to make sure everything is set up correctly.
-a. Open a separate PowerShell session
+
+    a. Open a separate PowerShell session
 
     b. Execute: "connect-graph -scopes GroupMember.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All" to bring up a sign in UI.
 
