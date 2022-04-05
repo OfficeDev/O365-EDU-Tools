@@ -110,7 +110,6 @@ function Get-SdsSchools
 
     foreach($au in $list)
     {
-        #SIS ID,Name,School Number,School NCES_ID
         $data += [pscustomobject]@{
             "SIS ID" = $au.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId
             "Name" = $au.DisplayName
@@ -260,7 +259,7 @@ function Get-SdsTeachers
     foreach($user in $users)
     {
         $data += [pscustomobject]@{
-            "DisplayName1" = $user.DisplayName  
+            "DisplayName" = $user.DisplayName  
             "UserPrincipalName" = $user.userPrincipalName          
 	        "SIS ID" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_TeacherId
             "School SIS ID" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId
