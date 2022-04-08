@@ -39,7 +39,7 @@ Parameter to specify whether to download the script with common functions or not
 
     a. Open a separate PowerShell session
 
-    b. Execute: "connect-graph -scopes GroupMember.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All" to bring up a sign in UI. 
+    b. Execute: "connect-graph -scopes Group.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All" to bring up a sign in UI. 
 
     c. Sign in with any tenant administrator credentials
 
