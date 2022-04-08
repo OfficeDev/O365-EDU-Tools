@@ -1,49 +1,96 @@
 <#
------------------------------------------------------------------------
- <copyright file="Get-SectionUsageReport.ps1" company="Microsoft">
- © Microsoft. All rights reserved.
- </copyright>
------------------------------------------------------------------------
-.Synopsis
-    Generates section usage report
+.SYNOPSIS
+This script is designed to generate section usage report
 
-.Description
-    The script will query all SDS created sections and write their properties to a file
+.DESCRIPTION
+The script will query all SDS created sections and write their properties to a file
 
-.Parameter OutFolder
-    The script will create a CSV file at this location
+.PARAMETER PPE
+Used to refer pre production environment
 
-.Parameter AzureEnvironment
-    The AAD environment. By default the script uses Azure cloud. For testing purposes this can use PPE
-    environment
+.PARAMETER skipToken
+Used to start where the script left off fetching the users in case of interruption.  The value used is nextLink in the log file, otherwise use default value of "" to start from the beginning.
 
-.Example
-    .\Get-SectionUsageReport.ps1 -OutFolder "C:\temp"
+.PARAMETER outFolder
+The script will create a CSV file at this location ".\"
 
+.PARAMETER graphVersion
+The version of the Graph API.
+
+.PARAMETER graphScopes
+Scopes used to request access to data
+
+.PARAMETER skipDownloadCommonFunctions
+Parameter to specify whether to download the script with common functions or not
+
+.EXAMPLE
+.\Get-SectionUsageReport.ps1
+
+.NOTES
+***This script may take a while.***
+
+========================
+ Required Prerequisites
+========================
+
+1. Install Microsoft Graph Powershell Module with command 'Install-Module Microsoft.Graph'.
+
+2. Check that you can connect to your tenant directory from the PowerShell module to make sure everything is set up correctly.
+
+    a. Open a separate PowerShell session
+
+    b. Execute: "connect-graph -scopes Group.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All" to bring up a sign in UI. 
+
+    c. Sign in with any tenant administrator credentials
+
+    d. If you are returned to the PowerShell session without error, you are correctly set up
+
+3. Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working
+
+4.  Please visit the following link if a message is received that the license cannot be assigned.
+    https://docs.microsoft.com/en-us/azure/active-directory/enterprise-users/licensing-groups-resolve-problems
 #>
 
 Param (
+    [switch] $PPE = $false,
+    [Parameter(Mandatory=$false)]
+    [string] $skipToken= ".",
     [Parameter(Mandatory = $false)]
-    [string] $OutFolder = ".",
-
-    [ValidateSet('AzureCloud', 'AzurePPE')]
-    [string] $AzureEnvironment = "AzureCloud"
+    [string] $outFolder = ".\Section_Usage_Report",
+    [Parameter(Mandatory=$false)]
+    [string] $graphVersion = "beta",
+    [switch] $skipDownloadCommonFunctions
 )
 
-# Azure enviroment variables
+# Azure environment variables
 $GraphEndpointProd = "https://graph.microsoft.com"
-$AuthEndpointProd = "https://login.windows.net"
 $GraphEndpointPPE = "https://graph.microsoft-ppe.com"
-$AuthEndpointPPE = "https://login.windows-ppe.net"
 $DefaultForegroundColor = "White"
 $CurrentTime = $(((get-date).ToUniversalTime()).ToString("yyyy-MM-dd_HH-mm-ssZ"))
 $msgLogInstanceFilename = ("SectionReportLog_" + $CurrentTime + ".log")
 $msgErrorLogInstanceFilename = ("SectionReportErrorLog_" + $CurrentTime + ".log")
-
-# Authorization token constants
-$clientId = "1950a258-227b-4e31-a9cf-717495945fc2"
-$redirectUri = [Uri] "urn:ietf:wg:oauth:2.0:oob"
 $outputFilename = "SectionUsageReport.csv"
+
+# Create output folder if it does not exist
+if ((Test-Path $outFolder) -eq 0) {
+    Write-Host "Creating output folder path"
+    mkdir $outFolder | Out-Null;
+}
+
+if ($skipDownloadCommonFunctions -eq $false) {
+    # Downloading file with latest common functions
+    try {
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
+        "Grabbed 'common.ps1' to the directory alongside the executing script"
+        Write-Output "[$(get-date -Format G)] Grabbed 'common.ps1' to the directory alongside the executing script. common.ps1 script contains common functions, which can be used by other SDS scripts" | out-file $msgErrorLogInstanceFilename -Append
+    } 
+    catch {
+        throw "Unable to download common.ps1"
+    }
+}
+
+#import file with common functions
+. .\common.ps1
 
 <#
 .Synopsis
@@ -72,223 +119,61 @@ function Write-Message($message, $foregroundColor) {
 
         Write-Host $message -ForegroundColor $foregroundColor
     }
-    catch { } 
+    catch { }
 }
-
 <#
 .Synopsis
     Writes messages to log file
 #>
 function Write-Log($message) {
-    $logFile = Join-Path $OutFolder $msgLogInstanceFilename
+    $logFile = Join-Path $outFolder $msgLogInstanceFilename
     $message | Out-File -FilePath $logFile -Append
 }
-
 <#
 .Synopsis
     Writes messages to error log file
 #>
 function Write-ErrorLog($message) {
-    $logFile = Join-Path $OutFolder $msgErrorLogInstanceFilename
+    $logFile = Join-Path $outFolder $msgErrorLogInstanceFilename
     $errorMessage = ((get-date).ToUniversalTime()).ToString("yyyy-MM-dd_HH-mm-ssZ") + $message
     $errorMessage | Out-File -FilePath $logFile -Append
     Write-Log $errorMessage
 }
 
-<#
-.Synopsis
-    Sets the authentication result and sets it at the global scope. This is to Set an OAuth2token for graph API calls.
-#>
-function Set-AuthenticationResult($resourceAppIdURI) {
-    $authContext = New-Object "Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext" -ArgumentList $global:authority, $false
-    $promptBehaviour = [Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior]::Always
-    $authParam = New-Object "Microsoft.IdentityModel.Clients.ActiveDirectory.PlatformParameters" -ArgumentList $($promptBehaviour)
-    $asyncTask = $authContext.AcquireTokenAsync([string] $resourceAppIdURI, [string] $clientId, [Uri] $redirectUri, $authParam)
-    $asyncTask.Wait()
-    $global:authToken = $asyncTask.Result
-    $global:blobAuth = $authContext.TokenCache.Serialize()
+function Get-SectionGroups($graphEndPoint, $eduObjectType, $refreshToken, $graphScopes, $msgErrorLogInstanceFilename) {
+    $uri = "$graphEndPoint/$graphVersion/groups?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'";
+    $fileName = $eduObjectType +"-Usage-Report.csv"
+    $filePath = Join-Path $outFolder $fileName 
+    $objectProperties = @()
+    $objectProperties += @{label = "Id"; expression = { $_.id } }, @{label = 'SectionId'; expression = {$_.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SectionId}}, @{label = 'Name'; expression = {$_.displayName}}
+    PageAll-GraphRequest-WriteToFile $uri $refreshToken 'GET' $graphScopes $msgErrorLogInstanceFilename $filePath $objectProperties $eduObjectType | out-null
+
+    return $filePath
 }
 
-<#
-.Synopsis
-    Sets the authentication result from the refresh token and sets it at the global scope. This is to Set an OAuth2token for graph API calls.
-#>
-function Set-AuthenticationResultFromRefreshToken {
-    $authContext = New-Object "Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext" -ArgumentList $global:authority, $false
-    $authContext.TokenCache.Deserialize($global:blobAuth);
-    $asyncTask = $authContext.AcquireTokenSilentAsync([string] $($global:authToken.RefreshToken), [string] $clientId)
-    $asyncTask.Wait()
-    $global:authToken = $asyncTask.Result
-    $global:blobAuth = $authContext.TokenCache.Serialize()
+# Main function
+$graphEndPoint = $GraphEndpointProd
+
+if ($PPE) {
+    $graphEndPoint = $GraphEndpointPPE
 }
 
-<#
-.Synopsis
-    Invoke web request. Based on http request method, it constructs request headers using global $authToken.
-    Response is in json format. If token expired, it will ask user to refresh token. Max retry time is 5.
-.Parameter method
-    Http request method
-.Parameter uri
-    Http request uri
-.Parameter payload
-    Http request payload. Not used if method is Get.
-#>
-function Send-WebRequest($method, $uri, $payload) {
-    $response = ""
+$graphScopes = "Group.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All"
+$refreshToken = Initialize $graphScopes
 
-    $expiresOn = $global:authToken.ExpiresOn.UtcDateTime.AddMinutes(-1)
-    $now = (Get-Date).ToUniversalTime()
-    if ($expiresOn -lt $now) {
-        Get-AuthenticationResultFromRefreshToken
-    }
-
-    if ($method -ieq "get") {
-        $headers = @{ "Authorization" = "Bearer " + $($global:authToken.AccessToken) }
-        $response = Invoke-RestMethod -Method $method -Uri $uri -Headers $headers
-    }
-    else {
-        $headers = @{ 
-            "Authorization" = "Bearer " + $($global:authToken.AccessToken)
-            "Content-Type"  = "application/json"
-        }
-
-        $response = Invoke-RestMethod -Method $method -Uri $uri -Headers $headers -Body $payload
-    }
-
-    return $response
+try {
+    Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1 | Out-Null
+    Write-Message "Authenticated to Microsoft"
+}
+catch {
+    Write-ErrorLog "Failed to load Microsoft Graph PowerShell Module."
+    Get-Help -Name .\Get-SectionUsageReport.ps1 -Full | Out-String | Write-Error
+    throw
 }
 
-<#
-.Synopsis
-    Loads modules and DLLs required to run this script.
-    ADAL package is downloaded from nuget server if not available.
-#>
-function Import-ActiveDirectoryAuthenticationLibrary {
-    $AdalPackageName = "Microsoft.IdentityModel.Clients.ActiveDirectory"
-    $NugetClientLatest = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
-
-    $modulePath = $env:Temp + "\AADGraph"
-    $nugetPackagePath = $modulePath + "\Nugets"
-    if (-not (Test-Path ($nugetPackagePath))) {
-        Write-Message "[Load-ADAL] Creating directory $nugetPackagePath"
-        New-Item -Path ($nugetPackagePath) -ItemType "Directory" | out-null
-    }
-    $adalPackageDirectories = (Get-ChildItem -Path ($nugetPackagePath) -Filter $($AdalPackageName + "*") -Directory)
-
-    if ($null -eq $adalPackageDirectories -or $adalPackageDirectories.Length -eq 0) {
-        Write-Message "[Load-ADAL] ADAL package directory not found in $nugetPackagePath"
-
-        # Get latest nuget client
-        Write-Message "[Load-ADAL] Downloading latest nuget client from $NugetClientLatest"
-        $nugetClientPath = $modulePath + "\Nugets\nuget.exe"
-        Remove-Item -Path $nugetClientPath -Force -ErrorAction Ignore
-        $wc = New-Object System.Net.WebClient
-        $wc.DownloadFile($NugetClientLatest, $nugetClientPath);
-        
-        # Install ADAL nuget package
-        $nugetDownloadExpression = $nugetClientPath + " install " + $AdalPackageName + " -OutputDirectory " + $nugetPackagePath
-        Write-Message "[Load-ADAL] Active Directory Authentication Library Nuget doesn't exist. Downloading now: `n$nugetDownloadExpression"
-        Invoke-Expression $nugetDownloadExpression
-    }
-
-    $adalPackageDirectories = (Get-ChildItem -Path ($nugetPackagePath) -Filter $($AdalPackageName + "*") -Directory)
-    if ($null -eq $adalPackageDirectories -or $adalPackageDirectories.length -le 0) {
-        Write-Message "Unable to download ADAL nuget package" Red
-        return $false
-    }
-
-    $adal4_5Directory = Join-Path $adalPackageDirectories[$adalPackageDirectories.length - 1].FullName -ChildPath "lib\net45"
-    $ADAL_Assembly = Join-Path $adal4_5Directory -ChildPath "Microsoft.IdentityModel.Clients.ActiveDirectory.dll"
-
-    if ($ADAL_Assembly.Length -gt 0) {
-        Write-Message "[Load-ADAL] Loading ADAL Assemblies: `n`t$ADAL_Assembly `n`t$ADAL_WindowsForms_Assembly"
-        Write-Debug "file path length for $ADAL_Assembly is $($ADAL_Assembly.Length)"
-        [System.Reflection.Assembly]::LoadFrom($ADAL_Assembly) | out-null
-        return $true
-    }
-    else {
-        Write-Message "[Load-ADAL] Fixing Active Directory Authentication Library package directories ..."
-        $adalPackageDirectories | Remove-Item -Recurse -Force | Out-Null
-        $message = "Not able to load ADAL assembly. Delete the Nugets folder under " + $modulePath + " , restart PowerShell session and try again ..."
-        Write-Message $message Red
-    }
-
-    return $false
-}
-
-<#
-.Synopsis
-    Generate section report
-#>
-function Get-Report (
-    [Parameter(Mandatory = $false)]
-    [string] $OutFolder = ".",
-
-    [ValidateSet('AzureCloud', 'AzurePPE')]
-    [string] $AzureEnvironment = "AzureCloud"
-) {
-    try {
-        if ($AzureEnvironment -eq "AzurePPE") {
-            $global:graphEndPoint = $GraphEndpointPPE
-            $global:authEndPoint = $AuthEndpointPPE
-        }
-        else {
-            $global:graphEndPoint = $GraphEndpointProd
-            $global:authEndPoint = $AuthEndpointProd
-        }
-        $global:authority = $authEndPoint + "/common"
-
-        if (!(Test-Path $OutFolder)) {
-            mkdir $OutFolder;
-        }
-
-        # Connect to the tenant
-        $adalLoaded = Import-ActiveDirectoryAuthenticationLibrary
-        if ($adalLoaded) {
-            Set-AuthenticationResult $global:graphEndPoint
-        }
-        else {
-            Write-Error "Could not load dependent libraries required by the script."
-            exit
-        }
-
-        $outputFilePath = [system.io.path]::Combine($OutFolder, $outputFilename);
-
-        $uri = "https://graph.microsoft.com/beta/groups?$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'Section'";
-        Remove-Item $outputFilePath -ErrorAction Ignore
-        while ($null -ne $uri) {
-            try {
-                $result = Send-WebRequest -Method Get -Uri $uri -Payload $null
-                $sections = $result.value
-                $uri = $result.'@odata.nextLink'
-                Write-Message "Received $($result.value.Count) sections"
-                $outSections = $sections | Select-Object `
-                @{label = "GraphId"; expression = { $_.id } }, `
-                @{label = "SectionId"; expression = { $_.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SectionId } }, `
-                @{label = "Name"; expression = { $_.displayname } }, `
-                    CreatedDateTime
-                
-                $outSections | ForEach-Object {
-                    Export-Csv -InputObject $_ -Path $outputFilePath -Append -NoTypeInformation
-                }
-            }
-            catch {
-                if ($_.Exception.Message -like "*Unauthorized*") {
-                    Set-AuthenticationResultFromRefreshToken
-                }
-                else {
-                    throw
-                }
-            }
-        }
-
-        Write-Message -foregroundColor "Green"  -message "Report successfully generated at $outputFilePath."
-    }
-    catch {
-        Write-Message "`n`nException occured while script execution. Please rerun the script.`n`n" Red
-        throw
-    }
-}
-
-# main
-Get-Report $OutFolder $AzureEnvironment
+# Get all Sections of Edu Object Type Section
+Write-Message "Fetching Section Usage Report"
+$OutputFileName = Get-SectionGroups $graphEndPoint 'Section' $refreshToken $graphScopes $msgErrorLogInstanceFilename
+Write-Message "`nSection usage report successfully generated at $outputFilename `n" -ForegroundColor Green
+Write-Output "Done.`n"
+Write-Output "Please run 'disconnect-graph' if you are finished making changes.`n"
