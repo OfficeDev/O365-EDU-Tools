@@ -17,6 +17,12 @@ The script will create a CSV file at this location ".\"
 .PARAMETER graphVersion
 The version of the Graph API.
 
+.PARAMETER graphScopes
+Scopes used to request access to data
+
+.PARAMETER skipDownloadCommonFunctions
+Parameter to specify whether to download the script with common functions or not
+
 .EXAMPLE
 .\Get-SectionUsageReport.ps1
 
@@ -50,27 +56,25 @@ Param (
     [Parameter(Mandatory=$false)]
     [string] $skipToken= ".",
     [Parameter(Mandatory = $false)]
-    [string] $OutFolder = ".\Section_Usage_Report",
+    [string] $outFolder = ".\Section_Usage_Report",
     [Parameter(Mandatory=$false)]
     [string] $graphVersion = "beta",
-    #Parameter to specify whether to download the script with common functions or not
     [switch] $skipDownloadCommonFunctions
 )
 
-# Azure enviroment variables
+# Azure environment variables
 $GraphEndpointProd = "https://graph.microsoft.com"
 $GraphEndpointPPE = "https://graph.microsoft-ppe.com"
 $DefaultForegroundColor = "White"
 $CurrentTime = $(((get-date).ToUniversalTime()).ToString("yyyy-MM-dd_HH-mm-ssZ"))
 $msgLogInstanceFilename = ("SectionReportLog_" + $CurrentTime + ".log")
 $msgErrorLogInstanceFilename = ("SectionReportErrorLog_" + $CurrentTime + ".log")
-$logFilePath = "$OutFolder\SDSSectionUsageReport.log"
 $outputFilename = "SectionUsageReport.csv"
 
 # Create output folder if it does not exist
-if ((Test-Path $OutFolder) -eq 0) {
-    Write-Message "Creating output folder path"
-    mkdir $OutFolder | Out-Null;
+if ((Test-Path $outFolder) -eq 0) {
+    Write-Host "Creating output folder path"
+    mkdir $outFolder | Out-Null;
 }
 
 if ($skipDownloadCommonFunctions -eq $false) {
@@ -78,7 +82,7 @@ if ($skipDownloadCommonFunctions -eq $false) {
     try {
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
         "Grabbed 'common.ps1' to the directory alongside the executing script"
-        Write-Output "[$(get-date -Format G)] Grabbed 'common.ps1' to the directory alongside the executing script. common.ps1 script contains common functions, which can be used by other SDS scripts" | out-file $logFilePath -Append
+        Write-Output "[$(get-date -Format G)] Grabbed 'common.ps1' to the directory alongside the executing script. common.ps1 script contains common functions, which can be used by other SDS scripts" | out-file $msgErrorLogInstanceFilename -Append
     } 
     catch {
         throw "Unable to download common.ps1"
@@ -122,7 +126,7 @@ function Write-Message($message, $foregroundColor) {
     Writes messages to log file
 #>
 function Write-Log($message) {
-    $logFile = Join-Path $OutFolder $msgLogInstanceFilename
+    $logFile = Join-Path $outFolder $msgLogInstanceFilename
     $message | Out-File -FilePath $logFile -Append
 }
 <#
@@ -130,19 +134,19 @@ function Write-Log($message) {
     Writes messages to error log file
 #>
 function Write-ErrorLog($message) {
-    $logFile = Join-Path $OutFolder $msgErrorLogInstanceFilename
+    $logFile = Join-Path $outFolder $msgErrorLogInstanceFilename
     $errorMessage = ((get-date).ToUniversalTime()).ToString("yyyy-MM-dd_HH-mm-ssZ") + $message
     $errorMessage | Out-File -FilePath $logFile -Append
     Write-Log $errorMessage
 }
 
-function Get-SectionGroups($graphEndPoint, $eduObjectType, $refreshToken, $graphScopes, $logFilePath) {
-    $uri = "$graphEndPoint/$graphVersion/groups?$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'";
+function Get-SectionGroups($graphEndPoint, $eduObjectType, $refreshToken, $graphScopes, $msgErrorLogInstanceFilename) {
+    $uri = "$graphEndPoint/$graphVersion/groups?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'";
     $fileName = $eduObjectType +"-Usage-Report.csv"
-    $filePath = Join-Path $OutFolder $fileName 
+    $filePath = Join-Path $outFolder $fileName 
     $objectProperties = @()
-    $objectProperties += @{label = "Id"; expression = { $_.id } }, @{label = 'SectionId'; expression = {$_.organizationId}}, @{label = 'Name'; expression = {$_.displayName}}
-    PageAll-GraphRequest-WriteToFile $uri $refreshToken 'GET' $graphScopes $logFilePath $filePath $objectProperties $eduObjectType | out-null
+    $objectProperties += @{label = "Id"; expression = { $_.id } }, @{label = 'SectionId'; expression = {$_.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SectionId}}, @{label = 'Name'; expression = {$_.displayName}}
+    PageAll-GraphRequest-WriteToFile $uri $refreshToken 'GET' $graphScopes $msgErrorLogInstanceFilename $filePath $objectProperties $eduObjectType | out-null
 
     return $filePath
 }
@@ -154,13 +158,12 @@ if ($PPE) {
     $graphEndPoint = $GraphEndpointPPE
 }
 
-#scopes used to request access to data
-$graphScopes = "GroupMember.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All"
+$graphScopes = "Group.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All"
 $refreshToken = Initialize $graphScopes
 
 try {
     Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1 | Out-Null
-    Write-Message "microsoft authentication"
+    Write-Message "Authenticated to Microsoft"
 }
 catch {
     Write-ErrorLog "Failed to load Microsoft Graph PowerShell Module."
@@ -170,7 +173,7 @@ catch {
 
 # Get all Sections of Edu Object Type Section
 Write-Message "Fetching Section Usage Report"
-$OutputFileName = Get-SectionGroups $graphEndPoint 'Section' $refreshToken $graphScopes $logFilePath
+$OutputFileName = Get-SectionGroups $graphEndPoint 'Section' $refreshToken $graphScopes $msgErrorLogInstanceFilename
 Write-Message "`nSection usage report successfully generated at $outputFilename `n" -ForegroundColor Green
 Write-Output "Done.`n"
 Write-Output "Please run 'disconnect-graph' if you are finished making changes.`n"
