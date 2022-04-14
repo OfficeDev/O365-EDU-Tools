@@ -175,8 +175,8 @@ function Get-Users
 
     $list = @()
 
-    $initialUri = "$graphEndPoint/beta/users?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
-
+    $initialUri = "$graphEndPoint/$graphVersion/users?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
+    
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
     $users = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
 
