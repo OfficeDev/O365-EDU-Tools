@@ -34,11 +34,7 @@ Param (
     [string] $outFolder = ".\StudentsTeachersExport",  
     [Parameter(Mandatory=$false)]
     [string] $graphVersion = "beta",
-    [Parameter(Mandatory=$false)]
     [switch] $PPE = $false,
-    [string] $exportStudents = $true,
-    [string] $exportTeachers = $true,
-    [string] $exportTeacherRosters = $true,
     [switch] $appendTenantIdToFileName = $false,
     [switch] $downloadCommonFNs = $false
 )
@@ -68,7 +64,7 @@ if ($downloadCommonFNs){
 
 function Export-SdsTeachers
 {
-    $fileName = $eduObjTeacher.ToLower() + $(if ($appendTenantIdToFileName) { "-" + $authToken.TenantId } else { "" }) +".csv"
+    $fileName = $eduObjTeacher.ToLower() + $(if ($appendTenantIdToFileName) { "-" + $tenantInfo.Id } else { "" }) +".csv"
 	$filePath = Join-Path $outFolder $fileName
     Remove-Item -Path $filePath -Force -ErrorAction Ignore
 
@@ -78,7 +74,7 @@ function Export-SdsTeachers
     if ($cnt -gt 0)
     {
         Write-Host "Exporting $cnt Teachers ..."
-        $data | Export-Csv $filePath -Force -NotypeInformation
+        $data | Export-Csv $filePath -Force -NoTypeInformation
         Write-Host "`nTeachers exported to file $filePath `n" -ForegroundColor Green
         return $filePath
     }
@@ -118,7 +114,7 @@ function Get-Teachers
 
 function Export-SdsStudents
 {
-    $fileName = $eduObjStudent.ToLower() + $(if ($appendTenantIdToFileName) { "-" + $authToken.TenantId } else { "" }) +".csv"
+    $fileName = $eduObjStudent.ToLower() + $(if ($appendTenantIdToFileName) { "-" + $tenantInfo.Id } else { "" }) +".csv"
 	$filePath = Join-Path $outFolder $fileName
     Remove-Item -Path $filePath -Force -ErrorAction Ignore
     
@@ -128,7 +124,7 @@ function Export-SdsStudents
     if ($cnt -gt 0)
     {
         Write-Host "Exporting $cnt Students ..."
-        $data | Export-Csv $filePath -Force -NotypeInformation
+        $data | Export-Csv $filePath -Force -NoTypeInformation
         Write-Host "`nStudents exported to file $filePath `n" -ForegroundColor Green
         return $filePath
     }
@@ -200,7 +196,7 @@ if ($PPE)
 
 $activityName = "Reading SDS objects in the directory"
 
-$graphscopes = "User.Read.All, GroupMember.Read.All, Member.Read.Hidden, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All"
+$graphScopes = "User.Read.All, GroupMember.Read.All, Member.Read.Hidden, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All"
 
 try
 {
@@ -209,7 +205,7 @@ try
 catch
 {
     Write-Error "Failed to load Microsoft Graph PowerShell Module."
-    Get-PrerequisiteHelp | Out-String | Write-Error
+    Get-Help -Name .\Get-All_Students_and_Teachers.ps1 -Full | Out-String | Write-Error
     throw
 }
 
@@ -242,7 +238,7 @@ Export-SdsTeachers | Out-Null
 
 Write-Progress -Activity $activityName -Status "Fetching Students ..."
 Export-SdsStudents | Out-Null
-    
+
 
 #Write Tenant Details to the PS screen
 Write-Host -foregroundcolor green "Tenant Name is $tenantDisplayName"
