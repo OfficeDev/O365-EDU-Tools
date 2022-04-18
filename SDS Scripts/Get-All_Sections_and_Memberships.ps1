@@ -21,14 +21,13 @@ Path where to put the csv output file.
 
     a. Open a separate PowerShell session
     
-    b. Execute: "Connect-ExchangeOnline -Device" to bring up a sign-in UI.
-    The command returns a URL and unique code that's tied to the session. You need to open the URL in a browser on any computer, and then enter the unique code.
-    After you complete the login in the web browser, the session in the Powershell 7 window is authenticated via the regular Azure AD authentication flow, and the Exchange Online cmdlets are imported after few seconds.
+    b. Execute: "Connect-ExchangeOnline" to bring up a sign-in UI. 
+    After you complete the login in the web browser, the session in the Powershell window is authenticated via the regular Azure AD authentication flow, and the Exchange Online cmdlets are imported after few seconds.
     
     c. If you are returned to the PowerShell session without error, you are correctly set up.
 #>
 
-Param (
+Param (    
     [Parameter(Mandatory = $false)]
     [string] $outFolder = ".\SDS_Sections_Memberships"
 )
@@ -76,9 +75,11 @@ function Get-SectionMemberships {
             $auObj | Add-Member NoteProperty -Name GroupAddress -Value $addr
             $results += $auObj
         }
+
         $counter++
         Write-Progress -Activity "Retrieving section memberships" -Status "Progress ->" -PercentComplete ($counter/$groups.count*100)
     }
+
     return $results
 }
 
@@ -95,6 +96,8 @@ catch {
     Get-Help -Name .\Get-All_Sections_and_Memberships.ps1 -Full | Out-String | Write-Error
     throw
 }
+
+Connect-ExchangeOnline
 
 $sectionMemberships = Get-SectionMemberships
 
