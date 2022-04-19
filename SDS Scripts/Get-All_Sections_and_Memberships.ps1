@@ -51,6 +51,7 @@ function Get-SectionMemberships {
         $dn = $group.DisplayName
         $addr = $group.PrimarySmtpAddress
         $owner = Get-UnifiedGroupLinks –Identity $name -LinkType Owners
+        $owners = $owner -join ","
 
         #Progress Reporting
         Write-Host -ForegroundColor Green "Processing Group $dn"
@@ -71,7 +72,7 @@ function Get-SectionMemberships {
             $auObj | Add-Member NoteProperty -Name GroupName -Value $name
             $auObj | Add-Member NoteProperty -Name GroupExchangeGuid -Value $exchGuid
             $auObj | Add-Member NoteProperty -Name GroupGuid -Value $guid
-            $auObj | Add-Member NoteProperty -Name GroupOwner -Value $owner
+            $auObj | Add-Member NoteProperty -Name GroupOwner -Value $owners
             $auObj | Add-Member NoteProperty -Name GroupAddress -Value $addr
             $results += $auObj
         }
