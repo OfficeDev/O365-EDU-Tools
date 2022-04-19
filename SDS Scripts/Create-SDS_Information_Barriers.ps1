@@ -17,9 +17,7 @@ Param (
     [string] $skipToken= ".",
     [Parameter(Mandatory=$false)]
     [string] $outFolder = ".\SDS_InformationBarriers",
-    [Parameter(Mandatory=$false)]
     [switch] $downloadCommonFNs = $true,
-    [Parameter(Mandatory=$false)]
     [switch] $PPE = $false
 )
 
@@ -206,7 +204,7 @@ $logFilePath = "$outFolder\SDS_InformationBarriers.log"
 $csvFilePath = "$outFolder\SDS_SchoolAUs.csv"
 
 #List used to request access to data
-$graphscopes = "AdministrativeUnit.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All"
+$graphScopes = "AdministrativeUnit.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All"
 
 try 
 {
@@ -233,7 +231,7 @@ catch
  #Create output folder if it does not exist
  if ((Test-Path $outFolder) -eq 0)
  {
- 	mkdir $outFolder;
+ 	mkdir $outFolder | Out-Null;
  }
 
 Write-Host "`nActivity logged to file $logFilePath `n" -ForegroundColor Green
@@ -241,7 +239,7 @@ Write-Host "`nActivity logged to file $logFilePath `n" -ForegroundColor Green
 #Get all AU's of Edu Object Type School
 Write-Progress -Activity "Reading SDS" -Status "Fetching School Administrative Units"
 
-Connect-Graph -scopes $graphscopes | Out-Null
+Connect-Graph -scopes $graphScopes | Out-Null
 Connect-IPPSSession | Out-Null
 
 Get-AllSchoolAUs
