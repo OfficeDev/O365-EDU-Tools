@@ -144,7 +144,7 @@ function Update-SDSUserAttributes
 	)
 
 	Write-Host "WARNING: You are about to update user anchor id's created from SDS. `nIf you want to skip removing any users, edit the file now and update the corresponding lines before proceeding. `n" -ForegroundColor Yellow
-	Write-Host "Proceed with removing all the SDS user anchor ids in $userListFileName (yes/no)?" -ForegroundColor White
+	Write-Host "Proceed with restoring all the SDS v1 user anchor ids in $userListFileName (yes/no)?" -ForegroundColor White
 	
     $choice = Read-Host
 	if ($choice -ieq "y" -or $choice -ieq "yes")
