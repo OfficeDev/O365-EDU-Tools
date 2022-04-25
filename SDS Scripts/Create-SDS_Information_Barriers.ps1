@@ -13,22 +13,34 @@ This script uses features required by Information Barriers version 3 or above en
 #>
 
 Param (
+    [Parameter(Mandatory=$true)]
+    [string] $upn,
     [Parameter(Mandatory=$false)]
     [string] $skipToken= ".",
     [Parameter(Mandatory=$false)]
     [string] $outFolder = ".\SDS_InformationBarriers",
+    [Parameter(Mandatory=$false)]
+    [string] $graphVersion = "beta",
     [switch] $downloadCommonFNs = $true,
     [switch] $PPE = $false
 )
 
-$GraphEndpointProd = "https://graph.microsoft.com"
-$GraphEndpointPPE = "https://graph.microsoft-ppe.com"
+$graphEndpointProd = "https://graph.microsoft.com"
+$graphEndpointPPE = "https://graph.microsoft-ppe.com"
+
+#Used for refreshing connection
+$connectTypeGraph = "Graph"
+$connectTypeIPPSSession = "IPPSSession"
+$connectGraphDT = Get-Date -Date "1970-01-01T00:00:00"
+$connectIPPSSessionDT = Get-Date -Date "1970-01-01T00:00:00"
+$timeout = (New-Timespan -Hours 3 -Seconds 1)
+$pssOpt = new-PSSessionOption -IdleTimeout $timeout.TotalMilliseconds
 
 #Checking parameter to download common.ps1 file for required common functions
 if ($downloadCommonFNs){
     #Downloading file with latest common functions
     try {
-        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop
         "Grabbed 'common.ps1' to current directory"
     } 
     catch {
@@ -71,7 +83,32 @@ function Get-PrerequisiteHelp
 "@
 }
 
-function Get-AllSchoolAUs {
+function Set-Connection($connectDT, $connectionType) {
+    #Check if need to renew connection
+    $currentDT = Get-Date
+    $lastRefreshedDT = $connectDT
+
+    if ((New-TimeSpan -Start $lastRefreshedDT -End $currentDT).Minutes -gt $timeout.TotalMinutes)
+    {
+        if ($connectionType -ieq $connectTypeIPPSSession)
+        {
+            $sessionIPPS = Get-PSSession | Where-Object {$_.ConfigurationName -eq "Microsoft.Exchange" -and $_.State -eq "Opened"}
+            
+            if ($sessionIPPS)
+            {
+                Disconnect-ExchangeOnline -confirm:$false | Out-Null
+            }
+
+            Connect-IPPSSession -PSSessionOption $pssOpt -UserPrincipalName $upn | Out-Null
+        }
+        else
+        {
+            Connect-Graph -scopes $graphScopes | Out-Null
+        }
+    }
+    return Get-Date
+}
+function Get-AllSchoolAUs($connectDT) {
 
     #Remove temp csv file with school AUs if not resuming from last token
     if ((Test-Path $csvFilePath) -and ($skipToken -eq "."))
@@ -81,7 +118,7 @@ function Get-AllSchoolAUs {
 
     #Preparing uri string
     $auSelectClause = "`$select=id,displayName"
-    $initialSDSSchoolAUsUri = "$graphEndPoint/beta/directory/administrativeUnits?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'School'&$auSelectClause"
+    $initialSDSSchoolAUsUri = "$graphEndPoint/$graphVersion/directory/administrativeUnits?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'School'&$auSelectClause"
         
     #Getting AUs for all schools
     Write-Output "`nRetrieving SDS School Administrative Units`n"
@@ -90,7 +127,9 @@ function Get-AllSchoolAUs {
     $allSchoolAUs = @() #array of objects for pages of school AUs
     $pageCnt = 1 #Counts the number of pages of school AUs Retrieved
 
+    #Get all AU's of Edu Object Type School
     do {
+        $connectDT = Set-Connection $connectDT $connectTypeGraph
         $graphResponse = Invoke-GraphRequest -Method GET -Uri $checkedSDSSchoolAUsUri -ContentType "application/json"
         $schoolAUs = $graphResponse.value
 
@@ -108,25 +147,27 @@ function Get-AllSchoolAUs {
         #Write nextLink to log if need to restart from previous page
         Write-Output "[$(Get-Date -Format G)] nextLink: $($graphResponse.'@odata.nextLink')" | Out-File $logFilePath -Append
         $pageCnt++
+        Write-Progress -Activity "Reading SDS" -Status "Fetching School Administrative Units"
 
     } while($graphResponse.'@odata.nextLink')
     
     $allSchoolAUs | Export-Csv -Path "$csvfilePath" -Append -NoTypeInformation
-    return
+    return $connectDT
 }
 
-function Create-InformationBarriersFromSchoolAUs {
+function Create-InformationBarriersFromSchoolAUs($connectDT) {
     
     $allSchoolAUs = Import-Csv $csvfilePath | Sort-Object * -Unique #Import school AUs retrieved and remove dupes if occurred from skipToken retry.  
     $i = 0 #Counter for progress of IB creation
-        
+
     #Looping through all school AUs
     foreach($au in $allSchoolAUs)
     {
         if ($au.AUObjectId -ne $null)
         {
+            $connectDT = Set-Connection $connectDT $connectTypeIPPSSession
             Write-Host "Processing $($au.AUDisplayName)"
-
+            
             #Creating Organization Segment from SDS School Administrative Unit for the Information Barrier
             try {
                 New-OrganizationSegment -Name $au.AUDisplayName -UserGroupFilter "AdministrativeUnits -eq '$($au.AUDisplayName)'" -ErrorAction Stop | Out-Null
@@ -148,16 +189,15 @@ function Create-InformationBarriersFromSchoolAUs {
         $i++
         Write-Progress -Activity "`nCreating Organization Segments and Information Barrier Policies based from SDS School Administrative Units" -Status "Progress ->" -PercentComplete ($i/$allSchoolAUs.count*100)
     }
-    return
+    return $connectDT
 }
 
-function Create-InformationBarriersFromTeacherSG {
-
+function Get-AllTeacherSG($connectDT){
     #preparing uri string
     $grpTeacherSelectClause = "?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'AllTeachersSecurityGroup'&`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
-    $teacherSGUri = "$graphEndPoint/beta/groups$grpTeacherSelectClause"
+    $teacherSGUri = "$graphEndPoint/$graphVersion/groups$grpTeacherSelectClause"
 
-    Write-Output "Creating Information Barrier Policy from 'All Teachers' Security Group`n"  
+    $connectDT = Set-Connection $connectDT $connectTypeGraph
 
     try {
         $graphResponse = Invoke-GraphRequest -Method GET -Uri $teacherSGUri -ContentType "application/json"
@@ -169,6 +209,13 @@ function Create-InformationBarriersFromTeacherSG {
     catch{
         throw "Could not retrieve 'All Teachers' Security Group.  Please make sure that it is enabled in SDS."
     }
+    return $teacherSG
+}
+
+function Create-InformationBarriersFromTeacherSG($connectDT, $teacherSG) {
+    
+    Write-Host "Creating Information Barrier Policy from 'All Teachers' Security Group`n"  
+    $connectDT = Set-Connection $connectDT $connectTypeIPPSSession
 
     try {
         New-OrganizationSegment -Name $teacherSG.displayName -UserGroupFilter "MemberOf -eq '$($teacherSG.id)'" | Out-Null
@@ -186,16 +233,15 @@ function Create-InformationBarriersFromTeacherSG {
     catch {
         throw "Error creating Information Barrier Policy for security group $($teacherSG.displayName)"
     }
-
-    return
+    return $connectDT
 }
 
 # Main
-$graphEndPoint = $GraphEndpointProd
+$graphEndPoint = $graphEndpointProd
 
 if ($PPE)
 {
-    $graphEndPoint = $GraphEndpointPPE
+    $graphEndPoint = $graphEndpointPPE
 }
 
 $activityName = "Creating information barrier policies"
@@ -236,32 +282,32 @@ catch
 
 Write-Host "`nActivity logged to file $logFilePath `n" -ForegroundColor Green
 
-#Get all AU's of Edu Object Type School
-Write-Progress -Activity "Reading SDS" -Status "Fetching School Administrative Units"
-
-Connect-Graph -scopes $graphScopes | Out-Null
-Connect-IPPSSession | Out-Null
-
-Get-AllSchoolAUs
+Write-Host "Proceed with fetching SDS school administrative units?  Skip if you want to use a previously generated $csvFilePath (yes/no)?" -ForegroundColor Yellow
+$choiceSchoolAU = Read-Host
+if ($choiceSchoolAU -ieq "y" -or $choiceSchoolAU -ieq "yes") {
+    $connectGraphDT = Get-AllSchoolAUs $connectGraphDT
+}
 
 Write-Host "`nYou are about to create organization segments and information barrier policies from SDS school administrative units. `nIf you want to skip any administrative units, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
 Write-Host "Proceed with creating organization segments and information barrier policies from SDS school administrative units logged in $csvFilePath (yes/no)?" -ForegroundColor Yellow
     
 $choiceSchoolIB = Read-Host
 if ($choiceSchoolIB -ieq "y" -or $choiceSchoolIB -ieq "yes") {
-    Create-InformationBarriersFromSchoolAUs
+    $connectIPPSSessionDT = Create-InformationBarriersFromSchoolAUs $connectIPPSSessionDT
 }
 
 Write-Host "`nYou are about to create an organization segment and information barrier policy from the 'All Teachers' Security Group. `nNote: You need to have the group created via a toggle in the SDS profile beforehand.`n" -ForegroundColor Yellow
 Write-Host "Proceed with creating an organization segments and information barrier policy from the 'All Teachers' Security Group. (yes/no)?" -ForegroundColor Yellow
 $choiceTeachersIB = Read-Host
 if ($choiceTeachersIB -ieq "y" -or $choiceTeachersIB -ieq "yes") {
-    Create-InformationBarriersFromTeacherSG
+    $allTeacherSG = Get-AllTeacherSG $connectGraphDT
+    $connectIPPSSessionDT = Create-InformationBarriersFromTeacherSG $connectIPPSSessionDT $allTeacherSG
 }
 
 Write-Host "`nProceed with starting the information barrier policies application (yes/no)?" -ForegroundColor Yellow
 $choiceStartIB = Read-Host
 if ($choiceStartIB -ieq "y" -or $choiceStartIB -ieq "yes") {
+    $connectIPPSSessionDT = Set-Connection $connectIPPSSessionDT $connectTypeIPPSSession
     Start-InformationBarrierPoliciesApplication | Out-Null
     Write-Output "Done.  Please allow ~30 minutes for the system to start the process of applying Information Barrier Policies. `nUse Get-InformationBarrierPoliciesApplicationStatus to check the status"
 }
