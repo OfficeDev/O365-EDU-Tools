@@ -47,8 +47,8 @@ Param (
     [Parameter(Mandatory=$false)]
     [string] $skipToken= ".",
     [Parameter(Mandatory=$false)]
-    [string] $graphVersion = "beta",    
-    [switch] $skipDownloadCommonFunctions    
+    [string] $graphVersion = "beta",
+    [switch] $skipDownloadCommonFunctions
 )
 
 $GraphEndpointProd = "https://graph.microsoft.com"
@@ -152,11 +152,11 @@ function Update-SDSUserAttributes
     $choice = Read-Host
 	if ($choice -ieq "y" -or $choice -ieq "yes")
 	{
-		$userList = import-csv $userListFileName
+		$userList = Import-Csv $userListFileName
 		$userCount = (gc $userListFileName | measure-object).count - 1
 		$index = 0
         $saveToken = $refreshToken
-		Foreach ($user in $userList) 
+		Foreach ($user in $userList)
 		{
             $saveToken = Refresh-Token $saveToken $graphScopes
 
@@ -174,7 +174,7 @@ function Update-SDSUserAttributes
                 $newAnchorId = "Teacher_" + $existingAnchorId.Split("_")[1]
             }
 
-            Invoke-GraphRequest -Method PATCH -Uri $updateUrl -Body "{`"extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId`": `"$($newAnchorId)`"}" 
+            Invoke-GraphRequest -Method PATCH -Uri $updateUrl -Body "{`"extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId`": `"$($newAnchorId)`"}"
             $index++
             Write-Progress -Activity "Updating SDS user anchor ids" -Status "Progress ->" -PercentComplete ($index/$userCount*100)
 		}
