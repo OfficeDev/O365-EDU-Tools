@@ -67,7 +67,7 @@ if ($skipDownloadCommonFunctions -eq $false) {
     # Downloading file with latest common functions
     try {
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
-        "Grabbed 'common.ps1' to currrent directory"
+        "Grabbed 'common.ps1' to current directory"
     } 
     catch {
         throw "Unable to download common.ps1"
@@ -82,7 +82,7 @@ function Get-Users
     Param
     (
         $refreshToken,
-        $graphscopes,
+        $graphScopes,
         $logFilePath
     )
 
@@ -93,7 +93,7 @@ function Get-Users
     $initialUri = "$graphEndPoint/$graphVersion/users$userSelectClause"
 
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
-    $users = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
+    $users = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphScopes $logFilePath
     
     $i = 0 #counter for progress
 
@@ -112,11 +112,11 @@ function Get-Users
     return $list
 }
 
-Function Format-ResultsAndExport($graphscopes, $logFilePath) {
+Function Format-ResultsAndExport($graphScopes, $logFilePath) {
 
-    $refreshToken = Initialize $graphscopes
+    $refreshToken = Initialize $graphScopes
     
-    $users = Get-Users $refreshToken $graphscopes $logFilePath
+    $users = Get-Users $refreshToken $graphScopes $logFilePath
 
     if($users) {
         #output to file
@@ -142,7 +142,7 @@ function Update-SDSUserAttributes
 	Param
 	(
         $refreshToken,
-        $graphscopes,
+        $graphScopes,
 		$userListFileName
 	)
 
@@ -158,7 +158,7 @@ function Update-SDSUserAttributes
         $saveToken = $refreshToken
 		Foreach ($user in $userList) 
 		{
-            $saveToken = Refresh-Token $saveToken $graphscopes
+            $saveToken = Refresh-Token $saveToken $graphScopes
 
 			Write-Output "[$(get-date -Format G)] [$index/$userCount] Updating attribute [$($user.userAnchorId)] for user `"$($user.userDisplayName)`" " | Out-File $logFilePath -Append -Encoding "UTF8"
             
@@ -192,7 +192,7 @@ if ($PPE)
 $activityName = "Connecting to Graph"
 
 #list used to request access to data
-$graphscopes = "User.ReadWrite.All"
+$graphScopes = "User.ReadWrite.All"
 
 try
 {
@@ -210,12 +210,12 @@ Write-Progress -Activity $activityName -Status "Connecting to tenant"
 
 Write-Progress -Activity $activityName -Status "Connected. Discovering tenant information"
 
-Format-ResultsAndExport $graphscopes $logFilePath
+Format-ResultsAndExport $graphScopes $logFilePath
 
 Write-Host "`nSDS users logged to file $csvFilePath `n" -ForegroundColor Green
 
 # update AnchorID
-Update-SDSUserAttributes $refreshToken $graphscopes $csvFilePath
+Update-SDSUserAttributes $refreshToken $graphScopes $csvFilePath
 
 Write-Output "`nDone.`n"
 
