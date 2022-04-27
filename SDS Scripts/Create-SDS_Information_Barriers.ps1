@@ -8,12 +8,17 @@ This script will read from Azure, and output the administrative units to a csv. 
 .EXAMPLE
 PS> .\Create-SDS_Information_Barriers.ps1
 
+.EXAMPLE
+PS> .\Create-SDS_Information_Barriers.ps1 -upn "<global admin user principle name>"
+
+The script uses the upn from Graph for Connect-IPPSSession.  The upn parameter is required if the user skips fetching Graph data. 
+
 .NOTES
 This script uses features required by Information Barriers version 3 or above enabled in your tenant.  Existing Organization Segments and Information Barriers created by a legacy version should be removed prior to upgrading.
 #>
 
 Param (
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory=$false)]
     [string] $upn,
     [Parameter(Mandatory=$false)]
     [string] $skipToken= ".",
@@ -33,7 +38,7 @@ $connectTypeGraph = "Graph"
 $connectTypeIPPSSession = "IPPSSession"
 $connectGraphDT = Get-Date -Date "1970-01-01T00:00:00"
 $connectIPPSSessionDT = Get-Date -Date "1970-01-01T00:00:00"
-$timeout = (New-Timespan -Hours 3 -Seconds 1)
+$timeout = (New-Timespan -Hours 1 -Minutes 59 -Seconds 0)
 $pssOpt = new-PSSessionOption -IdleTimeout $timeout.TotalMilliseconds
 
 #Checking parameter to download common.ps1 file for required common functions
@@ -104,6 +109,13 @@ function Set-Connection($connectDT, $connectionType) {
         else
         {
             Connect-Graph -scopes $graphScopes | Out-Null
+
+            if (!($upn)) #Get upn for Connect-IPPSSession
+            {
+                $connectedGraphUser = Invoke-GraphRequest -method get -uri "$graphEndpoint/$graphVersion/me"
+                $connectedGraphUPN = $connectedGraphUser.userPrincipalName
+                $upn = $connectedGraphUPN
+            }
         }
     }
     return Get-Date
@@ -170,7 +182,7 @@ function Create-InformationBarriersFromSchoolAUs($connectDT) {
             
             #Creating Organization Segment from SDS School Administrative Unit for the Information Barrier
             try {
-                New-OrganizationSegment -Name $au.AUDisplayName -UserGroupFilter "AdministrativeUnits -eq '$($au.AUDisplayName)'" -ErrorAction Stop | Out-Null
+                New-OrganizationSegment -Name $au.AUDisplayName -UserGroupFilter "AdministrativeUnits -eq '$($au.AUObjectId)'" -ErrorAction Stop | Out-Null
                 Write-Output "[$(Get-Date -Format G)] Created organization segment $($au.AUDisplayName) from school AUs." | Out-File $logFilePath -Append
             }
             catch {
