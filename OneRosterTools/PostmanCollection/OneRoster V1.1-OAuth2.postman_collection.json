@@ -1,8 +1,8 @@
 {
 	"info": {
-		"_postman_id": "d234753e-b349-411f-8dad-b505a7444f27",
+		"_postman_id": "14b937a8-f60d-43f5-8dda-5abede5d1525",
 		"name": "SDS OneRoster V1.1-OAuth2",
-		"description": "OneRoster� API version 1.1 spec is availble here: \nhttps://www.imsglobal.org/oneroster-v11-final-specification",
+		"description": "OneRosterï¿½ API version 1.1 spec is availble here: \nhttps://www.imsglobal.org/oneroster-v11-final-specification",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -3013,7 +3013,7 @@
 									"",
 									"\t\tpm.test(\"Require teacher.givenName\", function () {",
 									"\t\t\tpm.expect(ret0).to.have.property('givenName');",
-									"\t\t\tpm.expect(ret0.type).to.not.be.eql('');",
+									"\t\t\tpm.expect(ret0.givenName).to.not.be.eql('');",
 									"\t\t});",
 									"",
 									"\t\tpm.test(\"Require teacher.identifier\", function () {",
@@ -3084,7 +3084,7 @@
 									"        if (ret0.email !== null && ret0.email !== undefined)",
 									"        {",
 									"            pm.environment.set(\"teacher_email_address\", ret0.email);",
-									"            console.log(\"Teacher email set to: \" + pm.variables.get(\"email\"));",
+									"            console.log(\"Teacher email set to: \" + pm.variables.get(\"teacher_email_address\"));",
 									"",
 									"        } // teacher email for gradesync",
 									"",
@@ -3737,7 +3737,7 @@
 									"\r",
 									"\t\tpm.test(\"Require teacher.givenName\", function () {\r",
 									"\t\t\tpm.expect(ret0).to.have.property('givenName');\r",
-									"\t\t\tpm.expect(ret0.type).to.not.be.eql('');\r",
+									"\t\t\tpm.expect(ret0.givenName).to.not.be.eql('');\r",
 									"\t\t});\r",
 									"\r",
 									"\t\tpm.test(\"Require teacher.identifier\", function () {\r",
@@ -5944,6 +5944,11 @@
 									"var retSchool = undefined;\r",
 									"var maxResponseTime = 30000; //30 seconds\r",
 									"\r",
+									"\r",
+									"if (!pm.environment.get(\"teacher_email_address\"))\r",
+									"{\r",
+									"    console.log(\"Please add value for teacher_email_address in environment variables\")\r",
+									"}\r",
 									"// response 200\r",
 									"pm.test(\"Users Success response / 200\", function () {\r",
 									"\tpm.expect(responseCode.code).to.be.eql(200);\r",
@@ -6176,6 +6181,21 @@
 									"var retSchoolsArray = undefined;",
 									"var retSchool = undefined;",
 									"var maxResponseTime = 30000; //30 seconds",
+									"var teaAddrParam = true;",
+									"var teaAddr = pm.variables.get(\"teacher_email_address\");",
+									"",
+									"",
+									"",
+									"if ((teaAddr == undefined) || (teaAddr == \"\")) {",
+									"    teaAddrParam = false",
+									"}",
+									"",
+									"pm.test(\"Require set environment variable 'teacher_email_address'\", function () {",
+									"\tpm.expect(teaAddrParam).to.be.eql(true);",
+									"}) ",
+									"",
+									"if (teaAddrParam == true)",
+									"{",
 									"",
 									"// response 200",
 									"pm.test(\"Teachers Success response / 200\", function () {",
@@ -6369,7 +6389,7 @@
 									"",
 									"\t} // validations",
 									"} // 200",
-									""
+									"} // teaAddrParam"
 								],
 								"type": "text/javascript"
 							}
@@ -6379,7 +6399,7 @@
 							"script": {
 								"exec": [
 									"// Expects Teacher Email to be provided as environment variable\r",
-									"if (!pm.environment.get(\"TeacherEmailAddress\"))\r",
+									"if (!pm.environment.get(\"teacher_email_address\"))\r",
 									"{\r",
 									"    console.log(\"Missing Teacher Email Address, It is required to be added in pm.environment\");\r",
 									"}"
@@ -9284,74 +9304,6 @@
 					"response": []
 				},
 				{
-					"name": "Get Students For Class by Class ID",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"tests[\"Get Students For Class\"] = responseCode.code === 200;\r",
-									"var data = JSON.parse(responseBody);\r",
-									"if(responseCode.code === 200)\r",
-									"{\r",
-									"    tests[\"Parse Student ID\"] = false;\r",
-									"    if (data.students)\r",
-									"    {\r",
-									"        pm.environment.set(\"student_id\", data.students[0].sourcedId);\r",
-									"        console.log(\"Student ID set to: \" + pm.variables.get(\"student_id\"));\r",
-									"        tests[\"Parse Student ID\"] = true;\r",
-									"    }\r",
-									"    else if (data.users)\r",
-									"    {\r",
-									"        pm.environment.set(\"student_id\", data.users[0].sourcedId);\r",
-									"        console.log(\"Student ID set to: \" + pm.variables.get(\"student_id\"));\r",
-									"        tests[\"Parse Student ID\"] = true;\r",
-									"    }\r",
-									"}"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"if (pm.environment.get(\"class_id\"))\r",
-									"{\r",
-									"    console.log(\"Missing Class Id, Please execute GradeSync Collection Requests in order to ensure it is set\");\r",
-									"}"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/classes/{{class_id}}/students",
-							"host": [
-								"{{OneRosterHost}}"
-							],
-							"path": [
-								"ims",
-								"oneroster",
-								"v1p1",
-								"classes",
-								"{{class_id}}",
-								"students"
-							]
-						},
-						"description": "Gets a page of teachers for a class_id"
-					},
-					"response": []
-				},
-				{
 					"name": "Get Class by ID",
 					"event": [
 						{
@@ -9579,7 +9531,7 @@
 									"        .to.be.an('array')\r",
 									"        .to.have.lengthOf(1);\r",
 									"        \r",
-									"    const lineItemId = pm.environment.get('lineitem_id');\r",
+									"    const lineItemId = pm.environment.get('line_item_sourcedId');\r",
 									"    pm.expect(jsonData.lineItems[0].sourcedId).to.eql(lineItemId);\r",
 									"});"
 								],
@@ -11661,7 +11613,7 @@
 									"",
 									"\t\tpm.test(\"Require user.givenName\", function () {",
 									"\t\t\tpm.expect(ret0).to.have.property('givenName');",
-									"\t\t\tpm.expect(ret0.type).to.not.be.eql('');",
+									"\t\t\tpm.expect(ret0.givenName).to.not.be.eql('');",
 									"\t\t});",
 									"",
 									"\t\tpm.test(\"Require user.identifier\", function () {",
