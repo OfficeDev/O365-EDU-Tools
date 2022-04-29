@@ -129,7 +129,7 @@ function Create-InformationBarriersFromSchoolAUs {
 
             #Creating Organization Segment from SDS School Administrative Unit for the Information Barrier
             try {
-                New-OrganizationSegment -Name $au.AUDisplayName -UserGroupFilter "AdministrativeUnits -eq '$($au.AUDisplayName)'" -ErrorAction Stop | Out-Null
+                New-OrganizationSegment -Name $au.AUDisplayName -UserGroupFilter "AdministrativeUnits -eq '$($au.AUObjectId)'" -ErrorAction Stop | Out-Null
                 Write-Output "[$(Get-Date -Format G)] Created organization segment $($au.AUDisplayName) from school AUs." | Out-File $logFilePath -Append
             }
             catch {
