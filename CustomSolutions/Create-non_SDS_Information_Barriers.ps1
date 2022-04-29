@@ -160,7 +160,7 @@ function Create-InformationBarriers ($aadObjectType, $csvfilePath) {
             if ( $record.ObjectId -ne $null ) {
                 switch ($aadObjectType) {
                     $aadObjAU { 
-                        $segmentFilter = "AdministrativeUnits -eq '$($record.DisplayName)'" 
+                        $segmentFilter = "AdministrativeUnits -eq '$($record.ObjectId)'" 
                     }
                     $aadObjSG { 
                         $segmentFilter = "MemberOf -eq '$($record.ObjectId)'" 
