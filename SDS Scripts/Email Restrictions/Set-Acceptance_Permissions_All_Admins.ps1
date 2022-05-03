@@ -9,7 +9,7 @@ PS> .\Set-Acceptance_Permissions_All_Admins.ps1
 ========================
  Required Prerequisites
 ========================
-1. Install Microsoft Graph Powershell Module with command 'Install-Module Microsoft.Graph'
+1. Install Microsoft Graph Powershell Module with command 'Install-Module Microsoft.Graph' and also install the Exchange Online PowerShell module with command 'Install-Module ExchangeOnlineManagement'
 2. Make sure to download common.ps1 to the same folder of the script which has common functions needed.  https://github.com/OfficeDev/O365-EDU-Tools/blob/master/SDS%20Scripts/common.ps1
 3. Check that you can connect to your tenant directory from the PowerShell module to make sure everything is set up correctly.
     
@@ -25,7 +25,7 @@ PS> .\Set-Acceptance_Permissions_All_Admins.ps1
     
     f. If you are returned to the PowerShell session without error, you are correctly set up
 
-4. Ensure that All Admins security group is enabled in SDS and exists in Azure Active Directory. 
+4. Ensure that you have a security group called "All Admins" in Azure Active Directory.
 
 5. Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working and do the same for the Exchange Online Management Module.
 
