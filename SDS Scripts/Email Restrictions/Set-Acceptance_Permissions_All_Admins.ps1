@@ -25,7 +25,7 @@ PS> .\Set-Acceptance_Permissions_All_Admins.ps1
     
     f. If you are returned to the PowerShell session without error, you are correctly set up
 
-4. Ensure that you have a security group called "All Admins" in Azure Active Directory.
+4. Ensure that you have a security group called "All_Admins" in Azure Active Directory.
 
 5. Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working and do the same for the Exchange Online Management Module.
 
