@@ -38,8 +38,8 @@ $connectTypeGraph = "Graph"
 $connectTypeIPPSSession = "IPPSSession"
 $connectGraphDT = Get-Date -Date "1970-01-01T00:00:00"
 $connectIPPSSessionDT = Get-Date -Date "1970-01-01T00:00:00"
-$timeout = (New-Timespan -Hours 1 -Minutes 59 -Seconds 0)
-$pssOpt = new-PSSessionOption -IdleTimeout $timeout.TotalMilliseconds
+$timeout = (New-Timespan -Hours 0 -Minutes 0 -Seconds 43200)
+$pssOpt = new-PSSessionOption -IdleTimeout $timeout.TotalMilliseconds #-OpenTimeout 0 -CancelTimeout 0 -OperationTimeout 0 uncomment after testing
 
 #Checking parameter to download common.ps1 file for required common functions
 if ($downloadCommonFNs){
@@ -47,7 +47,7 @@ if ($downloadCommonFNs){
     try {
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop
         "Grabbed 'common.ps1' to current directory"
-    } 
+    }
     catch {
         throw "Unable to download common.ps1"
     }
@@ -93,7 +93,7 @@ function Set-Connection($connectDT, $connectionType) {
     $currentDT = Get-Date
     $lastRefreshedDT = $connectDT
 
-    if ((New-TimeSpan -Start $lastRefreshedDT -End $currentDT).Minutes -gt $timeout.TotalMinutes)
+    if ((New-TimeSpan -Start $lastRefreshedDT -End $currentDT).TotalMinutes -gt $timeout.TotalMinutes)
     {
         if ($connectionType -ieq $connectTypeIPPSSession)
         {
@@ -104,13 +104,20 @@ function Set-Connection($connectDT, $connectionType) {
                 Disconnect-ExchangeOnline -confirm:$false | Out-Null
             }
 
-            Connect-IPPSSession -PSSessionOption $pssOpt -UserPrincipalName $upn | Out-Null
+            if (!($upn))
+            {
+                Connect-IPPSSession -PSSessionOption $pssOpt | Out-Null
+            }
+            else
+            {
+                Connect-IPPSSession -PSSessionOption $pssOpt -UserPrincipalName $upn | Out-Null
+            }
         }
         else
         {
             Connect-Graph -scopes $graphScopes | Out-Null
 
-            if (!($upn)) #Get upn for Connect-IPPSSession
+            if (!($upn)) #Get upn for Connect-IPPSSession to avoid entering again
             {
                 $connectedGraphUser = Invoke-GraphRequest -method get -uri "$graphEndpoint/$graphVersion/me"
                 $connectedGraphUPN = $connectedGraphUser.userPrincipalName
@@ -134,15 +141,15 @@ function Get-AllSchoolAUs($connectDT) {
         
     #Getting AUs for all schools
     Write-Output "`nRetrieving SDS School Administrative Units`n"
-    $checkedSDSSchoolAUsUri = TokenSkipCheck $initialSDSSchoolAUsUri
+    $currentUri = TokenSkipCheck $initialSDSSchoolAUsUri
     
-    $allSchoolAUs = @() #array of objects for pages of school AUs
     $pageCnt = 1 #Counts the number of pages of school AUs Retrieved
 
     #Get all AU's of Edu Object Type School
     do {
+        $allSchoolAUs = @() #array of objects for pages of school AUs
         $connectDT = Set-Connection $connectDT $connectTypeGraph
-        $graphResponse = Invoke-GraphRequest -Method GET -Uri $checkedSDSSchoolAUsUri -ContentType "application/json"
+        $graphResponse = Invoke-GraphRequest -Method GET -Uri $currentUri -ContentType "application/json"
         $schoolAUs = $graphResponse.value
 
         #Write school AU count to log
@@ -156,16 +163,20 @@ function Get-AllSchoolAUs($connectDT) {
             $allSchoolAUs += $obj
         }
         
+        $allSchoolAUs | Export-Csv -Path "$csvfilePath" -Append -NoTypeInformation
+
         #Write nextLink to log if need to restart from previous page
         Write-Output "[$(Get-Date -Format G)] nextLink: $($graphResponse.'@odata.nextLink')" | Out-File $logFilePath -Append
         $pageCnt++
+        $currentUri = $graphResponse.'@odata.nextLink'
         Write-Progress -Activity "Reading SDS" -Status "Fetching School Administrative Units"
 
     } while($graphResponse.'@odata.nextLink')
     
-    $allSchoolAUs | Export-Csv -Path "$csvfilePath" -Append -NoTypeInformation
     return $connectDT
 }
+
+function Create-OrganizationSegmentsFromSchoolAUs{}
 
 function Create-InformationBarriersFromSchoolAUs($connectDT) {
     
@@ -173,17 +184,21 @@ function Create-InformationBarriersFromSchoolAUs($connectDT) {
     $i = 0 #Counter for progress of IB creation
 
     #Looping through all school AUs
-    foreach($au in $allSchoolAUs)
-    {
-        if ($au.AUObjectId -ne $null)
+    $allSchoolAUs | foreach-object {
+        if ($_.AUObjectId -ne $null)
         {
-            $connectDT = Set-Connection $connectDT $connectTypeIPPSSession
-            Write-Host "Processing $($au.AUDisplayName)"
+            $connectDT = "" #Set-Connection $connectDT $connectTypeIPPSSession uncomment after testing
+            Write-Host "$i : Processing $($_.AUDisplayName)"
             
             #Creating Organization Segment from SDS School Administrative Unit for the Information Barrier
             try {
-                New-OrganizationSegment -Name $au.AUDisplayName -UserGroupFilter "AdministrativeUnits -eq '$($au.AUObjectId)'" -ErrorAction Stop | Out-Null
-                Write-Output "[$(Get-Date -Format G)] Created organization segment $($au.AUDisplayName) from school AUs." | Out-File $logFilePath -Append
+                Write-Output "[$(Get-Date -Format G)] Log start time" | Out-File $logFilePath -Append
+                $startTime = Get-Date
+                New-OrganizationSegment -Name $_.AUDisplayName -UserGroupFilter "AdministrativeUnits -eq '$($_.AUObjectId)'" -ErrorAction Stop | Out-Null
+                $endTime = Get-Date
+                $elapsedTime = $endTime - $startTime
+                Write-Output "[$(Get-Date -Format G)] Created organization segment $($_.AUDisplayName) from school AUs in $elapsedTime" | Out-File $logFilePath -Append
+                Write-Output "[$(Get-Date -Format G)] Log end time" | Out-File $logFilePath -Append
             }
             catch {
                 Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
@@ -191,8 +206,13 @@ function Create-InformationBarriersFromSchoolAUs($connectDT) {
 
             #Creating Information Barrier Policies from SDS School Administrative Unit
             try {
-                New-InformationBarrierPolicy -Name "$($au.AUDisplayName) - IB" -AssignedSegment $au.AUDisplayName -SegmentsAllowed $au.AUDisplayName -State Active -Force -ErrorAction Stop | Out-Null
-                Write-Output "[$(Get-Date -Format G)] Created Information Barrier Policy $($au.AUDisplayName) from Organization Segment" | Out-File $logFilePath -Append
+                Write-Output "[$(Get-Date -Format G)] Log start time" | Out-File $logFilePath -Append
+                $startTime = Get-Date
+                New-InformationBarrierPolicy -Name "$($_.AUDisplayName) - IB" -AssignedSegment $_.AUDisplayName -SegmentsAllowed $_.AUDisplayName -State Active -Force -ErrorAction Stop | Out-Null
+                $endTime = Get-Date
+                $elapsedTime = $endTime - $startTime
+                Write-Output "[$(Get-Date -Format G)] Created Information Barrier Policy $($_.AUDisplayName) from Organization Segment in $elapsedTime" | Out-File $logFilePath -Append
+                Write-Output "[$(Get-Date -Format G)] Log end time" | Out-File $logFilePath -Append
             }
             catch {
                 Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
@@ -219,6 +239,7 @@ function Get-AllTeacherSG($connectDT){
         Write-Output "[$(Get-Date -Format G)] Retrieved $($teacherSG.displayName)." | Out-File $logFilePath -Append
     }
     catch{
+        Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
         throw "Could not retrieve 'All Teachers' Security Group.  Please make sure that it is enabled in SDS."
     }
     return $teacherSG
@@ -305,6 +326,7 @@ Write-Host "Proceed with creating organization segments and information barrier 
     
 $choiceSchoolIB = Read-Host
 if ($choiceSchoolIB -ieq "y" -or $choiceSchoolIB -ieq "yes") {
+    Connect-IPPSSession -PSSessionOption $pssOpt -UserPrincipalName $upn #remove line after testing
     $connectIPPSSessionDT = Create-InformationBarriersFromSchoolAUs $connectIPPSSessionDT
 }
 
