@@ -1,17 +1,32 @@
 <#
 .SYNOPSIS
-This script is designed to create information barrier policies for each administrative unit and security Group not created by SDS from an O365 tenant.
+This script is designed to create information barrier policies for each administrative unit and security groups from an O365 tenant.
 
 .DESCRIPTION
 This script will read from Azure, and output the administrative units and security groups to CSVs.  Afterwards, you are prompted to confirm that you want to create the organization segments needed, then create and apply the information barrier policies.  A folder will be created in the same directory as the script itself and contains a log file which details the organization segments and information barrier policies created.  The rows of the csv files can be reduced to only target specific administrative units and security groups.  Nextlink in the log can be used for the skipToken script parameter to continue where the script left off in case it does not finish. 
 
+.PARAMETER all
+Executes script without confirmation prompts
+
+.PARAMETER auOrgSeg
+Bypasses confirmation prompt to create organization segments from records in the administrative units file.  
+
+.PARAMETER auIB
+Bypasses confirmation prompt to create information barriers from records in the administrative units file.  
+
+.PARAMETER sgOrgSeg
+Bypasses confirmation prompt to create organization segments from records in the security groups file. 
+
+.PARAMETER sgIB
+Bypasses confirmation prompt to create information barriers from records in the security groups file.
+
 .PARAMETER csvFilePathAU
 
-The path for the csv file containing the non-SDS administrative units in the tenant.  When provided, the script will attempt to create the organization segments and information barrier policies from the records in the file.  Each record should contain the AAD ObjectId and DisplayName.
+The path for the csv file containing the administrative units in the tenant.  When provided, the script will attempt to create the organization segments and information barrier policies from the records in the file.  Each record should contain the AAD ObjectId and DisplayName.
 
 .PARAMETER csvFilePathSG
 
-The path for the csv file containing the non-SDS security groups in the tenant.  When provided, the script will attempt to create the organization segments and information barrier policies from the records in the file.  Each record should contain the AAD ObjectId and DisplayName.
+The path for the csv file containing the security groups in the tenant.  When provided, the script will attempt to create the organization segments and information barrier policies from the records in the file.  Each record should contain the AAD ObjectId and DisplayName.
 
 .PARAMETER skipToken
 
@@ -54,6 +69,16 @@ PS> .\Create-non_SDS_Information_Barriers.ps1
 
 Param (
     [Parameter(Mandatory=$false)]
+    [string] $upn,
+
+    [Alias("a")]
+    # Next 5 switches used to bypass confirmation prompt
+    [switch]$all = $false,
+    [switch]$auOrgSeg = $false,
+    [switch]$auIB = $false,
+    [switch]$sgOrgSeg = $false,
+    [switch]$sgIB = $false,
+    [Parameter(Mandatory=$false)]
     [string] $skipToken= "",
     [Parameter(Mandatory=$false)]
     [string] $csvFilePathAU = "",
@@ -69,126 +94,208 @@ Param (
 $GraphEndpointProd = "https://graph.microsoft.com"
 $GraphEndpointPPE = "https://graph.microsoft-ppe.com"
 
+#Used for refreshing connection
+$connectTypeGraph = "Graph"
+$connectTypeIPPSSession = "IPPSSession"
+$connectGraphDT = Get-Date -Date "1970-01-01T00:00:00"
+$connectIPPSSessionDT = Get-Date -Date "1970-01-01T00:00:00"
+
+# Try to use the most session time for large datasets
+$timeout = (New-Timespan -Hours 0 -Minutes 0 -Seconds 43200)
+$pssOpt = new-PSSessionOption -IdleTimeout $timeout.TotalMilliseconds
+
+function Set-Connection($connectDT, $connectionType) {
+    # Check if need to renew connection
+    $currentDT = Get-Date
+    $lastRefreshedDT = $connectDT
+
+    if ((New-TimeSpan -Start $lastRefreshedDT -End $currentDT).TotalMinutes -gt $timeout.TotalMinutes)
+    {
+        if ($connectionType -ieq $connectTypeIPPSSession)
+        {
+            $sessionIPPS = Get-PSSession | Where-Object {$_.ConfigurationName -eq "Microsoft.Exchange" -and $_.State -eq "Opened"}
+            
+            if ($sessionIPPS.count -eq 3) # Exchange Online allows 3 sessions max
+            {
+                Disconnect-ExchangeOnline -confirm:$false | Out-Null
+            }
+            else {   
+                if (!($upn))
+                {
+                    Connect-IPPSSession -PSSessionOption $pssOpt | Out-Null
+                }
+                else
+                {
+                    Connect-IPPSSession -PSSessionOption $pssOpt -UserPrincipalName $upn | Out-Null
+                }
+            }
+        }
+        else
+        {
+            Connect-Graph -scopes $graphScopes | Out-Null
+
+            if (!($upn)) # Get upn for Connect-IPPSSession to avoid entering again
+            {
+                $connectedGraphUser = Invoke-GraphRequest -method get -uri "$graphEndpoint/$graphVersion/me"
+                $connectedGraphUPN = $connectedGraphUser.userPrincipalName
+                $upn = $connectedGraphUPN
+            }
+        }
+    }
+    return Get-Date
+}
 function Get-AUsAndSGs ($aadObjectType) {
 
-    $csvFilePath = "$outFolder\$aadObjectType.csv"
+        $csvFilePath = "$outFolder\$aadObjectType.csv"
 
-    # Removes csv file unless link is provided to resume
-    if ((Test-Path $csvFilePath) -and ($skipToken -eq ""))
-    {
- 	    Remove-Item $csvFilePath;
-    }
-
-    $pageCnt = 1 # Counts the number of pages of SGs retrieved
-    $lastRefreshed = $null # Used for refreshing connection
-
-    # Uri string for AU's
-    $auUri = "$graphEndPoint/$graphVersion/directory/administrativeUnits?`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
-
-    # Preparing uri string for groups
-    $grpSelectClause = "`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
-    $grpUri = "$graphEndPoint/$graphVersion/groups?`$filter=securityEnabled%20eq%20true&$grpSelectClause"
-
-    # Determine either AU or SG uri to use
-    switch ($aadObjectType) {
-        $aadObjAU {
-            $graphUri = $auUri
-        }
-        $aadObjSG {
-            $graphUri = $grpUri
-        }
-    }
-
-    Write-Progress -Activity "Reading AAD" -Status "Fetching $aadObjectType's"
-
-    do {
-        if ($skipToken -ne "" ) {
-            $graphUri = $skipToken
+        # Removes csv file unless link is provided to resume
+        if ((Test-Path $csvFilePath) -and ($skipToken -eq ""))
+        {
+            Remove-Item $csvFilePath;
         }
 
-        $recordList = @() # Array of objects for SGs
+        $pageCnt = 1 # Counts the number of pages of SGs retrieved
+        $lastRefreshed = $null # Used for refreshing connection
 
-        # Check if need to renew connection
-        $currentDT = Get-Date
-        if ($lastRefreshed -eq $null -or (New-TimeSpan -Start $currentDT -End $lastRefreshed).Minutes -gt 10) {
-            Connect-Graph -scopes $graphScopes | Out-Null
-            $lastRefreshed = Get-Date
-        }
+        # Uri string for AU's
+        $auUri = "$graphEndPoint/$graphVersion/directory/administrativeUnits?`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
 
-        $response = Invoke-GraphRequest -Uri $graphUri -Method GET
-        $records = $response.value
+        # Preparing uri string for groups
+        $grpSelectClause = "`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
+        $grpUri = "$graphEndPoint/$graphVersion/groups?`$filter=securityEnabled%20eq%20true&$grpSelectClause"
 
-        $ctr = 0 # Counter for security groups retrieved
-
-        foreach ($record in $records) {
-            if ( !($record.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType) ) {
-                $recordList += [pscustomobject]@{"ObjectId"=$record.Id;"DisplayName"=$record.DisplayName}
-                $ctr++
+        # Determine either AU or SG uri to use
+        switch ($aadObjectType) {
+            $aadObjAU {
+                $graphUri = $auUri
+            }
+            $aadObjSG {
+                $graphUri = $grpUri
             }
         }
 
-        $recordList | Export-Csv $csvFilePath -Append -NoTypeInformation
-        Write-Progress -Activity "Retrieving $aadObjectType's..." -Status "Retrieved $ctr $aadObjectType's from $pageCnt pages"
+        Write-Progress -Activity "Reading AAD" -Status "Fetching $aadObjectType's"
 
-        # Write nextLink to log if need to restart from previous page
-        Write-Output "[$(Get-Date -Format G)] Retrieved $pageCnt $aadObjectType's. nextLink: $($response.'@odata.nextLink')" | Out-File $logFilePath -Append
-        $pageCnt++
-        $skipToken = $response.'@odata.nextLink'
+        do {
+            if ($skipToken -ne "" ) {
+                $graphUri = $skipToken
+            }
 
-    } while ($response.'@odata.nextLink')
+            $recordList = @() # Array of objects for SGs
 
+            $response = Invoke-GraphRequest -Uri $graphUri -Method GET
+            $records = $response.value
+
+            $ctr = 0 # Counter for security groups retrieved
+
+            foreach ($record in $records) {
+                # if ( !($record.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType) ) {
+                    $recordList += [pscustomobject]@{"ObjectId"=$record.Id;"DisplayName"=$record.DisplayName}
+                    $ctr++
+                # }
+            }
+
+            $recordList | Export-Csv $csvFilePath -Append -NoTypeInformation
+            Write-Progress -Activity "Retrieving $aadObjectType's..." -Status "Retrieved $ctr $aadObjectType's from $pageCnt pages"
+
+            # Write nextLink to log if need to restart from previous page
+            Write-Output "[$(Get-Date -Format G)] Retrieved $pageCnt $aadObjectType's. nextLink: $($response.'@odata.nextLink')" | Out-File $logFilePath -Append
+            $pageCnt++
+            $skipToken = $response.'@odata.nextLink'
+
+        } while ($response.'@odata.nextLink')
     return $csvFilePath
+}
+
+function Create-OrganizationSegments ($aadObjectType, $csvfilePath) {
+    
+    if ( $all -or ( $auOrgSeg -and ($aadObjectType -eq $aadObjAU)) -or ($sgOrgSeg -and ($aadObjectType -eq $aadObjSG)))
+    {
+        $choiceIB = "y"
+    }
+    else
+    {
+        Write-Host "`nYou are about to create organization segments from $aadObjectType's. `nIf you want to skip any $aadObjectType's, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
+        Write-Host "Proceed with creating an organization segments from $aadObjectType's logged in $csvFilePath (yes/no) or ^+c to exit script?" -ForegroundColor Yellow
+
+        $choiceIB = Read-Host
+    }
+
+    if ($choiceIB -ieq "y" -or $choiceIB -ieq "yes") {
+
+        $allRecords = Import-Csv $csvfilePath #| Sort-Object * -Unique # Import data retrieved from Graph and remove dupes if occurred from skipToken retry.
+
+        Write-Host "`nCreating $($allRecords.count) organization segments from $aadObjectType's.  Check $logFilePath to view progress`n" -ForegroundColor Yellow
+
+        $batch = 50
+        # Looping through all records
+        for ($i=0; $i -lt $allRecords.count; $i+=$batch){
+    
+            $recPart = $allRecords | Select-Object $_ -skip $i -first $batch
+
+            switch ($aadObjectType) {
+                $aadObjAU { 
+                    try {
+                        $recPart | foreach-object {New-OrganizationSegment -Name $_.DisplayName -UserGroupFilter "AdministrativeUnits -eq '$($_.ObjectId)'" | select-object whenchanged, type, name, guid | ConvertTo-json -compress | out-file $logFilePath -Append}
+                    }
+                    catch {
+                        Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
+                    }
+                }
+                $aadObjSG { 
+                    try {
+                        $recPart | foreach-object {New-OrganizationSegment -Name $_.DisplayName -UserGroupFilter "MemberOf -eq '$($record.ObjectId)'" | select-object whenchanged, type, name, guid | ConvertTo-json -compress | out-file $logFilePath -Append}
+                    }
+                    catch {
+                        Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
+                    }
+                }
+            }
+                
+            Start-Sleep -Seconds 10
+            Write-Progress -Activity "`nCreating Organization Segments based from $aadObjectType's" -Status "Progress ->" -PercentComplete ($i/$allRecords.count*100)
+        }
+    } 
+    return
 }
 
 function Create-InformationBarriers ($aadObjectType, $csvfilePath) {
 
-    Write-Host "`nYou are about to create an organization segment and information barrier policy from $aadObjectType's. `nIf you want to skip any security groups, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
-    Write-Host "Proceed with creating an organization segments and information barrier policy from $aadObjectType' logged in $csvFilePath (yes/no) or ^+c to exit script?" -ForegroundColor Yellow
+    if ( $all -or ( $auIB -and ($aadObjectType -eq $aadObjAU)) -or ($sgIB -and ($aadObjectType -eq $aadObjSG)))
+    {
+        $choiceIB = "y"
+    }
+    else
+    {
+        Write-Host "`nYou are about to create information barrier policies from $aadObjectType's. `nIf you want to skip any $aadObjectType's, edit the file now and remove the corresponding lines before proceeding. `n" -ForegroundColor Yellow
+        Write-Host "Proceed with creating information barrier policies from $aadObjectType's logged in $csvFilePath (yes/no) or ^+c to exit script?" -ForegroundColor Yellow
 
-    $choiceIB = Read-Host
+        $choiceIB = Read-Host
+    }
+
     if ($choiceIB -ieq "y" -or $choiceIB -ieq "yes") {
 
-        $allRecords = Import-Csv $csvfilePath | Sort-Object * -Unique # Import data retrieved from Graph and remove dupes if occurred from skipToken retry.
-        $i = 0 # Counter for progress of IB creation
+        $allRecords = Import-Csv $csvfilePath #| Sort-Object * -Unique # Import data retrieved from Graph and remove dupes if occurred from skipToken retry.
 
-        Write-Output "Creating Information Barrier Policy from $aadObjectType's`n"
+        Write-Host "`nCreating $($allRecords.count) information barrier policies from $aadObjectType's.  Check $logFilePath to view progress`n" -ForegroundColor Yellow
 
+        $batch = 50
         # Looping through all records
-        foreach($record in $allRecords) {
+        for ($i=0; $i -lt $allRecords.count; $i+=$batch){
+            $recPart = $allRecords | Select-Object $_ -skip $i -first $batch
 
-            # Determining which organization segment filter to use
-            if ( $record.ObjectId -ne $null ) {
-                switch ($aadObjectType) {
-                    $aadObjAU { 
-                        $segmentFilter = "AdministrativeUnits -eq '$($record.ObjectId)'" 
-                    }
-                    $aadObjSG { 
-                        $segmentFilter = "MemberOf -eq '$($record.ObjectId)'" 
-                    }
-                }
-
-                # Creating organization segments for the information barriers
-                try {
-                    New-OrganizationSegment -Name $record.DisplayName -UserGroupFilter $segmentFilter | Out-Null 
-                    Write-Output "[$(Get-Date -Format G)] Created organization segment $($record.DisplayName) from $($aadObjectType)." | Out-File $logFilePath -Append
-                }
-                catch {
-                    Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
-                }
-
-                # Creating information barrier policies
-                try {
-                    New-InformationBarrierPolicy -Name "$($record.DisplayName) - IB" -AssignedSegment $record.DisplayName -SegmentsAllowed $record.DisplayName -State Active -Force -ErrorAction Stop | Out-Null
-                    Write-Output "[$(Get-Date -Format G)] Created Information Barrier Policy $($record.DisplayName) from organization segment" | Out-File $logFilePath -Append
-                }
-                catch {
-                    Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
-                }
+            try {
+                $recPart | foreach-object {New-InformationBarrierPolicy -Name "$($_.DisplayName) - IB" -AssignedSegment $_.DisplayName -SegmentsAllowed $_.DisplayName -State Active -Force -ErrorAction Stop | select-object whenchanged, type, name, guid | ConvertTo-json -compress | out-file $logFilePath -Append}
             }
+            catch {
+                Write-Output "[$(Get-Date -Format G)] $($_.Exception.Message)" | Out-File $logFilePath -Append
+            }
+
+            Start-Sleep -Seconds 10           
             $i++
-            Write-Progress -Activity "`nCreating Organization Segments and Information Barrier Policies based from $aadObjectType's" -Status "Progress ->" -PercentComplete ($i/$allRecords.count*100)
+            Write-Progress -Activity "`nCreating information barrier policies based from $aadObjectType's" -Status "Progress ->" -PercentComplete ($i/$allRecords.count*100)
         }
-    }    
+    } 
     return
 }
 
@@ -237,16 +344,15 @@ catch
 
 Write-Host "`nActivity logged to file $logFilePath `n" -ForegroundColor Green
 
-Connect-Graph -scopes $graphScopes | Out-Null
-Connect-IPPSSession | Out-Null
-
-
-if ( $csvFilePathAU -eq "" ) {
+if ( $all -or $csvFilePathAU -eq "" ) {
+    $connectGraphDT = Set-Connection $connectGraphDT $connectTypeGraph
     $csvFilePathAU = Get-AUsAndSGs $aadObjAU
 }
 
-if ( $csvFilePathAU -ne "" ) {
+if ( $all -or $csvFilePathAU -ne "" ) {
     if (Test-Path $csvFilePathAU) {
+        $connectIPPSSessionDT = Set-Connection $connectIPPSSessionDT $connectTypeIPPSSession
+        Create-OrganizationSegments $aadObjAU $csvFilePathAU 
         Create-InformationBarriers $aadObjAU $csvFilePathAU
     }
     else {
@@ -254,12 +360,15 @@ if ( $csvFilePathAU -ne "" ) {
     }
 }
 
-if ( $csvFilePathSG -eq "" ) {
+if ( $all -or $csvFilePathSG -eq "" ) {
+    $connectGraphDT = Set-Connection $connectGraphDT $connectTypeGraph
     $csvFilePathSG = Get-AUsAndSGs $aadObjSG
 }
 
-if ( $csvFilePathSG -ne "" ) {
+if ( $all -or $csvFilePathSG -ne "" ) {
     if (Test-Path $csvFilePathSG) {
+        $connectTypeIPPSSession = Set-Connection $connectIPPSSessionDT $connectTypeIPPSSession
+        Create-OrganizationSegments $aadObjAU $csvFilePathAU 
         Create-InformationBarriers $aadObjSG $csvFilePathSG
     }
     else {
@@ -267,10 +376,16 @@ if ( $csvFilePathSG -ne "" ) {
     }
 }
 
-Write-Host "`nProceed with starting the information barrier policies application (yes/no)?" -ForegroundColor Yellow
-$choiceStartIB = Read-Host
+if ( !($all) ) {
+    Write-Host "`nProceed with starting the information barrier policies application (yes/no)?" -ForegroundColor Yellow
+    $choiceStartIB = Read-Host
+}
+else{
+    $choiceStartIB = "y"
+}
 
 if ($choiceStartIB -ieq "y" -or $choiceStartIB -ieq "yes") {
+    $connectTypeIPPSSession = Set-Connection $connectDT $connectTypeIPPSSession
     Start-InformationBarrierPoliciesApplication | Out-Null
     Write-Output "Done.  Please allow ~30 minutes for the system to start the process of applying Information Barrier Policies. `nUse Get-InformationBarrierPoliciesApplicationStatus to check the status"
 }
