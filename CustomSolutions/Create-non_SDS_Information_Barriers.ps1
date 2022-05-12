@@ -6,7 +6,7 @@ This script is designed to create information barrier policies for each administ
 This script will read from Azure, and output the administrative units and security groups to CSVs.  Afterwards, you are prompted to confirm that you want to create the organization segments needed, then create and apply the information barrier policies.  A folder will be created in the same directory as the script itself and contains a log file which details the organization segments and information barrier policies created.  The rows of the csv files can be reduced to only target specific administrative units and security groups.  Nextlink in the log can be used for the skipToken script parameter to continue where the script left off in case it does not finish.
 
 .PARAMETER upns
-Upn used for Connect-IPPSSession to try to avoid reentering credentials when renewing connection.  Multiple upns are used for parallel jobs. Recommend the maximum amount of 3 for large datasets.
+Upn used for Connect-IPPSSession to try to avoid reentering credentials when renewing connection.  Multiple upns separated by commas can be used for parallel jobs. Recommend the maximum amount of 3 for large datasets.
 
 .PARAMETER all
 Executes script without confirmation prompts
@@ -372,7 +372,7 @@ function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
     Write-Host "`n=====================================================" -ForegroundColor Cyan
     Write-Host "Adding $objectType in Tenant" -ForegroundColor Cyan
     
-    $jobDelay = 20;
+    $jobDelay = 30;
     $addJobDelay = 15;
     $attempts = 1;
 
