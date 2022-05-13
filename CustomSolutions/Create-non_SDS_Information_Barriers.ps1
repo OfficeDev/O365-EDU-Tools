@@ -434,7 +434,7 @@ function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
             $jobID = $i+1
             $sessionNum = $i
 
-            Write-Host "Spawning job $jobID to add $count $ippsObjectType's starting at $startIndex; End Index: $($startIndex+$count-1); UPN: $upns[$sessionNum]" -ForegroundColor Cyan
+            Write-Host "Spawning job $jobID to add $count $ippsObjectType's starting at $startIndex; End Index: $($startIndex+$count-1); UPN: $($upns[$sessionNum])" -ForegroundColor Cyan
             Start-Job $scriptBlock -ArgumentList $aadObjects, $aadObjectType, $startIndex, $count, $jobID, $jobDelay, $addJobDelay, $timeout, $upns[$sessionNum], $logFilePath, $aadObjAU, $aadObjSG
             $startIndex += $count
         }
