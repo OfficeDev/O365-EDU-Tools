@@ -45,7 +45,7 @@ Maximum time allowed to attempt to add all compliance objects using parallel job
 
 .PARAMETER skipToken
 
-Used to start where the script left off fetching the users in case of interruption.  The value used is nextLink in the log file, otherwise use default value of "" to start from the beginning.
+Used to start where the script left off fetching from Graph in case of interruption.  The value used is nextLink in the log file, otherwise use default value of "" to start from the beginning.
 
 .PARAMETER outFolder
 
@@ -57,6 +57,9 @@ The version of the Graph API.
 
 .EXAMPLE
 PS> .\Create-non_SDS_Information_Barriers.ps1
+
+.EXAMPLE
+PS> .\Create-non_SDS_Information_Barriers.ps1 -all:$true -upns upnOne@contoso.com,upnTwo@contoso.com,upnThree@contoso.com
 
 .NOTES
 ========================
@@ -153,7 +156,7 @@ function Set-Connection($connectDT, $connectionType) {
         {
             Connect-Graph -scopes $graphScopes | Out-Null
 
-            # Get upn for Connect-IPPSSession to avoid entering again
+            # Get upn for Connect-IPPSSession to avoid reentering creds
             if ($upns.count -eq 0)
             {
                 $connectedGraphUser = Invoke-GraphRequest -method get -uri "$graphEndpoint/$graphVersion/me"
@@ -178,10 +181,10 @@ function Get-AUsAndSGs ($aadObjectType) {
         $pageCnt = 1 # counts the number of pages of SGs retrieved
 
         # Uri string for AU's
-        $auUri = "$graphEndPoint/$graphVersion/directory/administrativeUnits?`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
+        $auUri = "$graphEndPoint/$graphVersion/directory/administrativeUnits?`$select=id,displayName,description,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
 
         # Preparing uri string for groups
-        $grpSelectClause = "`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
+        $grpSelectClause = "`$select=id,displayName,description,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
         $grpUri = "$graphEndPoint/$graphVersion/groups?`$filter=securityEnabled%20eq%20true&$grpSelectClause"
 
         # Determine either AU or SG uri to use
@@ -209,7 +212,7 @@ function Get-AUsAndSGs ($aadObjectType) {
             $ctr = 0 # Counter for security groups retrieved
 
             foreach ($record in $records) {
-                    $recordList += [pscustomobject]@{"ObjectId"=$record.Id;"DisplayName"=$record.DisplayName}
+                    $recordList += [pscustomobject]@{"ObjectId"=$record.Id;"DisplayName"=$record.DisplayName;"Description"=$record.Description}
                     $ctr++
             }
 
@@ -431,7 +434,7 @@ function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
             $jobID = $i+1
             $sessionNum = $i
 
-            Write-Host "Spawning job $jobID to add $count $ippsObjectType's starting at $startIndex; End Index: $($startIndex+$count-1)" -ForegroundColor Cyan
+            Write-Host "Spawning job $jobID to add $count $ippsObjectType's starting at $startIndex; End Index: $($startIndex+$count-1); UPN: $upns[$sessionNum]" -ForegroundColor Cyan
             Start-Job $scriptBlock -ArgumentList $aadObjects, $aadObjectType, $startIndex, $count, $jobID, $jobDelay, $addJobDelay, $timeout, $upns[$sessionNum], $logFilePath, $aadObjAU, $aadObjSG
             $startIndex += $count
         }
