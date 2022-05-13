@@ -84,7 +84,7 @@ PS> .\Create-non_SDS_Information_Barriers.ps1
 
 Param (
     [Parameter(Mandatory=$false)]
-    [array] $upns,
+    [System.Collections.ArrayList] $upns = @(),
 
     [Alias("a")]
     [switch]$all = $false,
@@ -139,13 +139,13 @@ function Set-Connection($connectDT, $connectionType) {
                 Disconnect-ExchangeOnline -confirm:$false | Out-Null
             }
             else {   
-                if (!($upns))
+                if ($upns.count -eq 0)
                 {
                     Connect-IPPSSession -PSSessionOption $pssOpt | Out-Null
                 }
                 else
                 {
-                    Connect-IPPSSession -PSSessionOption $pssOpt -UserPrincipalName $upn[0] | Out-Null
+                    Connect-IPPSSession -PSSessionOption $pssOpt -UserPrincipalName $upns[0] | Out-Null
                 }
             }
         }
@@ -153,12 +153,12 @@ function Set-Connection($connectDT, $connectionType) {
         {
             Connect-Graph -scopes $graphScopes | Out-Null
 
-             # Get upn for Connect-IPPSSession to avoid entering again
-            if (!($upns))
+            # Get upn for Connect-IPPSSession to avoid entering again
+            if ($upns.count -eq 0)
             {
                 $connectedGraphUser = Invoke-GraphRequest -method get -uri "$graphEndpoint/$graphVersion/me"
                 $connectedGraphUPN = $connectedGraphUser.userPrincipalName
-                $upns = $connectedGraphUPN
+                $upns.add($connectedGraphUPN)
             }
         }
     }
@@ -430,7 +430,7 @@ function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
 
             $jobID = $i+1
             $sessionNum = $i
-     
+
             Write-Host "Spawning job $jobID to add $count $ippsObjectType's starting at $startIndex; End Index: $($startIndex+$count-1)" -ForegroundColor Cyan
             Start-Job $scriptBlock -ArgumentList $aadObjects, $aadObjectType, $startIndex, $count, $jobID, $jobDelay, $addJobDelay, $timeout, $upns[$sessionNum], $logFilePath, $aadObjAU, $aadObjSG
             $startIndex += $count
@@ -509,7 +509,7 @@ if ((Test-Path $outFolder) -eq 0) {
 
 Write-Host "`nActivity logged to file $logFilePath `n" -ForegroundColor Green
 
-if ( $all -or $csvFilePathAU -eq "" ) {
+if ( $csvFilePathAU -eq "" ) {
     $connectGraphDT = Set-Connection $connectGraphDT $connectTypeGraph
     $csvFilePathAU = Get-AUsAndSGs $aadObjAU
 }
@@ -545,12 +545,12 @@ if ( $csvFilePathAU -ne "" ) {
     }
 }
 
-if ( $all -or $csvFilePathSG -eq "" ) {
+if ( $csvFilePathSG -eq "" ) {
     $connectGraphDT = Set-Connection $connectGraphDT $connectTypeGraph
     $csvFilePathSG = Get-AUsAndSGs $aadObjSG
 }
 
-if ( $all -or $csvFilePathSG -ne "" ) {
+if ( $csvFilePathSG -ne "" ) {
     if (Test-Path $csvFilePathSG) {
         if ($all -or $sgOrgSeg)
         {
