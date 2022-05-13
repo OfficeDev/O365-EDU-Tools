@@ -197,8 +197,6 @@ function Get-AUsAndSGs ($aadObjectType) {
             }
         }
 
-        Write-Progress -Activity "Reading AAD" -Status "Fetching $aadObjectType's"
-
         do {
             if ($skipToken -ne "" ) {
                 $graphUri = $skipToken
@@ -217,7 +215,7 @@ function Get-AUsAndSGs ($aadObjectType) {
             }
 
             $recordList | Export-Csv $csvFilePath -Append -NoTypeInformation
-            Write-Progress -Activity "Retrieving $aadObjectType's..." -Status "Retrieved $ctr $aadObjectType's from $pageCnt pages"
+            Write-Progress -Activity "Retrieving $aadObjectType's..." -Status "Retrieved $ctr $aadObjectType's from $pageCnt pages" -Id 1
 
             # Write nextLink to log if need to restart from previous page
             Write-Output "[$(Get-Date -Format G)] Retrieved page $pageCnt of $aadObjectType's. nextLink: $($response.'@odata.nextLink')" | Out-File $logFilePath -Append
@@ -225,12 +223,18 @@ function Get-AUsAndSGs ($aadObjectType) {
             $skipToken = $response.'@odata.nextLink'
 
         } while ($response.'@odata.nextLink')
+        
+        Start-Sleep 1 # Delay to refresh screen for progress
+        Write-Progress "Fetching $aadObjectType's complete" -Id 1 -Completed
+
     return $csvFilePath
 }
 
 $NewOrgSegmentsJob = {
 
     Param ($aadObjs, $aadObjectType, $startIndex, $count, $thisJobId, $defaultDelay, $addDelay, $timeout, $upn, $logFilePath, $aadObjAU, $aadObjSG)
+
+    $threadLogFilePath = $logFilePath -replace ".log$", "-thread$ThisJobId.log"
 
     $sb = [System.Text.StringBuilder]::new()
 
@@ -289,15 +293,16 @@ $NewOrgSegmentsJob = {
             $delay = $defaultDelay
         }
 
+        $sb.ToString() | Out-File $threadLogFilePath -Append
         Start-Sleep -Seconds $delay
     }
-
-    $sb.ToString() | Out-File $logFilePath -Append
 }
 
 $NewInformationBarriersJob = {
 
     Param ($aadObjs, $aadObjectType, $startIndex, $count, $thisJobId, $defaultDelay, $addDelay, $timeout, $upn, $logFilePath)
+
+    $threadLogFilePath = $logFilePath -replace ".log$", "-thread$ThisJobId.log"
 
     $sb = [System.Text.StringBuilder]::new()
 
@@ -346,10 +351,9 @@ $NewInformationBarriersJob = {
             $delay = $defaultDelay
         }
 
+        $sb.ToString() | Out-File $threadLogFilePath -Append
         Start-Sleep -Seconds $delay
     }
-
-    $sb.ToString() | Out-File $logFilePath -Append  
 }
 
 function Get-Confirmation ($ippsObjectType, $aadObjectType, $csvfilePath) {
