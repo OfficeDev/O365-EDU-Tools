@@ -278,13 +278,18 @@ $NewOrgSegmentsJob = {
         }
 
         $sb.AppendLine($logstr) | Out-Null
-                
+
         if ($err) 
         {
-            $sb.AppendLine("[$(Get-Date -Format G)] Error: " + $err) | Out-Null
+            $sb.AppendLine("[$(Get-Date -Format G)] ERROR: " + $err) | Out-Null
         }
-        
-        if ($warning | Select-String -Pattern 'delay' -SimpleMatch )
+
+        if ($warning) 
+        {
+            $sb.AppendLine("[$(Get-Date -Format G)] WARNING: " + $warning) | Out-Null
+        }
+
+        if ($warning | Select-String -Pattern 'GlobalThrottlingPolicy' -SimpleMatch )
         {
             $delay += $addDelay
         }
@@ -339,10 +344,15 @@ $NewInformationBarriersJob = {
 
         if ($err) 
         {
-            $sb.AppendLine("[$(Get-Date -Format G)] Error: " + $err) | Out-Null
+            $sb.AppendLine("[$(Get-Date -Format G)] ERROR: " + $err) | Out-Null
         }
 
-        if ($warning | Select-String -Pattern 'delay' -SimpleMatch )
+        if ($warning) 
+        {
+            $sb.AppendLine("[$(Get-Date -Format G)] WARNING: " + $warning) | Out-Null
+        }
+
+        if ($warning | Select-String -Pattern 'GlobalThrottlingPolicy' -SimpleMatch )
         {
             $delay += $addDelay
         }
