@@ -149,7 +149,14 @@ function Set-Connection($connectDT, $connectionType) {
                 }
                 else
                 {
-                    Connect-IPPSSession -PSSessionOption $pssOpt -UserPrincipalName $upns[0] | Out-Null
+                    if ($ippsCreds.count -eq 0)
+                    {
+                        Connect-IPPSSession -PSSessionOption $pssOpt -UserPrincipalName $upns[0] | Out-Null
+                    }
+                    else
+                    {
+                        Connect-IPPSSession -PSSessionOption $pssOptJob -Credential $ippsCreds[0] | Out-Null
+                    }
                 }
             }
         }
@@ -545,6 +552,11 @@ if ( $csvFilePathAU -eq "" ) {
 if($upns)
 {
     $ippsCreds = Get-IPPSCreds $upns
+}
+else
+{
+    Write-Host "Please run script with upns parameter for connecting with IPPSSession"
+    exit
 }
 
 if ( $csvFilePathAU -ne "" ) {
