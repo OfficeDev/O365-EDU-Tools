@@ -480,7 +480,7 @@ function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
     }
 }
 
-Get-IPPSCreds ($ippsUPNs)
+function Get-IPPSCreds($ippsUPNs)
 {
     $creds = @()
 
