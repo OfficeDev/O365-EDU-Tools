@@ -485,7 +485,7 @@ function Get-IPPSCreds($ippsUPNs)
     $creds = @()
 
     $ippsUPNs | ForEach-Object {
-        $creds += Get-Credential -Credential $_ -Message "Please enter credentials to IPPSSession for creating organization segments and information barrier policies."
+        $creds += Get-Credential -Username $_ -Message "Please enter credentials to IPPSSession for creating organization segments and information barrier policies."
     }
     return $creds
 }
