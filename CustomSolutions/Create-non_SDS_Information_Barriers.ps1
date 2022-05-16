@@ -6,7 +6,7 @@ This script is designed to create information barrier policies for each administ
 This script will read from Azure, and output the administrative units and security groups to CSVs.  Afterwards, you are prompted to confirm that you want to create the organization segments needed, then create and apply the information barrier policies.  A folder will be created in the same directory as the script itself and contains a log file which details the organization segments and information barrier policies created.  The rows of the csv files can be reduced to only target specific administrative units and security groups.  Nextlink in the log can be used for the skipToken script parameter to continue where the script left off in case it does not finish.
 
 .PARAMETER upns
-Upn used for Connect-IPPSSession to try to avoid reentering credentials when renewing connection.  Multiple upns separated by commas can be used for parallel jobs. Recommend the maximum amount of 3 for large datasets.
+Upn used for Connect-IPPSSession to try to avoid reentering credentials when renewing connection.  Multiple upns separated by commas can be used for parallel jobs. Recommend the maximum amount of 3 for large datasets.  See ** in Notes
 
 .PARAMETER all
 Executes script without confirmation prompts
@@ -65,6 +65,7 @@ PS> .\Create-non_SDS_Information_Barriers.ps1 -all:$true -upns upnOne@contoso.co
 ========================
  Required Prerequisites
 ========================
+**Because these scripts must require the Exchange Online PowerShell module and can time out after running for a period of time, it will cache the credentials for use to re-start the connection. This means it will not be useable with MFA.
 
 1. This script uses features that require Information Barriers version 3 or above to be enabled in your tenant.
 
@@ -232,7 +233,7 @@ function Get-AUsAndSGs ($aadObjectType) {
 
 $NewOrgSegmentsJob = {
 
-    Param ($aadObjs, $aadObjectType, $startIndex, $count, $thisJobId, $defaultDelay, $addDelay, $timeout, $upn, $logFilePath, $aadObjAU, $aadObjSG)
+    Param ($aadObjs, $aadObjectType, $startIndex, $count, $thisJobId, $defaultDelay, $addDelay, $timeout, $cred, $logFilePath, $aadObjAU, $aadObjSG)
 
     $threadLogFilePath = $logFilePath -replace ".log$", "-thread$ThisJobId.log"
 
@@ -262,7 +263,7 @@ $NewOrgSegmentsJob = {
                 Disconnect-ExchangeOnline -confirm:$false | Out-Null
             }
 
-            Connect-IPPSSession -PSSessionOption $pssOptJob -UserPrincipalName $upn | Out-Null
+            Connect-IPPSSession -PSSessionOption $pssOptJob -Credential $cred | Out-Null
             $lastJobRefreshedDT = Get-Date
         }
 
@@ -305,7 +306,7 @@ $NewOrgSegmentsJob = {
 
 $NewInformationBarriersJob = {
 
-    Param ($aadObjs, $aadObjectType, $startIndex, $count, $thisJobId, $defaultDelay, $addDelay, $timeout, $upn, $logFilePath)
+    Param ($aadObjs, $aadObjectType, $startIndex, $count, $thisJobId, $defaultDelay, $addDelay, $timeout, $cred, $logFilePath)
 
     $threadLogFilePath = $logFilePath -replace ".log$", "-thread$ThisJobId.log"
 
@@ -334,7 +335,7 @@ $NewInformationBarriersJob = {
                 Disconnect-ExchangeOnline -confirm:$false | Out-Null
             }
 
-            Connect-IPPSSession -PSSessionOption $pssOptJob -UserPrincipalName $upn | Out-Null
+            Connect-IPPSSession -PSSessionOption $pssOptJob -Credential $cred | Out-Null
             $lastJobRefreshedDT = Get-Date
         }
 
@@ -449,7 +450,7 @@ function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
             $sessionNum = $i
 
             Write-Host "Spawning job $jobID to add $count $ippsObjectType's starting at $startIndex; End Index: $($startIndex+$count-1); UPN: $($upns[$sessionNum])" -ForegroundColor Cyan
-            Start-Job $scriptBlock -ArgumentList $aadObjects, $aadObjectType, $startIndex, $count, $jobID, $jobDelay, $addJobDelay, $timeout, $upns[$sessionNum], $logFilePath, $aadObjAU, $aadObjSG
+            Start-Job $scriptBlock -ArgumentList $aadObjects, $aadObjectType, $startIndex, $count, $jobID, $jobDelay, $addJobDelay, $timeout, $ippsCreds[$sessionNum], $logFilePath, $aadObjAU, $aadObjSG
             $startIndex += $count
         }
 
@@ -477,6 +478,16 @@ function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
 
         $attempts = $attempts + 1;
     }
+}
+
+Get-IPPSCreds ($ippsUPNs)
+{
+    $creds = @()
+
+    $ippsUPNs | ForEach-Object {
+        $creds += Get-Credential -Credential $_ -Message "Please enter credentials to IPPSSession for creating organization segments and information barrier policies."
+    }
+    return $creds
 }
 
 # Main
@@ -529,6 +540,11 @@ Write-Host "`nActivity logged to file $logFilePath `n" -ForegroundColor Green
 if ( $csvFilePathAU -eq "" ) {
     $connectGraphDT = Set-Connection $connectGraphDT $connectTypeGraph
     $csvFilePathAU = Get-AUsAndSGs $aadObjAU
+}
+
+if($upns)
+{
+    $ippsCreds = Get-IPPSCreds $upns
 }
 
 if ( $csvFilePathAU -ne "" ) {
