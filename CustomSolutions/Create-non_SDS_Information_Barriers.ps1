@@ -241,8 +241,6 @@ function Get-AUsAndSGs ($aadObjectType) {
 $NewOrgSegmentsJob = {
 
     Param ($aadObjs, $aadObjectType, $startIndex, $count, $thisJobId, $defaultDelay, $addDelay, $timeout, $cred, $logFilePath, $aadObjAU, $aadObjSG)
-
-    $threadLogFilePath = $logFilePath -replace ".log$", "-thread$ThisJobId.log"
     
     $sb = [System.Text.StringBuilder]::new()
 
@@ -306,7 +304,7 @@ $NewOrgSegmentsJob = {
             $delay = $defaultDelay
         }
 
-        $sb.ToString() | Out-File $threadLogFilePath -Append
+        $sb.ToString() | Out-File $logFilePath -Append
         Start-Sleep -Seconds $delay
     }
 }
@@ -314,8 +312,6 @@ $NewOrgSegmentsJob = {
 $NewInformationBarriersJob = {
 
     Param ($aadObjs, $aadObjectType, $startIndex, $count, $thisJobId, $defaultDelay, $addDelay, $timeout, $cred, $logFilePath)
-
-    $threadLogFilePath = $logFilePath -replace ".log$", "-thread$ThisJobId.log"
 
     $sb = [System.Text.StringBuilder]::new()
 
@@ -369,7 +365,7 @@ $NewInformationBarriersJob = {
             $delay = $defaultDelay
         }
 
-        $sb.ToString() | Out-File $threadLogFilePath -Append
+        $sb.ToString() | Out-File $logFilePath -Append
         Start-Sleep -Seconds $delay
     }
 }
@@ -455,9 +451,10 @@ function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
 
             $jobID = $i+1
             $sessionNum = $i
+            $threadLogFilePath = $logFilePath -replace ".log$", "-thread$JobId.log"
 
             Write-Host "Spawning job $jobID to add $count $ippsObjectType's starting at $startIndex; End Index: $($startIndex+$count-1); UPN: $($upns[$sessionNum])" -ForegroundColor Cyan
-            Start-Job $scriptBlock -ArgumentList $aadObjects, $aadObjectType, $startIndex, $count, $jobID, $jobDelay, $addJobDelay, $timeout, $ippsCreds[$sessionNum], $logFilePath, $aadObjAU, $aadObjSG
+            Start-Job $scriptBlock -ArgumentList $aadObjects, $aadObjectType, $startIndex, $count, $jobID, $jobDelay, $addJobDelay, $timeout, $ippsCreds[$sessionNum], $threadLogFilePath, $aadObjAU, $aadObjSG
             $startIndex += $count
         }
 
@@ -505,7 +502,8 @@ if ($PPE)
     $graphEndPoint = $graphEndpointPPE
 }
 
-$logFilePath = "$outFolder\create_non_SDS_InformationBarriers.log"
+# Try to ensure log path for multithreading
+$logFilePath = "$(Resolve-Path $outFolder)\create_non_SDS_InformationBarriers.log"
 
 $aadObjAU = "AU"
 $aadObjSG = "SG"
