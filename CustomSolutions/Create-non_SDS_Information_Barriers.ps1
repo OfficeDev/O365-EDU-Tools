@@ -455,6 +455,7 @@ function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
 
             Write-Host "Spawning job $jobID to add $count $ippsObjectType's starting at $startIndex; End Index: $($startIndex+$count-1); UPN: $($upns[$sessionNum])" -ForegroundColor Cyan
             Start-Job $scriptBlock -ArgumentList $aadObjects, $aadObjectType, $startIndex, $count, $jobID, $jobDelay, $addJobDelay, $timeout, $ippsCreds[$sessionNum], $threadLogFilePath, $aadObjAU, $aadObjSG
+            "[$(Get-Date -Format G)] Check $threadLogFilePath for thread activity" | Tee-Object -FilePath $logFilePath -Append | Write-Host
             $startIndex += $count
         }
 
