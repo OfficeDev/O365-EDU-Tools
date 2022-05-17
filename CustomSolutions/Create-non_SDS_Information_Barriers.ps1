@@ -279,7 +279,7 @@ $NewOrgSegmentsJob = {
             }
             $aadObjSG {
                 Write-Output "[$($i-$startIndex+1)/$count/$thisJobId] [$(Get-Date -Format G)] Creating organization segment $displayName ($objectId) from $aadObjectType with $($cred.UserName)"
-                $logstr = Invoke-Command { New-OrganizationSegment -Name $displayName -UserGroupFilter "MemberOf -eq '$($objectId)'" } -ErrorAction Stop -WarningAction SilentlyContinue -WarningVariable warning | Select-Object WhenCreated, WhenChanged, Type, Name, Guid | ConvertTo-json -compress
+                $logstr = Invoke-Command { New-OrganizationSegment -Name $displayName -UserGroupFilter "MemberOf -eq '$($objectId)'" } -ErrorAction Stop -ErrorVariable err -WarningAction SilentlyContinue -WarningVariable warning | Select-Object WhenCreated, WhenChanged, Type, Name, Guid | ConvertTo-json -compress
             }
         }
 
