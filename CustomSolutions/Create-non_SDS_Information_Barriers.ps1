@@ -88,7 +88,7 @@ PS> .\Create-non_SDS_Information_Barriers.ps1 -all:$true -upns upnOne@contoso.co
 
 Param (
     [Parameter(Mandatory=$false)]
-    [System.Collections.ArrayList] $upns = @(),
+    [array] $upns = @(),
 
     [Alias("a")]
     [switch]$all = $false,
@@ -169,7 +169,7 @@ function Set-Connection($connectDT, $connectionType) {
             {
                 $connectedGraphUser = Invoke-GraphRequest -method get -uri "$graphEndpoint/$graphVersion/me"
                 $connectedGraphUPN = $connectedGraphUser.userPrincipalName
-                $upns.add($connectedGraphUPN)
+                $upns += $connectedGraphUPN
             }
         }
     }
@@ -186,7 +186,7 @@ function Get-AUsAndSGs ($aadObjectType) {
             Remove-Item $csvFilePath;
         }
 
-        $pageCnt = 1 # counts the number of pages of SGs retrieved
+        $pageCnt = 1 # Counts the number of pages of SGs retrieved
 
         # Uri string for AU's
         $auUri = "$graphEndPoint/$graphVersion/directory/administrativeUnits?`$select=id,displayName,description,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
@@ -243,7 +243,7 @@ $NewOrgSegmentsJob = {
     Param ($aadObjs, $aadObjectType, $startIndex, $count, $thisJobId, $defaultDelay, $addDelay, $timeout, $cred, $logFilePath, $aadObjAU, $aadObjSG)
 
     $threadLogFilePath = $logFilePath -replace ".log$", "-thread$ThisJobId.log"
-
+    
     $sb = [System.Text.StringBuilder]::new()
 
     $pssOptJob = new-PSSessionOption -IdleTimeout $timeout.TotalMilliseconds
@@ -276,11 +276,11 @@ $NewOrgSegmentsJob = {
 
         switch ($aadObjectType) {
             $aadObjAU {
-                Write-Output "[$($i-$startIndex+1)/$count/$thisJobId] [$(Get-Date -Format G)] Creating organization segment $displayName ($objectId) from $aadObjectType with  $($cred.UserName)"
+                Write-Output "[$($i-$startIndex+1)/$count/$thisJobId] [$(Get-Date -Format G)] Creating organization segment $displayName ($objectId) from $aadObjectType with $($cred.UserName)"
                 $logstr = Invoke-Command { New-OrganizationSegment -Name $displayName -UserGroupFilter "AdministrativeUnits -eq '$($objectId)'" } -ErrorAction Stop -ErrorVariable err -WarningAction SilentlyContinue -WarningVariable warning | Select-Object WhenCreated, WhenChanged, Type, Name, Guid | ConvertTo-json -compress
             }
             $aadObjSG {
-                Write-Output "[$($i-$startIndex+1)/$count/$thisJobId] [$(Get-Date -Format G)] Creating organization segment $displayName ($objectId) from $aadObjectType with  $($cred.UserName)"
+                Write-Output "[$($i-$startIndex+1)/$count/$thisJobId] [$(Get-Date -Format G)] Creating organization segment $displayName ($objectId) from $aadObjectType with $($cred.UserName)"
                 $logstr = Invoke-Command { New-OrganizationSegment -Name $displayName -UserGroupFilter "MemberOf -eq '$($objectId)'" } -ErrorAction Stop -WarningAction SilentlyContinue -WarningVariable warning | Select-Object WhenCreated, WhenChanged, Type, Name, Guid | ConvertTo-json -compress
             }
         }
@@ -395,7 +395,7 @@ function Get-Confirmation ($ippsObjectType, $aadObjectType, $csvfilePath) {
 function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
 {
     Write-Host "`n=====================================================" -ForegroundColor Cyan
-    Write-Host "Adding $objectType in Tenant" -ForegroundColor Cyan
+    Write-Host "Adding $ippsObjectType's in Tenant" -ForegroundColor Cyan
     
     $jobDelay = 30;
     $addJobDelay = 15;
@@ -427,14 +427,14 @@ function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
 
         if ($attempts -gt $maxAttempts)
         {
-            Write-Host "`nDone adding $objectType `n" -ForegroundColor Green
+            Write-Host "`nDone adding $ippsObjectType `n" -ForegroundColor Green
             break;
         }
         else
         {
             if ($attempts -gt 1)
             {
-                Write-Host "`n Could not remove all $objectType's. Giving up after $attempts attempts.`n" -ForegroundColor Red
+                Write-Host "`n Could not remove all $ippsObjectType's. Giving up after $attempts attempts.`n" -ForegroundColor Red
                 break;
             }
         }
@@ -549,7 +549,7 @@ if ( $csvFilePathAU -eq "" ) {
     $csvFilePathAU = Get-AUsAndSGs $aadObjAU
 }
 
-if($upns)
+if($upns.count -gt 0)
 {
     $ippsCreds = Get-IPPSCreds $upns
 }
