@@ -503,6 +503,11 @@ if ($PPE)
     $graphEndPoint = $graphEndpointPPE
 }
 
+# Create output folder if it does not exist
+if ((Test-Path $outFolder) -eq 0) {
+    mkdir $outFolder | Out-Null;
+}
+
 # Try to ensure log path for multithreading
 $logFilePath = "$(Resolve-Path $outFolder)\create_non_SDS_InformationBarriers.log"
 
@@ -534,11 +539,6 @@ catch
     Write-Error "Failed to load Exchange Online Management Module for creating Information Barriers"
     Get-Help -Name .\Create-non_SDS_Information_Barriers.ps1 -Full | Out-String | Write-Error
     throw
-}
-
-# Create output folder if it does not exist
-if ((Test-Path $outFolder) -eq 0) {
-    mkdir $outFolder | Out-Null;
 }
 
 Write-Host "`nActivity logged to file $logFilePath `n" -ForegroundColor Green
