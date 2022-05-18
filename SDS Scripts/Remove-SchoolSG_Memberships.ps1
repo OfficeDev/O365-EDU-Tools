@@ -1,53 +1,12 @@
 <#
-Script Name:
-Remove-SchoolSG_Memberships.ps1
-
-Synopsis:
-This script is designed to remove all School SG Membershipss created by SDS from an O365 tenant. The script sets up the connection to Azure, and then confirm you want to run the script with a "y". 
+.SYNOPSIS
+This script is designed to remove all School SG Memberships created by SDS from an O365 tenant. The script sets up the connection to Azure, and then confirm you want to run the script with a "y". 
 Once the script completes, a file will be created in the same directory as the script itself, and contain an output file which details the school SG memberships removed.
 
-Syntax Examples and Options:
+.EXAMPLE
 .\Remove-SchoolSG_Memberships.ps1
 
-Written By: 
-SDS Team, and adapted by Ayron Johnson
-
-Change Log:
-Version 1, 4/6/21 - First Draft
-
-#>
-
-Param (
-    [switch] $PPE = $false,
-    [Parameter(Mandatory=$false)]
-    [string] $skipToken= ".",
-    [Parameter(Mandatory=$false)]
-    [string] $OutFolder = ".\SDSSchoolSGMemberships",
-    [Parameter(Mandatory=$false)]
-    [string] $downloadFcns = "y"
-)
-
-$GraphEndpointProd = "https://graph.microsoft.com"
-$GraphEndpointPPE = "https://graph.microsoft-ppe.com"
-
-#checking parameter to download common.ps1 file for required common functions
-if ($downloadFcns -ieq "y" -or $downloadFcns -ieq "yes"){
-    # Downloading file with latest common functions
-    try {
-        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
-        "Grabbed 'common.ps1' to currrent directory"
-    } 
-    catch {
-        throw "Unable to download common.ps1"
-    }
-}
-
-#import file with common functions
-. .\common.ps1    
-
-function Get-PrerequisiteHelp
-{
-    Write-Output @"
+.NOTES
 ========================
  Required Prerequisites
 ========================
@@ -64,18 +23,44 @@ function Get-PrerequisiteHelp
     
     c. Sign in with any tenant administrator credentials
     
-    d. If you are returned to the PowerShell sesion without error, you are correctly set up
+    d. If you are returned to the PowerShell session without error, you are correctly set up
 
 4. Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working
 
-(END)
 ========================
-"@
+#>
+
+Param (
+    [switch] $PPE = $false,
+    [Parameter(Mandatory=$false)]
+    [string] $skipToken= ".",
+    [Parameter(Mandatory=$false)]
+    [string] $outFolder = ".\SDSSchoolSGMemberships",
+    [Parameter(Mandatory=$false)]
+    [string] $downloadFcns = "y"
+)
+
+$graphEndpointProd = "https://graph.microsoft.com"
+$graphEndpointPPE = "https://graph.microsoft-ppe.com"
+
+# Checking parameter to download common.ps1 file for required common functions
+if ($downloadFcns -ieq "y" -or $downloadFcns -ieq "yes"){
+    # Downloading file with latest common functions
+    try {
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
+        "Grabbed 'common.ps1' to current directory"
+    } 
+    catch {
+        throw "Unable to download common.ps1"
+    }
 }
+
+# Import file with common functions
+. .\common.ps1    
 
 function Get-SecurityGroupMemberships($refreshToken, $graphscopes, $logFilePath) {
 
-    #preparing uri string
+    # Preparing uri string
     $grpMemberTeacherSelectClause = "?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'SchoolTeachersSG'&`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
     $grpMemberStudentSelectClause = "?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'SchoolStudentsSG'&`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
     $grpMemberSelectClause = "?`$select=id,displayName,@data.type,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource"
@@ -93,39 +78,39 @@ function Get-SecurityGroupMemberships($refreshToken, $graphscopes, $logFilePath)
 
     $initialSDSSchoolSGsUri = "$graphEndPoint/beta/groups$grpSelectClause"
     
-    #getting SGs for all schools
+    # Getting SGs for all schools
     $checkedSDSSchoolSGsUri = TokenSkipCheck $initialSDSSchoolSGsUri $logFilePath
     $schoolSGs = PageAll-GraphRequest $checkedSDSSchoolSGsUri $refreshToken 'GET' $graphscopes $logFilePath
 
-    #write to school SG count to log
-    write-output "[$(get-date -Format G)] Retrieve $($schoolSGs.Count) school SGs." | out-file $logFilePath -Append
+    # Write to school SG count to log
+    Write-Output "[$(Get-Date -Format G)] Retrieve $($schoolSGs.Count) school SGs." | out-file $logFilePath -Append
     
-    $schoolSGMemberships = @() #array of objects for memberships
+    $schoolSGMemberships = @() # Array of objects for memberships
 
-    $i = 0 #counter for progress
+    $i = 0 # Counter for progress
 
-    #looping through all school SGs
+    # Looping through all school SGs
     foreach($grp in $schoolSGs)
     {
         if ($grp.id -ne $null)
         {
 
-            #getting members of each school SG
+            # Getting members of each school SG
             $grpMembershipUri = $graphEndPoint + '/beta/groups/' + $grp.id + '/members' + $grpMemberSelectClause
             $checkedSGMembershipUri = TokenSkipCheck $grpMembershipUri $logFilePath
             $schoolSGMembers = PageAll-GraphRequest $checkedSGMembershipUri $refreshToken 'GET' $graphscopes $logFilePath
 
-            #getting info for each SG member
+            # Getting info for each SG member
             foreach ($grpMember in $schoolSGMembers)
             {
-                $grpMemberType = $grpMember.'@odata.type' #some members are users and some are groups
+                $grpMemberType = $grpMember.'@odata.type' # Some members are users and some are groups
                 
                 if ($grpMemberType -eq '#microsoft.graph.user')
                 {
-                    #users created by sds have this extension
+                    # Users created by sds have this extension
                     if ($grpMember.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource -ne $null)
                     {
-                        #create object required for export-csv and add to array
+                        # Create object required for export-csv and add to array
                         $obj = [pscustomobject]@{"SGObjectId"=$grp.id;"SGDisplayName"=$grp.displayName;"SGMemberObjectId"=$grpMember.id; "SGMemberDisplayName"=$grpMember.displayName}
                         $schoolSGMemberships += $obj
                     }
@@ -156,14 +141,14 @@ function Remove-SecurityGroupMemberships
     if ($choice -ieq "y" -or $choice -ieq "yes")
     {
         Write-Progress -Activity $activityName -Status "Deleting Security Group Memberships"
-        $grpMemberList = import-csv $grpMemberListFileName
-        $grpMemberCount = (gc $grpMemberListFileName | measure-object).count - 1
+        $grpMemberList = Import-Csv $grpMemberListFileName
+        $grpMemberCount = (gc $grpMemberListFileName | Measure-Object).count - 1
         
         $index = 1
 
         Foreach ($grpm in $grpMemberList) 
         {
-            Write-Output "[$(get-date -Format G)] [$index/$grpMemberCount] Removing SG Member id [$($grpm.SGMemberObjectId)] of `"$($grpm.SGDisplayName)`" [$($grpm.SGObjectId)] from directory" | Out-File $logFilePath -Append 
+            Write-Output "[$(Get-Date -Format G)] [$index/$grpMemberCount] Removing SG Member id [$($grpm.SGMemberObjectId)] of `"$($grpm.SGDisplayName)`" [$($grpm.SGObjectId)] from directory" | Out-File $logFilePath -Append 
             $removeUrl = $graphEndPoint + '/beta/groups/' + $grpm.SGObjectId + '/members/' + $grpm.SGMemberObjectId +'/$ref'
             PageAll-GraphRequest $removeUrl $refreshToken 'DELETE' $graphscopes $logFilePath | Out-Null
             $index++
@@ -177,31 +162,31 @@ Function Format-ResultsAndExport($graphscopes, $logFilePath) {
     
     $allSchoolSGMemberships = Get-SecurityGroupMemberships $refreshToken $graphscopes $logFilePath
 
-    #output to file
+    # Output to file
     if($skipToken -eq "."){
-        write-output $allSchoolSGMemberships | Export-Csv -Path "$csvfilePath" -NoTypeInformation
+        Write-Output $allSchoolSGMemberships | Export-Csv -Path "$csvfilePath" -NoTypeInformation
     }
     else {
-        write-output $allSchoolSGMemberships | Export-Csv -Path "$csvfilePath$($skiptoken.Length).csv" -NoTypeInformation
+        Write-Output $allSchoolSGMemberships | Export-Csv -Path "$csvfilePath$($skiptoken.Length).csv" -NoTypeInformation
     }
 
     Out-File $logFilePath -Append -InputObject $global:nextLink
 }
 
 # Main
-$graphEndPoint = $GraphEndpointProd
+$graphEndPoint = $graphEndpointProd
 
 if ($PPE)
 {
-    $graphEndPoint = $GraphEndpointPPE
+    $graphEndPoint = $graphEndpointPPE
 }
 
-$logFilePath = "$OutFolder\SchoolSGMemberships.log"
-$csvFilePath = "$OutFolder\SchoolSGMemberships.csv"
+$logFilePath = "$outFolder\SchoolSGMemberships.log"
+$csvFilePath = "$outFolder\SchoolSGMemberships.csv"
 
 $activityName = "Cleaning up SDS Objects in Directory"
 
-#list used to request access to data
+# List used to request access to data
 $graphscopes = "GroupMember.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All, Directory.AccessAsUser.All"
 
 try
@@ -211,14 +196,14 @@ try
 catch
 {
     Write-Error "Failed to load Microsoft Graph PowerShell Module."
-    Get-PrerequisiteHelp | Out-String | Write-Error
+    Get-Help -Name .\Remove-SchoolSG_Memberships.ps1 -Full | Out-String | Write-Error
     throw
 }
 
  # Create output folder if it does not exist
- if ((Test-Path $OutFolder) -eq 0)
+ if ((Test-Path $outFolder) -eq 0)
  {
- 	mkdir $OutFolder;
+ 	mkdir $outFolder;
  }
 
 # Get all Members of all SG's of Edu Object Type School

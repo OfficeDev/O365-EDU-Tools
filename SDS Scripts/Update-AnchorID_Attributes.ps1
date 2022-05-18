@@ -26,7 +26,6 @@ This script is designed to get all SDS users, and update the Anchor IDs to facil
 
 5. Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working
 
-(END)
 ========================
 #>
 
@@ -128,15 +127,15 @@ function Update-SDSUserAttributes
     $choice = Read-Host
 	if ($choice -ieq "y" -or $choice -ieq "yes")
 	{
-		$userList = import-csv $userListFileName
-		$userCount = (gc $userListFileName | measure-object).count - 1
+		$userList = Import-Csv $userListFileName
+		$userCount = (gc $userListFileName | Measure-Object).count - 1
 		$index = 1
         $saveToken = $refreshToken
 		Foreach ($user in $userList) 
 		{
             $saveToken = Refresh-Token $saveToken $graphscopes
 
-			Write-Output "[$(get-date -Format G)] [$index/$userCount] Updating attribute [$($user.userAnchorId)] from user `"$($user.userDisplayName)`" " | Out-File $logFilePath -Append 
+			Write-Output "[$(Get-Date -Format G)] [$index/$userCount] Updating attribute [$($user.userAnchorId)] from user `"$($user.userDisplayName)`" " | Out-File $logFilePath -Append 
             
             $updateUrl = $graphEndPoint + '/beta/users/' + $user.userObjectId
             
@@ -159,8 +158,8 @@ if ($PPE)
     $graphEndPoint = $graphEndpointPPE
 }
 
-$logFilePath = "$OutFolder\SDSUsers.log"
-$csvFilePath = "$OutFolder\SDSUsers.csv"
+$logFilePath = "$outFolder\SDSUsers.log"
+$csvFilePath = "$outFolder\SDSUsers.csv"
 
 $activityName = "Connecting to Graph"
 
@@ -184,9 +183,9 @@ Write-Progress -Activity $activityName -Status "Connecting to tenant"
 Write-Progress -Activity $activityName -Status "Connected. Discovering tenant information"
 
 # Create output folder if it does not exist
-if ((Test-Path $OutFolder) -eq 0)
+if ((Test-Path $outFolder) -eq 0)
 {
-	mkdir $OutFolder;
+	mkdir $outFolder;
 }
 
 Format-ResultsAndExport $graphscopes $logFilePath
