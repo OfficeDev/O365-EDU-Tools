@@ -634,7 +634,7 @@ else{
 }
 
 if ($choiceStartIB -ieq "y" -or $choiceStartIB -ieq "yes") {
-    $connectTypeIPPSSession = Set-Connection $connectIPPSSessionDT $connectTypeIPPSSession
+    $connectIPPSSessionDT = Set-Connection $connectIPPSSessionDT $connectTypeIPPSSession
     Start-InformationBarrierPoliciesApplication | Out-Null
     Write-Output "Done.  Please allow ~30 minutes for the system to start the process of applying Information Barrier Policies. `nUse Get-InformationBarrierPoliciesApplicationStatus to check the status"
 }
