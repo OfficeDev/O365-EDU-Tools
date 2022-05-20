@@ -155,7 +155,7 @@ function Set-Connection($connectDT, $connectionType) {
                     }
                     else
                     {
-                        Connect-IPPSSession -PSSessionOption $pssOptJob -Credential $ippsCreds[0] | Out-Null
+                        Connect-IPPSSession -PSSessionOption $pssOpt -Credential $ippsCreds[0] | Out-Null
                     }
                 }
             }
