@@ -40,6 +40,8 @@ Param (
     [switch] $PPE = $false,
     [switch] $AppendTenantIdToFileName = $false,
     [Parameter(Mandatory=$false)]
+    [string] $graphVersion = "beta",
+    [Parameter(Mandatory=$false)]
     [string] $skipToken= ".",
     [switch] $downloadCommonFNs = $true
 )
@@ -74,7 +76,7 @@ if ($downloadCommonFNs){
 
 function Export-SdsSchools
 {
-    $fileName = $eduObjSchool.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $authToken.TenantId } else { "" }) +".csv"
+    $fileName = $eduObjSchool.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $tenantId } else { "" }) +".csv"
 	$filePath = Join-Path $OutFolder $fileName
     Remove-Item -Path $filePath -Force -ErrorAction Ignore
 
@@ -141,7 +143,7 @@ function Get-AdministrativeUnits
 
     $list = @()
 
-    $initialUri = "$graphEndPoint/beta/directory/administrativeUnits?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
+    $initialUri = "$graphEndPoint/$graphVersion/directory/administrativeUnits?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
 
     #getting AUs for all schools
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
@@ -160,7 +162,7 @@ function Get-AdministrativeUnits
 
 function Export-SdsSections
 {
-    $fileName = $eduObjSection.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $authToken.TenantId } else { "" }) +".csv"
+    $fileName = $eduObjSection.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $tenantId } else { "" }) +".csv"
 	$filePath = Join-Path $OutFolder $fileName
     Remove-Item -Path $filePath -Force -ErrorAction Ignore
 
@@ -225,7 +227,7 @@ function Get-Groups
 
     $list = @()
 
-    $initialUri = "$graphEndPoint/beta/groups?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
+    $initialUri = "$graphEndPoint/$graphVersion/groups?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
 
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
 
@@ -243,7 +245,7 @@ function Get-Groups
 
 function Export-SdsTeacherRosters
 {
-    $fileName = $eduRelTeacherRoster.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $authToken.TenantId } else { "" }) +".csv"
+    $fileName = $eduRelTeacherRoster.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $tenantId } else { "" }) +".csv"
 	$filePath = Join-Path $OutFolder $fileName
     Remove-Item -Path $filePath -Force -ErrorAction Ignore
 
@@ -282,7 +284,6 @@ function Get-SdsTeacherRoster
     $members = Get-TeacherRoster $section.id
     return Format-SdsTeacherRoster $section $members
 }
-
 
 function Format-SdsTeacherRoster
 {
@@ -331,7 +332,7 @@ function Get-TeacherRoster
 
 function Export-SdsStudentEnrollments
 {
-    $fileName = $eduRelStudentEnrollment.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $authToken.TenantId } else { "" }) +".csv"
+    $fileName = $eduRelStudentEnrollment.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $tenantId } else { "" }) +".csv"
 	$filePath = Join-Path $OutFolder $fileName
     Remove-Item -Path $filePath -Force -ErrorAction Ignore
 
@@ -348,7 +349,7 @@ function Export-SdsStudentEnrollments
     if ($cnt -gt 0)
     {
         Write-Host "Exporting $cnt Student Enrollments ..."
-        $data | Export-Csv $filePath -Force -NoTypeInformation
+        $data | Export-Csv $filePath -Force -NoTypeInformation -ErrorAction SilentlyContinue
         Write-Host "`nStudent Enrollments exported to file $filePath `n" -ForegroundColor Green
         return $filePath
     }
@@ -358,7 +359,6 @@ function Export-SdsStudentEnrollments
         return $null
     }
 }
-
 function Get-SdsStudentEnrollment
 {
     Param
@@ -423,7 +423,7 @@ function Get-SdsSection
         $sectionId
     )
 
-    $initialUri = "$graphEndPoint/beta/groups?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SectionId%20eq%20'$sectionId'"
+    $initialUri = "$graphEndPoint/$graphVersion/groups?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SectionId%20eq%20'$sectionId'"
 
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
     $groups = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
@@ -443,7 +443,7 @@ function Get-Section
         $objectId
     )
 
-    $initialUri = "$graphEndPoint/beta/groups/$objectId"
+    $initialUri = "$graphEndPoint/$graphVersion/groups/$objectId"
 
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
     $group = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
@@ -463,11 +463,11 @@ function Get-GroupMembership
             
     if ($eduObjectType -eq $eduObjTeacher) 
     {
-         $initialUri = $graphEndPoint + '/beta/groups/' + $groupObjectId + '/owners'
+         $initialUri = $graphEndPoint + '/' + $graphVersion + '/groups/' + $groupObjectId + '/owners'
     }
     else
     {
-         $initialUri = $graphEndPoint + '/beta/groups/' + $groupObjectId + '/members'
+         $initialUri = $graphEndPoint + '/' + $graphVersion + '/groups/' + $groupObjectId + '/members'
     }
     
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
@@ -486,7 +486,7 @@ function Get-GroupMembership
 
 function Export-SdsTeachers
 {
-    $fileName = $eduObjTeacher.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $authToken.TenantId } else { "" }) +".csv"
+    $fileName = $eduObjTeacher.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $tenantId } else { "" }) +".csv"
 	$filePath = Join-Path $OutFolder $fileName
     Remove-Item -Path $filePath -Force -ErrorAction Ignore
 
@@ -541,7 +541,7 @@ function Get-Teachers
 
 function Export-SdsStudents
 {
-    $fileName = $eduObjStudent.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $authToken.TenantId } else { "" }) +".csv"
+    $fileName = $eduObjStudent.ToLower() + $(if ($AppendTenantIdToFileName) { "-" + $tenantId } else { "" }) +".csv"
 	$filePath = Join-Path $OutFolder $fileName
     Remove-Item -Path $filePath -Force -ErrorAction Ignore
     
@@ -623,7 +623,7 @@ function Get-Users
 
     $list = @()
 
-    $initialUri = "$graphEndPoint/beta/users?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
+    $initialUri = "$graphEndPoint/$graphVersion/users?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
 
     $checkedUri = TokenSkipCheck $initialUri $logFilePath
     $users = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
@@ -667,11 +667,13 @@ Write-Progress -Activity $activityName -Status "Connecting to tenant"
 Initialize
 
 Write-Progress -Activity $activityName -Status "Connected. Discovering tenant information"
+$tenantInfo = Get-MgOrganization
+$tenantId =  $tenantInfo.Id
 
 # Create output folder if it does not exist
 if ((Test-Path $OutFolder) -eq 0)
 {
-	mkdir $OutFolder;
+	mkdir $OutFolder | Out-Null;
 }
 
 # Export all User of Edu Object Type Teacher/Student
