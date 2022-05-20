@@ -93,7 +93,10 @@ function Update-UnexpireSingleGroup($groupId, $logFilePath, $team) {
         "extension_fe2174665583431c953114ff7268b7b3_Education_Status" : "Active"
     }'
 
-    $result = invoke-graphrequest -Method Patch -Uri $uri -body $requestBody -ContentType "application/json" -SkipHttpErrorCheck
+    #Force encoding of utf8 as it gets changed for non-English language characters
+    $requestBodyEncoded = ([System.Text.Encoding]::UTF8.GetBytes($requestBody))
+
+    $result = Invoke-GraphRequest -Method Patch -Uri $uri -body $requestBodyEncoded -ContentType "application/json" -SkipHttpErrorCheck
 
     if ([string]::IsNullOrEmpty($_.Exception.Message) -eq $true ) {
         $statusMessage = "success"
