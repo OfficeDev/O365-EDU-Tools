@@ -37,7 +37,7 @@ if ($downloadCommonFNs){
     # Downloading file with latest common functions
     try {
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
-        "Grabbed 'common.ps1' to currrent directory"
+        "Grabbed 'common.ps1' to current directory"
     } 
     catch {
         throw "Unable to download common.ps1"
@@ -66,7 +66,7 @@ function Get-PrerequisiteHelp
     
     c. Sign in with any tenant administrator credentials
     
-    d. If you are returned to the PowerShell sesion without error, you are correctly set up
+    d. If you are returned to the PowerShell session without error, you are correctly set up
 
 5. Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working
 

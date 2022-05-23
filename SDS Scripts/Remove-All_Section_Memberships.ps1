@@ -3,7 +3,7 @@ Script Name:
 Remove-All_Section_Memberships.ps1
 
 Written By: 
-Micrsoft SDS Team, and adapted by Debashis Dwivedi
+Microsoft SDS Team, and adapted by Debashis Dwivedi
 
 Change Log:
 Version 1.0, 12/12/2016 - First Draft
@@ -75,7 +75,7 @@ Command to download the function: Invoke-WebRequest -Uri "https://raw.githubuser
     
     c. Sign in with any tenant administrator credentials
     
-    d. If you are returned to the PowerShell sesion without error, you are correctly set up
+    d. If you are returned to the PowerShell session without error, you are correctly set up
 
 4. Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working
 
