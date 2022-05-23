@@ -61,8 +61,8 @@ function Get-AdministrativeUnitMemberships($refreshToken, $graphscopes, $logFile
 
     # Preparing uri string
     $auSelectClause = "`$select=id,displayName"
-    $auMemberAllSelectClause = "`$select=id,DisplayName,@data.type,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId"
-    $auMemberStudentSelectClause = "`$select=id,DisplayName,@data.type,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_StudentId"
+    $auMemberAllSelectClause = "`$select=id,DisplayName,@data.type,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
+    $auMemberStudentSelectClause = "`$select=id,DisplayName,@data.type,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_StudentId"
 
     $initialSDSSchoolAUsUri = "$graphEndPoint/beta/directory/administrativeUnits?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'School'&$auSelectClause"
     
@@ -108,11 +108,10 @@ function Get-AdministrativeUnitMemberships($refreshToken, $graphscopes, $logFile
                     $userUri = $graphEndPoint + "/beta/users/" + $auMember.Id + "?$auMemberSelectClause"
                     $user = invoke-graphrequest -Method GET -Uri $userUri -ContentType "application/json"
 
-                    # Users created by sds have this extension
-                    if ($user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId -ne $null)
+                    if ($user.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType -ne $null)
                     {   
                         # Checking if retuning students only
-                        if(($choice -ieq "y" -or $choice -ieq "yes") -or ($user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_StudentId -ne $null))
+                        if(($choice -ieq "y" -or $choice -ieq "yes") -or ($user.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType -ieq 'Student'))
                         {
                             # Create object required for export-csv and add to array
                             $obj = [pscustomobject]@{"AUObjectId"=$au.Id;"AUDisplayName"=$au.DisplayName;"AUMemberObjectId"=$user.Id; "AUMemberDisplayName"=$user.DisplayName;}
