@@ -54,13 +54,13 @@ function PageAll-GraphRequest-WriteToFile($initialUri, $refreshToken, $method, $
     while ($currentUrl -ne $null) {
         Refresh-Token $refreshToken $graphscopes
         $response = invoke-graphrequest -Method $method -Uri $currentUrl -ContentType "application/json"
-        $response.value | select-object -property $objectProperties | where-object {$_.Id -ne $null} | export-csv -Path "$filePath" -Append -NoTypeInformation
+        $response.value | select-object -property $objectProperties | where-object {$_.Id -ne $null} | export-csv -Path "$filePath" -Append -NoTypeInformation -Encoding utf8
         
         $currentUrl = $response.'@odata.nextLink'
         $recordCount += $response.value.Count
     }
     $global:nextLink = $response.'@odata.nextLink'
-    Write-Output "[$(get-date -Format G)] Retrieve $($recordCount) $($eduObjectType)s." | out-file $logFilePath -Append    
+    Write-Output "[$(get-date -Format G)] Retrieve $($recordCount) $($eduObjectType)s." | out-file $logFilePath -Append -Encoding utf8
 }
 
 function TokenSkipCheck ($uriToCheck, $logFilePath)
