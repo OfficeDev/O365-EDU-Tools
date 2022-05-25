@@ -186,7 +186,7 @@ function Get-AUsAndSGs ($aadObjectType) {
             Remove-Item $csvFilePath;
         }
 
-        $pageCnt = 1 # Counts the number of pages of SGs retrieved
+        $pageCnt = 1 # Counts the number of pages retrieved
 
         # Uri string for AU's
         $auUri = "$graphEndPoint/$graphVersion/directory/administrativeUnits?`$select=id,displayName,description,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
@@ -210,12 +210,12 @@ function Get-AUsAndSGs ($aadObjectType) {
                 $graphUri = $skipToken
             }
 
-            $recordList = @() # Array of objects for SGs
+            $recordList = @() # Array of objects
 
             $response = Invoke-GraphRequest -Uri $graphUri -Method GET
             $records = $response.value
 
-            $ctr = 0 # Counter for security groups retrieved
+            $ctr = 0 # Counter for items retrieved
 
             foreach ($record in $records) {
                     $recordList += [pscustomobject]@{"ObjectId"=$record.Id;"DisplayName"=$record.DisplayName;"Description"=$record.Description}
