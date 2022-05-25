@@ -430,7 +430,7 @@ function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
         {
             if ($attempts -gt 1)
             {
-                Write-Host "`n Could not remove all $ippsObjectType's. Giving up after $attempts attempts.`n" -ForegroundColor Red
+                Write-Host "`n Could not add all $ippsObjectType's. Giving up after $attempts attempts.`n" -ForegroundColor Red
                 break;
             }
         }
