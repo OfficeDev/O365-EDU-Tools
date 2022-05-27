@@ -412,13 +412,13 @@ function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
             {
                 $scriptBlock = $NewOrgSegmentsJob
                 $createdObjs = Get-OrganizationSegment
-                $aadObjects = $csvData | Where-Object { $_.displayName -notin $createdObjs.name }
+                $aadObjects = $csvData | Where-Object { "AdministrativeUnits -eq '$($_.ObjectId)'" -notin $createdObjs.UserGroupFilter }
             }
             $ippsObjIB
             {
                 $scriptBlock = $NewInformationBarriersJob
                 $createdObjs = Get-InformationBarrierPolicy
-                $aadObjects = $csvData | Where-Object { "$($_.displayName) - IB" -notin $createdObjs.name }
+                $aadObjects = $csvData | Where-Object { "$($_.DisplayName) - IB" -notin $createdObjs.Name }
             }
         }
 
