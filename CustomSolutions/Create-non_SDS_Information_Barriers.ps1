@@ -397,6 +397,8 @@ function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
     $addJobDelay = 15;
     $attempts = 1;
 
+    $csvData = Import-Csv $csvFilePath
+
     while ($true)
     {
         $scriptBlock = $null
@@ -409,30 +411,32 @@ function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
             $ippsObjOS
             {
                 $scriptBlock = $NewOrgSegmentsJob
-                $aadObjects = Import-Csv $csvFilePath
+                $createdObjs = Get-OrganizationSegment
+                $aadObjects = $csvData | Where-Object { $_.displayName -notin $createdObjs.name }
             }
             $ippsObjIB
             {
                 $scriptBlock = $NewInformationBarriersJob
-                $aadObjects = Import-Csv $csvFilePath
+                $createdObjs = Get-InformationBarrierPolicy
+                $aadObjects = $csvData | Where-Object { "$($_.displayName) - IB" -notin $createdObjs.name }
             }
         }
 
         $totalObjectCount = $aadObjects.count
         Write-Host "Creating $totalObjectCount $ippsObjectType's from $aadObjectType's. [Attempt #$attempts]" -ForegroundColor Green
 
-        if ($attempts -gt $maxAttempts)
-        {
-            Write-Host "`nDone adding $ippsObjectType `n" -ForegroundColor Green
-            break;
-        }
-        else
-        {
-            if ($attempts -gt 1)
+        if ($totalObjectCount -eq 0 -or $attempts -gt $maxAttempts)
+        {   
+            if ($totalObjectCount -eq 0)
             {
+                Write-Host "`nDone adding $ippsObjectType `n" -ForegroundColor Green
+            }    
+            else
+            {
+            
                 Write-Host "`n Could not add all $ippsObjectType's. Giving up after $attempts attempts.`n" -ForegroundColor Red
-                break;
             }
+            break;
         }
 
         # Split task into equal sized jobs and start executing in parallel
