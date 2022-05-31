@@ -390,6 +390,13 @@ function Get-Confirmation ($ippsObjectType, $aadObjectType, $csvfilePath) {
 
 function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
 {
+
+    if ($ippsCreds.count -ne $maxParallelJobs) 
+    {
+        Write-Host "Please ensure number of sessions matches number of parallel jobs" -ForegroundColor Red
+        exit
+    }
+    
     Write-Host "`n=====================================================" -ForegroundColor Cyan
     Write-Host "Adding $ippsObjectType's in Tenant" -ForegroundColor Cyan
     
