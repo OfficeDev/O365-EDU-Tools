@@ -33,7 +33,7 @@ The path for the csv file containing the security groups in the tenant.  When pr
 
 .PARAMETER maxParallelJobs 
 
-Maximum number of jobs to run in parallel using ExchangeOnline Module.  We use 1 job per session.  Max sessions is 3 for ExchangeOnline.
+Maximum number of jobs to run in parallel using ExchangeOnline Module.  We use 1 job per session.  Max sessions is 3 for ExchangeOnline.  Do not run more threads than there are upns.
 
 .PARAMETER maxAttempts
 
@@ -59,7 +59,7 @@ The version of the Graph API.
 PS> .\Create-non_SDS_Information_Barriers.ps1
 
 .EXAMPLE
-PS> .\Create-non_SDS_Information_Barriers.ps1 -all:$true -upns upnOne@contoso.com,upnTwo@contoso.com,upnThree@contoso.com
+PS> .\Create-non_SDS_Information_Barriers.ps1 -all:$true -upns upnOne@contoso.com,upnTwo@contoso.com,upnThree@contoso.com -maxParallelJobs 3
 
 .NOTES
 ========================
@@ -96,7 +96,7 @@ Param (
     [switch]$auIB = $false,
     [switch]$sgOrgSeg = $false,
     [switch]$sgIB = $false,
-    [int]$maxParallelJobs = 3,
+    [int]$maxParallelJobs = 1,
     [int]$maxAttempts = 1,
     [int]$maxTimePerAttemptMins = 180,
     [Parameter(Mandatory=$false)]
@@ -390,12 +390,21 @@ function Get-Confirmation ($ippsObjectType, $aadObjectType, $csvfilePath) {
 
 function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
 {
+
+    if ($ippsCreds.count -ne $maxParallelJobs) 
+    {
+        Write-Host "Please ensure the maxParallelJobs parameter equals the number of UPNs entered" -ForegroundColor Red
+        exit
+    }
+    
     Write-Host "`n=====================================================" -ForegroundColor Cyan
     Write-Host "Adding $ippsObjectType's in Tenant" -ForegroundColor Cyan
     
     $jobDelay = 30;
     $addJobDelay = 15;
     $attempts = 1;
+
+    $csvData = Import-Csv $csvFilePath
 
     while ($true)
     {
@@ -409,30 +418,32 @@ function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
             $ippsObjOS
             {
                 $scriptBlock = $NewOrgSegmentsJob
-                $aadObjects = Import-Csv $csvFilePath
+                $createdObjs = Get-OrganizationSegment
+                $aadObjects = $csvData | Where-Object { "AdministrativeUnits -eq '$($_.ObjectId)'" -notin $createdObjs.UserGroupFilter }
             }
             $ippsObjIB
             {
                 $scriptBlock = $NewInformationBarriersJob
-                $aadObjects = Import-Csv $csvFilePath
+                $createdObjs = Get-InformationBarrierPolicy
+                $aadObjects = $csvData | Where-Object { "$($_.DisplayName) - IB" -notin $createdObjs.Name }
             }
         }
 
         $totalObjectCount = $aadObjects.count
         Write-Host "Creating $totalObjectCount $ippsObjectType's from $aadObjectType's. [Attempt #$attempts]" -ForegroundColor Green
 
-        if ($attempts -gt $maxAttempts)
-        {
-            Write-Host "`nDone adding $ippsObjectType `n" -ForegroundColor Green
-            break;
-        }
-        else
-        {
-            if ($attempts -gt 1)
+        if ($totalObjectCount -eq 0 -or $attempts -gt $maxAttempts)
+        {   
+            if ($totalObjectCount -eq 0)
             {
+                Write-Host "`nDone adding $ippsObjectType `n" -ForegroundColor Green
+            }    
+            else
+            {
+            
                 Write-Host "`n Could not add all $ippsObjectType's. Giving up after $attempts attempts.`n" -ForegroundColor Red
-                break;
             }
+            break;
         }
 
         # Split task into equal sized jobs and start executing in parallel
@@ -557,6 +568,8 @@ else
     Write-Host "Please run script with upns parameter for connecting with IPPSSession"
     exit
 }
+
+$connectIPPSSessionDT = Set-Connection $connectIPPSSessionDT $connectTypeIPPSSession
 
 if ( $csvFilePathAU -ne "" ) {
     if (Test-Path $csvFilePathAU) {
