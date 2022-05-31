@@ -33,7 +33,7 @@ The path for the csv file containing the security groups in the tenant.  When pr
 
 .PARAMETER maxParallelJobs 
 
-Maximum number of jobs to run in parallel using ExchangeOnline Module.  We use 1 job per session.  Max sessions is 3 for ExchangeOnline.
+Maximum number of jobs to run in parallel using ExchangeOnline Module.  We use 1 job per session.  Max sessions is 3 for ExchangeOnline.  Do not run more threads than there are upns.
 
 .PARAMETER maxAttempts
 
@@ -96,7 +96,7 @@ Param (
     [switch]$auIB = $false,
     [switch]$sgOrgSeg = $false,
     [switch]$sgIB = $false,
-    [int]$maxParallelJobs = 3,
+    [int]$maxParallelJobs = 1,
     [int]$maxAttempts = 1,
     [int]$maxTimePerAttemptMins = 180,
     [Parameter(Mandatory=$false)]
