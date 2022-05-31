@@ -21,7 +21,7 @@ Bypasses confirmation prompt to create information barriers from records in the 
 Bypasses confirmation prompt to create an organization segment and information barrier policy from the All Teachers security group.
 
 .PARAMETER maxParallelJobs 
-Maximum number of jobs to run in parallel using ExchangeOnline Module.  We use 1 job per session.  Max sessions is 3 for ExchangeOnline.
+Maximum number of jobs to run in parallel using ExchangeOnline Module.  We use 1 job per session.  Max sessions is 3 for ExchangeOnline.  Do not run more threads than there are upns.
 
 .PARAMETER maxAttempts
 Number of times we attempt to add all compliance objects.
@@ -42,7 +42,7 @@ The version of the Graph API.
 PS> .\Create-SDS_Information_Barriers.ps1
 
 .EXAMPLE
-PS> .\Create-SDS_Information_Barriers.ps1 -all:$true -upns upnOne@contoso.com,upnTwo@contoso.com,upnThree@contoso.com
+PS> .\Create-SDS_Information_Barriers.ps1 -all:$true -upns upnOne@contoso.com,upnTwo@contoso.com,upnThree@contoso.com -maxParallelJobs 3
 
 .NOTES
 ========================
@@ -79,7 +79,7 @@ Param (
     [switch]$auIB = $false,
     [switch]$sgOrgSeg = $false,
     [switch]$sgIB = $false,
-    [int]$maxParallelJobs = 3,
+    [int]$maxParallelJobs = 1,
     [int]$maxAttempts = 1,
     [int]$maxTimePerAttemptMins = 180,
     [Parameter(Mandatory=$false)]
@@ -338,6 +338,13 @@ $NewAUInformationBarriersJob = {
 
 function Add-AllIPPSObjects($ippsObjectType)
 {
+
+    if ($ippsCreds.count -ne $maxParallelJobs) 
+    {
+        Write-Host "Please ensure the maxParallelJobs parameter equals the number of UPNs entered" -ForegroundColor Red
+        exit
+    }
+
     Write-Host "`n=====================================================" -ForegroundColor Cyan
     Write-Host "Adding $ippsObjectType's in Tenant" -ForegroundColor Cyan
     
@@ -373,18 +380,18 @@ function Add-AllIPPSObjects($ippsObjectType)
         $totalObjectCount = $aus.count
         Write-Host "Creating $totalObjectCount $ippsObjectType's from administrative units. [Attempt #$attempts]" -ForegroundColor Green
 
-        if ($attempts -gt $maxAttempts)
-        {
-            Write-Host "`nDone adding $ippsObjectType `n" -ForegroundColor Green
-            break;
-        }
-        else
-        {
-            if ($attempts -gt 1)
+        if ($totalObjectCount -eq 0 -or $attempts -gt $maxAttempts)
+        {   
+            if ($totalObjectCount -eq 0)
             {
+                Write-Host "`nDone adding $ippsObjectType `n" -ForegroundColor Green
+            }    
+            else
+            {
+            
                 Write-Host "`n Could not add all $ippsObjectType's. Giving up after $attempts attempts.`n" -ForegroundColor Red
-                break;
             }
+            break;
         }
 
         # Split task into equal sized jobs and start executing in parallel
