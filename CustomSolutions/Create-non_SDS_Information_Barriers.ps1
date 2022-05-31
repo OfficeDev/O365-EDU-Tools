@@ -59,7 +59,7 @@ The version of the Graph API.
 PS> .\Create-non_SDS_Information_Barriers.ps1
 
 .EXAMPLE
-PS> .\Create-non_SDS_Information_Barriers.ps1 -all:$true -upns upnOne@contoso.com,upnTwo@contoso.com,upnThree@contoso.com
+PS> .\Create-non_SDS_Information_Barriers.ps1 -all:$true -upns upnOne@contoso.com,upnTwo@contoso.com,upnThree@contoso.com -maxParallelJobs 3
 
 .NOTES
 ========================
