@@ -393,7 +393,7 @@ function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
 
     if ($ippsCreds.count -ne $maxParallelJobs) 
     {
-        Write-Host "Please ensure number of sessions matches number of parallel jobs" -ForegroundColor Red
+        Write-Host "Please ensure the maxParallelJobs parameter equals the number of UPNs entered" -ForegroundColor Red
         exit
     }
     
