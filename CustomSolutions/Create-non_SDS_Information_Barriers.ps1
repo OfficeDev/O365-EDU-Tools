@@ -569,6 +569,8 @@ else
     exit
 }
 
+$connectIPPSSessionDT = Set-Connection $connectIPPSSessionDT $connectTypeIPPSSession
+
 if ( $csvFilePathAU -ne "" ) {
     if (Test-Path $csvFilePathAU) {
         if ( $all -or $auOrgSeg )
