@@ -97,7 +97,7 @@ Param (
     [switch]$sgOrgSeg = $false,
     [switch]$sgIB = $false,
     [int]$maxParallelJobs = 1,
-    [int]$maxAttempts = 1,
+    [int]$maxAttempts = 2,
     [int]$maxTimePerAttemptMins = 180,
     [Parameter(Mandatory=$false)]
     [string] $skipToken= "",
@@ -393,7 +393,7 @@ function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
 
     if ($ippsCreds.count -ne $maxParallelJobs) 
     {
-        Write-Host "Please ensure the maxParallelJobs parameter equals the number of UPNs entered" -ForegroundColor Red
+        Write-Host "Please ensure that the maxParallelJobs parameter equals the number of UPNs entered" -ForegroundColor Red
         exit
     }
     
