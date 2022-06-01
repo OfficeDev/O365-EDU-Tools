@@ -48,7 +48,7 @@ PS> .\Create-SDS_Information_Barriers.ps1 -all:$true -upns upnOne@contoso.com,up
 ========================
  Required Prerequisites
 ========================
-**Because these scripts must require the Exchange Online PowerShell module and can time out after running for a period of time, it will cache the credentials for use to re-start the connection. This means it will not be useable with MFA.
+**Because the script must require the Exchange Online PowerShell module and can time out after running for a period of time, it will cache the credentials for use to re-start the connection. This means it will not be useable with MFA.
 
 1. This script uses features that require Information Barriers version 3 or above to be enabled in your tenant.
 
@@ -80,7 +80,7 @@ Param (
     [switch]$sgOrgSeg = $false,
     [switch]$sgIB = $false,
     [int]$maxParallelJobs = 1,
-    [int]$maxAttempts = 1,
+    [int]$maxAttempts = 2,
     [int]$maxTimePerAttemptMins = 180,
     [Parameter(Mandatory=$false)]
     [string] $skipToken= "",
@@ -505,8 +505,17 @@ if ($PPE)
 
 $activityName = "Creating information barrier policies"
 
+ #Create output folder if it does not exist
+ if ((Test-Path $outFolder) -eq 0)
+ {
+ 	mkdir $outFolder | Out-Null;
+ }
+
 $logFilePath = "$(Resolve-Path $outFolder)\SDS_InformationBarriers.log"
 $csvFilePath = "$(Resolve-Path $outFolder)\SDS_SchoolAUs.csv"
+
+$ippsObjOS = 'OS'
+$ippsObjIB = "IB"
 
 #List used to request access to data
 $graphScopes = "AdministrativeUnit.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All"
@@ -533,12 +542,6 @@ catch
     throw
 }
 
- #Create output folder if it does not exist
- if ((Test-Path $outFolder) -eq 0)
- {
- 	mkdir $outFolder | Out-Null;
- }
-
 Write-Host "`nActivity logged to file $logFilePath `n" -ForegroundColor Green
 
 if ($all)
@@ -555,6 +558,18 @@ else
         Get-AllSchoolAUs 
     }
 }
+
+if($upns.count -gt 0)
+{
+    $ippsCreds = Get-IPPSCreds $upns
+}
+else
+{
+    Write-Host "Please run script with upns parameter for connecting with IPPSSession" -ForegroundColor Red
+    exit
+}
+
+$connectIPPSSessionDT = Set-Connection $connectIPPSSessionDT $connectTypeIPPSSession
 
 if ($all -or $auOrgSeg)
 {
