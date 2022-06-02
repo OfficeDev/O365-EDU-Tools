@@ -1,25 +1,137 @@
 <#
-Script Name:
-Set-Acceptance_Permissions_Students_by_Grade.ps1
-
-Synopsis:
+.Synopsis
 This script is designed to add the Grade_x DDL to the acceptance permissions on each of the user's mailbox, for the users within the scope of this script. After running this script, only members of the Grade_x DDL will be able to email that particular user. In order to run this script successfully, you must run the New-DDL_for_Students_by_Grade.ps1 to create and populate the DDLs to be used here.
 
-Syntax Examples and Options:
+.Example
 .\Set-Acceptance_Permissions_Students_by_Grade.ps1
 
-Written By: 
-Bill Sluss
+.Notes
+========================
+ Required Prerequisites
+========================
+1. Install Microsoft Graph Powershell Module with command 'Install-Module Microsoft.Graph' and also install the Exchange Online PowerShell module with command 'Install-Module ExchangeOnlineManagement'
+2. Make sure to download common.ps1 to the same folder of the script which has common functions needed.  https://github.com/OfficeDev/O365-EDU-Tools/blob/master/SDS%20Scripts/common.ps1
+3. Check that you can connect to your tenant directory from the PowerShell module to make sure everything is set up correctly.
+    
+    a. Open a separate PowerShell session
+    
+    b. Execute: "connect-graph -scopes User.Read.All, GroupMember.Read.All, Member.Read.Hidden, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All" to bring up a sign in UI. 
+    
+    c. Sign in with any tenant administrator credentials
 
-Change Log:
-Version 1.0, 12/14/2016 - First Draft
+	d. Execute: "connect-exchangeonline"
+
+    e. Sign in with any tenant administrator credentials
+    
+    f. If you are returned to the PowerShell session without error, you are correctly set up
+
+4. Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working and do the same for the Exchange Online Management Module.
+
+========================
 
 #>
 
-#Import the CSV we exported
-$Users = Get-MsolUser -All
+Param (
+    [Parameter(Mandatory=$false)]
+    [string] $skipToken = ".",
+    [Parameter(Mandatory=$false)]
+    [string] $outFolder = ".\Export",
+    [Parameter(Mandatory=$false)]
+    [string] $graphVersion = "beta",
+    [switch] $PPE = $false,
+    [switch] $downloadCommonFNs = $false
+)
 
-#Set Global Vairbales
+$graphEndpointProd = "https://graph.windows.net"
+$graphEndpointPPE = "https://graph.ppe.windows.net"
+
+$logFilePath = "$outFolder\Export.log"
+
+$eduObjStudent = "Student"
+
+#checking parameter to download common.ps1 file for required common functions
+if ($downloadCommonFNs){
+    # Downloading file with latest common functions
+    try {
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
+        "Grabbed 'common.ps1' to current directory"
+    } 
+    catch {
+        throw "Unable to download common.ps1"
+    }
+}
+    
+#import file with common functions
+. .\common.ps1
+
+#Get All student users
+function Get-Students
+{
+    return Get-Users $eduObjStudent
+}
+
+function Get-Users
+{
+    Param
+    (
+        $eduObjectType
+    )
+
+    $list = @()
+
+    $initialUri = "$graphEndPoint/$graphVersion/users?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'&`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_Grade"
+		        
+    $checkedUri = TokenSkipCheck $initialUri $logFilePath
+    $users = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
+
+    foreach ($user in $users)
+    {
+        if ($null -ne $user.id)
+        {
+            $list += $user
+        }
+    }
+    return $list
+}
+
+# Main
+$graphEndPoint = $graphEndpointProd
+
+if ($PPE)
+{
+    $graphEndPoint = $graphEndpointPPE
+}
+
+$graphScopes = "User.Read.All, GroupMember.Read.All, Member.Read.Hidden, Group.Read.All, Directory.Read.All, AdministrativeUnit.Read.All"
+
+try 
+{
+    Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1 | Out-Null
+}
+catch
+{
+    Write-Error "Failed to load Microsoft Graph PowerShell Module."
+    Get-Help -Name .\Set-Acceptance_Permissions_SDS_Sections.ps1 -Full | Out-String | Write-Error
+    throw
+}
+
+try 
+{
+    Import-Module ExchangeOnlineManagement | Out-Null
+}
+catch
+{
+    Write-Error "Failed to load Exchange Online Management Module"
+    Get-Help -Name .\Set-Acceptance_Permissions_SDS_Sections.ps1 -Full | Out-String | Write-Error
+    throw
+}
+
+Initialize
+
+#Get list of students from graph request
+$Students = Get-Students
+
+#Set Global Variables
 $DDL1 = Get-DynamicDistributionGroup Grade_1
 $DDL2 = Get-DynamicDistributionGroup Grade_2
 $DDL3 = Get-DynamicDistributionGroup Grade_3
@@ -32,7 +144,7 @@ $DDL9 = Get-DynamicDistributionGroup Grade_9
 $DDL10 = Get-DynamicDistributionGroup Grade_10
 $DDL11 = Get-DynamicDistributionGroup Grade_11
 $DDL12 = Get-DynamicDistributionGroup Grade_12
-$DDLk = Get-DynamicDistributionGroup Grade_k
+$DDLkg = Get-DynamicDistributionGroup Grade_kg
 
 $DDA1 = $DDL1.PrimarySmtpAddress
 $DDA2 = $DDL2.PrimarySmtpAddress
@@ -46,7 +158,7 @@ $DDA9 = $DDL9.PrimarySmtpAddress
 $DDA10 = $DDL10.PrimarySmtpAddress
 $DDA11 = $DDL11.PrimarySmtpAddress
 $DDA12 = $DDL12.PrimarySmtpAddress
-$DDAk = $DDLk.PrimarySmtpAddress
+$DDAk = $DDLkg.PrimarySmtpAddress
 
 $DDN1 = $DDL1.DisplayName
 $DDN2 = $DDL2.DisplayName
@@ -60,17 +172,16 @@ $DDN9 = $DDL9.DisplayName
 $DDN10 = $DDL10.DisplayName
 $DDN11 = $DDL11.DisplayName
 $DDN12 = $DDL12.DisplayName
-$DDNk = $DDLk.DisplayName
+$DDNk = $DDLkg.DisplayName
 
-#Start Foearch loop against the initial export
-Foreach ($User in $Users) {
+#Start Foreach loop against the initial export
+Foreach ($Student in $Students) {
 
-	#set user variables
-	$Dept = $User.department
-	$DN = $User.DisplayName
-	$ObjID = $User.ObjectID
+	#Set user variables
+	$DN = $Student.displayName
+	$ObjID = $Student.id
 
-	If ($Dept -eq "1") {
+	If ($Student.extension_fe2174665583431c953114ff7268b7b3_Education_Grade -eq "1") {
 		#Write Progress
 		Write-Host -ForegroundColor Green "Adding $DDN1 to $DN acceptance list"
 
@@ -78,7 +189,7 @@ Foreach ($User in $Users) {
 		Set-Mailbox $ObjID -AcceptMessagesOnlyFromDLMembers @{add=$DDA1}
 	}
 
-	If ($Dept -eq "2") {
+	If ($Student.extension_fe2174665583431c953114ff7268b7b3_Education_Grade -eq "2") {
 		#Write Progress
 		Write-Host -ForegroundColor Green "Adding $DDN2 to $DN acceptance list"
 
@@ -86,7 +197,7 @@ Foreach ($User in $Users) {
 		Set-Mailbox $ObjID -AcceptMessagesOnlyFromDLMembers @{add=$DDA2}
 	}
 
-	If ($Dept -eq "3") {
+	If ($Student.extension_fe2174665583431c953114ff7268b7b3_Education_Grade -eq "3") {
 		#Write Progress
 		Write-Host -ForegroundColor Green "Adding $DDN3 to $DN acceptance list"
 
@@ -94,7 +205,7 @@ Foreach ($User in $Users) {
 		Set-Mailbox $ObjID -AcceptMessagesOnlyFromDLMembers @{add=$DDA3}
 	}
 
-	If ($Dept -eq "4") {
+	If ($Student.extension_fe2174665583431c953114ff7268b7b3_Education_Grade -eq "4") {
 		#Write Progress
 		Write-Host -ForegroundColor Green "Adding $DDN4 to $DN acceptance list"
 
@@ -102,7 +213,7 @@ Foreach ($User in $Users) {
 		Set-Mailbox $ObjID -AcceptMessagesOnlyFromDLMembers @{add=$DDA4}
 	}
 
-	If ($Dept -eq "5") {
+	If ($Student.extension_fe2174665583431c953114ff7268b7b3_Education_Grade -eq "5") {
 		#Write Progress
 		Write-Host -ForegroundColor Green "Adding $DDN5 to $DN acceptance list"
 
@@ -110,7 +221,7 @@ Foreach ($User in $Users) {
 		Set-Mailbox $ObjID -AcceptMessagesOnlyFromDLMembers @{add=$DDA5}
 	}
 
-	If ($Dept -eq "6") {
+	If ($Student.extension_fe2174665583431c953114ff7268b7b3_Education_Grade -eq "6") {
 		#Write Progress
 		Write-Host -ForegroundColor Green "Adding $DDN6 to $DN acceptance list"
 
@@ -118,7 +229,7 @@ Foreach ($User in $Users) {
 		Set-Mailbox $ObjID -AcceptMessagesOnlyFromDLMembers @{add=$DDA6}
 	}
 
-	If ($Dept -eq "7") {
+	If ($Student.extension_fe2174665583431c953114ff7268b7b3_Education_Grade -eq "7") {
 		#Write Progress
 		Write-Host -ForegroundColor Green "Adding $DDN7 to $DN acceptance list"
 
@@ -126,7 +237,7 @@ Foreach ($User in $Users) {
 		Set-Mailbox $ObjID -AcceptMessagesOnlyFromDLMembers @{add=$DDA7}
 	}
 
-	If ($Dept -eq "8") {
+	If ($Student.extension_fe2174665583431c953114ff7268b7b3_Education_Grade -eq "8") {
 		#Write Progress
 		Write-Host -ForegroundColor Green "Adding $DDN8 to $DN acceptance list"
 
@@ -134,15 +245,15 @@ Foreach ($User in $Users) {
 		Set-Mailbox $ObjID -AcceptMessagesOnlyFromDLMembers @{add=$DDA8}
 	}
 
-	If ($Dept -eq "9") {
+	If ($Student.extension_fe2174665583431c953114ff7268b7b3_Education_Grade -eq "9") {
 		#Write Progress
-		Write-Host -ForegroundColor Green "Adding $DDN1 to $DN acceptance list"
+		Write-Host -ForegroundColor Green "Adding $DDN9 to $DN acceptance list"
 
 		#Set the permissions
 		Set-Mailbox $ObjID -AcceptMessagesOnlyFromDLMembers @{add=$DDA9}
 	}
 
-	If ($Dept -eq "10") {
+	If ($Student.extension_fe2174665583431c953114ff7268b7b3_Education_Grade -eq "10") {
 		#Write Progress
 		Write-Host -ForegroundColor Green "Adding $DDN10 to $DN acceptance list"
 
@@ -150,7 +261,7 @@ Foreach ($User in $Users) {
 		Set-Mailbox $ObjID -AcceptMessagesOnlyFromDLMembers @{add=$DDA10}
 	}
 
-	If ($Dept -eq "11") {
+	If ($Student.extension_fe2174665583431c953114ff7268b7b3_Education_Grade -eq "11") {
 		#Write Progress
 		Write-Host -ForegroundColor Green "Adding $DDN11 to $DN acceptance list"
 
@@ -158,7 +269,7 @@ Foreach ($User in $Users) {
 		Set-Mailbox $ObjID -AcceptMessagesOnlyFromDLMembers @{add=$DDA11}
 	}
 
-	If ($Dept -eq "12") {
+	If ($Student.extension_fe2174665583431c953114ff7268b7b3_Education_Grade -eq "12") {
 		#Write Progress
 		Write-Host -ForegroundColor Green "Adding $DDN12 to $DN acceptance list"
 
@@ -166,7 +277,7 @@ Foreach ($User in $Users) {
 		Set-Mailbox $ObjID -AcceptMessagesOnlyFromDLMembers @{add=$DDA12}
 	}
 
-	If ($Dept -eq "k") {
+	If ($Student.extension_fe2174665583431c953114ff7268b7b3_Education_Grade -eq "kg") {
 		#Write Progress
 		Write-Host -ForegroundColor Green "Adding $DDNk to $DN acceptance list"
 
@@ -176,4 +287,4 @@ Foreach ($User in $Users) {
 
 }
 
-Write-Host -ForegroundColor Green "Script is complete."
+Write-Output "`n`nDone.  Please run 'Disconnect-Graph' and 'Disconnect-ExchangeOnline' if you are finished`n"
