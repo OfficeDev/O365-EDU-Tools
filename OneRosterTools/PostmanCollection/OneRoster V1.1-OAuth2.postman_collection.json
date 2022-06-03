@@ -9497,7 +9497,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/lineitems/{{lineitem_id}}",
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/lineItems/{{lineitem_id}}",
 							"host": [
 								"{{OneRosterHost}}"
 							],
@@ -9726,7 +9726,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/classes/{{class_id}}/lineitems/{{line_item_sourcedId}}/results",
+							"raw": "{{OneRosterHost}}/ims/oneroster/v1p1/classes/{{class_id}}/lineItems/{{line_item_sourcedId}}/results",
 							"host": [
 								"{{OneRosterHost}}"
 							],
