@@ -38,7 +38,7 @@ if ($downloadFcns -ieq "y" -or $downloadFcns -ieq "yes"){
     # Downloading file with latest common functions
     try {
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/OfficeDev/O365-EDU-Tools/master/SDS%20Scripts/common.ps1" -OutFile ".\common.ps1" -ErrorAction Stop -Verbose
-        "Grabbed 'common.ps1' to currrent directory"
+        "Grabbed 'common.ps1' to current directory"
     } 
     catch {
         throw "Unable to download common.ps1"
@@ -67,7 +67,7 @@ function Get-PrerequisiteHelp
     
     c. Sign in with any tenant administrator credentials
     
-    d. If you are returned to the PowerShell sesion without error, you are correctly set up
+    d. If you are returned to the PowerShell session without error, you are correctly set up
 
 5. Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working
 
@@ -93,7 +93,10 @@ function Update-UnexpireSingleGroup($groupId, $logFilePath, $team) {
         "extension_fe2174665583431c953114ff7268b7b3_Education_Status" : "Active"
     }'
 
-    $result = invoke-graphrequest -Method Patch -Uri $uri -body $requestBody -ContentType "application/json" -SkipHttpErrorCheck
+    #Force encoding of utf8 as it gets changed for non-English language characters
+    $requestBodyEncoded = ([System.Text.Encoding]::UTF8.GetBytes($requestBody))
+
+    $result = Invoke-GraphRequest -Method Patch -Uri $uri -body $requestBodyEncoded -ContentType "application/json" -SkipHttpErrorCheck
 
     if ([string]::IsNullOrEmpty($_.Exception.Message) -eq $true ) {
         $statusMessage = "success"

@@ -3,7 +3,7 @@ Script Name:
 Remove-All_Section_Memberships.ps1
 
 Written By: 
-Micrsoft SDS Team, and adapted by Debashis Dwivedi
+Microsoft SDS Team, and adapted by Debashis Dwivedi
 
 Change Log:
 Version 1.0, 12/12/2016 - First Draft
@@ -75,7 +75,7 @@ Command to download the function: Invoke-WebRequest -Uri "https://raw.githubuser
     
     c. Sign in with any tenant administrator credentials
     
-    d. If you are returned to the PowerShell sesion without error, you are correctly set up
+    d. If you are returned to the PowerShell session without error, you are correctly set up
 
 4. Retry this script.  If you still get an error about failing to load the Microsoft Graph module, troubleshoot why "Import-Module Microsoft.Graph.Authentication -MinimumVersion 0.9.1" isn't working
 
@@ -112,7 +112,7 @@ function Remove-AdministrativeUnits($auListFileName, $graphEndPoint, $refreshTok
         Foreach ($au in $auList) {
             if ($au.Id -ne $null) {
                 Refresh-Token $refreshToken $graphscopes
-                Write-Output "[$(get-date -Format G)] [$index/$auCount] Removing AU `"$($au.DisplayName)`" [$($au.Id)] from directory" | out-file $logFilePath -Append			           
+                Write-Output "[$(get-date -Format G)] [$index/$auCount] Removing AU `"$($au.DisplayName)`" [$($au.Id)] from directory" | out-file $logFilePath -Append
                 $removeUrl = $graphEndPoint + '/beta/administrativeUnits/' + $au.Id
                 invoke-graphrequest -Method 'DELETE' -Uri $removeUrl -ContentType "application/json"
                 $index++
@@ -126,7 +126,7 @@ function Get-Groups($graphEndPoint, $eduObjectType, $refreshToken, $graphScopes,
     $groupsUri = "$graphEndPoint/beta/groups?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource%20eq%20'SIS'%20and%20extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
     
     $fileName = $eduObjectType + "-Groups.csv"
-    $filePath = Join-Path $OutFolder $fileName    
+    $filePath = Join-Path $OutFolder $fileName
     
     $objectProperties = @()
     $objectProperties += @{N='Id';E={$_.Id}}, @{N='DisplayName';E={$_.DisplayName}}, @{N='Mail';E={$_.Mail}}, @{N='Source ID';E={$_.extension_fe2174665583431c953114ff7268b7b3_Education_AnchorId}}
@@ -147,9 +147,9 @@ function Remove-Groups($groupListFileName, $graphEndPoint, $refreshToken, $graph
         $groupCount = $groupList.Length
         $index = 1
         Foreach ($group in $groupList) {
-            Write-Output "[$(get-date -Format G)] [$index/$groupCount] Removing Group `"$($group.DisplayName)`" [$($group.Id)] from directory" | out-file $logFilePath -Append          
+            Write-Output "[$(get-date -Format G)] [$index/$groupCount] Removing Group `"$($group.DisplayName)`" [$($group.Id)] from directory" | out-file $logFilePath -Append
             $removeUrl = $graphEndPoint + '/beta/groups/' + $group.Id
-            PageAll-GraphRequest $removeUrl $refreshToken 'DELETE' $graphScopes $logFilePath
+            PageAll-GraphRequest $removeUrl $refreshToken 'DELETE' $graphScopes $logFilePath | Out-Null
             $index++
         }
     }
@@ -168,20 +168,17 @@ function Remove-GroupMembers($groupListFileName, $graphEndPoint, $refreshToken, 
         $grpMemberSelectClause = "?`$select=id,email,displayName,@data.type,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource"
 
         Foreach ($group in $groupList) {
-            Write-Output "[$(get-date -Format G)] [$index/$groupCount] Processing Memberships for Group `"$($group.DisplayName)`" [$($group.Id)]`n" | out-file $logFilePath -Append			
+            Write-Output "[$(get-date -Format G)] [$index/$groupCount] Processing Memberships for Group `"$($group.DisplayName)`" [$($group.Id)]" | out-file $logFilePath -Append
             $groupMembersUri = $graphEndPoint + '/beta/groups/' + $group.Id + '/members' + $grpMemberSelectClause
             $groupMembers = PageAll-GraphRequest $groupMembersUri $refreshToken 'GET' $graphScopes $logFilePath
-            $groupMembersCount = $groupMembers.Count
-            Write-Output "[$(get-date -Format G)] Retrieve $($groupMembers.Count) groupMembers." | out-file $logFilePath -Append            
+            Write-Output "[$(get-date -Format G)] Retrieve $($groupMembers.Count-1) groupMembers.`n" | out-file $logFilePath -Append
             Write-Progress -Activity $activityName -Status "Removing Group Memberships"
-            $memberIndex = 1
             Foreach ($member in $groupMembers) {
                 $grpMemberType = $member.'@odata.type' #some members are users and some are groups
                 if (($member.Id -ne $null) -and ($grpMemberType -eq '#microsoft.graph.user')) {
-                    Write-Output "[$(get-date -Format G)] [$memberIndex/$groupMembersCount] Removing User `"$($member.DisplayName)`" from Group `"$($group.DisplayName)`"" | out-file $logFilePath -Append                
+                    Write-Output "[$(get-date -Format G)] Removing User `"$($member.DisplayName)`" from Group `"$($group.DisplayName)`"" | out-file $logFilePath -Append
                     $removeUrl = $graphEndPoint + '/beta/groups/' + $group.Id + '/members/' + $member.Id + '/$ref'
-                    PageAll-GraphRequest $removeUrl $refreshToken 'DELETE' $graphScopes $logFilePath
-                    $memberIndex++
+                    PageAll-GraphRequest $removeUrl $refreshToken 'DELETE' $graphScopes $logFilePath | Out-Null
                 }
             }
 
@@ -221,7 +218,7 @@ $refreshToken = Initialize $graphScopes
 if ($RemoveObject -eq "SchoolAUs") {
     # Get all AUs of Edu Object Type School
     Write-Progress -Activity $activityName -Status "Fetching School Administrative Units"
-    $OutputFileName = Get-AdministrativeUnits $graphEndPoint 'School' $refreshToken $graphScopes $logFilePath    
+    $OutputFileName = Get-AdministrativeUnits $graphEndPoint 'School' $refreshToken $graphScopes $logFilePath
     Write-Host "`nSchool Administrative Units logged to file $OutputFileName `n" -ForegroundColor Green
 
     # Delete School AUs
@@ -231,7 +228,7 @@ if ($RemoveObject -eq "SchoolAUs") {
 if ($RemoveObject -eq "SectionAUs") {
     # Get all AUs of Edu Object Type Section
     Write-Progress -Activity $activityName -Status "Fetching Section Administrative Units"
-    $OutputFileName = Get-AdministrativeUnits $graphEndPoint 'Section' $refreshToken $graphScopes $logFilePath	
+    $OutputFileName = Get-AdministrativeUnits $graphEndPoint 'Section' $refreshToken $graphScopes $logFilePath
     Write-Host "`nSection Administrative Units logged to file $OutputFileName `n" -ForegroundColor Green
 
     # Delete Section AUs
@@ -241,7 +238,7 @@ if ($RemoveObject -eq "SectionAUs") {
 if ($RemoveObject -eq "SectionGroupMemberships" -or $RemoveObject -eq "SectionGroups") {
     # Get all Groups of Edu Object Type Section
     Write-Progress -Activity $activityName -Status "Fetching Section Groups"
-    $OutputFileName = Get-Groups $graphEndPoint 'Section' $refreshToken $graphScopes $logFilePath	
+    $OutputFileName = Get-Groups $graphEndPoint 'Section' $refreshToken $graphScopes $logFilePath
     Write-Host "`nSection Groups logged to file $OutputFileName `n" -ForegroundColor Green
     
     if ($RemoveObject -eq "SectionGroupMemberships") {
