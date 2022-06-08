@@ -44,8 +44,8 @@ The sequence of loading both modules is significant. Load the IPPSSession before
 3.  Retry this script.  If you still get an error about failing to load the Exchange Online Management module, troubleshoot why 'Install-Module ExchangeOnlineManagement' isn't working.
 #>
 
-Connect-IPPSSession
-Connect-ExchangeOnline
+#Connection to fetch user info
+Connect-ExchangeOnline 
 
 $outFolder = "C:\temp\"
 $csvFilePath = "$outFolder\UserInformationBarrierSegments.csv"
@@ -58,22 +58,29 @@ if(!(Test-Path $outFolder)) {
     New-Item -ItemType Directory -Force -Path $outFolder
 }
 
-#Get all exchange recipients with mailboxes
-$recipients = Get-Recipient -RecipientType UserMailbox -ResultSize Unlimited
-$rCtr = 0
+$users = Get-User # Note: Even though Connect-IPPSSession shares the Get-User cmdlet, InformationBarrierSegments is returned when using Connect-ExchangeOnline
+
+Disconnect-ExchangeOnline -Confirm:$false | Out-Null
+
+#Connection to IB info
+Connect-IPPSSession
+
+$orgSegments = Get-OrganizationSegment
+
+$userCtr = 0
 
 #Start foreach loop
-foreach($recipient in $recipients) {
+foreach($user in $users) {
 
     #Set variables
-    $dn = $recipient.DisplayName
-    $smtp = $recipient.PrimarySMTPAddress
-    $ibs = $recipient.InformationBarrierSegments
-    $guid = $recipient.Guid
+    $dn = $user.DisplayName
+    $upn = $user.UserPrincipalName
+    $ibs = $user.InformationBarrierSegments
+    $guid = $user.Guid
     $segmentNames = @()
 
     foreach($segment in $ibs){
-        $segmentNames += (Get-OrganizationSegment | Where-Object{$_.ExoSegmentId -eq $segment}).Name
+        $segmentNames += ($orgSegments | Where-Object{$_.ExoSegmentId -eq $segment}).Name
     }
 
     #Create the PS Object
@@ -81,15 +88,15 @@ foreach($recipient in $recipients) {
 
     #Add each member attribute to the person's PS Object
     $userObj | Add-Member NoteProperty -Name DisplayName -Value $dn
-    $userObj | Add-Member NoteProperty -Name EmailAddress -Value $smtp
+    $userObj | Add-Member NoteProperty -Name UPN -Value $upn
     $userObj | Add-Member NoteProperty -Name ObjectID -Value $guid
     $userObj | Add-Member NoteProperty -Name InformationBarriers -Value (Join-String -Separator ", " -InputObject $ibs)
     $userObj | Add-Member NoteProperty -Name IBNames -Value (Join-String -Separator ", "  -InputObject $segmentNames)
 
     #Add this persons PS Object to the output array
     $outputArray += $userObj
-    $rCtr++
-    Write-Progress -Activity "`nGetting information barrier segments for users" -Status "Progress ->" -PercentComplete ($rCtr/$recipients.count*100)
+    $userCtr++
+    Write-Progress -Activity "`nGetting information barrier segments for users" -Status "Progress ->" -PercentComplete ($userCtr/$users.count*100)
 }
 
 #Export the output array to a CSV file in local outFolder directory
