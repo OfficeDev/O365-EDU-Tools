@@ -44,9 +44,6 @@ The sequence of loading both modules is significant. Load the IPPSSession before
 3.  Retry this script.  If you still get an error about failing to load the Exchange Online Management module, troubleshoot why 'Install-Module ExchangeOnlineManagement' isn't working.
 #>
 
-#Connection to fetch user info
-Connect-ExchangeOnline 
-
 $outFolder = "C:\temp\"
 $csvFilePath = "$outFolder\UserInformationBarrierSegments.csv"
 
@@ -58,14 +55,24 @@ if(!(Test-Path $outFolder)) {
     New-Item -ItemType Directory -Force -Path $outFolder
 }
 
-$users = Get-User # Note: Even though Connect-IPPSSession shares the Get-User cmdlet, InformationBarrierSegments is returned when using Connect-ExchangeOnline
-
-Disconnect-ExchangeOnline -Confirm:$false | Out-Null
+#Remove temp csv file
+if ((Test-Path $csvFilePath))
+{
+    Remove-Item $csvFilePath;
+}
 
 #Connection to IB info
 Connect-IPPSSession
 
-$orgSegments = Get-OrganizationSegment
+$orgSegments = Get-OrganizationSegment | Select-Object Name, Guid, ExoSegmentId
+
+Disconnect-ExchangeOnline -Confirm:$false | Out-Null
+
+#Connection to fetch user info
+Connect-ExchangeOnline 
+
+#Note: Even though Connect-IPPSSession shares the Get-User cmdlet, InformationBarrierSegments is returned when using Connect-ExchangeOnline
+$users = Get-User -ResultSize Unlimited -Filter 'InformationBarrierSegments -ne $null' | Select-Object DisplayName, UserPrincipalName, InformationBarrierSegments, Guid 
 
 $userCtr = 0
 
@@ -96,10 +103,11 @@ foreach($user in $users) {
     #Add this persons PS Object to the output array
     $outputArray += $userObj
     $userCtr++
+
+    #Export the output array to a CSV file in local outFolder directory
+    $outputArray | Export-csv $csvFilePath -NoTypeInformation -Append
     Write-Progress -Activity "`nGetting information barrier segments for users" -Status "Progress ->" -PercentComplete ($userCtr/$users.count*100)
 }
 
-#Export the output array to a CSV file in local outFolder directory
-$outputArray | Export-csv $csvFilePath -NoTypeInformation
 
 Write-Host -ForegroundColor Green "`n`nDone.  Please run and 'Disconnect-ExchangeOnline' and disconnect from both sessions if you are finished`n"
