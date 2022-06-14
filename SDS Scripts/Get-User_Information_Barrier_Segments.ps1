@@ -104,10 +104,10 @@ foreach($user in $users) {
     $outputArray += $userObj
     $userCtr++
 
-    #Export the output array to a CSV file in local outFolder directory
-    $outputArray | Export-csv $csvFilePath -NoTypeInformation -Append
     Write-Progress -Activity "`nGetting information barrier segments for users" -Status "Progress ->" -PercentComplete ($userCtr/$users.count*100)
 }
 
+#Export the output array to a CSV file in local outFolder directory
+$outputArray | Export-csv $csvFilePath -NoTypeInformation
 
 Write-Host -ForegroundColor Green "`n`nDone.  Please run and 'Disconnect-ExchangeOnline' and disconnect from both sessions if you are finished`n"
