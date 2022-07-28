@@ -93,6 +93,14 @@ function Update-UnexpireSingleGroup($groupId, $logFilePath, $team) {
         "extension_fe2174665583431c953114ff7268b7b3_Education_Status" : "Active"
     }'
 
+    #For manually created Teams expired by SDS
+    if ([string]::IsNullOrEmpty($team.SectionId) -eq $true ) {
+        $requestBody = '{
+            "displayName": "' + $unexpiredDisplayName + '",
+            "extension_fe2174665583431c953114ff7268b7b3_Education_Status" : "Active"
+        }'
+    }
+    
     #Force encoding of utf8 as it gets changed for non-English language characters
     $requestBodyEncoded = ([System.Text.Encoding]::UTF8.GetBytes($requestBody))
 
