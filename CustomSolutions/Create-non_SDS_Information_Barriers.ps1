@@ -623,7 +623,7 @@ if ( $csvFilePathSG -ne "" ) {
 
         if ($all -or $sgIB)
         {
-            Add-AllIPPSObjects $ippsObjIB $csvFilePathSG
+            Add-AllIPPSObjects $ippsObjIB $aadObjSG $csvFilePathSG
         }
         else
         {
