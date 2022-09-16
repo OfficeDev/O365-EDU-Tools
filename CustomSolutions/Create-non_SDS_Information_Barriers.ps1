@@ -419,7 +419,17 @@ function Add-AllIPPSObjects($ippsObjectType, $aadObjectType, $csvFilePath)
             {
                 $scriptBlock = $NewOrgSegmentsJob
                 $createdObjs = Get-OrganizationSegment
-                $aadObjects = $csvData | Where-Object { "AdministrativeUnits -eq '$($_.ObjectId)'" -notin $createdObjs.UserGroupFilter }
+                switch ($aadObjectType)
+                {
+                    $aadObjAU
+                    {
+                        $aadObjects = $csvData | Where-Object { "AdministrativeUnits -eq '$($_.ObjectId)'" -notin $createdObjs.UserGroupFilter }
+                    }
+                    $aadObjSG
+                    {
+                        $aadObjects = $csvData | Where-Object { "MemberOf -eq '$($_.ObjectId)'" -notin $createdObjs.UserGroupFilter }
+                    }
+                }
             }
             $ippsObjIB
             {
