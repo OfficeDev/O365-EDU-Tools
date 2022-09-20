@@ -146,6 +146,13 @@ function Remove-AdministrativeUnitMemberships
         Write-Progress -Activity $activityName -Status "Deleting Administrative Unit Memberships"
         $auMemberList = Import-Csv $auMemberListFileName
         $auMemberCount = (gc $auMemberListFileName | Measure-Object).count - 1
+
+        if ($grpMemberCount -lt 1)
+        {
+            Write-Host "`nNo memberships found`n" -ForegroundColor Yellow
+            break
+        }
+
         $index = 1
         Foreach ($aum in $auMemberList) 
         {
@@ -163,12 +170,20 @@ Function Format-ResultsAndExport($graphscopes, $logFilePath) {
     
     $allSchoolAUMemberships = Get-AdministrativeUnitMemberships $refreshToken $graphscopes $logFilePath
 
+    if ($allSchoolAUMemberships -eq $null)
+    {
+        return
+    }
+
     # Output to file
-    if($skipToken -eq "."){
+    if ($skipToken -eq ".")
+    {
         Write-Output $allSchoolAUMemberships | Export-Csv -Path "$csvfilePath" -NoTypeInformation
     }
-    else {
-        Write-Output $allSchoolAUMemberships | Export-Csv -Path "$csvfilePath$($skiptoken.Length).csv" -NoTypeInformation
+    else
+    {
+        $newCsvFilePath = "$outFolder\$((Get-ChildItem $csvfilePath).BaseName)$($skiptoken.length).csv"
+        Write-Output $allSchoolAUMemberships | Export-Csv -Path $newCsvFilePath -NoTypeInformation
     }
 
     Out-File $logFilePath -Append -InputObject $global:nextLink
