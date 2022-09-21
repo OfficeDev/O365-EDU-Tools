@@ -147,7 +147,7 @@ function Remove-AdministrativeUnitMemberships
         $auMemberList = Import-Csv $auMemberListFileName
         $auMemberCount = (gc $auMemberListFileName | Measure-Object).count - 1
 
-        if ($grpMemberCount -lt 1)
+        if ($auMemberCount -lt 1)
         {
             Write-Host "`nNo memberships found`n" -ForegroundColor Yellow
             break
