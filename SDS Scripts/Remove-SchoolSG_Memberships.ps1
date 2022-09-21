@@ -144,9 +144,14 @@ function Remove-SecurityGroupMemberships
         $grpMemberList = Import-Csv $grpMemberListFileName
         $grpMemberCount = (gc $grpMemberListFileName | Measure-Object).count - 1
         
-        $index = 1
+        if ($grpMemberCount -lt 1)
+        {
+            Write-Host "`nNo memberships found`n" -ForegroundColor Yellow
+            break
+        }
 
-        Foreach ($grpm in $grpMemberList) 
+        $index = 1
+        Foreach ($grpm in $grpMemberList)
         {
             Write-Output "[$(Get-Date -Format G)] [$index/$grpMemberCount] Removing SG Member id [$($grpm.SGMemberObjectId)] of `"$($grpm.SGDisplayName)`" [$($grpm.SGObjectId)] from directory" | Out-File $logFilePath -Append 
             $removeUrl = $graphEndPoint + '/beta/groups/' + $grpm.SGObjectId + '/members/' + $grpm.SGMemberObjectId +'/$ref'
@@ -162,12 +167,20 @@ Function Format-ResultsAndExport($graphscopes, $logFilePath) {
     
     $allSchoolSGMemberships = Get-SecurityGroupMemberships $refreshToken $graphscopes $logFilePath
 
+    if ($allSchoolSGMemberships -eq $null)
+    {
+        return
+    }
+
     # Output to file
-    if($skipToken -eq "."){
+    if ($skipToken -eq ".")
+    {
         Write-Output $allSchoolSGMemberships | Export-Csv -Path "$csvfilePath" -NoTypeInformation
     }
-    else {
-        Write-Output $allSchoolSGMemberships | Export-Csv -Path "$csvfilePath$($skiptoken.Length).csv" -NoTypeInformation
+    else
+    {
+        $newCsvFilePath = "$outFolder\$((Get-ChildItem $csvfilePath).BaseName)$($skiptoken.length).csv"
+        Write-Output $allSchoolSGMemberships | Export-Csv -Path $newCsvFilePath -NoTypeInformation
     }
 
     Out-File $logFilePath -Append -InputObject $global:nextLink
