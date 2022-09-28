@@ -706,6 +706,6 @@ Else {
 
 write-host -foregroundcolor green "The number of student licenses currently applied is $StudentLicensesApplied"
 write-host -foregroundcolor green "The number of teacher licenses currently applied is $TeacherLicensesApplied"
-Write-Output "`nDone.`n"
+Write-Output "`nDone.  Logs can be reviewed at $logFilePath`n"
 
 Write-Output "Please run 'Disconnect-Graph' if you are finished making changes.`n"

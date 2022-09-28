@@ -198,4 +198,6 @@ Write-Host "`nSchool Administrative Units logged to file $outputFileName `n" -Fo
 # Delete School AUs
 Remove-AdministrativeUnits $outputFileName
 
-Write-Output "`n`nDone.  Please run 'Disconnect-Graph' if you are finished.`n"
+Write-Output "`n`nDone.  Logs can be reviewed at $logFilePath`n"
+
+Write-Output "Please run 'Disconnect-Graph' if you are finished making changes.`n"

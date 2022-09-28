@@ -227,6 +227,6 @@ Write-Host "`nSchool Security Group Memberships logged to file $csvFilePath `n" 
 # Remove School SG Memberships
 Remove-SecurityGroupMemberships $refreshToken $graphscopes $csvFilePath
 
-Write-Output "`nDone.`n"
+Write-Output "`nDone.  Logs can be reviewed at $logFilePath`n"
 
 Write-Output "Please run 'disconnect-graph' if you are finished making changes.`n"

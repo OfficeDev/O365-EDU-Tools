@@ -635,4 +635,5 @@ if ($choiceStartIB -ieq "y" -or $choiceStartIB -ieq "yes") {
     Write-Output "Done.  Please allow ~30 minutes for the system to start the process of applying Information Barrier Policies. `nUse Get-InformationBarrierPoliciesApplicationStatus to check the status"
 }
 
-Write-Output "`n`nDone.  Please run 'Disconnect-Graph' and 'Disconnect-ExchangeOnline' if you are finished`n"
+Write-Output "`n`nDone.  Logs can be reviewed at $outFolder`n"
+Write-OutPut "Please run 'Disconnect-Graph' and 'Disconnect-ExchangeOnline' if you are finished`n"
