@@ -175,5 +175,5 @@ catch {
 Write-Message "Fetching Section Usage Report"
 $OutputFileName = Get-SectionGroups $graphEndPoint 'Section' $refreshToken $graphScopes $msgErrorLogInstanceFilename
 Write-Message "`nSection usage report successfully generated at $outputFilename `n" -ForegroundColor Green
-Write-Output "Done.`n"
-Write-Output "Please run 'disconnect-graph' if you are finished making changes.`n"
+Write-Output "`nDone.  Log files can be reviewed at $outFolder`n"
+Write-Output "Please run 'Disconnect-Graph' if you are finished making changes.`n"

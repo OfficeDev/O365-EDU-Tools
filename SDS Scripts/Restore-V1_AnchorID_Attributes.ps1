@@ -129,8 +129,8 @@ Function Format-ResultsAndExport($graphScopes, $logFilePath) {
     } 
     else {
         Write-Output "`nNo users found!"
-        Write-Output "`nDone.`n"
-        Write-Output "Please run 'disconnect-graph' if you are finished making changes.`n"
+        Write-Output "`nDone.  Logs can be reviewed at $logFilePath`n"
+        Write-Output "Please run 'Disconnect-Graph' if you are finished making changes.`n"
         Exit
     }
 
@@ -217,6 +217,6 @@ Write-Host "`nSDS users logged to file $csvFilePath `n" -ForegroundColor Green
 # update AnchorID
 Update-SDSUserAttributes $refreshToken $graphScopes $csvFilePath
 
-Write-Output "`nDone.`n"
+Write-Output "`nDone.  Logs can be reviewed at $logFilePath`n"
 
-Write-Output "Please run 'disconnect-graph' if you are finished making changes.`n"
+Write-Output "Please run 'Disconnect-Graph' if you are finished making changes.`n"

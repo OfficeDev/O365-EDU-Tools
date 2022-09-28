@@ -158,4 +158,6 @@ Foreach ($User in $Users) {
 	
 }
 
-Write-Output "`n`nDone.  Please run 'Disconnect-Graph' and 'Disconnect-ExchangeOnline' if you are finished`n"
+Write-Output "`n`nDone.  Logs can be reviewed at $logFilePath`n"
+
+Write-Output "Please run 'Disconnect-Graph' if you are finished making changes.`n"

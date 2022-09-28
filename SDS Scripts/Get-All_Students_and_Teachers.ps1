@@ -249,4 +249,6 @@ Write-Host -foregroundcolor green "Tenant default domain is $tenantdd"
 Write-Host "The number of student licenses currently applied is $studentLicensesApplied"
 Write-Host "The number of teacher licenses currently applied is $teacherLicensesApplied"
 
-Write-Output "`n`nDone.  Please run 'Disconnect-Graph' if you are finished.`n"
+Write-Output "`n`nDone.  Logs can be reviewed at $logFilePath`n"
+
+Write-Output "Please run 'Disconnect-Graph' if you are finished making changes.`n"
