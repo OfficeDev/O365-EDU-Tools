@@ -131,4 +131,4 @@ $groupSections | Export-Csv "$outFolder\Get-All_Sections_and_Membership_Counts.c
 
 Write-Output "`nDone.  Logs can be reviewed at $logFilePath`n"
 
-Write-Output "Please run 'disconnect-graph' if you are finished making changes.`n"
+Write-Output "Please run 'Disconnect-Graph' if you are finished making changes.`n"
