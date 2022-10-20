@@ -27,7 +27,7 @@
 1. App must be created in customer's Azure account with appropriate app permissions and scopes (Directory.Read.All,EduRoster.Read.All,EduRoster.ReadWrite.All)
 2. App must contain a certificate and clientSecret.
 3. Install Microsoft Graph Powershell Module with command 'Install-Module Microsoft.Graph'
-4. Connect-MgGraph -ClientID 20dc1164-259b-4a9b-b4f7-9b2920cb554f -TenantId 8a572b06-4f47-432f-9185-258f7a8d67e6 -CertificateThumbprint <CertificateThumbprint>
+4. Connect-MgGraph -ClientID 743f3d66-95aa-41d9-237d-45e961251889 -TenantId 8a572b06-4f46-432f-9185-258f6a8d67e6 -CertificateThumbprint <CertificateThumbprint>
 5. Import-Module Microsoft.Graph.Education
 6. Related Contacts must exist in the uploaded customer CSV files.
 ========================
@@ -50,10 +50,6 @@ Param (
     [Parameter(Mandatory = $false)]
     [string] $studentAadObjectIds
 )
-
-# $logFilePath = "$OutFolder\GetGuardians.log"
-
-# $eduObjTeacher = "Teacher"
 
 function Refresh-AccessToken($authToken, $lastRefreshed) {    
     $dateNow = get-date
@@ -87,57 +83,6 @@ function Get-AccessToken() {
     return $authToken, $lastRefreshed
 }
 
-# function Export-Guardians
-# {
-#     # $fileName = $eduObjTeacher.ToLower() + $(if ($appendTenantIdToFileName) { "-" + $tenantInfo.Id } else { "" }) +".csv"
-#     $fileName = "Guardians.csv"
-# 	$filePath = Join-Path $outFolder $fileName
-#     Remove-Item -Path $filePath -Force -ErrorAction Ignore
-
-#     $data = Get-SdsTeachers
-
-#     $cnt = ($data | Measure-Object).Count
-#     if ($cnt -gt 0)
-#     {
-#         Write-Host "Exporting $cnt Guardians ..."
-#         $data | Export-Csv $filePath -Force -NoTypeInformation
-#         Write-Host "`nGuardians exported to file $filePath `n" -ForegroundColor Green
-#         return $filePath
-#     }
-#     else
-#     {
-#         Write-Host "No Guardians found to export."
-#         return $null
-#     }
-# }
-
-# function Get-Guardians
-# {
-#     $users = Get-Teachers
-#     $data = @()
-    
-#     foreach($user in $users)
-#     {
-#         #DisplayName,UserPrincipalName,SIS ID,School SIS ID,Teacher Number,Status,Secondary Email,ObjectID
-#         $data += [pscustomobject]@{
-#             "DisplayName" = $user.DisplayName
-#             "UserPrincipalName" = $user.userPrincipalName
-#             "SIS ID" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_TeacherId
-#             "School SIS ID" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId
-#             "Teacher Number" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_TeacherNumber
-#             "Status" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_TeacherStatus
-#             "Secondary Email" = $user.extension_fe2174665583431c953114ff7268b7b3_Education_Email
-#             "ObjectID" = $user.id
-#         }
-#     }
-#     return $data
-# }
-
-# function Get-Teachers
-# {
-#     return Get-Users $eduObjTeacher
-# }
-
 function Get-GuardiansForUser($userId, $authToken, $lastRefreshed) {
     $authToken, $lastRefreshed = Refresh-AccessToken -authToken $authToken -lastRefreshed $lastRefreshed
     Write-Progress -Activity "Getting guardians for user $userId"
@@ -145,13 +90,6 @@ function Get-GuardiansForUser($userId, $authToken, $lastRefreshed) {
     $user = invoke-graphrequest -method GET -uri "https://graph.microsoft.com/beta/education/users/$($userid)?`$select=relatedContacts,id,displayName"
 
     $allContacts = $user.relatedContacts
-
-    #create CSV file
-    # $fileName = "Guardians.csv"
-    $fileName = $user.displayName + "-Guardians.csv"
-    # $fileName = $eduObjTeacher.ToLower() + $(if ($appendTenantIdToFileName) { "-" + $tenantInfo.Id } else { "" }) +".csv"
-	$filePath = Join-Path $outFolder $fileName
-    Remove-Item -Path $filePath -Force -ErrorAction Ignore
 
     $data = @()
     
@@ -165,7 +103,11 @@ function Get-GuardiansForUser($userId, $authToken, $lastRefreshed) {
             "Access Consent" = $contact.accessConsent
         }
     }
-    # return $data
+
+    #Create CSV file
+    $fileName = $user.displayName + "-Guardians.csv"
+    $filePath = Join-Path $outFolder $fileName
+    Remove-Item -Path $filePath -Force -ErrorAction Ignore
 
     $cnt = ($data | Measure-Object).Count
     if ($cnt -gt 0)
@@ -182,30 +124,6 @@ function Get-GuardiansForUser($userId, $authToken, $lastRefreshed) {
     }
 }
 
-# function Get-Users
-# {
-#     Param
-#     (
-#         $eduObjectType
-#     )
-
-#     $list = @()
-
-#     $initialUri = "$graphEndPoint/$graphVersion/users?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'$eduObjectType'"
-    
-#     $checkedUri = TokenSkipCheck $initialUri $logFilePath
-#     $users = PageAll-GraphRequest $checkedUri $refreshToken 'GET' $graphscopes $logFilePath
-
-#     foreach ($user in $users)
-#     {
-#         if ($null -ne $user.id)
-#         {
-#             $list += $user
-#         }
-#     }
-#     return $list
-# }
-
 $authToken, $lastRefreshed = Get-AccessToken
 
 if ($authToken -eq $null) {
@@ -221,8 +139,4 @@ if ($studentAadObjectIds -ne "") {
     }    
 } 
 
-# Export all Guardians of EducationUser
-# Write-Progress -Activity $activityName -Status "Fetching Guardians ..."
-# Export-Guardians | Out-Null
-
-# Write-Output "Please run 'Disconnect-Graph' if you are finished.`n"
+Write-Output "Please run 'Disconnect-Graph' if you are finished.`n"
