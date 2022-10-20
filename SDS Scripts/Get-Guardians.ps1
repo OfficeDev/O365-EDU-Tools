@@ -19,7 +19,7 @@
 .Parameter studentAadObjectIds
     The AAD object Id(s) of the student(s) for whom the guardians needs to be retrieved. 
 .Example
-    Get guardian for one student: .\Get-Guardians.ps1 -OutFolder . -clientId "20dc1164-259b-4a9b-b4f7-9b2920cb554f" -clientSecret "CPJ8Q~MfrTioSyW2pQhdKRh26Bp1FXWcxAvgfbdQ" -tenantDomain "M365EDU259798.onmicrosoft.com" -studentAadObjectIds "ce3ceb28-b185-4576-8cbc-f5b24d22f2ed"
+    Get guardian for one student: .\Get-Guardians.ps1 -OutFolder . -clientId "743f3d66-95aa-41d9-237d-45e961251889" -clientSecret "8bK]-[p19402Ac;Y+7<b>5b" -tenantDomain "contoso.onmicrosoft.com" -studentAadObjectIds "ab043123-00aa-60d9-2ab4-12e961702abc"
 .Notes
 ========================
  Required Prerequisites
@@ -27,7 +27,7 @@
 1. App must be created in customer's Azure account with appropriate app permissions and scopes (Directory.Read.All,EduRoster.Read.All,EduRoster.ReadWrite.All)
 2. App must contain a certificate and clientSecret.
 3. Install Microsoft Graph Powershell Module with command 'Install-Module Microsoft.Graph'
-4. Connect-MgGraph -ClientID 20dc1164-259b-4a9b-b4f7-9b2920cb554f -TenantId 8a572b06-4f47-432f-9185-258f7a8d67e6 -CertificateThumbprint 0C75F85FBF8DE95737616E85BB965C26F467AC28
+4. Connect-MgGraph -ClientID 20dc1164-259b-4a9b-b4f7-9b2920cb554f -TenantId 8a572b06-4f47-432f-9185-258f7a8d67e6 -CertificateThumbprint <CertificateThumbprint>
 5. Import-Module Microsoft.Graph.Education
 6. Related Contacts must exist in the uploaded customer CSV files.
 ========================
