@@ -9,7 +9,7 @@
 .Description
     This script will query for a single SDS synced student and export the guardians associated with them to a CSV file.
 .Parameter OutFolder
-    The script will output log file here. Can be changed to any folder (ex. ".\GuardiansExport")
+    The script will output log file here.
 .Parameter clientId
     The application Id that has EduRoster.ReadWrite.All permission
 .Parameter clientSecret
