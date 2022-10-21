@@ -12,8 +12,6 @@
     The script will output log file here.
 .Parameter clientId
     The application Id that has EduRoster.Read.All and EduRoster.ReadWrite.All permission
-.Parameter clientSecret
-    The secret of the application Id that has EduRoster.Read.All and EduRoster.ReadWrite.All permission
 .Parameter tenantId
     The Id of the tenant.
 .Parameter certificateThumbprint
@@ -48,13 +46,7 @@ Param (
     [string] $tenantId,
 
     [Parameter(Mandatory = $true)]
-    [string] $clientSecret,
-
-    [Parameter(Mandatory = $true)]
     [string] $certificateThumbprint,
-
-    [Parameter(Mandatory = $true)]
-    [string] $tenantDomain,
 
     [Parameter(Mandatory = $true)]
     [string] $studentAadObjectId
