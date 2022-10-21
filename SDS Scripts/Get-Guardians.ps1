@@ -11,9 +11,9 @@
 .Parameter OutFolder
     The script will output log file here.
 .Parameter clientId
-    The application Id that has EduRoster.ReadWrite.All permission
+    The application Id that has EduRoster.Read.All and EduRoster.ReadWrite.All permission
 .Parameter clientSecret
-    The secret of the application Id that has EduRoster.ReadWrite.All permission
+    The secret of the application Id that has EduRoster.Read.All and EduRoster.ReadWrite.All permission
 .Parameter tenantId
     The Id of the tenant.
 .Parameter certificateThumbprint
@@ -60,30 +60,9 @@ Param (
     [string] $studentAadObjectId
 )
 
-function Get-AccessToken() {
-    $tokenUrl = "https://login.windows.net/$tenantDomain/oauth2/token"
-    try {
-    $tokenBody = @{
-        client_id = "$clientId"
-        client_secret = "$clientSecret"
-        grant_type = "client_credentials"
-        resource = "https://graph.microsoft.com"
-    }
-
-    Write-Host "Getting access token"
-    $tokenResponse = Invoke-RestMethod -Method POST -Uri $tokenUrl -Body $tokenBody
-    $authToken = $tokenResponse.access_token 
-    } catch {
-        Write-Error -Exception $_ -Message "Failed to get authentication token for Microsoft Graph. Please check the client Id and secret provided."
-        $authToken = $null
-    }
-
-    return $authToken
-}
-
 Connect-MgGraph -ClientID $clientId -TenantId $tenantId -CertificateThumbprint $certificateThumbprint
 
-function Get-GuardiansForUser($userId, $authToken) {
+function Get-GuardiansForUser($userId) {
     Write-Progress -Activity "Getting guardians for user $userId"
 
     $user = Invoke-graphrequest -method GET -uri "https://graph.microsoft.com/beta/education/users/$($userid)?`$select=relatedContacts,id,displayName"
@@ -123,18 +102,11 @@ function Get-GuardiansForUser($userId, $authToken) {
     }
 }
 
-$authToken = Get-AccessToken
-
-if ($authToken -eq $null) {
-    Write-Host "Authentication Failed"
-    return
-}
-
 if ($studentAadObjectId -ne "") {
     $studentAadObjectIdArr = $studentAadObjectId.split(',')
     foreach($studentAadObjectId in $studentAadObjectIdArr) {
         Write-Host "Getting guardians for student object Id $studentAadObjectId"
-        Get-GuardiansForUser -userId $studentAadObjectId -authToken $authToken -lastRefreshed $lastRefreshed
+        Get-GuardiansForUser -userId $studentAadObjectId
     }    
 } 
 
