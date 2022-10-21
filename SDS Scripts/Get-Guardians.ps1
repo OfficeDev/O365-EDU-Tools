@@ -16,8 +16,6 @@
     The Id of the tenant.
 .Parameter certificateThumbprint
     The certificate thumbprint for the application.
-.Parameter tenantDomain
-    The domain name of the tenant (ex. contoso.onmicrosoft.com)
 .Parameter studentAadObjectId
     The AAD object Id of the student for whom the guardians needs to be retrieved. 
 .Example
