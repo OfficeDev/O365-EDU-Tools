@@ -60,16 +60,6 @@ Param (
     [string] $studentAadObjectId
 )
 
-function Refresh-AccessToken($authToken, $lastRefreshed) {    
-    $dateNow = get-date
-    if ($lastRefreshed -eq $null -or ($dateNow - $lastRefreshed).Minutes -gt 55) {
-        Write-Host "Refreshing Access token"
-        $authToken, $lastRefreshed = Get-AccessToken       
-    } 
-
-    return $authToken, $lastRefreshed
-}
-
 function Get-AccessToken() {
     $tokenUrl = "https://login.windows.net/$tenantDomain/oauth2/token"
     try {
@@ -82,20 +72,18 @@ function Get-AccessToken() {
 
     Write-Host "Getting access token"
     $tokenResponse = Invoke-RestMethod -Method POST -Uri $tokenUrl -Body $tokenBody
-    $authToken = $tokenResponse.access_token
-    $lastRefreshed = get-date    
+    $authToken = $tokenResponse.access_token 
     } catch {
         Write-Error -Exception $_ -Message "Failed to get authentication token for Microsoft Graph. Please check the client Id and secret provided."
         $authToken = $null
     }
 
-    return $authToken, $lastRefreshed
+    return $authToken
 }
 
 Connect-MgGraph -ClientID $clientId -TenantId $tenantId -CertificateThumbprint $certificateThumbprint
 
-function Get-GuardiansForUser($userId, $authToken, $lastRefreshed) {
-    $authToken, $lastRefreshed = Refresh-AccessToken -authToken $authToken -lastRefreshed $lastRefreshed
+function Get-GuardiansForUser($userId, $authToken) {
     Write-Progress -Activity "Getting guardians for user $userId"
 
     $user = Invoke-graphrequest -method GET -uri "https://graph.microsoft.com/beta/education/users/$($userid)?`$select=relatedContacts,id,displayName"
@@ -135,7 +123,7 @@ function Get-GuardiansForUser($userId, $authToken, $lastRefreshed) {
     }
 }
 
-$authToken, $lastRefreshed = Get-AccessToken
+$authToken = Get-AccessToken
 
 if ($authToken -eq $null) {
     Write-Host "Authentication Failed"
