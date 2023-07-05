@@ -19,7 +19,7 @@ Optional. An string that is a full valid path to the log file that the script wi
 Optional. The character to use as a delimeter in the log file that the script creates. Must be a single character surrounded by single quotes. Default is a comma character (',')
 
 .EXAMPLE
-PS> .\Get-OneDriveLTI-Groups.ps1 -LMS 'Canvas' -CsvLogFilePath 'C:\logs\OTLTIGroupList.csv' -CsvLogFileDelimiter ','
+PS> .\Get-OneDriveLTI-Groups.ps1 -LMS 'Canvas' -CsvLogFilePath 'C:\logs\OTLTIGroupList.csv' -CsvLogDelimiter ','
 
 .NOTES
 ========================
