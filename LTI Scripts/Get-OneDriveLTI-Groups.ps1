@@ -1,16 +1,27 @@
-﻿<#
+﻿
+
+<#
 .SYNOPSIS
-This script is designed to query O365 groups and discover groups that were created by the OneDrive LTI to support LMS integration and write informaion about the groups found to a CSV file. 
+This script is designed to query O365 groups and discover groups that were created by the OneDrive LTI to support LMS integration. 
 
 .EXAMPLE
 .\Get-OneDriveLTI-Groups.ps1 
 
 .PARAMETER LMS
- possible LMS issuerName values are:
+ possible LMS issuerName string values are:
   Canvas
   Schoology
   Blackboard
   Generic
+
+.PARAMETER CsvLogFilePath
+A string that is a full valid path to the log file that the script will create and write each group discovered into.
+
+.PARAMETER CsvLogDelimiter
+The character to use as a delimeter in the log file that the script creates. Must be a single character surrounded by single quotes. Default is a comma character (',')
+
+.EXAMPLE
+PS> .\Get-OneDriveLTI-Groups.ps1 -LMS 'Canvas' -CsvLogFilePath 'C:\logs\OTLTIGroupList.csv' -CsvLogFileDelimiter ','
 
 .NOTES
 ========================
@@ -45,44 +56,62 @@ This script is designed to query O365 groups and discover groups that were creat
 [cmdletbinding()]
 param(
     [Parameter(Mandatory=$True)]
+    [ValidateSet('Canvas','Schoology','Blackboard','Generic')]
+    [String]$LMS,
+
+    [Parameter(Mandatory=$False)]
     [ValidateNotNullOrEmpty()]
-    [string]$LMS
+    [String]$CsvLogFilePath,
+
+    [Parameter(Mandatory=$False)]
+    [ValidateNotNullOrEmpty()]
+    [String]$CsvLogDelimiter = ','
 )
 
-if ($PSVersionTable.PSVersion -lt 7)
+#PowerShell major version required for this script
+$majorVersionRequired = 7
+
+function ImportOrInstallModule {
+    param (
+        [Parameter(Mandatory=$True)]
+        [ValidateNotNullOrEmpty()]
+        [string]
+        $Name
+    )
+    if (-not (Get-Module -ListAvailable -Name $Name)) {
+        Import-Module $Name -ErrorAction SilentlyContinue 
+        if ($error){
+            if (Find-Module -Name $Name | Where-Object {$_.Name -eq $Name}) {
+                Install-Module -Name $Name -Force -Scope CurrentUser
+            }
+            else {
+                Write-Error "Module $Name not installed. You must locate and install this module before continuing"
+                Exit
+            }
+        }
+    }
+}
+
+#main process
+$version = $PSVersionTable.PSVersion
+Write-Host "PowerShell Version " $version
+if ($version.Major -lt $majorVersionRequired)
 {
-    Write-Error "PowerShell version 7.xx is required to run this script"
-    Return
+    Write-Error "PowerShell version $majorVersionRequired or higher is required to run this script"
+    Exit
 }
 
-#set this to a file path if you want a CSV output, otherwise, set to '' or $null for no logging, the script will prompt to replace if exists
-$csvLogFilePath = "C:\ODLTIGroupLog.csv"
-$csvLogDelimiter = ','
-
-if (Get-Module -ListAvailable -Name Microsoft.Graph) {
-    Write-Host "Microsoft.Graph Module Installed."
-} 
-else {
-    Write-Host "Installing Microsoft.Graph Module..."
-    Install-Module Microsoft.Graph -Scope CurrentUser
-}
-
-if (Get-Module -ListAvailable -Name Microsoft.Graph.Groups) {
-    Write-Host "Microsoft.Graph.Groups Module Imported."
-}
-else {
-    Write-Host "Importing Microsoft.Graph.Groups Module...."
-    Import-Module Microsoft.Graph.Groups
-}
+#Import MS Graph PowerShell SDK module
+ImportOrInstallModule -Name "Microsoft.Graph"
 
 $details = $null
 $groups = $null
 $issuer = $null
 
 #Set up logging ...
-if ($csvLogFilePath) {
+if ($CsvLogFilePath) {
     $answer = 'y'
-    if (Test-Path -Path $csvLogFilePath) {
+    if (Test-Path -Path $CsvLogFilePath) {
         $answer = 'n'
         $Cursor = [System.Console]::CursorTop
         Do {
@@ -93,21 +122,26 @@ if ($csvLogFilePath) {
         Until ($answer -eq 'y' -or $answer -eq 'n')
     }
     else {
-       if (-not (Test-Path -Path $csvLogFilePath -IsValid)) {
+       if (-not (Test-Path -Path $CsvLogFilePath -IsValid)) {
          Write-Error "The log file path specified is invalid."
-         Return
+         Exit
        }
     }
     if ($answer -eq 'y') {
-        Set-Content $csvLogFilePath -Value ('GroupId' + $csvLogDelimiter + 'GroupName' + $csvLogDelimiter + 'GroupDescription') -Force -Encoding utf8 -ErrorAction Stop
+        $columns= @(         
+            "GroupId",
+            "GroupName",       
+            "GroupDescription"                 
+        )
+        Set-Content $CsvLogFilePath -Value ($columns -Join $CsvLogDelimiter)-Force -Encoding utf8 -ErrorAction Stop
     } 
     else {
-        $csvLogFilePath = $null
+        $CsvLogFilePath = $null
     }
 }
 
 Write-Host "Connecting ..."
-Connect-MgGraph -Scopes "Group.Read.All"
+Connect-MgGraph -Scopes "Group.Read.All" -ForceRefresh
 
 $issuer = "Description:issuerName: " + $LMS
 
@@ -118,16 +152,16 @@ $cnt = 0
 foreach($group in $groups)
 { 
      $cnt = $cnt + 1
-     Write-Host $cnt " || " $group.Id " || " $group.DisplayName " || " $group.Description
+     Write-Host $cnt " | " $group.Id " | " $group.DisplayName " | " $group.Description
 
-    if ($csvLogFilePath) {
+    if ($CsvLogFilePath) {
         $details = [ordered] @{            
             GroupId = $group.Id 
             GroupName = $group.displayName       
             GroupDescription = $group.Description                 
         }
             
-        New-Object PSObject -Property $details | Export-Csv -Path $csvLogFilePath -Delimiter $csvLogDelimiter -NoTypeInformation -Append -Force -Encoding utf8 -UseQuotes AsNeeded
+        New-Object PSObject -Property $details | Export-Csv -Path $CsvLogFilePath -Delimiter $CsvLogDelimiter -NoTypeInformation -Append -Force -Encoding utf8 -UseQuotes AsNeeded
     }
 }
 if ($cnt -eq 0)
