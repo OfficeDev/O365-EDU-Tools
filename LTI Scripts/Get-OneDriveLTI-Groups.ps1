@@ -2,23 +2,21 @@
 
 <#
 .SYNOPSIS
-This script is designed to query O365 groups and discover groups that were created by the OneDrive LTI to support LMS integration. 
-
-.EXAMPLE
-.\Get-OneDriveLTI-Groups.ps1 
+This script is designed to query O365 groups and discover groups that were created by the OneDrive LTI to support LMS integration.
 
 .PARAMETER LMS
- possible LMS issuerName string values are:
+Required. Name of the LMS issuer.
+Possible LMS issuerName string values are:
   Canvas
   Schoology
   Blackboard
   Generic
 
 .PARAMETER CsvLogFilePath
-A string that is a full valid path to the log file that the script will create and write each group discovered into.
+Optional. An string that is a full valid path to the log file that the script will create and write each group discovered into.
 
 .PARAMETER CsvLogDelimiter
-The character to use as a delimeter in the log file that the script creates. Must be a single character surrounded by single quotes. Default is a comma character (',')
+Optional. The character to use as a delimeter in the log file that the script creates. Must be a single character surrounded by single quotes. Default is a comma character (',')
 
 .EXAMPLE
 PS> .\Get-OneDriveLTI-Groups.ps1 -LMS 'Canvas' -CsvLogFilePath 'C:\logs\OTLTIGroupList.csv' -CsvLogFileDelimiter ','
