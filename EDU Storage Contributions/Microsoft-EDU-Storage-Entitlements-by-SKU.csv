@@ -1,1 +1,168 @@
-
+Product Name,Part Number,Product SKU ID,(reference) Product Summary Name,"Segment (Edu, Commercial)","Paid? (Paid, Unpaid)",Storage added to the pool per seat (GB)
+Exchange Online (Plan 1) for Alumni,EXCHANGE_STANDARD_ALUMNI,28db6bcc-8442-405b-9ebb-e2f4da7355ed,Exchange Online - Edu / Alumni,Education,Unpaid,0
+Exchange Online (Plan 1) for Alumni_DE,EXCHANGE_STANDARD_ALUMNI_DE,b6322647-bc01-4da9-83b1-dc637ee010bd,Exchange Online - Edu / Alumni,Education,Unpaid,0
+Exchange Online (Plan 1) for Faculty,EXCHANGESTANDARD_FACULTY,c24b3bac-78f7-42f7-9468-97dce529d88a,Exchange Online - Edu / Alumni,Education,Unpaid,0
+Exchange Online (Plan 1) for Faculty_DE,EXCHANGESTANDARD_FACULTY_DE,24677c48-079d-4c2b-ab76-e4429d93ecbd,Exchange Online - Edu / Alumni,Education,Unpaid,0
+Exchange Online (Plan 1) for Students,EXCHANGESTANDARD_STUDENT,ad2fe44a-915d-4e2b-ade1-6766d50a9d9c,Exchange Online - Edu / Alumni,Education,Unpaid,0
+Exchange Online (Plan 1) for Students_DE,EXCHANGESTANDARD_STUDENT_DE,57d6f53f-5a0a-4f8d-8329-5903fc2584a5,Exchange Online - Edu / Alumni,Education,Unpaid,0
+Exchange Online (Plan 2) for Faculty,EXCHANGEENTERPRISE_FACULTY,0b7b15a8-7fd2-4964-bb96-5a566d4e3c15,Exchange Online - Edu / Alumni,Education,Unpaid,0
+Exchange Online (Plan 2) for Faculty_DE,EXCHANGEENTERPRISE_FACULTY_DE,1bb406b9-42b0-4272-b914-a71431b39cc6,Exchange Online - Edu / Alumni,Education,Unpaid,0
+Exchange Online (Plan 2) for Students,EXCHANGEENTERPRISE_STUDENT,2970a0b3-301d-46e6-8ff9-a37e3ef3091b,Exchange Online - Edu / Alumni,Education,Unpaid,0
+Exchange Online (Plan 2) for Students_DE,EXCHANGEENTERPRISE_STUDENT_DE,9b8b69d5-455c-443b-a12c-52ce7dc3a797,Exchange Online - Edu / Alumni,Education,Unpaid,0
+Microsoft 365 A3 - Unattended License for students use benefit,M365EDU_A3_STUUSEBNFT_RPA1,1aa94593-ca12-4254-a738-81a5972958e8,"Student Use Benefit (A3, A5, M365 Apps)",Education,Unpaid,0
+Microsoft 365 A3 student use benefits,M365EDU_A3_STUUSEBNFT,18250162-5d87-4436-a834-d795c15c80f3,"Student Use Benefit (A3, A5, M365 Apps)",Education,Unpaid,0
+Microsoft 365 A5 student use benefits,M365EDU_A5_STUUSEBNFT,31d57bc7-3a05-4867-ab53-97a17835a411,"Student Use Benefit (A3, A5, M365 Apps)",Education,Unpaid,0
+Microsoft 365 A5 without Audio Conferencing for students use benefit,M365EDU_A5_NOPSTNCONF_STUUSEBNFT,81441ae1-0b31-4185-a6c0-32b6b84d419f,"Student Use Benefit (A3, A5, M365 Apps)",Education,Unpaid,0
+Microsoft 365 Apps for Students,OFFICESUBSCRIPTION_STUDENT,c32f9321-a627-406d-a114-1f9c81aaafac,"Student Use Benefit (A3, A5, M365 Apps)",Education,Unpaid,0
+Microsoft 365 Apps for Students_DE,OFFICESUBSCRIPTION_STUDENT_DE,02517a14-392f-4665-b830-6e2138052a33,"Student Use Benefit (A3, A5, M365 Apps)",Education,Unpaid,0
+Office 365 A1 for faculty,STANDARDWOFFPACK_FACULTY,94763226-9b3c-4e75-a931-5c89701abe66,O365 A1,Education,Unpaid,0
+Office 365 A1 for faculty (for Device),STANDARDWOFFPACK_FACULTY_DEVICE,af4e28de-6b52-4fd3-a5f4-6bf708a304d3,O365 A1,Education,Unpaid,0
+Office 365 A1 for faculty_DE,STANDARDWOFFPACK_FACULTY_DE,884e415c-1efb-4eba-9295-36bbd3148e99,O365 A1,Education,Unpaid,0
+Office 365 A1 for students,STANDARDWOFFPACK_STUDENT,314c4481-f395-4525-be8b-2ec4bb1e9d91,O365 A1,Education,Unpaid,0
+Office 365 A1 for students (for Device),STANDARDWOFFPACK_STUDENT_DEVICE,160d609e-ab08-4fce-bc1c-ea13321942ac,O365 A1,Education,Unpaid,0
+Office 365 A1 for students_DE,STANDARDWOFFPACK_STUDENT_DE,bf5fb1bd-84f4-48f8-97e8-c5db6ea1cd49,O365 A1,Education,Unpaid,0
+Office 365 A1 Plus for faculty,STANDARDWOFFPACK_IW_FACULTY,78e66a63-337a-4a9a-8959-41c6654dfb56,O365 A1,Education,Unpaid,0
+Office 365 A1 Plus for students,STANDARDWOFFPACK_IW_STUDENT,e82ae690-a2d5-4d76-8d30-7c6e01e6022e,O365 A1,Education,Unpaid,0
+Office 365 A3 student use benefit,ENTERPRISEPACKPLUS_STUUSEBNFT,476aad1e-7a7f-473c-9d20-35665a5cbd4f,"Student Use Benefit (A3, A5, M365 Apps)",Education,Unpaid,0
+Office 365 A5 student use benefit,ENTERPRISEPREMIUM_STUUSEBNFT,f6e603f1-1a6d-4d32-a730-34b809cb9731,"Student Use Benefit (A3, A5, M365 Apps)",Education,Unpaid,0
+Office 365 A5 without Audio Conferencing for students use benefit,ENTERPRISEPREMIUM_NOPSTNCONF_STUUSEBNFT,bc86c9cd-3058-43ba-9972-141678675ac1,"Student Use Benefit (A3, A5, M365 Apps)",Education,Unpaid,0
+Office 365 Education E1 for Faculty,STANDARDPACK_FACULTY,a19037fc-48b4-4d57-b079-ce44b7832473,O365 A1,Education,Unpaid,0
+Office 365 Education E1 for Students,STANDARDPACK_STUDENT,d37ba356-38c5-4c82-90da-3d714f72a382,O365 A1,Education,Unpaid,0
+Office 365 Education for Homeschool for faculty,STANDARDWOFFPACK_HOMESCHOOL_FAC,43e691ad-1491-4e8c-8dc9-da6b8262c03b,O365 A1,Education,Unpaid,0
+Office 365 Education for Homeschool for students,STANDARDWOFFPACK_HOMESCHOOL_STU,afbb89a7-db5f-45fb-8af0-1bc5c5015709,O365 A1,Education,Unpaid,0
+Office 365 Education for Jio for faculty,Office_365_Education_for_Jio_for_faculty,0a9234c1-1386-4c36-a08d-ab5929940334,O365 A1,Education,Unpaid,0
+Office 365 Education for Jio for students,Office_365_Education_for_Jio_for_students,d39f7088-95d3-42f4-a022-74f1854a1d90,O365 A1,Education,Unpaid,0
+Office 365 Extra File Storage,SHAREPOINTSTORAGE,99049c9c-6011-4908-bf17-15f496e6519d,O365 Storage Pack,Commercial,Paid,1
+Office 365 Extra File Storage (Tiered),SHAREPOINTSTORAGE_TIERED,256d7f94-5378-4b0f-bb34-687500dc8118,O365 Storage Pack,Commercial,Paid,1
+Office 365 Extra File Storage for Faculty,SHAREPOINTSTORAGE_FACULTY,4e36995d-5cb8-430f-9028-8be8c7199ed3,O365 Storage Pack,Education,Paid,1
+Office 365 Extra File Storage for faculty_DE,SHAREPOINTSTORAGE_FACULTY_DE,8e9e119f-4561-4ffc-9362-58a874e399e7,O365 Storage Pack,Education,Paid,1
+Office 365 Extra File Storage_DE,SHAREPOINTSTORAGE_DE,6b2099d4-1e4a-41ea-a4a8-8a00cfb7e37b,O365 Storage Pack,Commercial,Paid,1
+Exchange Online Essentials,EXCHANGE_S_ESSENTIALS,e8f81a67-bd96-4074-b108-cf193eb9433b,Exchange Online (Kiosk / Essentials),Commercial,Paid,2
+Exchange Online Essentials_DE,EXCHANGE_S_ESSENTIALS_DE,548c70eb-7a38-4c43-8677-841b13d09873,Exchange Online (Kiosk / Essentials),Commercial,Paid,2
+Exchange Online Kiosk,EXCHANGEDESKLESS,80b2d799-d2ba-4d2a-8842-fb0d0f3a4b82,Exchange Online (Kiosk / Essentials),Commercial,Paid,2
+Exchange Online Kiosk_DE,EXCHANGEDESKLESS_DE,5b117322-6e6a-4f41-a724-ad4c34c3cfb1,Exchange Online (Kiosk / Essentials),Commercial,Paid,2
+Microsoft 365 F1,M365_F1_COMM,50f60901-3181-4b75-8a2c-4c8e4c1d5a72,M365 F1,Commercial,Paid,2
+SharePoint Kiosk,SHAREPOINTDESKLESS,902b47e5-dcb2-4fdc-858b-c63a90a2bdb9,SharePoint (Kiosk),Commercial,Paid,2
+Microsoft 365 Business Starter,RJIO_OFFICE_OFFER,1c7ae618-0c36-40ba-9930-3d01d1da04b4,O/M365 F3,Commercial,Paid,5
+Microsoft 365 F3,SPE_F1,66b55226-6b4f-492c-910c-a3b7a3c9d993,O/M365 F3,Commercial,Paid,5
+Microsoft 365 F3 (for Department),Microsoft_365_F3_DEPT,45972061-34c4-44c8-9e83-ad97815acc34,O/M365 F3,Commercial,Paid,5
+Microsoft 365 F3 (self-service),Microsoft_365_F3_Department,6803cf1e-c822-41a1-864e-a31377bcdb7e,O/M365 F3,Commercial,Paid,5
+Microsoft Teams Essentials,Teams_Ess,fde42873-30b6-436b-b361-21af5a6b84ae,Teams (Devices / Essentials / Exploratory),Commercial,Paid,5
+Microsoft Teams Essentials (AAD Identity),TEAMS_ESSENTIALS_AAD,3ab6abff-666f-4424-bfb7-f0bc274ec7bc,Teams (Devices / Essentials / Exploratory),Commercial,Paid,5
+Microsoft Teams Essentials and Microsoft Teams Phone with​ Domestic Calling,Microsoft_Teams_Essentials_and_Microsoft_Teams_Phone_with_Domestic_Calling,581fec38-e9bc-4c55-a5c4-e1aabb0c99bc,Teams (Devices / Essentials / Exploratory),Commercial,Paid,5
+Microsoft Teams Essentials and Microsoft Teams Phone with​ International Calling,Microsoft_Teams_Essentials_and_Microsoft_Teams_Phone_with_International_Calling,252e3107-748e-4f27-9a65-82edcb167662,Teams (Devices / Essentials / Exploratory),Commercial,Paid,5
+Microsoft Teams Essentials and Microsoft Teams Phone with​ Pay as you go Calling (country zone 1 - US),Microsoft_Teams_Essentials_and_Microsoft_Teams_Phone_with_Pay_as_you_go_Calling_(country_zone_1_US),39386997-f35a-4a29-943a-b05b3587b396,Teams (Devices / Essentials / Exploratory),Commercial,Paid,5
+Microsoft Teams Essentials and Microsoft Teams Phone with​ Pay as you go Calling (country zone 1),Microsoft_Teams_Essentials_and_Microsoft_Teams_Phone_with_Pay_as_you_go_Calling_(country_zone_1),e2142f0c-804e-4bbf-b7d3-fd45cba2c9ba,Teams (Devices / Essentials / Exploratory),Commercial,Paid,5
+Microsoft Teams Essentials and Microsoft Teams Phone with​ Pay as you go Calling (country zone 2),Microsoft_Teams_Essentials_and_Microsoft_Teams_Phone_with_Pay_as_you_go_Calling_(country_zone_2),8436ae6a-3f66-449f-8f16-2c09924d7542,Teams (Devices / Essentials / Exploratory),Commercial,Paid,5
+Microsoft Teams Essentials with Phone,Microsoft_Teams_Essentials_with_Phone,af4483f2-b8a8-4bfc-9484-c6145a70d24e,Teams (Devices / Essentials / Exploratory),Commercial,Paid,5
+Microsoft Teams Exploratory,TEAMS_EXPLORATORY,710779e8-3d4a-4c88-adb9-386c958d1fdf,Teams (Devices / Essentials / Exploratory),Commercial,Paid,5
+Microsoft Teams Exploratory Dept,Microsoft_Teams_Exploratory_Dept,e0dfc8b9-9531-4ec8-94b4-9fec23b05fc8,Teams (Devices / Essentials / Exploratory),Commercial,Paid,5
+Microsoft Teams IW,MS_TEAMS_IW,74fbf1bb-47c6-4796-9623-77dc7371723b,Teams (Devices / Essentials / Exploratory),Commercial,Paid,5
+Microsoft Teams IW,MS_TEAMS1_IW,a17cc8c1-b374-4bc5-af24-40aa52cf6ea0,Teams (Devices / Essentials / Exploratory),Commercial,Paid,5
+Microsoft Teams Shared Devices,MCOCAP,295a8eb0-f78d-45c7-8b5b-1eed5ed02dff,Teams (Devices / Essentials / Exploratory),Commercial,Paid,5
+Microsoft Teams Shared Devices,MCOPSTNCAP,acca30e5-eb9f-4433-96d8-a3d4c0fb9d4a,Teams (Devices / Essentials / Exploratory),Commercial,Paid,5
+Microsoft Teams Shared Devices for faculty,MCOCAP_FACULTY,420c7602-7f70-4895-9394-d3d679ea36fb,Teams (Devices / Essentials / Exploratory),Education,Paid,5
+Microsoft Teams Shared Devices for students,MCOCAP_STUDENT,1a079a9b-3bb5-41e9-be54-b329deaeb8dc,Teams (Devices / Essentials / Exploratory),Education,Paid,5
+Office 365 F2,DESKLESSWOFFPACK,131fd665-5752-4995-a628-bcba5c889745,O/M365 F3,Commercial,Paid,5
+Office 365 F3,DESKLESSPACK,4b585984-651b-448a-9e53-3b10f069cf7f,O/M365 F3,Commercial,Paid,5
+Office 365 F3 with Addon,DESKLESSPACK_ADDON,9317a5b9-51f1-402d-a589-6d120337b69a,O/M365 F3,Commercial,Paid,5
+Office 365 F3 with Yammer,DESKLESSPACK_YAMMER,1d84a257-f07c-4b38-839b-b517222270f7,O/M365 F3,Commercial,Paid,5
+Office 365 F3_DE,DESKLESSPACK_DE,ba44da2d-d26d-4c8b-8c85-247ff3ea7891,O/M365 F3,Commercial,Paid,5
+Exchange Online (Plan 1),EXCHANGESTANDARD,4b9405b0-7788-4568-add1-99614e613b69,Exchange Online (Plan 1),Commercial,Paid,10
+Exchange Online (Plan 1)_DE,EXCHANGESTANDARD_DE,571aa549-0322-42b3-8ac2-50ec76c00eaf,Exchange Online (Plan 1),Commercial,Paid,10
+Exchange Online Essentials (ExO P1 Based),EXCHANGEESSENTIALS,7fc0182e-d107-4556-8329-7caaa511197b,Exchange Online (Plan 1),Commercial,Paid,10
+Microsoft 365 A1 for devices for faculty,MICROSOFT_365_A1_FOR_DEVICES_FAC,c07395e9-4cec-4b3e-9f63-f6933efbb6c2,M365 A1,Education,Paid,10
+Microsoft 365 A1 for devices for students,MICROSOFT_365_A1_FOR_DEVICES_STU,e8b07ce3-b6f2-42dd-b22e-1dd3cda1c103,M365 A1,Education,Paid,10
+Microsoft 365 A1 Legacy,M365EDU_A1,b17653a4-2443-4e8c-a550-18249dda78bb,M365 A1,Education,Paid,10
+Microsoft 365 Apps for business,O365_BUSINESS,cdd28e44-67e3-425e-be4c-737fab2899d3,M365 Apps,Commercial,Paid,10
+Microsoft 365 Apps for business - IW,O365_BUSINESS_IW,fd5c3bf4-824f-4639-a05b-40f9bbc05a09,M365 Apps,Commercial,Paid,10
+Microsoft 365 Apps for business - Prepaid Legacy,SMB_BUSINESS,b214fe43-f5a3-4703-beeb-fa97188220fc,M365 Apps,Commercial,Paid,10
+Microsoft 365 Apps for business_DE,O365_BUSINESS_DE,b92d41af-1c13-4e54-b8c8-de3ba738b3e3,M365 Apps,Commercial,Paid,10
+Microsoft 365 Apps for enterprise,OFFICESUBSCRIPTION,c2273bd0-dff7-4215-9ef5-2c7bcfb06425,M365 Apps,Commercial,Paid,10
+Microsoft 365 Apps for enterprise - IW,OFFICESUBSCRIPTION_IW,9104c7f8-9cce-4e50-895c-d22b2c3c2d2a,M365 Apps,Commercial,Paid,10
+Microsoft 365 Apps for enterprise_DE,OFFICESUBSCRIPTION_DE,f20dcc6a-c590-473a-a5ea-337bd5fdaf16,M365 Apps,Commercial,Paid,10
+Microsoft 365 Apps for Faculty,OFFICESUBSCRIPTION_FACULTY,12b8c807-2e20-48fc-b453-542b6ee9d171,M365 Apps,Education,Paid,10
+Microsoft 365 Apps for Faculty_DE,OFFICESUBSCRIPTION_FACULTY_DE,ebb21df1-6f37-471c-aee1-ffc876ddfd7a,M365 Apps,Education,Paid,10
+Microsoft 365 Apps for Homeschool for faculty,OFFICESUBSCRIPTION_HOMESCHOOL_FAC,6bf5348c-ba67-4597-a549-422be8416a20,M365 Apps,Education,Paid,10
+Microsoft 365 Apps for Homeschool for students,OFFICESUBSCRIPTION_HOMESCHOOL_STU,fd6316ec-4313-452c-9c4d-f46a14ffb4f9,M365 Apps,Education,Paid,10
+Microsoft 365 Education GIGA Promo,M365_EDU_GIGA_PROMO,3239c42d-28c4-4962-b350-2fbc5c65be37,M365 Apps,Education,Paid,10
+OneDrive for business (Plan 1),WACONEDRIVESTANDARD,e6778190-713e-4e4f-9119-8b8238de25df,OneDrive for Business (Plan 1),Commercial,Paid,10
+OneDrive for business (Plan 1)_DE,WACONEDRIVESTANDARD_DE,2697dc3a-1ff8-4c89-946b-e928c8b65b20,OneDrive for Business (Plan 1),Commercial,Paid,10
+OneDrive for business with Office Online - IW,WACONEDRIVESTANDARD_IW,3d0e6c55-e596-4a9c-aaf6-ab95824e18e2,OneDrive for Business (Plan 1),Commercial,Paid,10
+SharePoint (Plan 1),SHAREPOINTSTANDARD,1fc08a02-8b3d-43b9-831e-f76859e04e1a,SharePoint (Plan 1),Commercial,Paid,10
+SharePoint (Plan 1) for faculty,SHAREPOINTSTANDARD_FACULTY,d456bf67-5c95-4695-b9da-83a9c77f3d8b,SharePoint (Plan 1),Education,Paid,10
+SharePoint (Plan 1) for students,SHAREPOINTSTANDARD_STUDENT,ed415169-4c92-46e0-a763-70932ff14f3b,SharePoint (Plan 1),Education,Paid,10
+SharePoint (Plan 1)_DE,SHAREPOINTSTANDARD_DE,73caf739-4277-4c48-b9f8-ec9d17dba013,SharePoint (Plan 1),Commercial,Paid,10
+SharePoint DUET,DUET_ADDON,d04202b0-d8b4-4c70-a966-a6dd591f7595,SharePoint (Plan 1),Commercial,Paid,10
+Exchange Online (Plan 2),EXCHANGEENTERPRISE,19ec0d23-8335-4cbd-94ac-6050e30712fa,Exchange Online (Plan 2),Commercial,Paid,25
+Exchange Online (Plan 2)_DE,EXCHANGEENTERPRISE_DE,6b2d207b-4b93-43e1-ac1e-d438a8aa443f,Exchange Online (Plan 2),Commercial,Paid,25
+Microsoft 365 Business Basic,O365_BUSINESS_ESSENTIALS,3b555118-da6a-4418-894f-7df1e2096870,M365 Business,Commercial,Paid,25
+Microsoft 365 Business Basic - Prepaid Legacy,SMB_BUSINESS_ESSENTIALS,dab7782a-93b1-4074-8bb1-0e61318bea0b,M365 Business,Commercial,Paid,25
+Microsoft 365 Business Basic_DE,O365_BUSINESS_ESSENTIALS_DE,d04bb358-91e9-49d9-bece-81c2a18f591e,M365 Business,Commercial,Paid,25
+Microsoft 365 Business Premium,SPB,cbdc14ab-d96c-4c30-b9f4-6ada7cdc1d46,M365 Business,Commercial,Paid,25
+Microsoft 365 Business Standard,O365_BUSINESS_PREMIUM,f245ecc8-75af-4f8e-b61f-27d8114de5f3,M365 Business,Commercial,Paid,25
+Microsoft 365 Business Standard - Prepaid Legacy,SMB_BUSINESS_PREMIUM,ac5cef5d-921b-4f97-9ef3-c99076e5470f,M365 Business,Commercial,Paid,25
+Microsoft 365 Business Standard_DE,O365_BUSINESS_PREMIUM_DE,840565c0-2019-4a56-b116-442afe4428b7,M365 Business,Commercial,Paid,25
+Office 365 E1,STANDARDPACK,18181a46-0d4e-45cd-891e-60aabd171b4e,O/M365 E1,Commercial,Paid,25
+Office 365 E1 Plus,Office365_E1_Plus,12a0b0ef-3d7c-4456-8f61-aa3817576c8d,O/M365 E1,Commercial,Paid,25
+Office 365 E1 Plus CCAL,Office_365_E1_Plus_CCAL,91ea456f-170f-4b4b-971a-d99ff365870e,O/M365 E1,Commercial,Paid,25
+Office 365 E1 Plus ECAL,Office_365_E1_Plus_ECAL,403edb6e-947f-44ad-8284-8fb7b829ced5,O/M365 E1,Commercial,Paid,25
+Office 365 E1 Plus v1,OE1_Plus,10cf6822-34cc-446f-b7e1-9b010f59efa0,O/M365 E1,Commercial,Paid,25
+Office 365 E1 with Exchange Online Archiving,STANDARDPACKWITHEXCHANGEARCHIVE_ADDON,6e8353b7-3362-4039-a52f-d57677ca187f,O/M365 E1,Commercial,Paid,25
+Office 365 E1_DE,STANDARDPACK_DE,bc19b96b-acbd-4cc0-8cb4-ebec7313f446,O/M365 E1,Commercial,Paid,25
+Office 365 E2,STANDARDWOFFPACK,6634e0ce-1a9f-428c-a498-f84ec7b8aa2e,O/M365 E1,Commercial,Paid,25
+Office 365 w/o Teams Bundle Business Premium,Office_365_w/o_Teams_Bundle_Business_Premium,a3f586b6-8cce-4d9b-99d6-55238397f77a,M365 Business,Commercial,Paid,25
+Office 365 w/o Teams Bundle Business Standard,Office_365_w/o_Teams_Bundle_Business_Standard,c1f79c29-5d7a-4bec-a2c1-1a76774864c0,M365 Business,Commercial,Paid,25
+Office 365 w/o Teams Bundle E1,Office_365_w/o_Teams_Bundle_E1,b57282e3-65bd-4252-9502-c0eae1e5ab7f,O/M365 E1,Commercial,Paid,25
+OneDrive for business (Plan 2),WACONEDRIVEENTERPRISE,ed01faf2-1d88-4947-ae91-45ca18703a96,OneDrive for Business (Plan 2),Commercial,Paid,25
+OneDrive for business (Plan 2)_DE,WACONEDRIVEENTERPRISE_DE,cbea158c-7919-46f6-8228-10c114f91ea3,OneDrive for Business (Plan 2),Commercial,Paid,25
+SharePoint (Plan 2),SHAREPOINTENTERPRISE,a9732ec9-17d9-494c-a51c-d6b45b384dcb,SharePoint (Plan 2),Commercial,Paid,25
+SharePoint (Plan 2) for faculty,SHAREPOINTENTERPRISE_FACULTY,25e35bf2-81a6-47cf-afb2-51d976cebfb6,SharePoint (Plan 2),Education,Paid,25
+SharePoint (Plan 2) for students,SHAREPOINTENTERPRISE_STUDENT,1e16a1cc-519f-4c16-8c53-3791908558a0,SharePoint (Plan 2),Education,Paid,25
+SharePoint (Plan 2)_DE,SHAREPOINTENTERPRISE_DE,ed76d306-ef8a-4d6a-a065-c8b1a5d56cc7,SharePoint (Plan 2),Commercial,Paid,25
+Microsoft 365 A3 - Unattended License for faculty,M365EDU_A3_FACULTY_RPA1,73ce2367-4453-4cbb-894d-adfe46b0c5c0,O/M365 A3,Education,Paid,50
+Microsoft 365 A3 - Unattended License for students,M365EDU_A3_STUDENT_RPA1,66f57291-0028-4817-967c-aa4917d0187a,O/M365 A3,Education,Paid,50
+Microsoft 365 A3 for faculty,M365EDU_A3_FACULTY,4b590615-0888-425a-a965-b3bf7789848d,O/M365 A3,Education,Paid,50
+Microsoft 365 A3 for students,M365EDU_A3_STUDENT,7cfd9a2b-e110-4c39-bf20-c6a3f36a3121,O/M365 A3,Education,Paid,50
+Microsoft 365 E3,SPE_E3,05e9a617-0261-4cee-bb44-138d3ef5d965,O/M365 E3,Commercial,Paid,50
+Microsoft 365 E3 - Unattended License,SPE_E3_RPA1,c2ac2ee4-9bb1-47e4-8541-d689c7e83371,O/M365 E3,Commercial,Paid,50
+Microsoft 365 E3 (500 seats min)_HUB,Microsoft_365_E3,0c21030a-7e60-4ec7-9a0f-0042e0e0211a,O/M365 E3,Commercial,Paid,50
+O365 w/o Teams Bundle E3​,O365_w/o_Teams_Bundle_E3,d711d25a-a21c-492f-bd19-aae1e8ebaf30,O/M365 E3,Commercial,Paid,50
+O365 w/o Teams Bundle M3​ (500 seats min) HUB,O365_w/o Teams Bundle_M3_(500_seats_min)_HUB,602e6573-55a3-46b1-a1a0-cc267991501a,O/M365 E3,Commercial,Paid,50
+O365 w/o Teams Bundle M3​,O365_w/o Teams Bundle_M3,c2fe850d-fbbb-4858-b67d-bd0c6e746da3,O/M365 E3,Commercial,Paid,50
+Office 365 A3 for faculty,ENTERPRISEPACKPLUS_FACULTY,e578b273-6db4-4691-bba0-8d691f4da603,O/M365 A3,Education,Paid,50
+Office 365 A3 for students,ENTERPRISEPACKPLUS_STUDENT,98b6e773-24d4-4c0d-a968-6e787a1f8204,O/M365 A3,Education,Paid,50
+Office 365 E3,ENTERPRISEPACK,6fd2c87f-b296-42f0-b197-1e91e994b900,O/M365 E3,Commercial,Paid,50
+Office 365 E3 without Microsoft 365 Apps,ENTERPRISEPACKWITHOUTPROPLUS,1908916a-464c-44c1-8f86-55f260ed9643,O/M365 E3,Commercial,Paid,50
+Office 365 E3 without Microsoft 365 Apps_DE,ENTERPRISEPACKWITHOUTPROPLUS_DE,b3c2a9eb-4eba-40bb-a180-f7e645c4c9a3,O/M365 E3,Commercial,Paid,50
+Office 365 E3_DE,ENTERPRISEPACK_DE,b33ff485-9025-4323-92d7-d5f6cee2168c,O/M365 E3,Commercial,Paid,50
+Office 365 Education E3 for Faculty,ENTERPRISEPACK_FACULTY,e4fa3838-3d01-42df-aa28-5e0a4c68604b,O/M365 A3,Education,Paid,50
+Office 365 Education E3 for Faculty_DE,ENTERPRISEPACK_FACULTY_DE,eed7a755-c6cf-49b1-ace3-32eb3627c498,O/M365 A3,Education,Paid,50
+Office 365 Education E3 for Students,ENTERPRISEPACK_STUDENT,8fc2205d-4e51-4401-97f0-5c89ef1aafbb,O/M365 A3,Education,Paid,50
+Office 365 Education E3 for Students_DE,ENTERPRISEPACK_STUDENT_DE,678e0149-1118-47cd-a65f-88f8ad1bb87e,O/M365 A3,Education,Paid,50
+Microsoft 365 A5 for faculty,M365EDU_A5_FACULTY,e97c048c-37a4-45fb-ab50-922fbf07a370,O/M365 A5,Education,Paid,100
+Microsoft 365 A5 for students,M365EDU_A5_STUDENT,46c119d4-0379-4a9d-85e4-97c66d3f909e,O/M365 A5,Education,Paid,100
+Microsoft 365 A5 with Calling Minutes for Faculty,M365EDU_A5_FACULTY_CALLINGMINUTES,ea73fc9b-3f94-418d-b128-1181dc9fb125,O/M365 A5,Education,Paid,100
+Microsoft 365 A5 with Calling Minutes for Students,M365EDU_A5_STUDENT_CALLINGMINUTES1,1c660248-c539-4d93-9d44-1a5707984fe4,O/M365 A5,Education,Paid,100
+Microsoft 365 A5 without Audio Conferencing for faculty,M365EDU_A5_NOPSTNCONF_FACULTY,65200ac3-f927-4407-a3d5-c63562dff461,O/M365 A5,Education,Paid,100
+Microsoft 365 A5 without Audio Conferencing for students,M365EDU_A5_NOPSTNCONF_STUDENT,a25c01ce-bab1-47e9-a6d0-ebe939b99ff9,O/M365 A5,Education,Paid,100
+Microsoft 365 E5,SPE_E5,06ebc4ee-1bb5-47dd-8120-11324bc54e06,O/M365 E5,Commercial,Paid,100
+Microsoft 365 E5 (500 seats min)_HUB,Microsoft_365_E5,db684ac5-c0e7-4f92-8284-ef9ebde75d33,O/M365 E5,Commercial,Paid,100
+Microsoft 365 E5 with Calling Minutes,SPE_E5_CALLINGMINUTES,a91fc4e0-65e5-4266-aa76-4037509c1626,O/M365 E5,Commercial,Paid,100
+Microsoft 365 E5 without Audio Conferencing,SPE_E5_NOPSTNCONF,cd2925a3-5076-4233-8931-638a8c94f773,O/M365 E5,Commercial,Paid,100
+Microsoft 365 E5 without Audio Conferencing (500 seats min)_HUB,Microsoft_365_E5_without_Audio_Conferencing,2113661c-6509-4034-98bb-9c47bd28d63c,O/M365 E5,Commercial,Paid,100
+O365 w/o Teams Bundle M5​,O365_w/o_Teams_Bundle_M5,3271cf8e-2be5-4a09-a549-70fd05baaa17,O/M365 E5,Commercial,Paid,100
+O365 w/o Teams Bundle M5​ (500 seats min)_HUB,O365_w/o_Teams_Bundle_M5_(500_seats_min)_HUB,1e988bf3-8b7c-4731-bec0-4e2a2946600c,O/M365 E5,Commercial,Paid,100
+Office 365 A5 for faculty,ENTERPRISEPREMIUM_FACULTY,a4585165-0533-458a-97e3-c400570268c4,O/M365 A5,Education,Paid,100
+Office 365 A5 for students,ENTERPRISEPREMIUM_STUDENT,ee656612-49fa-43e5-b67e-cb1fdf7699df,O/M365 E5,Education,Paid,100
+Office 365 A5 with Calling Minutes for Faculty,ENTERPRISEPREMIUM_FACULTY_CALLINGMINUTES,1a18ad49-7cd3-4d0a-bb2a-5108dbd226ae,O/M365 A5,Education,Paid,100
+Office 365 A5 with Calling Minutes for Students,ENTERPRISEPREMIUM_STUDENT_CALLINGMINUTES,9750ea2e-1849-45d4-91c5-1f1191f8be71,O/M365 A5,Education,Paid,100
+Office 365 A5 without Audio Conferencing for faculty,ENTERPRISEPREMIUM_NOPSTNCONF_FACULTY,9a320620-ca3d-4705-a79d-27c135c96e05,O/M365 A5,Education,Paid,100
+Office 365 A5 without Audio Conferencing for students,ENTERPRISEPREMIUM_NOPSTNCONF_STUDENT,1164451b-e2e5-4c9e-8fa6-e5122d90dbdc,O/M365 A5,Education,Paid,100
+Office 365 E5,ENTERPRISEPREMIUM,c7df2760-2c81-4ef7-b578-5b5392b571df,O/M365 E5,Commercial,Paid,100
+Office 365 E5 - escalation Sku,ENTERPRISEPREMIUM_ESC,3424eafc-53e0-4e71-9e69-118a016ecf1d,O/M365 E5,Commercial,Paid,100
+Office 365 E5 with Calling Minutes,ENTERPRISEPREMIUM_CALLINGMINUTES,ebec32e7-146e-4862-ad9a-9f5d9fbb7dbd,O/M365 E5,Commercial,Paid,100
+Office 365 E5 without Audio Conferencing,ENTERPRISEPREMIUM_NOPSTNCONF,26d45bd9-adf1-46cd-a9e1-51e9a5524128,O/M365 E5,Commercial,Paid,100
+Office 365 E5 without Power BI and Phone System,ENTERPRISEPREMIUM_NOPBIPBX,6d885561-5146-4711-9595-d33d07a18900,O/M365 E5,Commercial,Paid,100
+Office 365 w/o Teams Bundle E5,Office_365_w/o_Teams_Bundle_E5,cf50bae9-29e8-4775-b07c-56ee10e3776d,O/M365 E5,Commercial,Paid,100
+Microsoft 365 Education 10 TB Additional Storage,,,Edu Pooled Storage Pack,Education,Paid,10240
