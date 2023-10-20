@@ -15,11 +15,11 @@ if (-not $sp) {
     $sp = New-AzureADServicePrincipal -AppId $appId
 }
 
-# Require user assignment for the Graph app
-Set-AzureADServicePrincipal -ObjectId $sp.ObjectId -AppRoleAssignmentRequired $true
-
 # Assign the default app role (0-Guid) to the current user
 $me = Get-AzureADUser -ObjectId $session.Account.Id
 New-AzureADServiceAppRoleAssignment -ObjectId $sp.ObjectId -ResourceId $sp.ObjectId -Id ([Guid]::Empty.ToString()) -PrincipalId $me.ObjectId
+
+# Require user assignment for the Graph app
+Set-AzureADServicePrincipal -ObjectId $sp.ObjectId -AppRoleAssignmentRequired $true
 
 Write-host "Script Complete. PowerShell is now restricted."
