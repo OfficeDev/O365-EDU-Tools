@@ -1,0 +1,2354 @@
+{
+	"info": {
+		"_postman_id": "3148d69f-80c2-4b1c-91c5-e6942ba2e923",
+		"name": "EDU Graph - Classwork",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20841326"
+	},
+	"item": [
+		{
+			"name": "Module - Create",
+			"item": [
+				{
+					"name": "Get AuthenticationMode",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var authMode = postman.getEnvironmentVariable(\"AuthenticationMode\");\r",
+									"\r",
+									"if(authMode == \"application\"){\r",
+									"    postman.setNextRequest(\"RefreshApplicationToken\");\r",
+									"} else { //delegated\r",
+									"    postman.setNextRequest(\"RefreshToken\");\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://postman-echo.com/delay/0",
+							"protocol": "https",
+							"host": [
+								"postman-echo",
+								"com"
+							],
+							"path": [
+								"delay",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RefreshToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"try {",
+									"    if (responseBody.indexOf(\"InvalidAuthenticationToken\") !== -1) {",
+									"        console.log(\"You need to run *On behalf of a User | Get User Access Token* request first.\");",
+									"    }",
+									"    else {",
+									"        if (pm.response.status === \"Forbidden\") {",
+									"            console.log(\"You need to add user delegated permissions in your application to at least *User.Read* in portal.azure.com and then consent as user or Grant admin consent in portal. And re-run *On behalf of a User | Get User Access Token* request to update access token. \");",
+									"        }",
+									"        else {",
+									"            var json = JSON.parse(responseBody);",
+									"            postman.setEnvironmentVariable(\"userBearerToken\", json.access_token);",
+									"            postman.setNextRequest(\"Create Module\");",
+									"            return;",
+									"        }",
+									"    }",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}",
+									"catch (e) {",
+									"    console.log(e);",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "resource",
+									"value": "{{GraphResourceID}}",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{ClientID}}",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{UserName}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{UserPassword}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{ClientSecret}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://login.windows.net/common/oauth2/token",
+							"protocol": "https",
+							"host": [
+								"login",
+								"windows",
+								"net"
+							],
+							"path": [
+								"common",
+								"oauth2",
+								"token"
+							]
+						},
+						"description": "Use refreshToken variable to request a new access token for the user in PPE environment."
+					},
+					"response": []
+				},
+				{
+					"name": "RefreshApplicationToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"try {",
+									"    if (responseBody.indexOf(\"InvalidAuthenticationToken\") !== -1) {",
+									"        console.log(\"You need to run *On behalf of a User | Get User Access Token* request first.\");",
+									"    }",
+									"    else {",
+									"        if (pm.response.status === \"Forbidden\") {",
+									"            console.log(\"You need to add user delegated permissions in your application to at least *User.Read* in portal.azure.com and then consent as user or Grant admin consent in portal. And re-run *On behalf of a User | Get User Access Token* request to update access token. \");",
+									"        }",
+									"        else {",
+									"            var json = JSON.parse(responseBody);",
+									"            postman.setEnvironmentVariable(\"userBearerToken\", json.access_token);",
+									"            return;",
+									"        }",
+									"    }",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}",
+									"catch (e) {",
+									"    console.log(e);",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "{{GraphResourceID}}/.default",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{ClientID}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{ClientSecret}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://login.microsoftonline.com/{{TenantID}}/oauth2/v2.0/token",
+							"protocol": "https",
+							"host": [
+								"login",
+								"microsoftonline",
+								"com"
+							],
+							"path": [
+								"{{TenantID}}",
+								"oauth2",
+								"v2.0",
+								"token"
+							]
+						},
+						"description": "Use refreshToken variable to request a new access token for the user in PPE environment."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Module",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 201){",
+									"    var json = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"moduleId\", json.id);",
+									"    console.log(`Module created: ${json.id} - ${json.displayName}`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Generates a new displayName for a new module using the pattern as below;",
+									"// [Current date and time] + [Random number between 1-9999]",
+									"// Example: 2023-09-12T15:52:35.620Z3506",
+									"var currentDateTime = new Date();",
+									"var displayName = currentDateTime.toISOString() + Math.floor(Math.random() * 9999);",
+									"pm.collectionVariables.set(\"moduleName\", displayName);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n  \"displayName\":\"{{moduleName}}\",\n  \"description\": \"Description for {{moduleName}}\"\n}"
+						},
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules"
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				},
+				{
+					"name": "Pin Module",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 200){",
+									"    var json = JSON.parse(responseBody);",
+									"    console.log(`Module pinned: ${json.id} - ${json.displayName}`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n  \"displayName\":\"{{moduleName}}\",\n  \"description\": \"Description for {{moduleName}}\"\n}"
+						},
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}/pin",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}",
+								"pin"
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				},
+				{
+					"name": "Unpin Module",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 200){",
+									"    var json = JSON.parse(responseBody);",
+									"    console.log(`Module unpinned: ${json.id} - ${json.displayName}`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n  \"displayName\":\"{{moduleName}}\",\n  \"description\": \"Description for {{moduleName}}\"\n}"
+						},
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}/unpin",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}",
+								"unpin"
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				},
+				{
+					"name": "Publish Module",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 200){",
+									"    var json = JSON.parse(responseBody);",
+									"    console.log(`Module published: ${json.id} - ${json.displayName} - ${json.status}`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n  \"displayName\":\"{{moduleName}}\",\n  \"description\": \"Description for {{moduleName}}\"\n}"
+						},
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}/publish",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}",
+								"publish"
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				},
+				{
+					"name": "Patch Module",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 200){",
+									"    var json = JSON.parse(responseBody);",
+									"    console.log(`Module patched: ${json.id} - ${json.displayName} - ${json.description}`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"{{moduleName}} has been updated\"\n}"
+						},
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}"
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Module - Post resources",
+			"item": [
+				{
+					"name": "Set Up Module Resources Folder",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 200){",
+									"    var json = JSON.parse(responseBody);",
+									"    console.log(`Module resources folder: ${json.resourcesFolderUrl}`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}/setUpResourcesFolder",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}",
+								"setUpResourcesFolder"
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Link Resource",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 201){",
+									"    var json = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"linkResourceId\", json.id);",
+									"    console.log(`Link resource created: ${json.id} - ${json.resource.displayName}`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"resource\": {\n         \"@odata.type\": \"#microsoft.graph.educationLinkResource\",\n         \"displayName\":\"Bing website\",\n         \"link\": \"https://www.bing.com\"\n     }\n}"
+						},
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}/resources/",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}",
+								"resources",
+								""
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Assignment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 201){",
+									"    var json = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"assignmentId\", json.id);",
+									"    pm.collectionVariables.set(\"assignmentDisplayName\", json.displayName);",
+									"    console.log(`Assignment created: ${json.id} - ${json.displayName}`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Generates a new displayName for a new assignment using the pattern as below;\r",
+									"// [Current date and time] + [Random number between 1-9999]\r",
+									"// Example: 2023-09-12T15:52:35.620Z3506\r",
+									"var currentDateTime = new Date();\r",
+									"var displayName = currentDateTime.toISOString() + Math.floor(Math.random() * 9999);\r",
+									"pm.collectionVariables.set(\"displayName\", displayName);\r",
+									"\r",
+									"// Generates a Due date tha will be 30 days ahead\r",
+									"var newDueDate = new Date();\r",
+									"var days = 30;\r",
+									"newDueDate = new Date(newDueDate.getTime() + days*24*60*60*1000);\r",
+									"pm.collectionVariables.set(\"dueDate\", newDueDate);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dueDateTime\": \"{{dueDate}}\",\n    \"displayName\": \"{{displayName}}\",\n    \"instructions\": {\n        \"contentType\": \"text\",\n        \"content\": \"Sample description for {{displayName}} with due date: {{dueDate}}.\"\n    },\n    \"grading\": {\n        \"@odata.type\": \"#microsoft.graph.educationAssignmentPointsGradeType\",\n        \"maxPoints\": 100\n    },\n    \"assignTo\": {\n        \"@odata.type\": \"#microsoft.graph.educationAssignmentClassRecipient\"\n    },\n    \"status\": \"draft\",\n    \"allowStudentsToAddResourcesToSubmission\": true\n}"
+						},
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/assignments",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"assignments"
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				},
+				{
+					"name": "Publish Assignment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 200){",
+									"    var json = JSON.parse(responseBody);",
+									"    console.log(`Assignment published: ${json.id} - ${json.displayName}`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/assignments/{{assignmentId}}/publish",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"assignments",
+								"{{assignmentId}}",
+								"publish"
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				},
+				{
+					"name": "Delay After Publish",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://postman-echo.com/delay/10",
+							"protocol": "https",
+							"host": [
+								"postman-echo",
+								"com"
+							],
+							"path": [
+								"delay",
+								"10"
+							]
+						},
+						"description": "Using this endpoint one can configure how long it takes for the server to come back with a response. Appending a number to the URL defines the time (in seconds) the server will wait before responding.\n\nNote that a maximum delay of 10 seconds is accepted by the server."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Assignment Resource",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 201){",
+									"    var json = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"assignmentResourceId\", json.id);",
+									"    console.log(`Linked Assignment resource created: ${json.id} - ${json.resource.displayName}`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"resource\": {\n         \"@odata.type\": \"#microsoft.graph.educationLinkedAssignmentResource\",\n         \"displayName\":\"{{assignmentDisplayName}}\",\n         \"url\": \"https://graph.microsoft.com/v1.0/education/classes/{{ClassID}}/assignments/{{assignmentId}}\"\n     }\n}"
+						},
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}/resources",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}",
+								"resources"
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Word Resource",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 201){",
+									"    var json = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"wordResourceId\", json.id);",
+									"    console.log(`Word resource created: ${json.id} - ${json.resource.displayName}`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"resource\": {\n        \"@odata.type\": \"#microsoft.graph.educationWordResource\",\n        \"displayName\": \"New_Word_Doc.docx\"\n     }\n}"
+						},
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}/resources",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}",
+								"resources"
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Excel Resource",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 201){",
+									"    var json = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"excelResourceId\", json.id);",
+									"    console.log(`Excel resource created: ${json.id} - ${json.resource.displayName}`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"resource\": {\n        \"@odata.type\": \"#microsoft.graph.educationExcelResource\",\n        \"displayName\": \"New_Excel.xlsx\"\n     }\n}"
+						},
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}/resources",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}",
+								"resources"
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				},
+				{
+					"name": "Create PowerPoint Resource",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 201){",
+									"    var json = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"powerPointResourceId\", json.id);",
+									"    console.log(`Power Point resource created: ${json.id} - ${json.resource.displayName}`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"resource\": {\n        \"@odata.type\": \"#microsoft.graph.educationPowerPointResource\",\n        \"displayName\": \"New_PowerPoint.pptx\"\n     }\n}"
+						},
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}/resources",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}",
+								"resources"
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Module - Get",
+			"item": [
+				{
+					"name": "Get Pinned Modules",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code != 200){",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/?$filter=isPinned eq true",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								""
+							],
+							"query": [
+								{
+									"key": "$filter",
+									"value": "isPinned eq true"
+								}
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Module",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code != 200){",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}"
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Module Resources",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code != 200){",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}/resources",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}",
+								"resources"
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Modules with expands",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code != 200){",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules?$expand=resources",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules"
+							],
+							"query": [
+								{
+									"key": "$expand",
+									"value": "resources"
+								}
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Student - Get",
+			"item": [
+				{
+					"name": "RefreshToken for Student 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"try {",
+									"    if (responseBody.indexOf(\"InvalidAuthenticationToken\") !== -1) {",
+									"        console.log(\"You need to run *On behalf of a User | Get User Access Token* request first.\");",
+									"    }",
+									"    else {",
+									"        if (pm.response.status === \"Forbidden\") {",
+									"            console.log(\"You need to add user delegated permissions in your application to at least *User.Read* in portal.azure.com and then consent as user or Grant admin consent in portal. And re-run *On behalf of a User | Get User Access Token* request to update access token. \");",
+									"        }",
+									"        else {",
+									"            var json = JSON.parse(responseBody);",
+									"            postman.setEnvironmentVariable(\"student1BearerToken\", json.access_token);",
+									"        }",
+									"    }",
+									"}",
+									"catch (e) {",
+									"    console.log(e);",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "resource",
+									"value": "{{GraphResourceID}}",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{ClientID}}",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{S-UserName1}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{S-UserPassword1}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{ClientSecret}}",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://login.windows.net/common/oauth2/token",
+							"protocol": "https",
+							"host": [
+								"login",
+								"windows",
+								"net"
+							],
+							"path": [
+								"common",
+								"oauth2",
+								"token"
+							]
+						},
+						"description": "Use refreshToken variable to request a new access token for the user in PPE environment."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Module",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code != 200){",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{student1BearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}"
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Module Resource",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code != 200){",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{student1BearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}/resources/{{assignmentResourceId}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}",
+								"resources",
+								"{{assignmentResourceId}}"
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Module Resources",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code != 200){",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{student1BearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}/resources",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}",
+								"resources"
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Deletes",
+			"item": [
+				{
+					"name": "Delete Link Resource",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 204){",
+									"    console.log(`Link resource deleted`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}/resources/{{linkResourceId}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}",
+								"resources",
+								"{{linkResourceId}}"
+							]
+						},
+						"description": "GET //edu/me/classes/:classId \r\nGets the class for teacher"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Assignment Resource",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 204){",
+									"    console.log(`Assignment resource deleted`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}/resources/{{assignmentResourceId}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}",
+								"resources",
+								"{{assignmentResourceId}}"
+							]
+						},
+						"description": "GET //edu/me/classes/:classId \r\nGets the class for teacher"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Word Resource",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 204){",
+									"    console.log(`Word resource deleted`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}/resources/{{wordResourceId}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}",
+								"resources",
+								"{{wordResourceId}}"
+							]
+						},
+						"description": "GET //edu/me/classes/:classId \r\nGets the class for teacher"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Excel Resource",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 204){",
+									"    console.log(`Excel resource deleted`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}/resources/{{excelResourceId}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}",
+								"resources",
+								"{{excelResourceId}}"
+							]
+						},
+						"description": "GET //edu/me/classes/:classId \r\nGets the class for teacher"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete PowerPoint Resource",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 204){",
+									"    console.log(`Power Point resource deleted`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}/resources/{{powerPointResourceId}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}",
+								"resources",
+								"{{powerPointResourceId}}"
+							]
+						},
+						"description": "GET //edu/me/classes/:classId \r\nGets the class for teacher"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Module",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 204){",
+									"    console.log(`Module deleted`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/modules/{{moduleId}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"modules",
+								"{{moduleId}}"
+							]
+						},
+						"description": "GET //edu/me/classes/:classId \r\nGets the class for teacher"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Assignment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check the response code",
+									"if(responseCode.code == 204){",
+									"    console.log(`Assignment Deleted!`);",
+									"} else {",
+									"    console.log(`${pm.info.requestName} - There is an error: ${responseCode.code} - ${pm.response.status}`);",
+									"    postman.setNextRequest(\"-- End of Collection --\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userBearerToken}}"
+							},
+							{
+								"key": "MS-Int-AppID",
+								"value": "test"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							}
+						],
+						"url": {
+							"raw": "{{BaseURL}}/classes/{{ClassID}}/assignments/{{assignmmentId}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"classes",
+								"{{ClassID}}",
+								"assignments",
+								"{{assignmmentId}}"
+							]
+						},
+						"description": "POST /assignments \r\n{ \r\n    \"displayName\": \"…\", \r\n    \"instructions\": \"…\", \r\n    \"dueDateTime\": \"…\", \r\n    \"assignDateTime\": \"\", \r\n    \"assignTo\": {…}, \r\n    \"grading\": { … }, \r\n    \"allowStudentsToAddResourcesToSubmission\": true, \r\n    \"allowLateSubmissions\": true, \r\n    \"status\": \"Published\" \r\n} \r\nResponse: 201 with created assignment \r\n \r\ndisplayName \r\nRequired when status is Published. When specified, its length must be less than 100. \r\ninstructions \r\nOptional. When specified, its length must be less than 2000. \r\ndueDateTime \r\nRequired when status is Published. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignDateTime \r\nOptional. When specified, it must be Now < DueDateTime < AssignDateTime. \r\nassignTo \r\nRequired when status is Published. \r\ngrading \r\nOptional. \r\nallowStudentsToAddResourcesToSubmission \r\nOptional. \r\nallowLateSubmissions \r\nOptional. \r\n \r\nThis API allows teacher to either create a draft assignment or publish assignment immediately. To create a draft assignment, don't set status in request. When status is set to Published, the assignment is created and published right away and allowStudentsToAddResourcesToSubmission is true in created assignment if it was not specified in Post request. \r\n \r\n403 returned if: \r\nUser is not a teacher. \r\n404 returned if: \r\nClass id not found \r\n400 returned if: \r\ndisplayName or instruction length is over limit. \r\ndueDateTime and AssignDateTime is invalid. \r\nassignDateTime not specified when status is set Published. \r\nassignTo not specified when status is set Published. \r\nassignTo has invalid values. \r\ngrading has invalid values."
+					},
+					"response": []
+				},
+				{
+					"name": "-- End of Collection --",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"postman.setNextRequest(null);",
+									"console.log(\"***End of Runner***\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://postman-echo.com/delay/0",
+							"protocol": "https",
+							"host": [
+								"postman-echo",
+								"com"
+							],
+							"path": [
+								"delay",
+								"0"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "tauthtoken",
+			"value": ""
+		},
+		{
+			"key": "trefreshtoken",
+			"value": ""
+		},
+		{
+			"key": "s1authtoken",
+			"value": ""
+		},
+		{
+			"key": "s1refreshtoken",
+			"value": ""
+		},
+		{
+			"key": "graphtoken",
+			"value": ""
+		},
+		{
+			"key": "graphrefreshtoken",
+			"value": ""
+		},
+		{
+			"key": "itemId",
+			"value": ""
+		},
+		{
+			"key": "itemFileUrl",
+			"value": ""
+		},
+		{
+			"key": "graphtokencopy",
+			"value": ""
+		},
+		{
+			"key": "graphrefreshtokencopy",
+			"value": ""
+		},
+		{
+			"key": "channelId",
+			"value": ""
+		},
+		{
+			"key": "channelUrl",
+			"value": ""
+		},
+		{
+			"key": "modulesLimit",
+			"value": ""
+		},
+		{
+			"key": "moduleName",
+			"value": ""
+		},
+		{
+			"key": "moduleId",
+			"value": ""
+		},
+		{
+			"key": "linkResourceId",
+			"value": ""
+		},
+		{
+			"key": "displayName",
+			"value": ""
+		},
+		{
+			"key": "dueDate",
+			"value": ""
+		},
+		{
+			"key": "assignmmentId",
+			"value": ""
+		},
+		{
+			"key": "assignmmentDisplayName",
+			"value": ""
+		},
+		{
+			"key": "assignmentId",
+			"value": ""
+		},
+		{
+			"key": "assignmentDisplayName",
+			"value": ""
+		},
+		{
+			"key": "assignmentResourceId",
+			"value": ""
+		},
+		{
+			"key": "wordResourceId",
+			"value": ""
+		},
+		{
+			"key": "excelResourceId",
+			"value": ""
+		},
+		{
+			"key": "powerPointResourceId",
+			"value": ""
+		}
+	]
+}

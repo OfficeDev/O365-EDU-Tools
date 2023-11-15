@@ -1,0 +1,350 @@
+{
+	"id": "b3e0cbd9-807f-425e-bac5-8256a8d80327",
+	"name": "EDU Graph Environment",
+	"values": [
+		{
+			"key": "------Test Tenant Config------",
+			"value": "---------------------",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "UserId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "UserName",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "UserPassword",
+			"value": "",
+			"type": "secret",
+			"enabled": true
+		},
+		{
+			"key": "TenantID",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "--AppAccessToken",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "------App IDs------",
+			"value": "---------------------",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "ClientID",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "ClientSecret",
+			"value": "",
+			"type": "secret",
+			"enabled": true
+		},
+		{
+			"key": "------Tokens------",
+			"value": "---------------------",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "userBearerToken",
+			"value": null,
+			"enabled": true
+		},
+		{
+			"key": "student1BearerToken",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "student2BearerToken",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "appBearerToken",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "bearerToken",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "------TBD------",
+			"value": "---------------------",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "--UserId",
+			"value": null,
+			"enabled": true
+		},
+		{
+			"key": "--MessageId",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "--ApplicationId",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "--NextWeek",
+			"value": "2020-05-18T19:16:44.780Z",
+			"enabled": true
+		},
+		{
+			"key": "--Today",
+			"value": "2020-05-18T19:16:44.780Z",
+			"enabled": true
+		},
+		{
+			"key": "--ProfileId",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "--Id",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "------File Upload Endpoints------",
+			"value": "---------------------",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "GraphResourceID",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "UseMsGraph",
+			"value": "true",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "HostSegment",
+			"value": "https://graph.microsoft.com",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "VersionSegment",
+			"value": "beta",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "------File Upload Runtime Calculated Values------",
+			"value": "---------------------",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "createdSourceSystemId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "createdDataConnectorId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "------Inbound Flows Runtime Calculated Values------",
+			"value": "---------------------",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "inboundFlowId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "inboundDisplayName",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "industryDataConnectorId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "sourceSystemId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "runId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "ClassID",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "BaseURL",
+			"value": "https://graph.microsoft.com/beta/education",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "------ EDU Data Runtime Calculated Values------",
+			"value": "---------------------",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "schoolId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "classId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "teacherId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "studentId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "------ EDU Assignments Students ------",
+			"value": "---------------------",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "S-UserId1",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "S-UserName1",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "S-UserPassword1",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "S-UserId2",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "S-UserName2",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "S-UserPassword2",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "s1FeedbackOutcomeId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "s1PointsOutcomeId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "s2FeedbackOutcomeId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "s2PointsOutcomeId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "------ EDU Assignments Students ------",
+			"value": "---------------------",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "syncProfileId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "AuthenticationMode",
+			"value": "delegated",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "UserAccessToken",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2023-11-15T15:27:25.030Z",
+	"_postman_exported_using": "Postman/10.19.7"
+}
