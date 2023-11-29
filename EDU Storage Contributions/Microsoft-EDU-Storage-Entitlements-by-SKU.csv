@@ -131,7 +131,7 @@ O365 w/o Teams Bundle E3​,O365_w/o_Teams_Bundle_E3,d711d25a-a21c-492f-bd19-aae
 O365 w/o Teams Bundle M3​ (500 seats min) HUB,O365_w/o Teams Bundle_M3_(500_seats_min)_HUB,602e6573-55a3-46b1-a1a0-cc267991501a,O/M365 E3,Commercial,Paid,50
 O365 w/o Teams Bundle M3​,O365_w/o Teams Bundle_M3,c2fe850d-fbbb-4858-b67d-bd0c6e746da3,O/M365 E3,Commercial,Paid,50
 Office 365 A3 for faculty,ENTERPRISEPACKPLUS_FACULTY,e578b273-6db4-4691-bba0-8d691f4da603,O/M365 A3,Education,Paid,50
-Office 365 A3 for students,ENTERPRISEPACKPLUS_STUDENT,98b6e773-24d4-4c0d-a968-6e787a1f8204,O/M365 A3,Education,Paid,50
+Office 365 A3 for students,ENTERPRISEPACKPLUS_STUDENT,98b6e773-24d4-4c0d-a968-6e787a1f8204,O/M365 A3,Education,Paid or Free,50 for paid version
 Office 365 E3,ENTERPRISEPACK,6fd2c87f-b296-42f0-b197-1e91e994b900,O/M365 E3,Commercial,Paid,50
 Office 365 E3 without Microsoft 365 Apps,ENTERPRISEPACKWITHOUTPROPLUS,1908916a-464c-44c1-8f86-55f260ed9643,O/M365 E3,Commercial,Paid,50
 Office 365 E3 without Microsoft 365 Apps_DE,ENTERPRISEPACKWITHOUTPROPLUS_DE,b3c2a9eb-4eba-40bb-a180-f7e645c4c9a3,O/M365 E3,Commercial,Paid,50
@@ -154,7 +154,7 @@ Microsoft 365 E5 without Audio Conferencing (500 seats min)_HUB,Microsoft_365_E5
 O365 w/o Teams Bundle M5​,O365_w/o_Teams_Bundle_M5,3271cf8e-2be5-4a09-a549-70fd05baaa17,O/M365 E5,Commercial,Paid,100
 O365 w/o Teams Bundle M5​ (500 seats min)_HUB,O365_w/o_Teams_Bundle_M5_(500_seats_min)_HUB,1e988bf3-8b7c-4731-bec0-4e2a2946600c,O/M365 E5,Commercial,Paid,100
 Office 365 A5 for faculty,ENTERPRISEPREMIUM_FACULTY,a4585165-0533-458a-97e3-c400570268c4,O/M365 A5,Education,Paid,100
-Office 365 A5 for students,ENTERPRISEPREMIUM_STUDENT,ee656612-49fa-43e5-b67e-cb1fdf7699df,O/M365 E5,Education,Paid,100
+Office 365 A5 for students,ENTERPRISEPREMIUM_STUDENT,ee656612-49fa-43e5-b67e-cb1fdf7699df,O/M365 E5,Education,Paid or Free,100 for paid version
 Office 365 A5 with Calling Minutes for Faculty,ENTERPRISEPREMIUM_FACULTY_CALLINGMINUTES,1a18ad49-7cd3-4d0a-bb2a-5108dbd226ae,O/M365 A5,Education,Paid,100
 Office 365 A5 with Calling Minutes for Students,ENTERPRISEPREMIUM_STUDENT_CALLINGMINUTES,9750ea2e-1849-45d4-91c5-1f1191f8be71,O/M365 A5,Education,Paid,100
 Office 365 A5 without Audio Conferencing for faculty,ENTERPRISEPREMIUM_NOPSTNCONF_FACULTY,9a320620-ca3d-4705-a79d-27c135c96e05,O/M365 A5,Education,Paid,100
