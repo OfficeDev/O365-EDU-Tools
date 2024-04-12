@@ -1,6 +1,6 @@
 {
-	"id": "b3e0cbd9-807f-425e-bac5-8256a8d80327",
-	"name": "EDU Graph Environment",
+	"id": "6166cb16-f79d-460f-9945-df4fb73aecc3",
+	"name": "SDS Graph - Empty",
 	"values": [
 		{
 			"key": "------Test Tenant Config------",
@@ -49,7 +49,7 @@
 		{
 			"key": "ClientSecret",
 			"value": "",
-			"type": "secret",
+			"type": "default",
 			"enabled": true
 		},
 		{
@@ -135,7 +135,7 @@
 		},
 		{
 			"key": "GraphResourceID",
-			"value": "",
+			"value": "00000003-0000-0000-c000-000000000000",
 			"type": "default",
 			"enabled": true
 		},
@@ -213,7 +213,7 @@
 		},
 		{
 			"key": "ClassID",
-			"value": "",
+			"value": "a56c2cd3-94da-47fc-b6d2-2aee25e5b790",
 			"type": "default",
 			"enabled": true
 		},
@@ -342,9 +342,27 @@
 			"value": "",
 			"type": "any",
 			"enabled": true
+		},
+		{
+			"key": "------ Outbound Provisioing Flows ------",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "outboundProvisioningFlowSetId",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "outboundProvisioningFlowId",
+			"value": "",
+			"type": "default",
+			"enabled": true
 		}
 	],
 	"_postman_variable_scope": "environment",
-	"_postman_exported_at": "2023-11-15T15:27:25.030Z",
-	"_postman_exported_using": "Postman/10.19.7"
+	"_postman_exported_at": "2024-04-04T14:36:02.764Z",
+	"_postman_exported_using": "Postman/10.24.11"
 }
