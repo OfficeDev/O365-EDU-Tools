@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "bc504865-7145-4b7e-a4a4-97ee3baa5254",
 		"name": "EDU Graph - industryData - SDS",
-		"description": "These requests are for viewing inbound data configuration and state, including runs, statistics, and enumerations.\n\nThese endpoints can use either Application or Delegated permissions.\n\nMany of these endpoints also support Update and Delete.\n\n## Permissions\n\n**yearTimePeriod**\n\n\\[Application\\]\n\n_IndustryData-TimePeriod.Read.All_\n\n_IndustryData-TimePeriod.ReadWrite.All  \n_\\[Delegated\\]\n\n_IndustryData-TimePeriod.Read.All_\n\n_IndustryData-TimePeriod.ReadWrite.All_\n\n**sourceSystem**\n\n\\[Application\\]\n\n_IndustryData-SourceSystem.Read.All_\n\n_IndustryData-SourceSystem.ReadWrite.All  \n_\\[Delegated\\]\n\n_IndustryData-SourceSystem.Read.All_\n\n_IndustryData-SourceSystem.ReadWrite.All_\n\n**industryDataConnector**\n\n\\[Application\\]\n\n_IndustryData-DataConnector.Read.All_\n\n_IndustryData-DataConnector.ReadWrite.All  \n_\\[Delegated\\]\n\n_IndustryData-DataConnector.Read.All_\n\n_IndustryData-DataConnector.ReadWrite.All_\n\n**inboundFlow**\n\n\\[Application\\]\n\n_IndustryData-InboundFlow.Read.All_\n\n_IndustryData-InboundFlow.ReadWrite.All  \n_\\[Delegated\\]\n\n_IndustryData-InboundFlow.Read.All_\n\n_IndustryData-InboundFlow.ReadWrite.All_\n\n**run, runStatistics**\n\n\\[Application\\]\n\n_IndustryData-Run.Read.All_\n\n_IndustryData-Run.ReadWrite.All  \n_\\[Delegated\\]\n\n_IndustryData-Run.Read.All_\n\n_IndustryData-Run.ReadWrite.All_\n\nreference, roleGroups\n\n\\[Application\\]\n\n_IndustryData-ReadBasic.Read.All_\n\n\\[Delegated\\]\n\n_IndustryData-Run.ReadBasic.All_\n\nReference: [https://learn.microsoft.com/en-us/graph/api/resources/industrydata-overview?view=graph-rest-beta](https://learn.microsoft.com/en-us/graph/api/resources/industrydata-overview?view=graph-rest-beta&preserve-view=true)",
+		"description": "These requests are for viewing inbound data configuration and state, including runs, statistics, and enumerations.\n\nThese endpoints can use either Application or Delegated permissions.\n\nMany of these endpoints also support Update and Delete.\n\n## Permissions\n\n**yearTimePeriod**\n\n\\[Application\\]\n\n_IndustryData-TimePeriod.Read.All_\n\n_IndustryData-TimePeriod.ReadWrite.All  \n_\\[Delegated\\]\n\n_IndustryData-TimePeriod.Read.All_\n\n_IndustryData-TimePeriod.ReadWrite.All_\n\n**sourceSystem**\n\n\\[Application\\]\n\n_IndustryData-SourceSystem.Read.All_\n\n_IndustryData-SourceSystem.ReadWrite.All  \n_\\[Delegated\\]\n\n_IndustryData-SourceSystem.Read.All_\n\n_IndustryData-SourceSystem.ReadWrite.All_\n\n**industryDataConnector**\n\n\\[Application\\]\n\n_IndustryData-DataConnector.Read.All_\n\n_IndustryData-DataConnector.ReadWrite.All  \n_\\[Delegated\\]\n\n_IndustryData-DataConnector.Read.All_\n\n_IndustryData-DataConnector.ReadWrite.All_\n\n**inboundFlow**\n\n\\[Application\\]\n\n_IndustryData-InboundFlow.Read.All_\n\n_IndustryData-InboundFlow.ReadWrite.All  \n_\\[Delegated\\]\n\n_IndustryData-InboundFlow.Read.All_\n\n_IndustryData-InboundFlow.ReadWrite.All_\n\n**run, runStatistics**\n\n\\[Application\\]\n\n_IndustryData-Run.Read.All_\n\n_IndustryData-Run.ReadWrite.All  \n_\\[Delegated\\]\n\n_IndustryData-Run.Read.All_\n\n_IndustryData-Run.ReadWrite.All_\n\n**reference, roleGroups**\n\n\\[Application\\]\n\n_IndustryData-ReadBasic.Read.All_\n\n\\[Delegated\\]\n\n_IndustryData-Run.ReadBasic.All_\n\n**outbound provisioning**\n\n_IndustryData-OutboundFlow.Read.All_\n\n_IndustryData-OutboundFlow.ReadWrite.All_\n\nReference: [https://learn.microsoft.com/en-us/graph/api/resources/industrydata-overview?view=graph-rest-beta](https://learn.microsoft.com/en-us/graph/api/resources/industrydata-overview?view=graph-rest-beta&preserve-view=true)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20841326"
 	},
@@ -240,7 +240,8 @@
 									"\r",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -302,17 +303,11 @@
 							]
 						},
 						"url": {
-							"raw": "https://graph.microsoft.com/beta/external/industryData/years",
-							"protocol": "https",
+							"raw": "{{IndustryDataUrl}}/years",
 							"host": [
-								"graph",
-								"microsoft",
-								"com"
+								"{{IndustryDataUrl}}"
 							],
 							"path": [
-								"beta",
-								"external",
-								"industryData",
 								"years"
 							]
 						}
@@ -361,7 +356,8 @@
 									"\r",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -423,17 +419,11 @@
 							]
 						},
 						"url": {
-							"raw": "https://graph.microsoft.com/beta/external/industryData/sourceSystems",
-							"protocol": "https",
+							"raw": "{{IndustryDataUrl}}/sourceSystems",
 							"host": [
-								"graph",
-								"microsoft",
-								"com"
+								"{{IndustryDataUrl}}"
 							],
 							"path": [
-								"beta",
-								"external",
-								"industryData",
 								"sourceSystems"
 							]
 						}
@@ -449,7 +439,8 @@
 								"exec": [
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -511,17 +502,11 @@
 							]
 						},
 						"url": {
-							"raw": "https://graph.microsoft.com/beta/external/industryData/sourceSystems/{{sourceSystemId}}",
-							"protocol": "https",
+							"raw": "{{IndustryDataUrl}}/sourceSystems/{{sourceSystemId}}",
 							"host": [
-								"graph",
-								"microsoft",
-								"com"
+								"{{IndustryDataUrl}}"
 							],
 							"path": [
-								"beta",
-								"external",
-								"industryData",
 								"sourceSystems",
 								"{{sourceSystemId}}"
 							]
@@ -571,7 +556,8 @@
 									"\r",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -633,17 +619,11 @@
 							]
 						},
 						"url": {
-							"raw": "https://graph.microsoft.com/beta/external/industryData/dataConnectors",
-							"protocol": "https",
+							"raw": "{{IndustryDataUrl}}/dataConnectors",
 							"host": [
-								"graph",
-								"microsoft",
-								"com"
+								"{{IndustryDataUrl}}"
 							],
 							"path": [
-								"beta",
-								"external",
-								"industryData",
 								"dataConnectors"
 							]
 						}
@@ -659,7 +639,8 @@
 								"exec": [
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -721,17 +702,11 @@
 							]
 						},
 						"url": {
-							"raw": "https://graph.microsoft.com/beta/external/industryData/dataConnectors/{{industryDataConnectorId}}",
-							"protocol": "https",
+							"raw": "{{IndustryDataUrl}}/dataConnectors/{{industryDataConnectorId}}",
 							"host": [
-								"graph",
-								"microsoft",
-								"com"
+								"{{IndustryDataUrl}}"
 							],
 							"path": [
-								"beta",
-								"external",
-								"industryData",
 								"dataConnectors",
 								"{{industryDataConnectorId}}"
 							]
@@ -782,7 +757,8 @@
 									"\r",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -844,17 +820,11 @@
 							]
 						},
 						"url": {
-							"raw": "https://graph.microsoft.com/beta/external/industryData/inboundFlows",
-							"protocol": "https",
+							"raw": "{{IndustryDataUrl}}/inboundFlows",
 							"host": [
-								"graph",
-								"microsoft",
-								"com"
+								"{{IndustryDataUrl}}"
 							],
 							"path": [
-								"beta",
-								"external",
-								"industryData",
 								"inboundFlows"
 							]
 						}
@@ -870,7 +840,8 @@
 								"exec": [
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -932,17 +903,11 @@
 							]
 						},
 						"url": {
-							"raw": "https://graph.microsoft.com/beta/external/industryData/inboundFlows/{{inboundFlowId}}",
-							"protocol": "https",
+							"raw": "{{IndustryDataUrl}}/inboundFlows/{{inboundFlowId}}",
 							"host": [
-								"graph",
-								"microsoft",
-								"com"
+								"{{IndustryDataUrl}}"
 							],
 							"path": [
-								"beta",
-								"external",
-								"industryData",
 								"inboundFlows",
 								"{{inboundFlowId}}"
 							]
@@ -992,7 +957,8 @@
 									"\r",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1054,17 +1020,11 @@
 							]
 						},
 						"url": {
-							"raw": "https://graph.microsoft.com/beta/external/industryData/runs",
-							"protocol": "https",
+							"raw": "{{IndustryDataUrl}}/runs",
 							"host": [
-								"graph",
-								"microsoft",
-								"com"
+								"{{IndustryDataUrl}}"
 							],
 							"path": [
-								"beta",
-								"external",
-								"industryData",
 								"runs"
 							]
 						}
@@ -1080,7 +1040,8 @@
 								"exec": [
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1142,17 +1103,11 @@
 							]
 						},
 						"url": {
-							"raw": "https://graph.microsoft.com/beta/external/industryData/runs/{{runId}}",
-							"protocol": "https",
+							"raw": "{{IndustryDataUrl}}/runs/{{runId}}",
 							"host": [
-								"graph",
-								"microsoft",
-								"com"
+								"{{IndustryDataUrl}}"
 							],
 							"path": [
-								"beta",
-								"external",
-								"industryData",
 								"runs",
 								"{{runId}}"
 							]
@@ -1169,7 +1124,8 @@
 								"exec": [
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1231,17 +1187,11 @@
 							]
 						},
 						"url": {
-							"raw": "https://graph.microsoft.com/beta/external/industryData/runs/{{runId}}/getStatistics",
-							"protocol": "https",
+							"raw": "{{IndustryDataUrl}}/runs/{{runId}}/getStatistics",
 							"host": [
-								"graph",
-								"microsoft",
-								"com"
+								"{{IndustryDataUrl}}"
 							],
 							"path": [
-								"beta",
-								"external",
-								"industryData",
 								"runs",
 								"{{runId}}",
 								"getStatistics"
@@ -1292,7 +1242,8 @@
 									"\r",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1354,17 +1305,11 @@
 							]
 						},
 						"url": {
-							"raw": "https://graph.microsoft.com/beta/external/industryData/referenceDefinitions",
-							"protocol": "https",
+							"raw": "{{IndustryDataUrl}}/referenceDefinitions",
 							"host": [
-								"graph",
-								"microsoft",
-								"com"
+								"{{IndustryDataUrl}}"
 							],
 							"path": [
-								"beta",
-								"external",
-								"industryData",
 								"referenceDefinitions"
 							]
 						}
@@ -1413,7 +1358,8 @@
 									"\r",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1475,17 +1421,11 @@
 							]
 						},
 						"url": {
-							"raw": "https://graph.microsoft.com/beta/external/industryData/roleGroups",
-							"protocol": "https",
+							"raw": "{{IndustryDataUrl}}/roleGroups",
 							"host": [
-								"graph",
-								"microsoft",
-								"com"
+								"{{IndustryDataUrl}}"
 							],
 							"path": [
-								"beta",
-								"external",
-								"industryData",
 								"roleGroups"
 							]
 						}
@@ -1494,6 +1434,298 @@
 				}
 			],
 			"description": "These request are for viewing the inbound data configuration, monitoring runs,"
+		},
+		{
+			"name": "SDS - Create Inbound / CSV",
+			"item": [
+				{
+					"name": "Create sourceSystem",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, () => {\r",
+									"    pm.expect(responseCode.code).to.equal(201, \"Expected HTTP 201 but recieved \" + responseCode.code);\r",
+									"    pm.expect(responseBody).to.have.string('\"id\":', '\"id\" property missing from response');\r",
+									"\r",
+									"    pm.environment.set(\"createdSourceSystemId\", JSON.parse(responseBody).id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{appBearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"displayName\": \"Postman source system\",\r\n  \"userMatchingSettings\": [\r\n    {\r\n      \"matchTarget\": {\r\n        \"code\": \"userPrincipalName\"\r\n      },\r\n      \"priorityOrder\": 0,\r\n      \"roleGroup@odata.bind\": \"{{IndustryDataUrl}}/roleGroups/staff\",\r\n      \"sourceIdentifier\": {\r\n        \"code\": \"username\"\r\n      }\r\n    },\r\n    {\r\n      \"matchTarget\": {\r\n        \"code\": \"userPrincipalName\"\r\n      },\r\n      \"priorityOrder\": 1,\r\n      \"roleGroup@odata.bind\": \"{{IndustryDataUrl}}/roleGroups('students')\",\r\n      \"sourceIdentifier\": {\r\n        \"code\": \"username\"\r\n      }\r\n    }\r\n  ]\r\n}"
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/sourceSystems",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"sourceSystems"
+							]
+						},
+						"description": "Creates a source system for an inbound flow. Note: User mapping can be changed according to the inbound user data and is optional. An example is included in the body."
+					},
+					"response": []
+				},
+				{
+					"name": "Create dataConnector",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, () => {\r",
+									"    pm.expect(responseCode.code).to.equal(201, \"Expected HTTP 201 but recieved \" + responseCode.code);\r",
+									"    pm.expect(responseBody).to.have.string('\"id\":', '\"id\" property missing from response');\r",
+									"\r",
+									"    pm.environment.set(\"createdDataConnectorId\", JSON.parse(responseBody).id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{appBearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"@odata.type\": \"#microsoft.graph.industryData.azureDataLakeConnector\",\r\n    \"displayName\": \"Connector for Postman\",\r\n    \"sourceSystem@odata.bind\": \"{{IndustryDataUrl}}/sourceSystems('{{createdSourceSystemId}}')\"\r\n}"
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/dataConnectors",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"dataConnectors"
+							]
+						},
+						"description": "Creates a data connector which allows data transfer for the source system."
+					},
+					"response": []
+				},
+				{
+					"name": "Create yearTimePeriodDefinition",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, () => {\r",
+									"    pm.expect(responseCode.code).to.equal(201, \"Expected HTTP 201 but recieved \" + responseCode.code);\r",
+									"    pm.expect(responseBody).to.have.string('\"id\":', '\"id\" property missing from response');\r",
+									"\r",
+									"    pm.environment.set(\"createdYearId\", JSON.parse(responseBody).id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Generates a new displayName for a new year using the pattern as below;\r",
+									"// [Current date and time] + [Random number between 1-9999]\r",
+									"// Example: 2023-09-12T15:52:35.620Z3506\r",
+									"var currentDateTime = new Date();\r",
+									"var displayName = currentDateTime.toISOString() + Math.floor(Math.random() * 9999);\r",
+									"pm.collectionVariables.set(\"yearDisplayName\", displayName);\r",
+									"\r",
+									"// Sets current year and start date to today\r",
+									"var currentYear = currentDateTime.getFullYear();\r",
+									"pm.collectionVariables.set(\"currentYear\", currentYear);\r",
+									"pm.collectionVariables.set(\"yearStartDate\", currentDateTime.toISOString().split('T')[0]);\r",
+									"\r",
+									"\r",
+									"// Generates an end date that will be 365 days ahead\r",
+									"var endDate = new Date();\r",
+									"var days = 365;\r",
+									"yearEndDate = new Date(endDate.getTime() + days*24*60*60*1000);\r",
+									"pm.collectionVariables.set(\"yearEndDate\", yearEndDate.toISOString().split('T')[0]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{appBearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"displayName\": \"Year {{yearDisplayName}}\",\r\n  \"endDate\": \"{{yearEndDate}}\",\r\n  \"startDate\": \"{{yearStartDate}}\",\r\n  \"year\": {\r\n    \"code\": \"{{currentYear}}\"\r\n  }\r\n}"
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/years",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"years"
+							]
+						},
+						"description": "Creates a time period associated with the inbound flow starting at the current date and ending in 1 year."
+					},
+					"response": []
+				},
+				{
+					"name": "Create inboundFlow",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var valueArray = undefined;\r",
+									"var value0 = undefined;\r",
+									"var json = JSON.parse(responseBody);\r",
+									"\r",
+									"// value must be an array\r",
+									"if (Array.isArray(json.value)) {\r",
+									"\tvalueArray = json.value;\r",
+									"}\r",
+									"else {\r",
+									"\tpm.test(\"Require array of values\", function () {\r",
+									"\t\tpm.expect(valueArray).to.be.an('array');\r",
+									"\t});\r",
+									"}\r",
+									"\r",
+									"//array must have at least one value\r",
+									"// array must have values\r",
+									"\tif (valueArray != undefined) {\r",
+									"\t\tif (valueArray.length >= 0)\r",
+									"\t\t\tvalue0 = valueArray[0]\r",
+									"\r",
+									"            // assign object id to env variable\r",
+									"            if (value0 != undefined) {\r",
+									"                postman.setEnvironmentVariable(\"inboundFlowId\", value0.id);\r",
+									"                postman.setEnvironmentVariable(\"inboundDisplayName\", value0.displayName);\r",
+									"            }\r",
+									"\r",
+									"\t\tpm.test(\"Value Array is not empty\", function () {\r",
+									"\t\t\tpm.expect(valueArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"\t}\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var currentDateTime = new Date();\r",
+									"pm.collectionVariables.set(\"inboundFlowEffectiveDateTime\", currentDateTime.toISOString().split('T')[0]);\r",
+									"\r",
+									"// Generates a exipiration date that will be 365 days ahead\r",
+									"var days = 365;\r",
+									"expirationDate = new Date(currentDateTime.getTime() + days*24*60*60*1000);\r",
+									"pm.collectionVariables.set(\"inboundFlowExpirationDateTime\", expirationDate.toISOString());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{appBearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"@odata.type\": \"#microsoft.graph.industryData.inboundFileFlow\",\r\n  \"dataConnector@odata.bind\": \"{{IndustryDataUrl}}/dataConnectors/{{createdDataConnectorId}}\",\r\n  \"dataDomain\": \"educationRostering\",\r\n  \"displayName\": \"Inbound rostering flow from Postman\",\r\n  \"effectiveDateTime\": \"{{inboundFlowEffectiveDateTime}}\",\r\n  \"expirationDateTime\": \"{{inboundFlowExpirationDateTime}}\",\r\n  \"year@odata.bind\": \"{{IndustryDataUrl}}/years/{{createdYearId}}\"\r\n}"
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/inboundFlows",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"inboundFlows"
+							]
+						},
+						"description": "Creates an inbound flow for syncing data effective the current date and time and expires in 1 year."
+					},
+					"response": []
+				}
+			],
+			"description": "These requests are for manually creating a inbound flow. The requests are setup to use an app in Azure Active Directory with the proper permissions for accessing the end points. Create this app before running the requests (see permssions below).\n\n## Delegated Permissions\n\n**Create sourceSystemDefinition**  \n_IndustryData-SourceSystem.ReadWrite.All_\n\n**Create industryDataConnector**  \n_IndustryData-DataConnector.ReadWrite.All_\n\nCreate yearTimePeriodDefinition\n\n_IndustryData-TimePeriod.ReadWrite.All_\n\n**Create inboundFileFlow**\n\n_IndustryData-InboundFlow.ReadWrite.All_\n\n**Reference:** [Use the industry data API as an extract, transform, and load (ETL) engine (preview) - Microsoft Graph beta | Microsoft Learn](https://learn.microsoft.com/en-us/graph/api/resources/industrydata-overview?view=graph-rest-beta)"
 		},
 		{
 			"name": "SDS - Upload CSVs",
@@ -2656,198 +2888,198 @@
 			"description": "These requests are for manually uploading CSV files to file storage to be picked up by School Data Sync (SDS). The requests are setup to use an app in Azure Active Directory with the proper delegated permissions for accessing the end points. Create this app before running the requests (see permssions below). _Note: It is also required to create an initial sync in SDS first so that the data connector is created when not using a dummy source system and data connector._\n\n## Delegated Permissions\n\n**Create sourceSystemDefinition**  \n_IndustryData-SourceSystem.ReadWrite.All_\n\n**Create industryDataConnector**  \n_IndustryData-DataConnector.ReadWrite.All_\n\n**List industryDataConnectors/azureDataLakeConnector**  \n_IndustryData-DataConnector.Read.All, IndustryData-DataConnector.ReadWrite.All_\n\n**azureDataLakeConnector: getUploadSession**  \n_IndustryData-DataConnector.Upload, IndustryData-DataConnector.ReadWrite.All_\n\n**industryDataConnector: validate**  \n_IndustryData-DataConnector.Upload, IndustryData-DataConnector.ReadWrite.All_\n\n**Get fileValidateOperations**  \n_IndustryData.ReadBasic.All_\n\n**Delete industryDataConnector**  \n_IndustryData-DataConnector.ReadWrite.All_\n\n**Delete sourceSystemDefinition**  \n_IndustryData-SourceSystem.ReadWrite.All_\n\n**Reference:** [Use the industry data API as an extract, transform, and load (ETL) engine (preview) - Microsoft Graph beta | Microsoft Learn](https://learn.microsoft.com/en-us/graph/api/resources/industrydata-overview?view=graph-rest-beta)"
 		},
 		{
-			"name": "SDS - Create Inbound / CSV",
+			"name": "SDS - Outbound - Read",
 			"item": [
 				{
-					"name": "Create sourceSystem",
+					"name": "_ GET Token (Application)",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(pm.info.requestName, () => {\r",
-									"    pm.expect(responseCode.code).to.equal(201, \"Expected HTTP 201 but recieved \" + responseCode.code);\r",
-									"    pm.expect(responseBody).to.have.string('\"id\":', '\"id\" property missing from response');\r",
+									"try {\r",
+									"    if (pm.environment.get(\"SecretId\") === \"\")\r",
+									"    {\r",
+									"        console.log(\"You need to enter *SecretId* environment variable first.\");\r",
+									"    }\r",
+									"    if (pm.environment.get(\"SecretValue\") === \"\")\r",
+									"    {\r",
+									"        console.log(\"You need to enter *SecretValue* environment variable first.\");\r",
+									"    }\r",
+									"    if (pm.environment.get(\"TenantID\") === \"\")\r",
+									"    {\r",
+									"        console.log(\"You need to enter *TenantID* environment variable first.\");\r",
+									"    }\r",
+									"    else\r",
+									"    {\r",
+									"        var json = JSON.parse(responseBody);\r",
+									"        postman.setEnvironmentVariable(\"bearerToken\", json.access_token);\r",
+									"        postman.setEnvironmentVariable(\"appBearerToken\", json.access_token);\r",
+									"    }\r",
+									"}\r",
+									"catch (e) {\r",
+									"    console.log(e);\r",
+									"}\r",
 									"\r",
-									"    pm.environment.set(\"createdSourceSystemId\", JSON.parse(responseBody).id);\r",
-									"});"
+									""
 								],
 								"type": "text/javascript"
 							}
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{appBearerToken}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "SdkVersion",
+								"value": "postman-graph/v1.0",
 								"type": "text"
 							}
 						],
 						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"displayName\": \"Postman source system\",\r\n  \"userMatchingSettings\": [\r\n    {\r\n      \"matchTarget\": {\r\n        \"code\": \"userPrincipalName\"\r\n      },\r\n      \"priorityOrder\": 0,\r\n      \"roleGroup@odata.bind\": \"{{IndustryDataUrl}}/roleGroups/staff\",\r\n      \"sourceIdentifier\": {\r\n        \"code\": \"username\"\r\n      }\r\n    },\r\n    {\r\n      \"matchTarget\": {\r\n        \"code\": \"userPrincipalName\"\r\n      },\r\n      \"priorityOrder\": 1,\r\n      \"roleGroup@odata.bind\": \"{{IndustryDataUrl}}/roleGroups('students')\",\r\n      \"sourceIdentifier\": {\r\n        \"code\": \"username\"\r\n      }\r\n    }\r\n  ]\r\n}"
-						},
-						"url": {
-							"raw": "{{IndustryDataUrl}}/sourceSystems",
-							"host": [
-								"{{IndustryDataUrl}}"
-							],
-							"path": [
-								"sourceSystems"
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{ClientID}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{ClientSecret}}",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "https://graph.microsoft.com/.default",
+									"type": "text"
+								}
 							]
 						},
-						"description": "Creates a source system for an inbound flow. Note: User mapping can be changed according to the inbound user data and is optional. An example is included in the body."
+						"url": {
+							"raw": "https://login.microsoftonline.com/{{TenantID}}/oauth2/v2.0/token",
+							"protocol": "https",
+							"host": [
+								"login",
+								"microsoftonline",
+								"com"
+							],
+							"path": [
+								"{{TenantID}}",
+								"oauth2",
+								"v2.0",
+								"token"
+							]
+						}
 					},
 					"response": []
 				},
 				{
-					"name": "Create dataConnector",
+					"name": "_GET Token (Delegated)",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(pm.info.requestName, () => {\r",
-									"    pm.expect(responseCode.code).to.equal(201, \"Expected HTTP 201 but recieved \" + responseCode.code);\r",
-									"    pm.expect(responseBody).to.have.string('\"id\":', '\"id\" property missing from response');\r",
-									"\r",
-									"    pm.environment.set(\"createdDataConnectorId\", JSON.parse(responseBody).id);\r",
-									"});"
+									"try {\r",
+									"    if (responseBody.indexOf(\"InvalidAuthenticationToken\") !== -1) {\r",
+									"        console.log(\"You need to run *On behalf of a User | Get User Access Token* request first.\");\r",
+									"    }\r",
+									"    else {\r",
+									"        if (pm.response.status === \"Forbidden\") {\r",
+									"            console.log(\"You need to add user delegated permissions in your application to at least *User.Read* in portal.azure.com and then consent as user or Grant admin consent in portal. And re-run *On behalf of a User | Get User Access Token* request to update access token. \");\r",
+									"        }\r",
+									"        else {\r",
+									"            var json = JSON.parse(responseBody);\r",
+									"            postman.setEnvironmentVariable(\"userBearerToken\", json.access_token);\r",
+									"            postman.setEnvironmentVariable(\"bearerToken\", json.access_token);\r",
+									"        }\r",
+									"    }\r",
+									"}\r",
+									"catch (e) {\r",
+									"    console.log(e);\r",
+									"}\r",
+									""
 								],
 								"type": "text/javascript"
 							}
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{appBearerToken}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [
 							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"key": "SdkVersion",
+								"type": "text",
+								"value": "postman-graph/v1.0"
 							}
 						],
 						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"@odata.type\": \"#microsoft.graph.industryData.azureDataLakeConnector\",\r\n    \"displayName\": \"Connector for Postman\",\r\n    \"sourceSystem@odata.bind\": \"{{IndustryDataUrl}}/sourceSystems('{{createdSourceSystemId}}')\"\r\n}"
-						},
-						"url": {
-							"raw": "{{IndustryDataUrl}}/dataConnectors",
-							"host": [
-								"{{IndustryDataUrl}}"
-							],
-							"path": [
-								"dataConnectors"
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "userName",
+									"value": "{{UserName}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{UserPassword}}",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "https://graph.microsoft.com/.default",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{ClientID}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{ClientSecret}}",
+									"type": "text"
+								}
 							]
 						},
-						"description": "Creates a data connector which allows data transfer for the source system."
-					},
-					"response": []
-				},
-				{
-					"name": "Create yearTimePeriodDefinition",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(pm.info.requestName, () => {\r",
-									"    pm.expect(responseCode.code).to.equal(201, \"Expected HTTP 201 but recieved \" + responseCode.code);\r",
-									"    pm.expect(responseBody).to.have.string('\"id\":', '\"id\" property missing from response');\r",
-									"\r",
-									"    pm.environment.set(\"createdYearId\", JSON.parse(responseBody).id);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Generates a new displayName for a new year using the pattern as below;\r",
-									"// [Current date and time] + [Random number between 1-9999]\r",
-									"// Example: 2023-09-12T15:52:35.620Z3506\r",
-									"var currentDateTime = new Date();\r",
-									"var displayName = currentDateTime.toISOString() + Math.floor(Math.random() * 9999);\r",
-									"pm.collectionVariables.set(\"yearDisplayName\", displayName);\r",
-									"\r",
-									"// Sets current year and start date to today\r",
-									"var currentYear = currentDateTime.getFullYear();\r",
-									"pm.collectionVariables.set(\"currentYear\", currentYear);\r",
-									"pm.collectionVariables.set(\"yearStartDate\", currentDateTime.toISOString().split('T')[0]);\r",
-									"\r",
-									"\r",
-									"// Generates an end date that will be 365 days ahead\r",
-									"var endDate = new Date();\r",
-									"var days = 365;\r",
-									"yearEndDate = new Date(endDate.getTime() + days*24*60*60*1000);\r",
-									"pm.collectionVariables.set(\"yearEndDate\", yearEndDate.toISOString().split('T')[0]);"
-								],
-								"type": "text/javascript"
-							}
+						"url": {
+							"raw": "https://login.microsoftonline.com/{{TenantID}}/oauth2/v2.0/token",
+							"protocol": "https",
+							"host": [
+								"login",
+								"microsoftonline",
+								"com"
+							],
+							"path": [
+								"{{TenantID}}",
+								"oauth2",
+								"v2.0",
+								"token"
+							]
 						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{appBearerToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"displayName\": \"Year {{yearDisplayName}}\",\r\n  \"endDate\": \"{{yearEndDate}}\",\r\n  \"startDate\": \"{{yearStartDate}}\",\r\n  \"year\": {\r\n    \"code\": \"{{currentYear}}\"\r\n  }\r\n}"
-						},
-						"url": {
-							"raw": "{{IndustryDataUrl}}/years",
-							"host": [
-								"{{IndustryDataUrl}}"
-							],
-							"path": [
-								"years"
-							]
-						},
-						"description": "Creates a time period associated with the inbound flow starting at the current date and ending in 1 year."
 					},
 					"response": []
 				},
 				{
-					"name": "Create inboundFlow",
+					"name": "List outboundProvisioningFlowSets",
 					"event": [
 						{
 							"listen": "test",
@@ -2875,8 +3107,7 @@
 									"\r",
 									"            // assign object id to env variable\r",
 									"            if (value0 != undefined) {\r",
-									"                postman.setEnvironmentVariable(\"inboundFlowId\", value0.id);\r",
-									"                postman.setEnvironmentVariable(\"inboundDisplayName\", value0.displayName);\r",
+									"                postman.setEnvironmentVariable(\"sourceSystemId\", value0.id);\r",
 									"            }\r",
 									"\r",
 									"\t\tpm.test(\"Value Array is not empty\", function () {\r",
@@ -2889,22 +3120,534 @@
 									"\r",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
 						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "userName",
+									"value": "{{UserName}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "{{UserPassword}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "scope",
+									"value": "https://graph.microsoft.com/.default",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_id",
+									"value": "{{ClientID}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_secret",
+									"value": "{{ClientSecret}}",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/outboundProvisioningFlowSets",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"outboundProvisioningFlowSets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List outboundProvisioningFlowSets with Flows",
+					"event": [
 						{
-							"listen": "prerequest",
+							"listen": "test",
 							"script": {
 								"exec": [
-									"var currentDateTime = new Date();\r",
-									"pm.collectionVariables.set(\"inboundFlowEffectiveDateTime\", currentDateTime.toISOString().split('T')[0]);\r",
+									"var valueArray = undefined;\r",
+									"var value0 = undefined;\r",
+									"var json = JSON.parse(responseBody);\r",
 									"\r",
-									"// Generates a exipiration date that will be 365 days ahead\r",
-									"var days = 365;\r",
-									"expirationDate = new Date(currentDateTime.getTime() + days*24*60*60*1000);\r",
-									"pm.collectionVariables.set(\"inboundFlowExpirationDateTime\", expirationDate.toISOString());"
+									"// value must be an array\r",
+									"if (Array.isArray(json.value)) {\r",
+									"\tvalueArray = json.value;\r",
+									"}\r",
+									"else {\r",
+									"\tpm.test(\"Require array of values\", function () {\r",
+									"\t\tpm.expect(valueArray).to.be.an('array');\r",
+									"\t});\r",
+									"}\r",
+									"\r",
+									"//array must have at least one value\r",
+									"// array must have values\r",
+									"\tif (valueArray != undefined) {\r",
+									"\t\tif (valueArray.length >= 0)\r",
+									"\t\t\tvalue0 = valueArray[0]\r",
+									"\r",
+									"            // assign object id to env variable\r",
+									"            if (value0 != undefined) {\r",
+									"                postman.setEnvironmentVariable(\"outboundProvisioningFlowSetId\", value0.id);\r",
+									"            }\r",
+									"\r",
+									"\t\tpm.test(\"Value Array is not empty\", function () {\r",
+									"\t\t\tpm.expect(valueArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"\t}\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "userName",
+									"value": "{{UserName}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "{{UserPassword}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "scope",
+									"value": "https://graph.microsoft.com/.default",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_id",
+									"value": "{{ClientID}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_secret",
+									"value": "{{ClientSecret}}",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/outboundProvisioningFlowSets?expand=provisioningFlows",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"outboundProvisioningFlowSets"
+							],
+							"query": [
+								{
+									"key": "expand",
+									"value": "provisioningFlows"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List provisioningFlows",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var valueArray = undefined;\r",
+									"var value0 = undefined;\r",
+									"var json = JSON.parse(responseBody);\r",
+									"\r",
+									"// value must be an array\r",
+									"if (Array.isArray(json.value)) {\r",
+									"\tvalueArray = json.value;\r",
+									"}\r",
+									"else {\r",
+									"\tpm.test(\"Require array of values\", function () {\r",
+									"\t\tpm.expect(valueArray).to.be.an('array');\r",
+									"\t});\r",
+									"}\r",
+									"\r",
+									"//array must have at least one value\r",
+									"// array must have values\r",
+									"\tif (valueArray != undefined) {\r",
+									"\t\tif (valueArray.length >= 0)\r",
+									"\t\t\tvalue0 = valueArray[0]\r",
+									"\r",
+									"            // assign object id to env variable\r",
+									"            if (value0 != undefined) {\r",
+									"                postman.setEnvironmentVariable(\"sourceSystemId\", value0.id);\r",
+									"            }\r",
+									"\r",
+									"\t\tpm.test(\"Value Array is not empty\", function () {\r",
+									"\t\t\tpm.expect(valueArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"\t}\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "userName",
+									"value": "{{UserName}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "{{UserPassword}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "scope",
+									"value": "https://graph.microsoft.com/.default",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_id",
+									"value": "{{ClientID}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_secret",
+									"value": "{{ClientSecret}}",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/OutboundProvisioningFlowSets/{{outboundProvisioningFlowSetId}}/provisioningFlows",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"OutboundProvisioningFlowSets",
+								"{{outboundProvisioningFlowSetId}}",
+								"provisioningFlows"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SDS - Outbound - Write",
+			"item": [
+				{
+					"name": "_ GET Token (Application)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"try {\r",
+									"    if (pm.environment.get(\"SecretId\") === \"\")\r",
+									"    {\r",
+									"        console.log(\"You need to enter *SecretId* environment variable first.\");\r",
+									"    }\r",
+									"    if (pm.environment.get(\"SecretValue\") === \"\")\r",
+									"    {\r",
+									"        console.log(\"You need to enter *SecretValue* environment variable first.\");\r",
+									"    }\r",
+									"    if (pm.environment.get(\"TenantID\") === \"\")\r",
+									"    {\r",
+									"        console.log(\"You need to enter *TenantID* environment variable first.\");\r",
+									"    }\r",
+									"    else\r",
+									"    {\r",
+									"        var json = JSON.parse(responseBody);\r",
+									"        postman.setEnvironmentVariable(\"bearerToken\", json.access_token);\r",
+									"        postman.setEnvironmentVariable(\"appBearerToken\", json.access_token);\r",
+									"    }\r",
+									"}\r",
+									"catch (e) {\r",
+									"    console.log(e);\r",
+									"}\r",
+									"\r",
+									""
 								],
 								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "SdkVersion",
+								"value": "postman-graph/v1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{ClientID}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{ClientSecret}}",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "https://graph.microsoft.com/.default",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://login.microsoftonline.com/{{TenantID}}/oauth2/v2.0/token",
+							"protocol": "https",
+							"host": [
+								"login",
+								"microsoftonline",
+								"com"
+							],
+							"path": [
+								"{{TenantID}}",
+								"oauth2",
+								"v2.0",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "_GET Token (Delegated)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"try {\r",
+									"    if (responseBody.indexOf(\"InvalidAuthenticationToken\") !== -1) {\r",
+									"        console.log(\"You need to run *On behalf of a User | Get User Access Token* request first.\");\r",
+									"    }\r",
+									"    else {\r",
+									"        if (pm.response.status === \"Forbidden\") {\r",
+									"            console.log(\"You need to add user delegated permissions in your application to at least *User.Read* in portal.azure.com and then consent as user or Grant admin consent in portal. And re-run *On behalf of a User | Get User Access Token* request to update access token. \");\r",
+									"        }\r",
+									"        else {\r",
+									"            var json = JSON.parse(responseBody);\r",
+									"            postman.setEnvironmentVariable(\"userBearerToken\", json.access_token);\r",
+									"            postman.setEnvironmentVariable(\"bearerToken\", json.access_token);\r",
+									"        }\r",
+									"    }\r",
+									"}\r",
+									"catch (e) {\r",
+									"    console.log(e);\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "SdkVersion",
+								"type": "text",
+								"value": "postman-graph/v1.0"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "userName",
+									"value": "{{UserName}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{UserPassword}}",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "https://graph.microsoft.com/.default",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{ClientID}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{ClientSecret}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://login.microsoftonline.com/{{TenantID}}/oauth2/v2.0/token",
+							"protocol": "https",
+							"host": [
+								"login",
+								"microsoftonline",
+								"com"
+							],
+							"path": [
+								"{{TenantID}}",
+								"oauth2",
+								"v2.0",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create outboundProvisioningFlowSets",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.test(pm.info.requestName, () => {\r",
+									"    pm.expect(responseCode.code).to.equal(201, \"Expected HTTP 201 but recieved (outbondProvisioingFlowSets)\" + responseCode.code)\r",
+									"} \r",
+									");\r",
+									"\r",
+									"if (responseCode.code === 201) {\r",
+									"    pm.environment.set(\"outboundProvisioningFlowSetId\", json.id);  \r",
+									"} \r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -2914,7 +3657,233 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{appBearerToken}}",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"@odata.type\": \"#microsoft.graph.industryData.outboundProvisioningFlowSet\",\r\n    \"displayName\": \"Outbound Provisioning Flow - Postman Test\",\r\n    \"filter\": {\r\n        \"@odata.type\": \"#microsoft.graph.industryData.basicFilter\",\r\n        \"attribute\": \"orgExternalId\",\r\n        \"in\": [ \"** Your org IDs here \"\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/outboundProvisioningFlowSets",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"outboundProvisioningFlowSets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create userProvisioningFlow",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = JSON.parse(responseBody);\r",
+									"pm.test(pm.info.requestName, () => {\r",
+									"    pm.expect(responseCode.code).to.equal(201, \"Expected HTTP 201 but recieved (userProvisioingFlow)\" + responseCode.code);\r",
+									"});\r",
+									"\r",
+									"if (responseCode.code === 201) {\r",
+									"    pm.environment.set(\"outboundProvisioningFlowId\", json.id);  \r",
+									"} "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"@odata.type\": \"#microsoft.graph.industryData.userProvisioningFlow\",\r\n\t\"createUnmatchedUsers\": true,\r\n\t\"managementOptions\": {\r\n\t\t\"additionalAttributes\": [\r\n\t\t\t\"userGradeLevel\"\r\n\t\t],\r\n\t\t\"additionalOptions\": {\r\n\t\t\t\"markAllStudentsAsMinors\": true,\r\n\t\t\t\"allowStudentContactAssociation\": false\r\n\t\t}\r\n\t},\r\n\t\"creationOptions\": {\r\n\t\t\"configurations\": [\r\n\t\t\t{\r\n\t\t\t\t\"roleGroup@odata.bind\": \"https://graph.microsoft.com/beta/external/industryData/roleGroups/staff\",\r\n\t\t\t\t\"defaultPasswordSettings\": {\r\n\t\t\t\t\t\"@odata.type\": \"#microsoft.graph.industryData.simplePasswordSettings\",\r\n\t\t\t\t\t\"password\": \"** Default Teacher Pwd here\"\r\n\t\t\t\t},\r\n\t\t\t\t\"licenseSkus\": [\r\n\t\t\t\t\t\"** Your Guid Here\"\r\n\t\t\t\t]\r\n\t\t\t},\r\n\t\t\t{\r\n\t\t\t\t\"roleGroup@odata.bind\": \"https://graph.microsoft.com/beta/external/industryData/roleGroups/students\",\r\n\t\t\t\t\"defaultPasswordSettings\": {\r\n\t\t\t\t\t\"@odata.type\": \"#microsoft.graph.industryData.simplePasswordSettings\",\r\n\t\t\t\t\t\"password\": \"** Default Student Pwd here\"\r\n\t\t\t\t},\r\n\t\t\t\t\"licenseSkus\": [\r\n\t\t\t\t\t\"** Your Guid Here\"\r\n\t\t\t\t]\r\n\t\t\t}\r\n\t\t]\r\n\t}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/outboundProvisioningFlowSets/{{outboundProvisioningFlowSetId}}/provisioningFlows",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"outboundProvisioningFlowSets",
+								"{{outboundProvisioningFlowSetId}}",
+								"provisioningFlows"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create classGroupProvisioningFlow",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = JSON.parse(responseBody);\r",
+									"pm.test(pm.info.requestName, () => {\r",
+									"    pm.expect(responseCode.code).to.equal(201, \"Expected HTTP 201 but recieved (classGroupProvisioingFlow)\" + responseCode.code);\r",
+									"});\r",
+									"\r",
+									"if (responseCode.code === 201) {\r",
+									"    pm.environment.set(\"outboundProvisioningFlowId\", json.id);  \r",
+									"} "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"@odata.type\": \"#microsoft.graph.industryData.classGroupProvisioningFlow\",\r\n    \"configuration\": {\r\n        \"additionalAttributes\": [\r\n            \"courseTitle\",\r\n            \"courseCode\",\r\n            \"courseSubject\",\r\n            \"courseGradeLevel\",\r\n            \"courseExternalId\",\r\n            \"academicSessionTitle\",\r\n            \"academicSessionExternalId\"\r\n        ],\r\n        \"additionalOptions\": {\r\n            \"createTeam\": true,\r\n            \"writeDisplayNameOnCreateOnly\": true\r\n        },\r\n        \"enrollmentMappings\": {\r\n            \"ownerEnrollmentMappings\": [\r\n                { \"code\": \"teacher\" },\r\n                { \"code\": \"proctor\" },\r\n                { \"code\": \"teacherAssistant\" },\r\n                { \"code\": \"paraprofessional\" },\r\n                { \"code\": \"physicalTherapist\" },\r\n                { \"code\": \"speechTherapist\" },\r\n                { \"code\": \"visionTherapist\" },\r\n                { \"code\": \"occupationalTherapist\" },\r\n                { \"code\": \"staff\" }\r\n            ],\r\n            \"memberEnrollmentMappings\": [ \r\n                {                 \"code\": \"student\" },\r\n                { \"code\": \"substitute\" },\r\n                { \"code\": \"aide\" },\r\n                { \"code\": \"proctor\" },\r\n                { \"code\": \"teacherAssistant\" },\r\n                { \"code\": \"paraprofessional\" },\r\n                { \"code\": \"physicalTherapist\" },\r\n                { \"code\": \"speechTherapist\" },\r\n                { \"code\": \"visionTherapist\" },\r\n                { \"code\": \"occupationalTherapist\" },\r\n                { \"code\": \"staff\" }\r\n            ]\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/outboundProvisioningFlowSets/{{outboundProvisioningFlowSetId}}/provisioningFlows",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"outboundProvisioningFlowSets",
+								"{{outboundProvisioningFlowSetId}}",
+								"provisioningFlows"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create securityGroupProvisioningFlow",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = JSON.parse(responseBody);\r",
+									"pm.test(pm.info.requestName, () => {\r",
+									"    pm.expect(responseCode.code).to.equal(201, \"Expected HTTP 201 but recieved (securityGroupProvisioingFlow)\" + responseCode.code);\r",
+									"});\r",
+									"\r",
+									"if (responseCode.code === 201) {\r",
+									"    pm.environment.set(\"outboundProvisioningFlowId\", json.id);  \r",
+									"} "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"@odata.type\": \"#microsoft.graph.industryData.securityGroupProvisioningFlow\",\r\n    \"creationOptions\": { \r\n        \"createBasedOnRoleGroup\": true, \r\n        \"createBasedOnOrgPlusRoleGroup\": false \r\n    }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/outboundProvisioningFlowSets/{{outboundProvisioningFlowSetId}}/provisioningFlows",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"outboundProvisioningFlowSets",
+								"{{outboundProvisioningFlowSetId}}",
+								"provisioningFlows"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create administrativeUnitProvisioningFlow",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = JSON.parse(responseBody);\r",
+									"pm.test(pm.info.requestName, () => {\r",
+									"    pm.expect(responseCode.code).to.equal(201, \"Expected HTTP 201 but recieved (administrativeUnitProvisioingFlow)\" + responseCode.code);\r",
+									"});\r",
+									"\r",
+									"if (responseCode.code === 201) {\r",
+									"    pm.environment.set(\"outboundProvisioningFlowId\", json.id);  \r",
+									"} "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
 									"type": "string"
 								}
 							]
@@ -2922,30 +3891,176 @@
 						"method": "POST",
 						"header": [
 							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"key": "x-test-endpoint",
+								"value": "true",
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"@odata.type\": \"#microsoft.graph.industryData.inboundFileFlow\",\r\n  \"dataConnector@odata.bind\": \"{{IndustryDataUrl}}/dataConnectors/{{createdDataConnectorId}}\",\r\n  \"dataDomain\": \"educationRostering\",\r\n  \"displayName\": \"Inbound rostering flow from Postman\",\r\n  \"effectiveDateTime\": \"{{inboundFlowEffectiveDateTime}}\",\r\n  \"expirationDateTime\": \"{{inboundFlowExpirationDateTime}}\",\r\n  \"year@odata.bind\": \"{{IndustryDataUrl}}/years/{{createdYearId}}\"\r\n}"
+							"raw": "{\r\n    \"@odata.type\": \"#microsoft.graph.industryData.administrativeUnitProvisioningFlow\",\r\n    \"creationOptions\": { \r\n        \"createBasedOnOrg\": true, \r\n        \"createBasedOnOrgPlusRoleGroup\": false \r\n    }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
-							"raw": "{{IndustryDataUrl}}/inboundFlows",
+							"raw": "{{IndustryDataUrl}}/outboundProvisioningFlowSets/{{outboundProvisioningFlowSetId}}/provisioningFlows",
 							"host": [
 								"{{IndustryDataUrl}}"
 							],
 							"path": [
-								"inboundFlows"
+								"outboundProvisioningFlowSets",
+								"{{outboundProvisioningFlowSetId}}",
+								"provisioningFlows"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update provisioningFlow (admin unit)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, () => {\r",
+									"    pm.expect(responseCode.code).to.equal(204, \"Expected HTTP 204 but recieved (administrativeUnitProvisioingFlow)\" + responseCode.code);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
 							]
 						},
-						"description": "Creates an inbound flow for syncing data effective the current date and time and expires in 1 year."
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"@odata.type\": \"#microsoft.graph.industryData.administrativeUnitProvisioningFlow\",\r\n  \"creationOptions\":\r\n  {\r\n    \"createBasedOnOrg\": true,\r\n    \"createBasedOnOrgPlusroleGroup\": true\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/outboundProvisioningFlowSets/{{outboundProvisioningFlowSetId}}/provisioningFlows/{{outboundProvisioningFlowId}}",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"outboundProvisioningFlowSets",
+								"{{outboundProvisioningFlowSetId}}",
+								"provisioningFlows",
+								"{{outboundProvisioningFlowId}}"
+							]
+						}
 					},
 					"response": []
 				}
+			]
+		},
+		{
+			"name": "DELETE provisioningFlow (remove --s)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
 			],
-			"description": "These requests are for manually creating a inbound flow. The requests are setup to use an app in Azure Active Directory with the proper permissions for accessing the end points. Create this app before running the requests (see permssions below).\n\n## Delegated Permissions\n\n**Create sourceSystemDefinition**  \n_IndustryData-SourceSystem.ReadWrite.All_\n\n**Create industryDataConnector**  \n_IndustryData-DataConnector.ReadWrite.All_\n\nCreate yearTimePeriodDefinition\n\n_IndustryData-TimePeriod.ReadWrite.All_\n\n**Create inboundFileFlow**\n\n_IndustryData-InboundFlow.ReadWrite.All_\n\n**Reference:** [Use the industry data API as an extract, transform, and load (ETL) engine (preview) - Microsoft Graph beta | Microsoft Learn](https://learn.microsoft.com/en-us/graph/api/resources/industrydata-overview?view=graph-rest-beta)"
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearerToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "--- {{IndustryDataUrl}}/outboundProvisioningFlowSets/{{outboundProvisioningFlowSetId}}/provisioningFlows/{{outboundProvisioningFlowId}}",
+					"host": [
+						"--- {{IndustryDataUrl}}"
+					],
+					"path": [
+						"outboundProvisioningFlowSets",
+						"{{outboundProvisioningFlowSetId}}",
+						"provisioningFlows",
+						"{{outboundProvisioningFlowId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE outboundProvisioningFlowSet (remove --s) Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearerToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "--- {{IndustryDataUrl}}/outboundProvisioningFlowSets/{{outboundProvisioningFlowSetId}}",
+					"host": [
+						"--- {{IndustryDataUrl}}"
+					],
+					"path": [
+						"outboundProvisioningFlowSets",
+						"{{outboundProvisioningFlowSetId}}"
+					]
+				}
+			},
+			"response": []
 		},
 		{
 			"name": "List yearTimePeriod",
@@ -3097,9 +4212,9 @@
 					"    var versionSegment  = !postman.getEnvironmentVariable('VersionSegment') ? pm.variables.get('VersionSegment') : postman.getEnvironmentVariable('VersionSegment')",
 					"    pm.variables.set('VersionSegment', versionSegment)",
 					"",
-					"    var industryDataUrl = hostSegment + '/' + versionSegment + '/external/industryData';",
+					"    //var industryDataUrl = hostSegment + '/' + versionSegment + '/external/industryData';",
 					"    pm.variables.set('ControlPlaneApiVersion', '');",
-					"    pm.variables.set('IndustryDataUrl', industryDataUrl)",
+					"    //pm.variables.set('IndustryDataUrl', industryDataUrl)",
 					"    pm.variables.set('SmsUrl', industryDataUrl)",
 					"}",
 					"else",
@@ -3179,11 +4294,12 @@
 		{
 			"key": "SmsUrl",
 			"value": "https://edu-aristoservices-ppe.trafficmanager.net:8698",
-			"type": "string"
+			"type": "string",
+			"disabled": true
 		},
 		{
 			"key": "IndustryDataUrl",
-			"value": "",
+			"value": "https://graph.microsoft.com/beta/external/industryData",
 			"type": "string"
 		},
 		{
@@ -3245,6 +4361,18 @@
 			"key": "inboundFlowExpirationDateTime",
 			"value": "",
 			"type": "string"
+		},
+		{
+			"key": "outboundProvisioningFlowSetId",
+			"value": "",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "outboundProvisioningFlowId",
+			"value": "",
+			"type": "string",
+			"disabled": true
 		}
 	]
 }
