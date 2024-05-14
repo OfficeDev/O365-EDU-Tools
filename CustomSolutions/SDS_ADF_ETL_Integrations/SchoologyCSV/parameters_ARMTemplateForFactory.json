@@ -27,6 +27,10 @@
             "type": "string",
             "defaultValue": ""
         },
+        "dataFactory_properties_globalParameters_subscriptionId_value": {
+            "type": "string",
+            "defaultValue": "N/A"
+        },
         "dataFactory_properties_globalParameters_entraAppClientId_value": {
             "type": "string",
             "defaultValue": ""
@@ -152,6 +156,10 @@
                     "tenantid": {
                         "type": "string",
                         "value": "[parameters('dataFactory_properties_globalParameters_tenantid_value')]"
+                    },
+                    "subscriptionId": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_subscriptionId_value')]"
                     },
                     "entraAppClientId": {
                         "type": "string",
