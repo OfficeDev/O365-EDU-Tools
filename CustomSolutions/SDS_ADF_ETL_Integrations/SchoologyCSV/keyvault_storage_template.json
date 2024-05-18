@@ -33,7 +33,7 @@
                 "enableRbacAuthorization": true,
                 "vaultUri": "[concat('https://', parameters('vaults_kv_schoology_sds_name'), '.vault.azure.net/')]",
                 "provisioningState": "Succeeded",
-                "publicNetworkAccess": "Enabled"
+                "publicNetworkAccess": "Disabled"
             }
         },
         {
@@ -49,7 +49,7 @@
             "properties": {
                 "dnsEndpointType": "Standard",
                 "defaultToOAuthAuthentication": false,
-                "publicNetworkAccess": "Enabled",
+                "publicNetworkAccess": "Disabled",
                 "allowCrossTenantReplication": false,
                 "isSftpEnabled": false,
                 "minimumTlsVersion": "TLS1_2",
