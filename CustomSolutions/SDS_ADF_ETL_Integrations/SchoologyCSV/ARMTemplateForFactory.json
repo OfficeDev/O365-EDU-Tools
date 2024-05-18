@@ -13,7 +13,7 @@
         },
         "kvSchoologySDSVnext_properties_typeProperties_baseUrl": {
             "type": "string",
-            "defaultValue": "https://keyvault-schoology-sds.vault.azure.net/"
+            "defaultValue": "https://kv-schoology-sds.vault.azure.net/"
         },
         "SchoologyWebUrl_properties_typeProperties_url": {
             "type": "string",
