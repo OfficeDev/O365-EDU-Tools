@@ -26,6 +26,34 @@
         "stsdsvnext_properties_typeProperties_url": {
             "type": "string",
             "defaultValue": "https://stschoologycsvsds.dfs.core.windows.net/"
+        },
+        "kv-schoology-sds_properties_privateLinkResourceId": {
+            "type": "string",
+            "defaultValue": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.KeyVault/vaults/kv-schoology-sds')]"
+        },
+        "kv-schoology-sds_properties_groupId": {
+            "type": "string",
+            "defaultValue": "vault"
+        },
+        "kv-schoology-sds_properties_fqdns": {
+            "type": "array",
+            "defaultValue": [
+                "kv-schoology-sds.vault.azure.net"
+            ]
+        },
+        "stschoologycsvsds_properties_privateLinkResourceId": {
+            "type": "string",
+            "defaultValue": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Storage/storageAccounts/stschoologycsvsds')]"
+        },
+        "stschoologycsvsds_properties_groupId": {
+            "type": "string",
+            "defaultValue": "dfs"
+        },
+        "stschoologycsvsds_properties_fqdns": {
+            "type": "array",
+            "defaultValue": [
+                "stschoologycsvsds.dfs.core.windows.net"
+            ]
         }
     },
     "variables": {
@@ -72,7 +100,7 @@
                 "type": "Managed",
                 "typeProperties": {
                     "computeProperties": {
-                        "location": "East US",
+                        "location": "[resourceGroup().location]",
                         "dataFlowProperties": {
                             "computeType": "General",
                             "coreCount": 8,
@@ -9610,6 +9638,33 @@
                 "[concat(variables('factoryId'), '/datasets/SDSVnext_Classes')]",
                 "[concat(variables('factoryId'), '/linkedServices/stsdsvnext')]"
             ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/default/kv-schoology-sds')]",
+            "type": "Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "privateLinkResourceId": "[parameters('kv-schoology-sds_properties_privateLinkResourceId')]",
+                "groupId": "[parameters('kv-schoology-sds_properties_groupId')]",
+                "fqdns": "[parameters('kv-schoology-sds_properties_fqdns')]"
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/default/stschoologycsvsds')]",
+            "type": "Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "privateLinkResourceId": "[parameters('stschoologycsvsds_properties_privateLinkResourceId')]",
+                "groupId": "[parameters('stschoologycsvsds_properties_groupId')]",
+                "fqdns": "[parameters('stschoologycsvsds_properties_fqdns')]"
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+            ]
         }
+
     ]
 }
