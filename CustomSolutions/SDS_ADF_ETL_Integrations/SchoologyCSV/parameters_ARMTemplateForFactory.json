@@ -25,11 +25,11 @@
         },
         "dataFactory_properties_globalParameters_tenantid_value": {
             "type": "string",
-            "defaultValue": ""
+            "defaultValue": "[tenant().tenantId]"
         },
         "dataFactory_properties_globalParameters_subscriptionId_value": {
             "type": "string",
-            "defaultValue": "N/A"
+            "defaultValue": "[subscription().subscriptionId]"
         },
         "dataFactory_properties_globalParameters_entraAppClientId_value": {
             "type": "string",
@@ -120,7 +120,7 @@
         },
         "dataFactory_location": {
             "type": "string",
-            "defaultValue": "eastus"
+            "defaultValue": "[resourceGroup().location]"
         },
         "dataFactory_identity_type": {
             "type": "string",
