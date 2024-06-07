@@ -8,8 +8,101 @@
 	},
 	"item": [
 		{
-			"name": "SDS - Inbound - Read",
+			"name": "Auth - Pick one",
 			"item": [
+				{
+					"name": "_GET Token (Delegated)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"try {\r",
+									"    if (responseBody.indexOf(\"InvalidAuthenticationToken\") !== -1) {\r",
+									"        console.log(\"You need to run *On behalf of a User | Get User Access Token* request first.\");\r",
+									"    }\r",
+									"    else {\r",
+									"        if (pm.response.status === \"Forbidden\") {\r",
+									"            console.log(\"You need to add user delegated permissions in your application to at least *User.Read* in portal.azure.com and then consent as user or Grant admin consent in portal. And re-run *On behalf of a User | Get User Access Token* request to update access token. \");\r",
+									"        }\r",
+									"        else {\r",
+									"            var json = JSON.parse(responseBody);\r",
+									"            postman.setEnvironmentVariable(\"userBearerToken\", json.access_token);\r",
+									"            postman.setEnvironmentVariable(\"bearerToken\", json.access_token);\r",
+									"        }\r",
+									"    }\r",
+									"}\r",
+									"catch (e) {\r",
+									"    console.log(e);\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "SdkVersion",
+								"type": "text",
+								"value": "postman-graph/v1.0"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "userName",
+									"value": "{{UserName}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{UserPassword}}",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "https://graph.microsoft.com/.default",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{ClientID}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{ClientSecret}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://login.microsoftonline.com/{{TenantID}}/oauth2/v2.0/token",
+							"protocol": "https",
+							"host": [
+								"login",
+								"microsoftonline",
+								"com"
+							],
+							"path": [
+								"{{TenantID}}",
+								"oauth2",
+								"v2.0",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "_ GET Token (Application)",
 					"event": [
@@ -104,100 +197,12 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "_GET Token (Delegated)",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"try {\r",
-									"    if (responseBody.indexOf(\"InvalidAuthenticationToken\") !== -1) {\r",
-									"        console.log(\"You need to run *On behalf of a User | Get User Access Token* request first.\");\r",
-									"    }\r",
-									"    else {\r",
-									"        if (pm.response.status === \"Forbidden\") {\r",
-									"            console.log(\"You need to add user delegated permissions in your application to at least *User.Read* in portal.azure.com and then consent as user or Grant admin consent in portal. And re-run *On behalf of a User | Get User Access Token* request to update access token. \");\r",
-									"        }\r",
-									"        else {\r",
-									"            var json = JSON.parse(responseBody);\r",
-									"            postman.setEnvironmentVariable(\"userBearerToken\", json.access_token);\r",
-									"            postman.setEnvironmentVariable(\"bearerToken\", json.access_token);\r",
-									"        }\r",
-									"    }\r",
-									"}\r",
-									"catch (e) {\r",
-									"    console.log(e);\r",
-									"}\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "SdkVersion",
-								"type": "text",
-								"value": "postman-graph/v1.0"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "grant_type",
-									"value": "password",
-									"type": "text"
-								},
-								{
-									"key": "userName",
-									"value": "{{UserName}}",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "{{UserPassword}}",
-									"type": "text"
-								},
-								{
-									"key": "scope",
-									"value": "https://graph.microsoft.com/.default",
-									"type": "text"
-								},
-								{
-									"key": "client_id",
-									"value": "{{ClientID}}",
-									"type": "text"
-								},
-								{
-									"key": "client_secret",
-									"value": "{{ClientSecret}}",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "https://login.microsoftonline.com/{{TenantID}}/oauth2/v2.0/token",
-							"protocol": "https",
-							"host": [
-								"login",
-								"microsoftonline",
-								"com"
-							],
-							"path": [
-								"{{TenantID}}",
-								"oauth2",
-								"v2.0",
-								"token"
-							]
-						}
-					},
-					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "SDS - Inbound - Read",
+			"item": [
 				{
 					"name": "List yearTimePeriod",
 					"event": [
@@ -515,7 +520,7 @@
 					"response": []
 				},
 				{
-					"name": "List industryDataConnectors",
+					"name": "List dataConnectors",
 					"event": [
 						{
 							"listen": "test",
@@ -631,7 +636,7 @@
 					"response": []
 				},
 				{
-					"name": "Get industryDataConnector by Id",
+					"name": "Get dataConnector by Id",
 					"event": [
 						{
 							"listen": "test",
@@ -1199,238 +1204,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "List reference",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var valueArray = undefined;\r",
-									"var value0 = undefined;\r",
-									"var json = JSON.parse(responseBody);\r",
-									"\r",
-									"// value must be an array\r",
-									"if (Array.isArray(json.value)) {\r",
-									"\tvalueArray = json.value;\r",
-									"}\r",
-									"else {\r",
-									"\tpm.test(\"Require array of values\", function () {\r",
-									"\t\tpm.expect(valueArray).to.be.an('array');\r",
-									"\t});\r",
-									"}\r",
-									"\r",
-									"//array must have at least one value\r",
-									"// array must have values\r",
-									"\tif (valueArray != undefined) {\r",
-									"\t\tif (valueArray.length >= 0)\r",
-									"\t\t\tvalue0 = valueArray[0]\r",
-									"\r",
-									"            // assign object id to env variable\r",
-									"            if (value0 != undefined) {\r",
-									"                postman.setEnvironmentVariable(\"runId\", value0.id);\r",
-									"            }\r",
-									"\r",
-									"\t\tpm.test(\"Value Array is not empty\", function () {\r",
-									"\t\t\tpm.expect(valueArray).to.be.an('array').that.is.not.empty;\r",
-									"\t\t});\r",
-									"\t}\r",
-									"\r",
-									"\r",
-									"\r",
-									"\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{bearerToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "grant_type",
-									"value": "password",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "userName",
-									"value": "{{UserName}}",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "password",
-									"value": "{{UserPassword}}",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "scope",
-									"value": "https://graph.microsoft.com/.default",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "client_id",
-									"value": "{{ClientID}}",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "client_secret",
-									"value": "{{ClientSecret}}",
-									"type": "text",
-									"disabled": true
-								}
-							]
-						},
-						"url": {
-							"raw": "{{IndustryDataUrl}}/referenceDefinitions",
-							"host": [
-								"{{IndustryDataUrl}}"
-							],
-							"path": [
-								"referenceDefinitions"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "List roleGroups",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var valueArray = undefined;\r",
-									"var value0 = undefined;\r",
-									"var json = JSON.parse(responseBody);\r",
-									"\r",
-									"// value must be an array\r",
-									"if (Array.isArray(json.value)) {\r",
-									"\tvalueArray = json.value;\r",
-									"}\r",
-									"else {\r",
-									"\tpm.test(\"Require array of values\", function () {\r",
-									"\t\tpm.expect(valueArray).to.be.an('array');\r",
-									"\t});\r",
-									"}\r",
-									"\r",
-									"//array must have at least one value\r",
-									"// array must have values\r",
-									"\tif (valueArray != undefined) {\r",
-									"\t\tif (valueArray.length >= 0)\r",
-									"\t\t\tvalue0 = valueArray[0]\r",
-									"\r",
-									"            // assign object id to env variable\r",
-									"            if (value0 != undefined) {\r",
-									"                postman.setEnvironmentVariable(\"runId\", value0.id);\r",
-									"            }\r",
-									"\r",
-									"\t\tpm.test(\"Value Array is not empty\", function () {\r",
-									"\t\t\tpm.expect(valueArray).to.be.an('array').that.is.not.empty;\r",
-									"\t\t});\r",
-									"\t}\r",
-									"\r",
-									"\r",
-									"\r",
-									"\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{bearerToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "grant_type",
-									"value": "password",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "userName",
-									"value": "{{UserName}}",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "password",
-									"value": "{{UserPassword}}",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "scope",
-									"value": "https://graph.microsoft.com/.default",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "client_id",
-									"value": "{{ClientID}}",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "client_secret",
-									"value": "{{ClientSecret}}",
-									"type": "text",
-									"disabled": true
-								}
-							]
-						},
-						"url": {
-							"raw": "{{IndustryDataUrl}}/roleGroups",
-							"host": [
-								"{{IndustryDataUrl}}"
-							],
-							"path": [
-								"roleGroups"
-							]
-						}
-					},
-					"response": []
 				}
 			],
 			"description": "These request are for viewing the inbound data configuration, monitoring runs,"
@@ -1452,7 +1225,8 @@
 									"    pm.environment.set(\"createdSourceSystemId\", JSON.parse(responseBody).id);\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1477,7 +1251,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"displayName\": \"Postman source system\",\r\n  \"userMatchingSettings\": [\r\n    {\r\n      \"matchTarget\": {\r\n        \"code\": \"userPrincipalName\"\r\n      },\r\n      \"priorityOrder\": 0,\r\n      \"roleGroup@odata.bind\": \"{{IndustryDataUrl}}/roleGroups/staff\",\r\n      \"sourceIdentifier\": {\r\n        \"code\": \"username\"\r\n      }\r\n    },\r\n    {\r\n      \"matchTarget\": {\r\n        \"code\": \"userPrincipalName\"\r\n      },\r\n      \"priorityOrder\": 1,\r\n      \"roleGroup@odata.bind\": \"{{IndustryDataUrl}}/roleGroups('students')\",\r\n      \"sourceIdentifier\": {\r\n        \"code\": \"username\"\r\n      }\r\n    }\r\n  ]\r\n}"
+							"raw": "{\r\n  \"displayName\": \"Postman source system\",\r\n  \"userMatchingSettings\": [\r\n    {\r\n      \"matchTarget\": {\r\n        \"code\": \"userPrincipalName\"\r\n      },\r\n      \"priorityOrder\": 0,\r\n      \"roleGroup@odata.bind\": \"{{IndustryDataUrl}}/roleGroups/staff\",\r\n      \"sourceIdentifier\": {\r\n        \"code\": \"username\"\r\n      }\r\n    },\r\n    {\r\n      \"matchTarget\": {\r\n        \"code\": \"userPrincipalName\"\r\n      },\r\n      \"domainName\": \"valid.domain.edu\",\r\n      \"priorityOrder\": 1,\r\n      \"roleGroup@odata.bind\": \"{{IndustryDataUrl}}/roleGroups('students')\",\r\n      \"sourceIdentifier\": {\r\n        \"code\": \"username\"\r\n      }\r\n    }\r\n  ]\r\n}"
 						},
 						"url": {
 							"raw": "{{IndustryDataUrl}}/sourceSystems",
@@ -1506,7 +1280,8 @@
 									"    pm.environment.set(\"createdDataConnectorId\", JSON.parse(responseBody).id);\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1531,7 +1306,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"@odata.type\": \"#microsoft.graph.industryData.azureDataLakeConnector\",\r\n    \"displayName\": \"Connector for Postman\",\r\n    \"sourceSystem@odata.bind\": \"{{IndustryDataUrl}}/sourceSystems('{{createdSourceSystemId}}')\"\r\n}"
+							"raw": "{\r\n    \"@odata.type\": \"#microsoft.graph.industryData.azureDataLakeConnector\",\r\n    \"displayName\": \"Connector for Postman\",\r\n    \"sourceSystem@odata.bind\": \"{{IndustryDataUrl}}/sourceSystems('{{createdSourceSystemId}}')\",\r\n    \"fileFormat\": {\r\n        \"code\": \"schoolDataSyncV2.1\"\r\n    }\r\n}"
 						},
 						"url": {
 							"raw": "{{IndustryDataUrl}}/dataConnectors",
@@ -1710,6 +1485,302 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n  \"@odata.type\": \"#microsoft.graph.industryData.inboundFileFlow\",\r\n  \"dataConnector@odata.bind\": \"{{IndustryDataUrl}}/dataConnectors/{{createdDataConnectorId}}\",\r\n  \"dataDomain\": \"educationRostering\",\r\n  \"displayName\": \"Inbound rostering flow from Postman\",\r\n  \"effectiveDateTime\": \"{{inboundFlowEffectiveDateTime}}\",\r\n  \"expirationDateTime\": \"{{inboundFlowExpirationDateTime}}\",\r\n  \"year@odata.bind\": \"{{IndustryDataUrl}}/years/{{createdYearId}}\"\r\n}"
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/inboundFlows",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"inboundFlows"
+							]
+						},
+						"description": "Creates an inbound flow for syncing data effective the current date and time and expires in 1 year."
+					},
+					"response": []
+				}
+			],
+			"description": "These requests are for manually creating a inbound flow. The requests are setup to use an app in Azure Active Directory with the proper permissions for accessing the end points. Create this app before running the requests (see permssions below).\n\n## Delegated Permissions\n\n**Create sourceSystemDefinition**  \n_IndustryData-SourceSystem.ReadWrite.All_\n\n**Create industryDataConnector**  \n_IndustryData-DataConnector.ReadWrite.All_\n\nCreate yearTimePeriodDefinition\n\n_IndustryData-TimePeriod.ReadWrite.All_\n\n**Create inboundFileFlow**\n\n_IndustryData-InboundFlow.ReadWrite.All_\n\n**Reference:** [Use the industry data API as an extract, transform, and load (ETL) engine (preview) - Microsoft Graph beta | Microsoft Learn](https://learn.microsoft.com/en-us/graph/api/resources/industrydata-overview?view=graph-rest-beta)"
+		},
+		{
+			"name": "SDS - Create Inbound / OneRoster API",
+			"item": [
+				{
+					"name": "Create sourceSystem",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, () => {\r",
+									"    pm.expect(responseCode.code).to.equal(201, \"Expected HTTP 201 but recieved \" + responseCode.code);\r",
+									"    pm.expect(responseBody).to.have.string('\"id\":', '\"id\" property missing from response');\r",
+									"\r",
+									"    pm.environment.set(\"sourceSystemId\", JSON.parse(responseBody).id);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{appBearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"displayName\": \"Postman source system\",\r\n  \"userMatchingSettings\": [\r\n    {\r\n      \"matchTarget\": {\r\n        \"code\": \"userPrincipalName\"\r\n      },\r\n      \"priorityOrder\": 0,\r\n      \"roleGroup@odata.bind\": \"{{IndustryDataUrl}}/roleGroups/staff\",\r\n      \"sourceIdentifier\": {\r\n        \"code\": \"username\"\r\n      }\r\n    },\r\n    {\r\n      \"matchTarget\": {\r\n        \"code\": \"userPrincipalName\"\r\n      },\r\n      \"domainName\": \"valid.domain.edu\",\r\n      \"priorityOrder\": 1,\r\n      \"roleGroup@odata.bind\": \"{{IndustryDataUrl}}/roleGroups('students')\",\r\n      \"sourceIdentifier\": {\r\n        \"code\": \"username\"\r\n      }\r\n    }\r\n  ]\r\n}"
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/sourceSystems",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"sourceSystems"
+							]
+						},
+						"description": "Creates a source system for an inbound flow. Note: User mapping can be changed according to the inbound user data and is optional. An example is included in the body."
+					},
+					"response": []
+				},
+				{
+					"name": "Create dataConnector",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, () => {\r",
+									"    pm.expect(responseCode.code).to.equal(201, \"Expected HTTP 201 but recieved \" + responseCode.code);\r",
+									"    pm.expect(responseBody).to.have.string('\"id\":', '\"id\" property missing from response');\r",
+									"\r",
+									"    pm.environment.set(\"dataConnectorId\", JSON.parse(responseBody).id);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{appBearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"@odata.type\": \"#microsoft.graph.industryData.oneRosterApiDataConnector\",\r\n    \"displayName\": \"Postman test\",\r\n    \"sourceSystem@odata.bind\": \"{{IndustryDataUrl}}/sourceSystems('{{sourceSystemId}}')\",\r\n    \"baseUrl\": \"https://myprovider.sis/ims/oneroster/v1p1\",\r\n    \"apiVersion\": \"1.1\",\r\n    \"apiFormat\": \"oneRoster\",\r\n    \"credential\": {\r\n        \"@odata.type\": \"#microsoft.graph.industryData.oAuth2ClientCredential\",\r\n        \"displayName\": \"Postman test OneRoster API\",\r\n        \"clientId\": \"** myClientId\",\r\n        \"clientSecret\": \"** myClientSecret\",\r\n        \"tokenUrl\": \"https://myprovider.sis/oauth2/token\",\r\n        \"scope\": null\r\n    },\r\n    \"isDemographicsEnabled\": false,\r\n    \"isFlagsEnabled\": false,\r\n    \"isContactsEnabled\": false\r\n}"
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/dataConnectors",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"dataConnectors"
+							]
+						},
+						"description": "Creates a data connector which allows data transfer for the source system."
+					},
+					"response": []
+				},
+				{
+					"name": "Create yearTimePeriodDefinition",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, () => {\r",
+									"    pm.expect(responseCode.code).to.equal(201, \"Expected HTTP 201 but recieved \" + responseCode.code);\r",
+									"    pm.expect(responseBody).to.have.string('\"id\":', '\"id\" property missing from response');\r",
+									"\r",
+									"    pm.environment.set(\"createdYearId\", JSON.parse(responseBody).id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Generates a new displayName for a new year using the pattern as below;\r",
+									"// [Current date and time] + [Random number between 1-9999]\r",
+									"// Example: 2023-09-12T15:52:35.620Z3506\r",
+									"var currentDateTime = new Date();\r",
+									"var displayName = currentDateTime.toISOString() + Math.floor(Math.random() * 9999);\r",
+									"pm.collectionVariables.set(\"yearDisplayName\", displayName);\r",
+									"\r",
+									"// Sets current year and start date to today\r",
+									"var currentYear = currentDateTime.getFullYear();\r",
+									"pm.collectionVariables.set(\"currentYear\", currentYear);\r",
+									"pm.collectionVariables.set(\"yearStartDate\", currentDateTime.toISOString().split('T')[0]);\r",
+									"\r",
+									"\r",
+									"// Generates an end date that will be 365 days ahead\r",
+									"var endDate = new Date();\r",
+									"var days = 365;\r",
+									"yearEndDate = new Date(endDate.getTime() + days*24*60*60*1000);\r",
+									"pm.collectionVariables.set(\"yearEndDate\", yearEndDate.toISOString().split('T')[0]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{appBearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"displayName\": \"Year {{yearDisplayName}}\",\r\n  \"endDate\": \"{{yearEndDate}}\",\r\n  \"startDate\": \"{{yearStartDate}}\",\r\n  \"year\": {\r\n    \"code\": \"{{currentYear}}\"\r\n  }\r\n}"
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/years",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"years"
+							]
+						},
+						"description": "Creates a time period associated with the inbound flow starting at the current date and ending in 1 year."
+					},
+					"response": []
+				},
+				{
+					"name": "Create inboundFlow",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var valueArray = undefined;\r",
+									"var value0 = undefined;\r",
+									"var json = JSON.parse(responseBody);\r",
+									"\r",
+									"// value must be an array\r",
+									"if (Array.isArray(json.value)) {\r",
+									"\tvalueArray = json.value;\r",
+									"}\r",
+									"else {\r",
+									"\tpm.test(\"Require array of values\", function () {\r",
+									"\t\tpm.expect(valueArray).to.be.an('array');\r",
+									"\t});\r",
+									"}\r",
+									"\r",
+									"//array must have at least one value\r",
+									"// array must have values\r",
+									"\tif (valueArray != undefined) {\r",
+									"\t\tif (valueArray.length >= 0)\r",
+									"\t\t\tvalue0 = valueArray[0]\r",
+									"\r",
+									"            // assign object id to env variable\r",
+									"            if (value0 != undefined) {\r",
+									"                postman.setEnvironmentVariable(\"inboundFlowId\", value0.id);\r",
+									"                postman.setEnvironmentVariable(\"inboundDisplayName\", value0.displayName);\r",
+									"            }\r",
+									"\r",
+									"\t\tpm.test(\"Value Array is not empty\", function () {\r",
+									"\t\t\tpm.expect(valueArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"\t}\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var currentDateTime = new Date();\r",
+									"pm.collectionVariables.set(\"inboundFlowEffectiveDateTime\", currentDateTime.toISOString().split('T')[0]);\r",
+									"\r",
+									"// Generates a exipiration date that will be 365 days ahead\r",
+									"var days = 365;\r",
+									"expirationDate = new Date(currentDateTime.getTime() + days*24*60*60*1000);\r",
+									"pm.collectionVariables.set(\"inboundFlowExpirationDateTime\", expirationDate.toISOString());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{appBearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"@odata.type\": \"#microsoft.graph.industryData.inboundApiFlow\",\r\n  \"dataConnector@odata.bind\": \"{{IndustryDataUrl}}/dataConnectors/{{dataConnectorId}}\",\r\n  \"dataDomain\": \"educationRostering\",\r\n  \"displayName\": \"Inbound rostering flow from Postman\",\r\n  \"effectiveDateTime\": \"{{inboundFlowEffectiveDateTime}}\",\r\n  \"expirationDateTime\": \"{{inboundFlowExpirationDateTime}}\",\r\n  \"year@odata.bind\": \"{{IndustryDataUrl}}/years/{{createdYearId}}\"\r\n}"
 						},
 						"url": {
 							"raw": "{{IndustryDataUrl}}/inboundFlows",
@@ -3921,6 +3992,68 @@
 					"response": []
 				},
 				{
+					"name": "Reset outboundProvisioningFlowSet (remove --s)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.test(pm.info.requestName, () => {\r",
+									"    pm.expect(responseCode.code).to.equal(201, \"Expected HTTP 201 but recieved (outbondProvisioingFlowSets)\" + responseCode.code)\r",
+									"} \r",
+									");\r",
+									"\r",
+									"if (responseCode.code === 201) {\r",
+									"    pm.environment.set(\"outboundProvisioningFlowSetId\", json.id);  \r",
+									"} \r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"@odata.type\": \"#microsoft.graph.industryData.outboundProvisioningFlowSet\",\r\n    \"displayName\": \"Outbound Provisioning Flow - Postman Test\",\r\n    \"filter\": {\r\n        \"@odata.type\": \"#microsoft.graph.industryData.basicFilter\",\r\n        \"attribute\": \"orgExternalId\",\r\n        \"in\": [ \"** Your org IDs here \"\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "--{{IndustryDataUrl}}/outboundProvisioningFlowSets/{{outboundProvisioningFlowSetId}}/provisioningFlows/{{outboundProvisioningFlowId}}/reset",
+							"host": [
+								"--{{IndustryDataUrl}}"
+							],
+							"path": [
+								"outboundProvisioningFlowSets",
+								"{{outboundProvisioningFlowSetId}}",
+								"provisioningFlows",
+								"{{outboundProvisioningFlowId}}",
+								"reset"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Update provisioningFlow (admin unit)",
 					"event": [
 						{
@@ -3977,211 +4110,623 @@
 			]
 		},
 		{
-			"name": "DELETE provisioningFlow (remove --s)",
-			"event": [
+			"name": "SDS - Settings",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 204\", function () {\r",
-							"    pm.response.to.have.status(204);\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
+					"name": "List yearTimePeriod",
+					"event": [
 						{
-							"key": "token",
-							"value": "{{bearerToken}}",
-							"type": "string"
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var valueArray = undefined;\r",
+									"var value0 = undefined;\r",
+									"var json = JSON.parse(responseBody);\r",
+									"\r",
+									"// value must be an array\r",
+									"if (Array.isArray(json.value)) {\r",
+									"\tvalueArray = json.value;\r",
+									"}\r",
+									"else {\r",
+									"\tpm.test(\"Require array of values\", function () {\r",
+									"\t\tpm.expect(valueArray).to.be.an('array');\r",
+									"\t});\r",
+									"}\r",
+									"\r",
+									"//array must have at least one value\r",
+									"// array must have values\r",
+									"\tif (valueArray != undefined) {\r",
+									"\t\tif (valueArray.length >= 0)\r",
+									"\t\t\tvalue0 = valueArray[0]\r",
+									"\r",
+									"            // assign object id to env variable\r",
+									"            if (value0 != undefined) {\r",
+									"                postman.setEnvironmentVariable(\"runId\", value0.id);\r",
+									"            }\r",
+									"\r",
+									"\t\tpm.test(\"Value Array is not empty\", function () {\r",
+									"\t\t\tpm.expect(valueArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"\t}\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
 						}
-					]
-				},
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "--- {{IndustryDataUrl}}/outboundProvisioningFlowSets/{{outboundProvisioningFlowSetId}}/provisioningFlows/{{outboundProvisioningFlowId}}",
-					"host": [
-						"--- {{IndustryDataUrl}}"
 					],
-					"path": [
-						"outboundProvisioningFlowSets",
-						"{{outboundProvisioningFlowSetId}}",
-						"provisioningFlows",
-						"{{outboundProvisioningFlowId}}"
-					]
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "userName",
+									"value": "{{UserName}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "{{UserPassword}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "scope",
+									"value": "https://graph.microsoft.com/.default",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_id",
+									"value": "{{ClientID}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_secret",
+									"value": "{{ClientSecret}}",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "https://graph.microsoft.com/beta/external/industryData/years",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"microsoft",
+								"com"
+							],
+							"path": [
+								"beta",
+								"external",
+								"industryData",
+								"years"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List roleGroups",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var valueArray = undefined;\r",
+									"var value0 = undefined;\r",
+									"var json = JSON.parse(responseBody);\r",
+									"\r",
+									"// value must be an array\r",
+									"if (Array.isArray(json.value)) {\r",
+									"\tvalueArray = json.value;\r",
+									"}\r",
+									"else {\r",
+									"\tpm.test(\"Require array of values\", function () {\r",
+									"\t\tpm.expect(valueArray).to.be.an('array');\r",
+									"\t});\r",
+									"}\r",
+									"\r",
+									"//array must have at least one value\r",
+									"// array must have values\r",
+									"\tif (valueArray != undefined) {\r",
+									"\t\tif (valueArray.length >= 0)\r",
+									"\t\t\tvalue0 = valueArray[0]\r",
+									"\r",
+									"            // assign object id to env variable\r",
+									"            if (value0 != undefined) {\r",
+									"                postman.setEnvironmentVariable(\"runId\", value0.id);\r",
+									"            }\r",
+									"\r",
+									"\t\tpm.test(\"Value Array is not empty\", function () {\r",
+									"\t\t\tpm.expect(valueArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"\t}\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "userName",
+									"value": "{{UserName}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "{{UserPassword}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "scope",
+									"value": "https://graph.microsoft.com/.default",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_id",
+									"value": "{{ClientID}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_secret",
+									"value": "{{ClientSecret}}",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/roleGroups",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"roleGroups"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List referenceDefinition",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var valueArray = undefined;\r",
+									"var value0 = undefined;\r",
+									"var json = JSON.parse(responseBody);\r",
+									"\r",
+									"// value must be an array\r",
+									"if (Array.isArray(json.value)) {\r",
+									"\tvalueArray = json.value;\r",
+									"}\r",
+									"else {\r",
+									"\tpm.test(\"Require array of values\", function () {\r",
+									"\t\tpm.expect(valueArray).to.be.an('array');\r",
+									"\t});\r",
+									"}\r",
+									"\r",
+									"//array must have at least one value\r",
+									"// array must have values\r",
+									"\tif (valueArray != undefined) {\r",
+									"\t\tif (valueArray.length >= 0)\r",
+									"\t\t\tvalue0 = valueArray[0]\r",
+									"\r",
+									"            // assign object id to env variable\r",
+									"            if (value0 != undefined) {\r",
+									"                postman.setEnvironmentVariable(\"runId\", value0.id);\r",
+									"            }\r",
+									"\r",
+									"\t\tpm.test(\"Value Array is not empty\", function () {\r",
+									"\t\t\tpm.expect(valueArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"\t}\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "userName",
+									"value": "{{UserName}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "{{UserPassword}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "scope",
+									"value": "https://graph.microsoft.com/.default",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_id",
+									"value": "{{ClientID}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_secret",
+									"value": "{{ClientSecret}}",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/referenceDefinitions",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"referenceDefinitions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create referenceDefinition",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var valueArray = undefined;\r",
+									"var value0 = undefined;\r",
+									"var json = JSON.parse(responseBody);\r",
+									"\r",
+									"// value must be an array\r",
+									"if (Array.isArray(json.value)) {\r",
+									"\tvalueArray = json.value;\r",
+									"}\r",
+									"else {\r",
+									"\tpm.test(\"Require array of values\", function () {\r",
+									"\t\tpm.expect(valueArray).to.be.an('array');\r",
+									"\t});\r",
+									"}\r",
+									"\r",
+									"//array must have at least one value\r",
+									"// array must have values\r",
+									"\tif (valueArray != undefined) {\r",
+									"\t\tif (valueArray.length >= 0)\r",
+									"\t\t\tvalue0 = valueArray[0]\r",
+									"\r",
+									"            // assign object id to env variable\r",
+									"            if (value0 != undefined) {\r",
+									"                postman.setEnvironmentVariable(\"runId\", value0.id);\r",
+									"            }\r",
+									"\r",
+									"\t\tpm.test(\"Value Array is not empty\", function () {\r",
+									"\t\t\tpm.expect(valueArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"\t}\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"@odata.type\": \"#microsoft.graph.industryData.referenceDefinition\",\r\n    \"referenceType\": \"RefGradeLevel\",\r\n    \"code\": \"TestGrade\",\r\n    \"isDisabled\": false,\r\n    \"sortIndex\": 99910,\r\n    \"displayName\": \"New Test Grade Level\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/referenceDefinitions",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"referenceDefinitions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update referenceDefinition",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"@odata.type\": \"#microsoft.graph.industryData.referenceDefinition\",\r\n    \"displayName\": \"Updated Test Grade Name\",\r\n    \"isDisabled\":false\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{IndustryDataUrl}}/referenceDefinitions/{{refDefId}}",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"referenceDefinitions",
+								"{{refDefId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Disable referenceDefinition",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{IndustryDataUrl}}/referenceDefinitions/RefGradeLevel-TestGrade",
+							"host": [
+								"{{IndustryDataUrl}}"
+							],
+							"path": [
+								"referenceDefinitions",
+								"RefGradeLevel-TestGrade"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "DELETE outboundProvisioningFlowSet (remove --s) Copy",
-			"event": [
+			"name": "SDS- Deletes",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 204\", function () {\r",
-							"    pm.response.to.have.status(204);\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
+					"name": "DELETE outboundProvisioningFlowSet (remove --s) Copy",
+					"event": [
 						{
-							"key": "token",
-							"value": "{{bearerToken}}",
-							"type": "string"
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
 						}
-					]
-				},
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "--- {{IndustryDataUrl}}/outboundProvisioningFlowSets/{{outboundProvisioningFlowSetId}}",
-					"host": [
-						"--- {{IndustryDataUrl}}"
 					],
-					"path": [
-						"outboundProvisioningFlowSets",
-						"{{outboundProvisioningFlowSetId}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "List yearTimePeriod",
-			"event": [
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "--- {{IndustryDataUrl}}/outboundProvisioningFlowSets/{{outboundProvisioningFlowSetId}}",
+							"host": [
+								"--- {{IndustryDataUrl}}"
+							],
+							"path": [
+								"outboundProvisioningFlowSets",
+								"{{outboundProvisioningFlowSetId}}"
+							]
+						}
+					},
+					"response": []
+				},
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"var valueArray = undefined;\r",
-							"var value0 = undefined;\r",
-							"var json = JSON.parse(responseBody);\r",
-							"\r",
-							"// value must be an array\r",
-							"if (Array.isArray(json.value)) {\r",
-							"\tvalueArray = json.value;\r",
-							"}\r",
-							"else {\r",
-							"\tpm.test(\"Require array of values\", function () {\r",
-							"\t\tpm.expect(valueArray).to.be.an('array');\r",
-							"\t});\r",
-							"}\r",
-							"\r",
-							"//array must have at least one value\r",
-							"// array must have values\r",
-							"\tif (valueArray != undefined) {\r",
-							"\t\tif (valueArray.length >= 0)\r",
-							"\t\t\tvalue0 = valueArray[0]\r",
-							"\r",
-							"            // assign object id to env variable\r",
-							"            if (value0 != undefined) {\r",
-							"                postman.setEnvironmentVariable(\"runId\", value0.id);\r",
-							"            }\r",
-							"\r",
-							"\t\tpm.test(\"Value Array is not empty\", function () {\r",
-							"\t\t\tpm.expect(valueArray).to.be.an('array').that.is.not.empty;\r",
-							"\t\t});\r",
-							"\t}\r",
-							"\r",
-							"\r",
-							"\r",
-							"\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
+					"name": "DELETE provisioningFlow (remove --s)",
+					"event": [
 						{
-							"key": "token",
-							"value": "{{bearerToken}}",
-							"type": "string"
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
 						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "grant_type",
-							"value": "password",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "userName",
-							"value": "{{UserName}}",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "password",
-							"value": "{{UserPassword}}",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "scope",
-							"value": "https://graph.microsoft.com/.default",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "client_id",
-							"value": "{{ClientID}}",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "client_secret",
-							"value": "{{ClientSecret}}",
-							"type": "text",
-							"disabled": true
-						}
-					]
-				},
-				"url": {
-					"raw": "https://graph.microsoft.com/beta/external/industryData/years",
-					"protocol": "https",
-					"host": [
-						"graph",
-						"microsoft",
-						"com"
 					],
-					"path": [
-						"beta",
-						"external",
-						"industryData",
-						"years"
-					]
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "--- {{IndustryDataUrl}}/outboundProvisioningFlowSets/{{outboundProvisioningFlowSetId}}/provisioningFlows/{{outboundProvisioningFlowId}}",
+							"host": [
+								"--- {{IndustryDataUrl}}"
+							],
+							"path": [
+								"outboundProvisioningFlowSets",
+								"{{outboundProvisioningFlowSetId}}",
+								"provisioningFlows",
+								"{{outboundProvisioningFlowId}}"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	],
 	"auth": {
