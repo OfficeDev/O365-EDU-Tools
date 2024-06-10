@@ -7,10 +7,6 @@
             "metadata": "Data Factory name",
             "defaultValue": "adf-SchoologyCSVtoSDS"
         },
-        "stsdsvnext_accountKey": {
-            "type": "secureString",
-            "metadata": "Secure string for 'accountKey' of 'stsdsvnext'"
-        },
         "kvSchoologySDSVnext_properties_typeProperties_baseUrl": {
             "type": "string",
             "defaultValue": "https://kv-schoology-sds.vault.azure.net/"
@@ -190,11 +186,7 @@
                 "annotations": [],
                 "type": "AzureBlobFS",
                 "typeProperties": {
-                    "url": "[parameters('stsdsvnext_properties_typeProperties_url')]",
-                    "accountKey": {
-                        "type": "SecureString",
-                        "value": "[parameters('stsdsvnext_accountKey')]"
-                    }
+                    "url": "[parameters('stsdsvnext_properties_typeProperties_url')]"
                 },
                 "connectVia": {
                     "referenceName": "IREastUSVNet",

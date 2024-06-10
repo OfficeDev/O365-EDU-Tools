@@ -54,7 +54,7 @@
                 "isSftpEnabled": false,
                 "minimumTlsVersion": "TLS1_2",
                 "allowBlobPublicAccess": false,
-                "allowSharedKeyAccess": true,
+                "allowSharedKeyAccess": false,
                 "isHnsEnabled": true,
                 "networkAcls": {
                     "bypass": "AzureServices",
