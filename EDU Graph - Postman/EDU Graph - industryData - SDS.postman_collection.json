@@ -1545,7 +1545,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"displayName\": \"Postman source system\",\r\n  \"userMatchingSettings\": [\r\n    {\r\n      \"matchTarget\": {\r\n        \"code\": \"userPrincipalName\"\r\n      },\r\n      \"priorityOrder\": 0,\r\n      \"roleGroup@odata.bind\": \"{{IndustryDataUrl}}/roleGroups/staff\",\r\n      \"sourceIdentifier\": {\r\n        \"code\": \"username\"\r\n      }\r\n    },\r\n    {\r\n      \"matchTarget\": {\r\n        \"code\": \"userPrincipalName\"\r\n      },\r\n      \"domainName\": \"valid.domain.edu\",\r\n      \"priorityOrder\": 1,\r\n      \"roleGroup@odata.bind\": \"{{IndustryDataUrl}}/roleGroups('students')\",\r\n      \"sourceIdentifier\": {\r\n        \"code\": \"username\"\r\n      }\r\n    }\r\n  ]\r\n}"
+							"raw": "{\r\n  \"displayName\": \"Postman source system\",\r\n  \"vendor\": \"** My Vendor\",\r\n  \"userMatchingSettings\": [\r\n    {\r\n      \"matchTarget\": {\r\n        \"code\": \"userPrincipalName\"\r\n      },\r\n      \"priorityOrder\": 0,\r\n      \"roleGroup@odata.bind\": \"{{IndustryDataUrl}}/roleGroups/staff\",\r\n      \"sourceIdentifier\": {\r\n        \"code\": \"username\"\r\n      }\r\n    },\r\n    {\r\n      \"matchTarget\": {\r\n        \"code\": \"userPrincipalName\"\r\n      },\r\n      \"domainName\": \"valid.domain.edu\",\r\n      \"priorityOrder\": 1,\r\n      \"roleGroup@odata.bind\": \"{{IndustryDataUrl}}/roleGroups('students')\",\r\n      \"sourceIdentifier\": {\r\n        \"code\": \"username\"\r\n      }\r\n    }\r\n  ]\r\n}"
 						},
 						"url": {
 							"raw": "{{IndustryDataUrl}}/sourceSystems",
@@ -3998,16 +3998,6 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var json = JSON.parse(responseBody);\r",
-									"\r",
-									"pm.test(pm.info.requestName, () => {\r",
-									"    pm.expect(responseCode.code).to.equal(201, \"Expected HTTP 201 but recieved (outbondProvisioingFlowSets)\" + responseCode.code)\r",
-									"} \r",
-									");\r",
-									"\r",
-									"if (responseCode.code === 201) {\r",
-									"    pm.environment.set(\"outboundProvisioningFlowSetId\", json.id);  \r",
-									"} \r",
 									""
 								],
 								"type": "text/javascript",
@@ -4030,7 +4020,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"@odata.type\": \"#microsoft.graph.industryData.outboundProvisioningFlowSet\",\r\n    \"displayName\": \"Outbound Provisioning Flow - Postman Test\",\r\n    \"filter\": {\r\n        \"@odata.type\": \"#microsoft.graph.industryData.basicFilter\",\r\n        \"attribute\": \"orgExternalId\",\r\n        \"in\": [ \"** Your org IDs here \"\r\n        ]\r\n    }\r\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4712,9 +4702,9 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "--- {{IndustryDataUrl}}/outboundProvisioningFlowSets/{{outboundProvisioningFlowSetId}}/provisioningFlows/{{outboundProvisioningFlowId}}",
+							"raw": "-- {{IndustryDataUrl}}/outboundProvisioningFlowSets/{{outboundProvisioningFlowSetId}}/provisioningFlows/{{outboundProvisioningFlowId}}",
 							"host": [
-								"--- {{IndustryDataUrl}}"
+								"-- {{IndustryDataUrl}}"
 							],
 							"path": [
 								"outboundProvisioningFlowSets",
