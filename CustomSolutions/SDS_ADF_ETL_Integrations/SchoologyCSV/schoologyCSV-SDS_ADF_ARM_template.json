@@ -2,66 +2,337 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "vaults_kv_schoology_sds_name": {
+            "defaultValue": "kv-schoology-sds",
+            "type": "String"
+        },
+        "storageAccounts_stschoologycsvsds_name": {
+            "defaultValue": "stschoologycsvsds",
+            "type": "String"
+        },
         "factoryName": {
             "type": "string",
             "metadata": "Data Factory name",
             "defaultValue": "adf-SchoologyCSVtoSDS"
         },
-        "kvSchoologySDSVnext_properties_typeProperties_baseUrl": {
-            "type": "string",
-            "defaultValue": "https://kv-schoology-sds.vault.azure.net/"
-        },
         "SchoologyWebUrl_properties_typeProperties_url": {
             "type": "string",
             "defaultValue": "https://api.schoology.com/v1/"
         },
-        "SDSAzureDataLakeStorageGen2_sasUri": {
-            "type": "secureString",
-            "metadata": "Secure string for 'sasUri' of 'SDSAzureDataLakeStorageGen2'"
-        },
-        "stsdsvnext_properties_typeProperties_url": {
+        "dataFactory_properties_globalParameters_schoologyBaseURL_value": {
             "type": "string",
-            "defaultValue": "https://stschoologycsvsds.dfs.core.windows.net/"
+            "defaultValue": "https://api.schoology.com/v1"
         },
-        "kv-schoology-sds_properties_privateLinkResourceId": {
+        "dataFactory_properties_globalParameters_schoologyConsumerKey_value": {
             "type": "string",
-            "defaultValue": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.KeyVault/vaults/kv-schoology-sds')]"
+            "defaultValue": "N/A"
         },
-        "kv-schoology-sds_properties_groupId": {
+        "dataFactory_properties_globalParameters_schoologyOauthSignature_value": {
             "type": "string",
-            "defaultValue": "vault"
+            "defaultValue": "N/A"
         },
-        "kv-schoology-sds_properties_fqdns": {
+        "dataFactory_properties_globalParameters_clientSecretForSdsApiKeyVaultUrl_value": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "dataFactory_properties_globalParameters_tenantid_value": {
+            "type": "string",
+            "defaultValue": "[tenant().tenantId]"
+        },
+        "dataFactory_properties_globalParameters_subscriptionId_value": {
+            "type": "string",
+            "defaultValue": "[subscription().subscriptionId]"
+        },
+        "dataFactory_properties_globalParameters_entraAppClientId_value": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "dataFactory_properties_globalParameters_sdsInboundFlowId_value": {
+            "type": "string",
+            "defaultValue": "N/A"
+        },
+        "dataFactory_properties_globalParameters_checkForEmptyFilesBeforeSending_value": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "dataFactory_properties_globalParameters_validationErrorThreshold_value": {
+            "type": "int",
+            "defaultValue": 20
+        },
+        "dataFactory_properties_globalParameters_reportSendAsUPN_value": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "dataFactory_properties_globalParameters_reportRecipientEmails_value": {
             "type": "array",
             "defaultValue": [
-                "kv-schoology-sds.vault.azure.net"
+                {
+                    "emailAddress": {
+                        "address": ""
+                    }
+                }
             ]
         },
-        "stschoologycsvsds_properties_privateLinkResourceId": {
-            "type": "string",
-            "defaultValue": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Storage/storageAccounts/stschoologycsvsds')]"
+        "dataFactory_properties_globalParameters_schoologyImportFileNames_value": {
+            "type": "object",
+            "defaultValue": {
+                "orgs": "SCHOOLOGY_SCHOOLS.csv",
+                "users": "SCHOOLOGY_USERS.csv",
+                "parents": "",
+                "roles": "SCHOOLOGY_USERS.csv",
+                "courses": "SCHOOLOGY_COURSES.csv",
+                "classes": "SCHOOLOGY_COURSES.csv",
+                "enrollments": "SCHOOLOGY_ENROLLMENTS.csv",
+                "relationships": ""
+            }
         },
-        "stschoologycsvsds_properties_groupId": {
-            "type": "string",
-            "defaultValue": "dfs"
+        "dataFactory_properties_globalParameters_syncTeamsClassesLTI_value": {
+            "type": "bool",
+            "defaultValue": false
         },
-        "stschoologycsvsds_properties_fqdns": {
-            "type": "array",
-            "defaultValue": [
-                "stschoologycsvsds.dfs.core.windows.net"
-            ]
+        "dataFactory_properties_globalParameters_useFamilyAndGivenNames_value": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "dataFactory_properties_globalParameters_staffSourceIdentifier_value": {
+            "type": "string",
+            "defaultValue": "username|email|activeDirectory"
+        },
+        "dataFactory_properties_globalParameters_staffMatchTarget_value": {
+            "type": "string",
+            "defaultValue": "userPrincipalName|mail"
+        },
+        "dataFactory_properties_globalParameters_staffDomainAddon_value": {
+            "type": "string",
+            "defaultValue": "N/A"
+        },
+        "dataFactory_properties_globalParameters_studentSourceIdentifier_value": {
+            "type": "string",
+            "defaultValue": "username|email|activeDirectory"
+        },
+        "dataFactory_properties_globalParameters_studentMatchTarget_value": {
+            "type": "string",
+            "defaultValue": "userPrincipalName|mail"
+        },
+        "dataFactory_properties_globalParameters_studentDomainAddon_value": {
+            "type": "string",
+            "defaultValue": "N/A"
+        },
+        "dataFactory_properties_globalParameters_yearStartDate_value": {
+            "type": "string",
+            "defaultValue": "yyyy-mm-dd"
+        },
+        "dataFactory_properties_globalParameters_yearEndDate_value": {
+            "type": "string",
+            "defaultValue": "yyyy-mm-dd"
+        },
+        "dataFactory_properties_globalParameters_expirationDateTime_value": {
+            "type": "string",
+            "defaultValue": "yyyy-mm-dd"
+        },
+        "dataFactory_location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]"
+        },
+        "dataFactory_identity_type": {
+            "type": "string",
+            "defaultValue": "SystemAssigned"
         }
     },
     "variables": {
+	"kvSchoologySDSVnext_properties_typeProperties_baseUrl":"[concat('https://',parameters('vaults_kv_schoology_sds_name'),'.vault.azure.net/')]",
+	"SDSAzureDataLakeStorageGen2_sasUri":"@{linkedService().sasUriParam}",
+	"stsdsvnext_properties_typeProperties_url":"[concat('https://',parameters('storageAccounts_stschoologycsvsds_name'),'.dfs.core.windows.net')]",
+	"kv-schoology-sds_properties_privateLinkResourceId":"[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.KeyVault/vaults/', parameters('vaults_kv_schoology_sds_name'))]",
+	"kv-schoology-sds_properties_groupId":"vault",
+	"kv-schoology-sds_properties_fqdns":"[concat(parameters('vaults_kv_schoology_sds_name'), '.vault.azure.net')]",
+	"stschoologycsvsds_properties_privateLinkResourceId":"[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Storage/storageAccounts/', parameters('storageAccounts_stschoologycsvsds_name'))]",
+	"stschoologycsvsds_properties_groupId":"dfs",
+	"stschoologycsvsds_properties_fqdns":"[concat(parameters('storageAccounts_stschoologycsvsds_name'), '.dfs.core.windows.net')]",
         "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
     },
     "resources": [
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2023-07-01",
+            "name": "[parameters('vaults_kv_schoology_sds_name')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "sku": {
+                    "family": "A",
+                    "name": "Standard"
+                },
+                "tenantId": "[tenant().tenantId]",
+                "accessPolicies": [],
+                "enabledForDeployment": false,
+                "enabledForDiskEncryption": false,
+                "enabledForTemplateDeployment": false,
+                "enableSoftDelete": true,
+                "softDeleteRetentionInDays": 90,
+                "enableRbacAuthorization": true,
+                "vaultUri": "[concat('https://', parameters('vaults_kv_schoology_sds_name'), '.vault.azure.net/')]",
+                "provisioningState": "Succeeded",
+                "publicNetworkAccess": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2023-04-01",
+            "name": "[parameters('storageAccounts_stschoologycsvsds_name')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Standard_RAGRS",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "dnsEndpointType": "Standard",
+                "defaultToOAuthAuthentication": false,
+                "publicNetworkAccess": "Disabled",
+                "allowCrossTenantReplication": false,
+                "isSftpEnabled": false,
+                "minimumTlsVersion": "TLS1_2",
+                "allowBlobPublicAccess": false,
+                "allowSharedKeyAccess": false,
+                "isHnsEnabled": true,
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "requireInfrastructureEncryption": false,
+                    "services": {
+                        "file": {
+                            "keyType": "Account",
+                            "enabled": true
+                        },
+                        "blob": {
+                            "keyType": "Account",
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                },
+                "accessTier": "Hot"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2023-07-01",
+            "name": "[concat(parameters('vaults_kv_schoology_sds_name'), '/ClientSecretForSdsCsvADF')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_kv_schoology_sds_name'))]"
+            ],
+            "properties": {
+                "attributes": {
+                    "enabled": true
+                },
+                "value": "blank"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2023-07-01",
+            "name": "[concat(parameters('vaults_kv_schoology_sds_name'), '/SchoologySignature')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_kv_schoology_sds_name'))]"
+            ],
+            "properties": {
+                "attributes": {
+                    "enabled": true
+                },
+                "value": "blank"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices",
+            "apiVersion": "2023-04-01",
+            "name": "[concat(parameters('storageAccounts_stschoologycsvsds_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stschoologycsvsds_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_RAGRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "containerDeleteRetentionPolicy": {
+                    "enabled": true,
+                    "days": 7
+                },
+                "cors": {
+                    "corsRules": []
+                },
+                "deleteRetentionPolicy": {
+                    "allowPermanentDelete": false,
+                    "enabled": true,
+                    "days": 7
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/fileServices",
+            "apiVersion": "2023-04-01",
+            "name": "[concat(parameters('storageAccounts_stschoologycsvsds_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stschoologycsvsds_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_RAGRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "protocolSettings": {
+                    "smb": {}
+                },
+                "cors": {
+                    "corsRules": []
+                },
+                "shareDeleteRetentionPolicy": {
+                    "enabled": true,
+                    "days": 7
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/queueServices",
+            "apiVersion": "2023-04-01",
+            "name": "[concat(parameters('storageAccounts_stschoologycsvsds_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stschoologycsvsds_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/tableServices",
+            "apiVersion": "2023-04-01",
+            "name": "[concat(parameters('storageAccounts_stschoologycsvsds_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stschoologycsvsds_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
         {
             "name": "[concat(parameters('factoryName'), '/default')]",
             "type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
             "apiVersion": "2018-06-01",
             "properties": {},
-            "dependsOn": []
+            "dependsOn": [
+		"[resourceId('Microsoft.DataFactory/factories', parameters('factoryName'))]"
+	]
         },
         {
             "name": "[concat(parameters('factoryName'), '/AutoResolveIntegrationRuntime')]",
@@ -89,7 +360,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('factoryName'), '/IREastUSVNet')]",
+            "name": "[concat(parameters('factoryName'), '/IRvNet')]",
             "type": "Microsoft.DataFactory/factories/integrationRuntimes",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -128,10 +399,13 @@
                 "annotations": [],
                 "type": "AzureKeyVault",
                 "typeProperties": {
-                    "baseUrl": "[parameters('kvSchoologySDSVnext_properties_typeProperties_baseUrl')]"
+                    "baseUrl": "[variables('kvSchoologySDSVnext_properties_typeProperties_baseUrl')]"
                 }
             },
-            "dependsOn": []
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRvNet')]",
+                "[resourceId('Microsoft.DataFactory/factories', parameters('factoryName'))]"
+	    ]
         },
         {
             "name": "[concat(parameters('factoryName'), '/SchoologyWebUrl')]",
@@ -146,12 +420,12 @@
                     "authenticationType": "Anonymous"
                 },
                 "connectVia": {
-                    "referenceName": "IREastUSVNet",
+                    "referenceName": "IRvNet",
                     "type": "IntegrationRuntimeReference"
                 }
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/integrationRuntimes/IREastUSVNet')]"
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRvNet')]"
             ]
         },
         {
@@ -167,15 +441,15 @@
                 "annotations": [],
                 "type": "AzureBlobFS",
                 "typeProperties": {
-                    "sasUri": "[parameters('SDSAzureDataLakeStorageGen2_sasUri')]"
+                    "sasUri": "[variables('SDSAzureDataLakeStorageGen2_sasUri')]"
                 },
                 "connectVia": {
-                    "referenceName": "IREastUSVNet",
+                    "referenceName": "IRvNet",
                     "type": "IntegrationRuntimeReference"
                 }
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/integrationRuntimes/IREastUSVNet')]"
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRvNet')]"
             ]
         },
         {
@@ -186,15 +460,15 @@
                 "annotations": [],
                 "type": "AzureBlobFS",
                 "typeProperties": {
-                    "url": "[parameters('stsdsvnext_properties_typeProperties_url')]"
+                    "url": "[variables('stsdsvnext_properties_typeProperties_url')]"
                 },
                 "connectVia": {
-                    "referenceName": "IREastUSVNet",
+                    "referenceName": "IRvNet",
                     "type": "IntegrationRuntimeReference"
                 }
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/integrationRuntimes/IREastUSVNet')]"
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRvNet')]"
             ]
         },
         {
@@ -1789,7 +2063,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "body": {
@@ -1827,7 +2101,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IREastUSVNet",
+                                "referenceName": "IRvNet",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "body": {
@@ -1865,7 +2139,7 @@
                 "lastPublishTime": "2024-05-18T02:23:06Z"
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/integrationRuntimes/IREastUSVNet')]"
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRvNet')]"
             ]
         },
         {
@@ -1894,7 +2168,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IREastUSVNet",
+                                "referenceName": "IRvNet",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "authentication": {
@@ -1932,7 +2206,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IREastUSVNet",
+                                "referenceName": "IRvNet",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "body": {
@@ -2009,7 +2283,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "body": {
@@ -2070,7 +2344,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "body": {
@@ -2121,7 +2395,7 @@
                 "lastPublishTime": "2024-05-18T02:20:38Z"
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/integrationRuntimes/IREastUSVNet')]"
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRvNet')]"
             ]
         },
         {
@@ -2175,7 +2449,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "body": {
@@ -2210,7 +2484,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         }
                                     }
@@ -2237,7 +2511,7 @@
                 "lastPublishTime": "2024-05-18T03:38:27Z"
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/integrationRuntimes/IREastUSVNet')]"
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRvNet')]"
             ]
         },
         {
@@ -2266,7 +2540,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IREastUSVNet",
+                                "referenceName": "IRvNet",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "authentication": {
@@ -2368,7 +2642,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IREastUSVNet",
+                                "referenceName": "IRvNet",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "authentication": {
@@ -2406,7 +2680,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IREastUSVNet",
+                                "referenceName": "IRvNet",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "body": {
@@ -2558,7 +2832,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         }
                                     }
@@ -2669,7 +2943,7 @@
                 "lastPublishTime": "2024-05-18T03:38:28Z"
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/integrationRuntimes/IREastUSVNet')]",
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRvNet')]",
                 "[concat(variables('factoryId'), '/datasets/SDSVnext_Classes')]",
                 "[concat(variables('factoryId'), '/pipelines/Update_Groups_With_LTI_Data')]"
             ]
@@ -2700,7 +2974,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IREastUSVNet",
+                                "referenceName": "IRvNet",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "authentication": {
@@ -2738,7 +3012,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IREastUSVNet",
+                                "referenceName": "IRvNet",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "body": {
@@ -2779,7 +3053,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IREastUSVNet",
+                                "referenceName": "IRvNet",
                                 "type": "IntegrationRuntimeReference"
                             }
                         }
@@ -3004,7 +3278,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IREastUSVNet",
+                                "referenceName": "IRvNet",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "body": {}
@@ -3053,7 +3327,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         }
                                     }
@@ -3094,7 +3368,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IREastUSVNet",
+                                "referenceName": "IRvNet",
                                 "type": "IntegrationRuntimeReference"
                             }
                         }
@@ -3166,7 +3440,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         }
                                     }
@@ -3223,7 +3497,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "body": {
@@ -3265,7 +3539,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "body": {
@@ -3307,7 +3581,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "body": {
@@ -3349,7 +3623,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "body": {
@@ -3452,7 +3726,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         }
                                     }
@@ -3500,7 +3774,7 @@
                 "lastPublishTime": "2024-05-18T02:17:39Z"
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/integrationRuntimes/IREastUSVNet')]",
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRvNet')]",
                 "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Files')]",
                 "[concat(variables('factoryId'), '/datasets/SDS_Vnext_storage')]"
             ]
@@ -3696,7 +3970,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -3771,7 +4045,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -4025,7 +4299,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -4523,7 +4797,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -4766,7 +5040,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -5088,7 +5362,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -5850,7 +6124,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -5959,7 +6233,7 @@
             "dependsOn": [
                 "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Files')]",
                 "[concat(variables('factoryId'), '/dataflows/validate_SDS_Vnext_OldUsers')]",
-                "[concat(variables('factoryId'), '/integrationRuntimes/IREastUSVNet')]",
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRvNet')]",
                 "[concat(variables('factoryId'), '/dataflows/validate_SDS_Vnext_NewUsers')]",
                 "[concat(variables('factoryId'), '/dataflows/SDSVnext_All_Files_Validation')]",
                 "[concat(variables('factoryId'), '/dataflows/Validate_SDSVnext_Demographics')]",
@@ -6075,7 +6349,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -6134,7 +6408,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -6187,7 +6461,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -6259,7 +6533,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -6312,7 +6586,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -6368,7 +6642,7 @@
                             },
                             "staging": {},
                             "integrationRuntime": {
-                                "referenceName": "IREastUSVNet",
+                                "referenceName": "IRvNet",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "traceLevel": "Fine"
@@ -6424,7 +6698,7 @@
                             },
                             "staging": {},
                             "integrationRuntime": {
-                                "referenceName": "IREastUSVNet",
+                                "referenceName": "IRvNet",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "traceLevel": "Fine"
@@ -6488,7 +6762,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IREastUSVNet",
+                                            "referenceName": "IRvNet",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -6550,7 +6824,7 @@
             "dependsOn": [
                 "[concat(variables('factoryId'), '/datasets/Schoology_CSV_Sink_Data')]",
                 "[concat(variables('factoryId'), '/dataflows/schoologySchools_to_SDSVnextOrgs_csv')]",
-                "[concat(variables('factoryId'), '/integrationRuntimes/IREastUSVNet')]",
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRvNet')]",
                 "[concat(variables('factoryId'), '/dataflows/schoologyUsers_to_SDSVnextRoles_csv')]",
                 "[concat(variables('factoryId'), '/dataflows/schoologyCourses_to_SDSVnextCourses_csv')]",
                 "[concat(variables('factoryId'), '/dataflows/schoologyCourses_to_SDSVnextClasses_csv')]",
@@ -9632,31 +9906,143 @@
             ]
         },
         {
-            "name": "[concat(parameters('factoryName'), '/default/kv-schoology-sds')]",
+            "name": "[concat(parameters('factoryName'), '/default/',parameters('vaults_kv_schoology_sds_name'))]",
             "type": "Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints",
             "apiVersion": "2018-06-01",
             "properties": {
-                "privateLinkResourceId": "[parameters('kv-schoology-sds_properties_privateLinkResourceId')]",
-                "groupId": "[parameters('kv-schoology-sds_properties_groupId')]",
-                "fqdns": "[parameters('kv-schoology-sds_properties_fqdns')]"
+                "privateLinkResourceId": "[variables('kv-schoology-sds_properties_privateLinkResourceId')]",
+                "groupId": "[variables('kv-schoology-sds_properties_groupId')]",
+                "fqdns": ["[variables('kv-schoology-sds_properties_fqdns')]"]
             },
             "dependsOn": [
                 "[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
             ]
         },
         {
-            "name": "[concat(parameters('factoryName'), '/default/stschoologycsvsds')]",
+            "name": "[concat(parameters('factoryName'), '/default/',parameters('storageAccounts_stschoologycsvsds_name'))]",
             "type": "Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints",
             "apiVersion": "2018-06-01",
             "properties": {
-                "privateLinkResourceId": "[parameters('stschoologycsvsds_properties_privateLinkResourceId')]",
-                "groupId": "[parameters('stschoologycsvsds_properties_groupId')]",
-                "fqdns": "[parameters('stschoologycsvsds_properties_fqdns')]"
+                "privateLinkResourceId": "[variables('stschoologycsvsds_properties_privateLinkResourceId')]",
+                "groupId": "[variables('stschoologycsvsds_properties_groupId')]",
+                "fqdns": ["[variables('stschoologycsvsds_properties_fqdns')]"]
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+                "[concat(variables('factoryId'), '/managedVirtualNetworks/default')]",
+		"[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stschoologycsvsds_name'))]"
             ]
+        },
+        {
+            "name": "[parameters('factoryName')]",
+            "type": "Microsoft.DataFactory/factories",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "globalParameters": {
+                    "schoologyBaseURL": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_schoologyBaseURL_value')]"
+                    },
+                    "schoologyConsumerKey": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_schoologyConsumerKey_value')]"
+                    },
+                    "schoologyOauthSignature": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_schoologyOauthSignature_value')]"
+                    },
+                    "clientSecretForSdsApiKeyVaultUrl": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_clientSecretForSdsApiKeyVaultUrl_value')]"
+                    },
+                    "tenantid": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_tenantid_value')]"
+                    },
+                    "subscriptionId": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_subscriptionId_value')]"
+                    },
+                    "entraAppClientId": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_entraAppClientId_value')]"
+                    },
+                    "sdsInboundFlowId": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_sdsInboundFlowId_value')]"
+                    },
+                    "checkForEmptyFilesBeforeSending": {
+                        "type": "bool",
+                        "value": "[parameters('dataFactory_properties_globalParameters_checkForEmptyFilesBeforeSending_value')]"
+                    },
+                    "validationErrorThreshold": {
+                        "type": "int",
+                        "value": "[parameters('dataFactory_properties_globalParameters_validationErrorThreshold_value')]"
+                    },
+                    "reportSendAsUPN": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_reportSendAsUPN_value')]"
+                    },
+                    "reportRecipientEmails": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_reportRecipientEmails_value')]"
+                    },
+                    "schoologyImportFileNames": {
+                        "type": "object",
+                        "value": "[parameters('dataFactory_properties_globalParameters_schoologyImportFileNames_value')]"
+                    },
+                    "syncTeamsClassesLTI": {
+                        "type": "bool",
+                        "value": "[parameters('dataFactory_properties_globalParameters_syncTeamsClassesLTI_value')]"
+                    },
+                    "useFamilyAndGivenNames": {
+                        "type": "bool",
+                        "value": "[parameters('dataFactory_properties_globalParameters_useFamilyAndGivenNames_value')]"
+                    },
+                    "staffSourceIdentifier": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_staffSourceIdentifier_value')]"
+                    },
+                    "staffMatchTarget": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_staffMatchTarget_value')]"
+                    },
+                    "staffDomainAddon": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_staffDomainAddon_value')]"
+                    },
+                    "studentSourceIdentifier": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_studentSourceIdentifier_value')]"
+                    },
+                    "studentMatchTarget": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_studentMatchTarget_value')]"
+                    },
+                    "studentDomainAddon": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_studentDomainAddon_value')]"
+                    },
+                    "yearStartDate": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_yearStartDate_value')]"
+                    },
+                    "yearEndDate": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_yearEndDate_value')]"
+                    },
+                    "expirationDateTime": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_expirationDateTime_value')]"
+                    }
+                }
+            },
+            "dependsOn": [],
+            "location": "[parameters('dataFactory_location')]",
+            "identity": {
+                "type": "[parameters('dataFactory_identity_type')]",
+                "principalId": "",
+                "tenantId": ""
+            }
         }
-
     ]
 }
