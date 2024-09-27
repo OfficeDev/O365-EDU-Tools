@@ -167,7 +167,7 @@
                 "enabledForDeployment": false,
                 "enabledForDiskEncryption": false,
                 "enabledForTemplateDeployment": false,
-                "enableSoftDelete": false,
+                "enableSoftDelete": true,
                 "softDeleteRetentionInDays": 90,
                 "enableRbacAuthorization": true,
                 "vaultUri": "[concat('https://', parameters('vaults_kv_schoology_sds_name'), '.vault.azure.net/')]",
@@ -6947,6 +6947,7 @@
                     {
                         "name": "SyncLTI",
                         "type": "IfCondition",
+                        "state": "Inactive",
                         "dependsOn": [
                             {
                                 "activity": "Validate_to_SDS_Vnext",
