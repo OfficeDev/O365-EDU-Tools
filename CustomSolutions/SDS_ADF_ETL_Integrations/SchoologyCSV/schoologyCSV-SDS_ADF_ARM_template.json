@@ -6947,7 +6947,6 @@
                     {
                         "name": "SyncLTI",
                         "type": "IfCondition",
-                        "state": "Inactive",
                         "dependsOn": [
                             {
                                 "activity": "Validate_to_SDS_Vnext",
