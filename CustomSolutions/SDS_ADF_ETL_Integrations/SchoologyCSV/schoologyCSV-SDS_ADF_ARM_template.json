@@ -43,6 +43,10 @@
             "type": "string",
             "defaultValue": "[subscription().subscriptionId]"
         },
+        "dataFactory_properties_globalParameters_resourceGroupName_value": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().name]"
+        },
         "dataFactory_properties_globalParameters_entraAppClientId_value": {
             "type": "string",
             "defaultValue": ""
@@ -2059,7 +2063,7 @@
                                         "method": "PATCH",
                                         "headers": {},
                                         "url": {
-                                            "value": "https://management.azure.com/subscriptions/@{pipeline().globalParameters.subscriptionId}/resourceGroups/rg-SchoologyCSVtoSDS/providers/Microsoft.Storage/storageAccounts/stschoologycsvsds?api-version=2023-01-01",
+                                            "value": "https://management.azure.com/subscriptions/@{pipeline().globalParameters.subscriptionId}/resourceGroups/@{pipeline().globalParameters.resourceGroupName}/providers/Microsoft.Storage/storageAccounts/stschoologycsvsds?api-version=2023-01-01",
                                             "type": "Expression"
                                         },
                                         "connectVia": {
@@ -2097,7 +2101,7 @@
                             "method": "PATCH",
                             "headers": {},
                             "url": {
-                                "value": "https://management.azure.com/subscriptions/@{pipeline().globalParameters.subscriptionId}/resourceGroups/rg-SchoologyCSVtoSDS/providers/Microsoft.Storage/storageAccounts/stschoologycsvsds?api-version=2023-01-01",
+                                "value": "https://management.azure.com/subscriptions/@{pipeline().globalParameters.subscriptionId}/resourceGroups/@{pipeline().globalParameters.resourceGroupName}/providers/Microsoft.Storage/storageAccounts/stschoologycsvsds?api-version=2023-01-01",
                                 "type": "Expression"
                             },
                             "connectVia": {
@@ -9961,6 +9965,10 @@
                     "subscriptionId": {
                         "type": "string",
                         "value": "[parameters('dataFactory_properties_globalParameters_subscriptionId_value')]"
+                    },
+                    "resourceGroupName": {
+                        "type": "string",
+                        "value": "[parameters('dataFactory_properties_globalParameters_resourceGroupName_value')]"
                     },
                     "entraAppClientId": {
                         "type": "string",
