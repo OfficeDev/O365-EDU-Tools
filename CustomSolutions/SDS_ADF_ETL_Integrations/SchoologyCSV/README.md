@@ -143,7 +143,7 @@ following steps:
 
 The main integration pipeline is Schoology_to_SDS_Vnext_Main
 
-![](.\img\main_pipeline.png)
+![](./img/main_pipeline.png)
 
 This pipeline utilizes sub pipelines to execute the following
 steps:
