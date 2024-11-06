@@ -15,10 +15,6 @@
             "metadata": "Data Factory name",
             "defaultValue": "adf-SchoologyCSVtoSDS"
         },
-        "SchoologyWebUrl_properties_typeProperties_url": {
-            "type": "string",
-            "defaultValue": "https://api.schoology.com/v1/"
-        },
         "dataFactory_properties_globalParameters_clientSecretForSdsApiKeyVaultUrl_value": {
             "type": "string",
             "defaultValue": ""
@@ -379,27 +375,6 @@
                 "[concat(variables('factoryId'), '/integrationRuntimes/IRvNet')]",
                 "[resourceId('Microsoft.DataFactory/factories', parameters('factoryName'))]"
 	    ]
-        },
-        {
-            "name": "[concat(parameters('factoryName'), '/SchoologyWebUrl')]",
-            "type": "Microsoft.DataFactory/factories/linkedServices",
-            "apiVersion": "2018-06-01",
-            "properties": {
-                "annotations": [],
-                "type": "RestService",
-                "typeProperties": {
-                    "url": "[parameters('SchoologyWebUrl_properties_typeProperties_url')]",
-                    "enableServerCertificateValidation": true,
-                    "authenticationType": "Anonymous"
-                },
-                "connectVia": {
-                    "referenceName": "IRvNet",
-                    "type": "IntegrationRuntimeReference"
-                }
-            },
-            "dependsOn": [
-                "[concat(variables('factoryId'), '/integrationRuntimes/IRvNet')]"
-            ]
         },
         {
             "name": "[concat(parameters('factoryName'), '/SDSAzureDataLakeStorageGen2')]",
