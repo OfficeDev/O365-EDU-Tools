@@ -10,6 +10,10 @@
             "defaultValue": "storsds",
             "type": "String"
         },
+        "IMSOneRosterValidator_properties_typeProperties_url": {
+            "type": "string",
+            "defaultValue": "https://partnertest.infinitecampus.org/campus/oneroster/microsofttest/ims/oneroster/v1p1"
+        },
         "factories_externalid": {
             "defaultValue": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/Microsoft.DataFactory/factories/*')]",
             "type": "String"
@@ -129,8 +133,7 @@
         }
     },
     "variables": {
-        "Keyvault integration_properties_typeProperties_baseUrl":"[concat('https://',parameters('Keyvault name'),'.vault.azure.net/')]",
-        "IMSOneRosterValidator_properties_typeProperties_url":"https://partnertest.infinitecampus.org/campus/oneroster/microsofttest/ims/oneroster/v1p1",
+        "Keyvault integration_properties_typeProperties_baseUrl":"[concat('https://',parameters('Keyvault name'),'.vault.azure.net/')]",  
         "SDSAzureDataLakeStorageGen2_sasUri":"@{linkedService().sasUriParam}",
         "Storageaccount_properties_typeProperties_url":"[concat('https://',parameters('Storage account name'),'.dfs.core.windows.net/')]",
         "Keyvault_properties_privateLinkResourceId":"[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/Microsoft.KeyVault/vaults/',parameters('Keyvault name'))]",
@@ -156,46 +159,14 @@
                 "networkAcls": {
                     "bypass": "AzureServices",
                     "defaultAction": "Allow",
-                    "ipRules": [
-                        {
-                            "value": "157.47.40.24/32"
-                        }
-                    ],
+                    "ipRules": [],
                     "virtualNetworkRules": []
                 },
-                "accessPolicies": [
-                    {
-                        "tenantId": "[tenant().tenantId]",
-                        "objectId": "c3884299-2cbf-411b-910a-7a1237c22bc0",
-                        "permissions": {
-                            "certificates": [],
-                            "keys": [],
-                            "secrets": [
-                                "get",
-                                "list",
-                                "delete",
-                                "recover"
-                            ]
-                        }
-                    },
-                    {
-                        "tenantId": "[tenant().tenantId]",
-                        "objectId": "3b37681d-218c-4b19-8687-f67810680c8e",
-                        "permissions": {
-                            "certificates": [],
-                            "keys": [],
-                            "secrets": [
-                                "Get",
-                                "List",
-                                "Set"
-                            ]
-                        }
-                    }
-                ],
+                "accessPolicies": [],
                 "enabledForDeployment": false,
                 "enabledForDiskEncryption": false,
                 "enabledForTemplateDeployment": false,
-                "enableSoftDelete": false,
+                "enableSoftDelete": true,
                 "softDeleteRetentionInDays": 90,
                 "enableRbacAuthorization": false,
                 "vaultUri": "[variables('Keyvault integration_properties_typeProperties_baseUrl')]",
@@ -216,7 +187,7 @@
             "properties": {
                 "dnsEndpointType": "Standard",
                 "defaultToOAuthAuthentication": false,
-                "publicNetworkAccess": "Enabled",
+                "publicNetworkAccess": "Disabled",
                 "allowCrossTenantReplication": false,
                 "isSftpEnabled": false,
                 "minimumTlsVersion": "TLS1_2",
@@ -224,28 +195,10 @@
                 "allowSharedKeyAccess": false,
                 "isHnsEnabled": true,
                 "networkAcls": {
-                    "resourceAccessRules": [
-                        {
-                            "tenantId": "[tenant().tenantId]",
-                            "resourceId": "[parameters('factories_externalid')]"
-                        },
-                        {
-                            "tenantId": "[tenant().tenantId]",
-                            "resourceId": "[concat('/subscriptions/',subscription().subscriptionId,'/providers/Microsoft.Security/datascanners/storageDataScanner')]"
-                        }
-                    ],
+                    "resourceAccessRules": [],
                     "bypass": "None",
                     "virtualNetworkRules": [],
-                    "ipRules": [
-                        {
-                            "value": "157.47.40.24",
-                            "action": "Allow"
-                        },
-                        {
-                            "value": "157.47.90.137",
-                            "action": "Allow"
-                        }
-                    ],
+                    "ipRules": [],
                     "defaultAction": "Allow"
                 },
                 "supportsHttpsTrafficOnly": true,
@@ -391,7 +344,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/IRSDSORVnext')]",
+            "name": "[concat(parameters('Data Factory Name'), '/IRSDSOR')]",
             "type": "Microsoft.DataFactory/factories/integrationRuntimes",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -459,7 +412,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/kvfultonetlintegration')]",
+            "name": "[concat(parameters('Data Factory Name'), '/kvonerosterintegration')]",
             "type": "Microsoft.DataFactory/factories/linkedServices",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -481,17 +434,17 @@
                 "annotations": [],
                 "type": "RestService",
                 "typeProperties": {
-                    "url": "[variables('IMSOneRosterValidator_properties_typeProperties_url')]",
+                    "url": "[parameters('IMSOneRosterValidator_properties_typeProperties_url')]",
                     "enableServerCertificateValidation": true,
                     "authenticationType": "Anonymous"
                 },
                 "connectVia": {
-                    "referenceName": "IRSDSORVnext",
+                    "referenceName": "IRSDSOR",
                     "type": "IntegrationRuntimeReference"
                 }
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/integrationRuntimes/IRSDSORVnext')]"
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRSDSOR')]"
             ]
         },
         {
@@ -510,12 +463,12 @@
                     "sasUri": "[variables('SDSAzureDataLakeStorageGen2_sasUri')]"
                 },
                 "connectVia": {
-                    "referenceName": "IRSDSORVnext",
+                    "referenceName": "IRSDSOR",
                     "type": "IntegrationRuntimeReference"
                 }
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/integrationRuntimes/IRSDSORVnext')]"
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRSDSOR')]"
             ]
         },
         {
@@ -529,12 +482,12 @@
                     "url": "[variables('Storageaccount_properties_typeProperties_url')]"
                 },
                 "connectVia": {
-                    "referenceName": "IRSDSORVnext",
+                    "referenceName": "IRSDSOR",
                     "type": "IntegrationRuntimeReference"
                 }
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/integrationRuntimes/IRSDSORVnext')]"
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRSDSOR')]"
             ]
         },
         {
@@ -635,7 +588,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/SDS_Vnext_Org_csv')]",
+            "name": "[concat(parameters('Data Factory Name'), '/SDS_Org_csv')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -652,7 +605,7 @@
                     }
                 },
                 "folder": {
-                    "name": "SDS Vnext Dataset"
+                    "name": "SDS Dataset"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -802,7 +755,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/SDS_Vnext_Users_csv')]",
+            "name": "[concat(parameters('Data Factory Name'), '/SDS_Users_csv')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -819,7 +772,7 @@
                     }
                 },
                 "folder": {
-                    "name": "SDS Vnext Dataset"
+                    "name": "SDS Dataset"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -880,7 +833,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/SDS_Vnext_Courses_csv')]",
+            "name": "[concat(parameters('Data Factory Name'), '/SDS_Courses_csv')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -897,7 +850,7 @@
                     }
                 },
                 "folder": {
-                    "name": "SDS Vnext Dataset"
+                    "name": "SDS Dataset"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -954,7 +907,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/SDS_Vnext_Roles_csv')]",
+            "name": "[concat(parameters('Data Factory Name'), '/SDS_Roles_csv')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -971,7 +924,7 @@
                     }
                 },
                 "folder": {
-                    "name": "SDS Vnext Dataset"
+                    "name": "SDS Dataset"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -1240,7 +1193,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/SDS_Vnext_Enrollments_csv')]",
+            "name": "[concat(parameters('Data Factory Name'), '/SDS_Enrollments_csv')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -1257,7 +1210,7 @@
                     }
                 },
                 "folder": {
-                    "name": "SDS Vnext Dataset"
+                    "name": "SDS Dataset"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -1396,7 +1349,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/SDS_Vnext_Demographics_csv')]",
+            "name": "[concat(parameters('Data Factory Name'), '/SDS_Demographics_csv')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -1413,7 +1366,7 @@
                     }
                 },
                 "folder": {
-                    "name": "SDS Vnext Dataset"
+                    "name": "SDS Dataset"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -1474,7 +1427,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/SDS_Vnext_Relationships_csv')]",
+            "name": "[concat(parameters('Data Factory Name'), '/SDS_Relationships_csv')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -1491,7 +1444,7 @@
                     }
                 },
                 "folder": {
-                    "name": "SDS Vnext Dataset"
+                    "name": "SDS Dataset"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -1532,7 +1485,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/SDS_Vnext_AcademicSessions_csv')]",
+            "name": "[concat(parameters('Data Factory Name'), '/SDS_AcademicSessions_csv')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -1549,7 +1502,7 @@
                     }
                 },
                 "folder": {
-                    "name": "SDS Vnext Dataset"
+                    "name": "SDS Dataset"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -1696,7 +1649,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/SDS_Vnext_storage')]",
+            "name": "[concat(parameters('Data Factory Name'), '/SDS_storage')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -1725,7 +1678,7 @@
                     }
                 },
                 "folder": {
-                    "name": "SDS Vnext Dataset"
+                    "name": "SDS Dataset"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -1752,7 +1705,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/SDS_Vnext_Files')]",
+            "name": "[concat(parameters('Data Factory Name'), '/SDS_Files')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -1766,7 +1719,7 @@
                     }
                 },
                 "folder": {
-                    "name": "SDS Vnext Dataset"
+                    "name": "SDS Dataset"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -1791,7 +1744,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/SDS_Vnext_Validation_Errors_csv')]",
+            "name": "[concat(parameters('Data Factory Name'), '/SDS_Validation_Errors_csv')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -1808,7 +1761,7 @@
                     }
                 },
                 "folder": {
-                    "name": "SDS Vnext Dataset"
+                    "name": "SDS Dataset"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -2165,7 +2118,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/SDS_Vnext_classes_CSV')]",
+            "name": "[concat(parameters('Data Factory Name'), '/SDS_classes_CSV')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -2182,7 +2135,7 @@
                     }
                 },
                 "folder": {
-                    "name": "SDS Vnext Dataset"
+                    "name": "SDS Dataset"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -2240,7 +2193,7 @@
                     "type": "LinkedServiceReference"
                 },
                 "folder": {
-                    "name": "SDS Vnext Dataset"
+                    "name": "SDS Dataset"
                 },
                 "annotations": [],
                 "type": "DelimitedText",
@@ -2280,7 +2233,7 @@
             "apiVersion": "2018-06-01",
             "properties": {
                 "folder": {
-                    "name": "SDS_Vnext_DataFlows"
+                    "name": "SDS_DataFlows"
                 },
                 "type": "MappingDataFlow",
                 "typeProperties": {
@@ -2296,7 +2249,7 @@
                     "sinks": [
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Org_csv",
+                                "referenceName": "SDS_Org_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkSdsSchoolCsv"
@@ -2315,7 +2268,7 @@
             },
             "dependsOn": [
                 "[concat(variables('factoryId'), '/datasets/OR_orgs_json')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Org_csv')]"
+                "[concat(variables('factoryId'), '/datasets/SDS_Org_csv')]"
             ]
         },
         {
@@ -2324,7 +2277,7 @@
             "apiVersion": "2018-06-01",
             "properties": {
                 "folder": {
-                    "name": "SDS_Vnext_DataFlows"
+                    "name": "SDS_DataFlows"
                 },
                 "type": "MappingDataFlow",
                 "typeProperties": {
@@ -2340,7 +2293,7 @@
                     "sinks": [
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Users_csv",
+                                "referenceName": "SDS_Users_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkSdsUsersCsv",
@@ -2363,7 +2316,7 @@
             },
             "dependsOn": [
                 "[concat(variables('factoryId'), '/datasets/OR_users_json')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Users_csv')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_Users_csv')]",
                 "[concat(variables('factoryId'), '/linkedServices/',parameters('Storage account name'))]"
             ]
         },
@@ -2373,7 +2326,7 @@
             "apiVersion": "2018-06-01",
             "properties": {
                 "folder": {
-                    "name": "SDS_Vnext_DataFlows"
+                    "name": "SDS_DataFlows"
                 },
                 "type": "MappingDataFlow",
                 "typeProperties": {
@@ -2389,7 +2342,7 @@
                     "sinks": [
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Courses_csv",
+                                "referenceName": "SDS_Courses_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkSdsCoursesCsv"
@@ -2414,7 +2367,7 @@
             },
             "dependsOn": [
                 "[concat(variables('factoryId'), '/datasets/OR_courses_json')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Courses_csv')]"
+                "[concat(variables('factoryId'), '/datasets/SDS_Courses_csv')]"
             ]
         },
         {
@@ -2423,7 +2376,7 @@
             "apiVersion": "2018-06-01",
             "properties": {
                 "folder": {
-                    "name": "SDS_Vnext_DataFlows"
+                    "name": "SDS_DataFlows"
                 },
                 "type": "MappingDataFlow",
                 "typeProperties": {
@@ -2439,7 +2392,7 @@
                     "sinks": [
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Roles_csv",
+                                "referenceName": "SDS_Roles_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkSdsRolesCsv",
@@ -2465,7 +2418,7 @@
             },
             "dependsOn": [
                 "[concat(variables('factoryId'), '/datasets/OR_users_json')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Roles_csv')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_Roles_csv')]",
                 "[concat(variables('factoryId'), '/linkedServices/',parameters('Storage account name'))]"
             ]
         },
@@ -2475,7 +2428,7 @@
             "apiVersion": "2018-06-01",
             "properties": {
                 "folder": {
-                    "name": "SDS_Vnext_DataFlows"
+                    "name": "SDS_DataFlows"
                 },
                 "type": "MappingDataFlow",
                 "typeProperties": {
@@ -2498,7 +2451,7 @@
                     "sinks": [
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Enrollments_csv",
+                                "referenceName": "SDS_Enrollments_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkSdsEnrollmentsCsv"
@@ -2536,7 +2489,7 @@
             "dependsOn": [
                 "[concat(variables('factoryId'), '/datasets/OR_enrollment_json')]",
                 "[concat(variables('factoryId'), '/datasets/OR_classGroups_json')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Enrollments_csv')]"
+                "[concat(variables('factoryId'), '/datasets/SDS_Enrollments_csv')]"
             ]
         },
         {
@@ -2545,7 +2498,7 @@
             "apiVersion": "2018-06-01",
             "properties": {
                 "folder": {
-                    "name": "SDS_Vnext_DataFlows"
+                    "name": "SDS_DataFlows"
                 },
                 "type": "MappingDataFlow",
                 "typeProperties": {
@@ -2561,7 +2514,7 @@
                     "sinks": [
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Demographics_csv",
+                                "referenceName": "SDS_Demographics_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkSdsDemographicsCsv"
@@ -2586,7 +2539,7 @@
             },
             "dependsOn": [
                 "[concat(variables('factoryId'), '/datasets/OR_demographics_json')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Demographics_csv')]"
+                "[concat(variables('factoryId'), '/datasets/SDS_Demographics_csv')]"
             ]
         },
         {
@@ -2595,7 +2548,7 @@
             "apiVersion": "2018-06-01",
             "properties": {
                 "folder": {
-                    "name": "SDS_Vnext_DataFlows"
+                    "name": "SDS_DataFlows"
                 },
                 "type": "MappingDataFlow",
                 "typeProperties": {
@@ -2618,7 +2571,7 @@
                     "sinks": [
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_classes_CSV",
+                                "referenceName": "SDS_classes_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkSdsClassesCsv"
@@ -2659,7 +2612,7 @@
             "dependsOn": [
                 "[concat(variables('factoryId'), '/datasets/OR_class_json')]",
                 "[concat(variables('factoryId'), '/datasets/OR_classGroups_json')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_classes_CSV')]"
+                "[concat(variables('factoryId'), '/datasets/SDS_classes_csv')]"
             ]
         },
         {
@@ -2668,7 +2621,7 @@
             "apiVersion": "2018-06-01",
             "properties": {
                 "folder": {
-                    "name": "SDS_Vnext_DataFlows"
+                    "name": "SDS_DataFlows"
                 },
                 "type": "MappingDataFlow",
                 "typeProperties": {
@@ -2684,7 +2637,7 @@
                     "sinks": [
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Relationships_csv",
+                                "referenceName": "SDS_Relationships_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkSdsRelationshipsCsv",
@@ -2713,7 +2666,7 @@
             },
             "dependsOn": [
                 "[concat(variables('factoryId'), '/datasets/OR_users_json')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Relationships_csv')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_Relationships_csv')]",
                 "[concat(variables('factoryId'), '/linkedServices/',parameters('Storage account name'))]"
             ]
         },
@@ -2723,7 +2676,7 @@
             "apiVersion": "2018-06-01",
             "properties": {
                 "folder": {
-                    "name": "SDS_Vnext_DataFlows"
+                    "name": "SDS_DataFlows"
                 },
                 "type": "MappingDataFlow",
                 "typeProperties": {
@@ -2739,7 +2692,7 @@
                     "sinks": [
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_AcademicSessions_csv",
+                                "referenceName": "SDS_AcademicSessions_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkSDSAcademicSessions"
@@ -2822,7 +2775,7 @@
             },
             "dependsOn": [
                 "[concat(variables('factoryId'), '/datasets/OR_academicSessions_json')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_AcademicSessions_csv')]"
+                "[concat(variables('factoryId'), '/datasets/SDS_AcademicSessions_csv')]"
             ]
         },
         {
@@ -2831,14 +2784,14 @@
             "apiVersion": "2018-06-01",
             "properties": {
                 "folder": {
-                    "name": "SDS_Vnext_DataFlows"
+                    "name": "SDS_DataFlows"
                 },
                 "type": "MappingDataFlow",
                 "typeProperties": {
                     "sources": [
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Users_csv",
+                                "referenceName": "SDS_Users_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sourceUsersCsv"
@@ -2847,21 +2800,21 @@
                     "sinks": [
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Users_csv",
+                                "referenceName": "SDS_Users_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkinvalidUserRecordsCSV"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Users_csv",
+                                "referenceName": "SDS_Users_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkValidUserCSV"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Validation_Errors_csv",
+                                "referenceName": "SDS_Validation_Errors_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkUserInvalidErrorLog"
@@ -2975,8 +2928,8 @@
                 }
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Users_csv')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Validation_Errors_csv')]"
+                "[concat(variables('factoryId'), '/datasets/SDS_Users_csv')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_Validation_Errors_csv')]"
             ]
         },
         {
@@ -2985,14 +2938,14 @@
             "apiVersion": "2018-06-01",
             "properties": {
                 "folder": {
-                    "name": "SDS_Vnext_DataFlows"
+                    "name": "SDS_DataFlows"
                 },
                 "type": "MappingDataFlow",
                 "typeProperties": {
                     "sources": [
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Users_csv",
+                                "referenceName": "SDS_Users_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sourceUsersCsv"
@@ -3001,21 +2954,21 @@
                     "sinks": [
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Users_csv",
+                                "referenceName": "SDS_Users_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkinvalidUserRecordsCSV"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Users_csv",
+                                "referenceName": "SDS_Users_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkValidUserCSV"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Validation_Errors_csv",
+                                "referenceName": "SDS_Validation_Errors_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkInvalidUsersErrorLog"
@@ -3135,8 +3088,8 @@
                 }
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Users_csv')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Validation_Errors_csv')]"
+                "[concat(variables('factoryId'), '/datasets/SDS_Users_csv')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_Validation_Errors_csv')]"
             ]
         },
         {
@@ -3145,7 +3098,7 @@
             "apiVersion": "2018-06-01",
             "properties": {
                 "folder": {
-                    "name": "SDS_Vnext_DataFlows"
+                    "name": "SDS_DataFlows"
                 },
                 "type": "MappingDataFlow",
                 "typeProperties": {
@@ -3161,7 +3114,7 @@
                     "sinks": [
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Users_csv",
+                                "referenceName": "SDS_Users_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkSdsUsersCsv",
@@ -3184,80 +3137,80 @@
             },
             "dependsOn": [
                 "[concat(variables('factoryId'), '/datasets/OR_users_json')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Users_csv')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_Users_csv')]",
                 "[concat(variables('factoryId'), '/linkedServices/',parameters('Storage account name'))]"
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/validateSdsVnextAllCsv')]",
+            "name": "[concat(parameters('Data Factory Name'), '/validateSdsAllCsv')]",
             "type": "Microsoft.DataFactory/factories/dataflows",
             "apiVersion": "2018-06-01",
             "properties": {
                 "folder": {
-                    "name": "SDS_Vnext_DataFlows"
+                    "name": "SDS_DataFlows"
                 },
                 "type": "MappingDataFlow",
                 "typeProperties": {
                     "sources": [
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Org_csv",
+                                "referenceName": "SDS_Org_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sourceOrgsCsv"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Validation_Errors_csv",
+                                "referenceName": "SDS_Validation_Errors_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sourceInvalidUsersErrorLog"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Roles_csv",
+                                "referenceName": "SDS_Roles_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sourceRolesCsv"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_AcademicSessions_csv",
+                                "referenceName": "SDS_AcademicSessions_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sourceAcademicSessionsCsv"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Enrollments_csv",
+                                "referenceName": "SDS_Enrollments_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sourceEnrollmentCsv"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Courses_csv",
+                                "referenceName": "SDS_Courses_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sourceCoursesCsv"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Demographics_csv",
+                                "referenceName": "SDS_Demographics_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sourceDemographicsCSV"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Relationships_csv",
+                                "referenceName": "SDS_Relationships_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sourceRelationshipsCsv"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_classes_CSV",
+                                "referenceName": "SDS_classes_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sourceClassSouece"
@@ -3266,119 +3219,119 @@
                     "sinks": [
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Validation_Errors_csv",
+                                "referenceName": "SDS_Validation_Errors_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkValidationErrorsCsv"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Org_csv",
+                                "referenceName": "SDS_Org_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkInvalidOrgCSV"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Org_csv",
+                                "referenceName": "SDS_Org_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkValidOrgsCSV"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Roles_csv",
+                                "referenceName": "SDS_Roles_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkValidRoleCsv"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Courses_csv",
+                                "referenceName": "SDS_Courses_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkValidCoursesCSV"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Courses_csv",
+                                "referenceName": "SDS_Courses_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkInvalidCoursesCSV"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Enrollments_csv",
+                                "referenceName": "SDS_Enrollments_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkValidEnrollmentsCSV"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Enrollments_csv",
+                                "referenceName": "SDS_Enrollments_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkInvalidEnrollmentsCSV"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_AcademicSessions_csv",
+                                "referenceName": "SDS_AcademicSessions_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkValidAcademicSessionsCSV"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_AcademicSessions_csv",
+                                "referenceName": "SDS_AcademicSessions_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkInvalidAcademicSessionsCSV"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Roles_csv",
+                                "referenceName": "SDS_Roles_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkInvalidRoleCsv"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Demographics_csv",
+                                "referenceName": "SDS_Demographics_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkInvalidDemographicsCsv"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Demographics_csv",
+                                "referenceName": "SDS_Demographics_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkValidDemographicsCsv"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Relationships_csv",
+                                "referenceName": "SDS_Relationships_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkValidRelationshipRecords"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Relationships_csv",
+                                "referenceName": "SDS_Relationships_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkInvalidRelationshipRecords"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_classes_CSV",
+                                "referenceName": "SDS_classes_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkInvalidClassesRecords"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_classes_CSV",
+                                "referenceName": "SDS_classes_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkValidClassesRecords"
@@ -3468,45 +3421,45 @@
                 }
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Org_csv')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Validation_Errors_csv')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Roles_csv')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_AcademicSessions_csv')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Enrollments_csv')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Courses_csv')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Demographics_csv')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Relationships_csv')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_classes_CSV')]"
+                "[concat(variables('factoryId'), '/datasets/SDS_Org_csv')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_Validation_Errors_csv')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_Roles_csv')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_AcademicSessions_csv')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_Enrollments_csv')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_Courses_csv')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_Demographics_csv')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_Relationships_csv')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_classes_csv')]"
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/validateSdsVnextRequiredCsv')]",
+            "name": "[concat(parameters('Data Factory Name'), '/validateSdsRequiredCsv')]",
             "type": "Microsoft.DataFactory/factories/dataflows",
             "apiVersion": "2018-06-01",
             "properties": {
                 "folder": {
-                    "name": "SDS_Vnext_DataFlows"
+                    "name": "SDS_DataFlows"
                 },
                 "type": "MappingDataFlow",
                 "typeProperties": {
                     "sources": [
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Org_csv",
+                                "referenceName": "SDS_Org_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sourceOrgsCsv"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Validation_Errors_csv",
+                                "referenceName": "SDS_Validation_Errors_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sourceInvalidUsersErrorLog"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Roles_csv",
+                                "referenceName": "SDS_Roles_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sourceRolesCsv"
@@ -3515,35 +3468,35 @@
                     "sinks": [
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Validation_Errors_csv",
+                                "referenceName": "SDS_Validation_Errors_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkValidationErrorsCsv"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Org_csv",
+                                "referenceName": "SDS_Org_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkInvalidOrgCSV"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Org_csv",
+                                "referenceName": "SDS_Org_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkValidOrgsCSV"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Roles_csv",
+                                "referenceName": "SDS_Roles_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkValidRoleCsv"
                         },
                         {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Roles_csv",
+                                "referenceName": "SDS_Roles_csv",
                                 "type": "DatasetReference"
                             },
                             "name": "sinkInvalidRoleCsv"
@@ -3579,9 +3532,9 @@
                 }
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Org_csv')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Validation_Errors_csv')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Roles_csv')]"
+                "[concat(variables('factoryId'), '/datasets/SDS_Org_csv')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_Validation_Errors_csv')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_Roles_csv')]"
             ]
         },
         {
@@ -3651,7 +3604,7 @@
                     }
                 },
                 "folder": {
-                    "name": "OR_to_SDS_Vnext/Vnext Sub Pipelines"
+                    "name": "OR_to_SDS/Sub Pipelines"
                 },
                 "annotations": [],
                 "lastPublishTime": "2024-04-04T09:20:29Z"
@@ -3661,7 +3614,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/Master_OR_to_SDS_Vnext')]",
+            "name": "[concat(parameters('Data Factory Name'), '/Master_OR_to_SDS')]",
             "type": "Microsoft.DataFactory/factories/pipelines",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -3697,7 +3650,7 @@
                         }
                     },
                     {
-                        "name": "OR_Json_Transform_To_SDS_Vnext",
+                        "name": "OR_Json_Transform_To_SDS",
                         "type": "ExecutePipeline",
                         "dependsOn": [
                             {
@@ -3713,7 +3666,7 @@
                         "userProperties": [],
                         "typeProperties": {
                             "pipeline": {
-                                "referenceName": "Transform_to_SDS_Vnext_csv",
+                                "referenceName": "Transform_to_SDS_csv",
                                 "type": "PipelineReference"
                             },
                             "waitOnCompletion": true,
@@ -3734,11 +3687,11 @@
                         }
                     },
                     {
-                        "name": "Validate_and_Upload_SDS_Vnext",
+                        "name": "Validate_and_Upload_SDS",
                         "type": "ExecutePipeline",
                         "dependsOn": [
                             {
-                                "activity": "OR_Json_Transform_To_SDS_Vnext",
+                                "activity": "OR_Json_Transform_To_SDS",
                                 "dependencyConditions": [
                                     "Succeeded"
                                 ]
@@ -3802,14 +3755,14 @@
                     }
                 },
                 "folder": {
-                    "name": "OR_to_SDS_Vnext"
+                    "name": "OR_to_SDS"
                 },
                 "annotations": [],
                 "lastPublishTime": "2024-04-10T07:53:15Z"
             },
             "dependsOn": [
                 "[concat(variables('factoryId'), '/pipelines/ForEach_OR_Endpoints')]",
-                "[concat(variables('factoryId'), '/pipelines/Transform_to_SDS_Vnext_csv')]",
+                "[concat(variables('factoryId'), '/pipelines/Transform_to_SDS_csv')]",
                 "[concat(variables('factoryId'), '/pipelines/Validate_and_Upload')]"
             ]
         },
@@ -3848,7 +3801,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IRSDSORVnext",
+                                "referenceName": "IRSDSOR",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "body": {
@@ -3877,7 +3830,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IRSDSORVnext",
+                                "referenceName": "IRSDSOR",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "authentication": {
@@ -3937,7 +3890,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IRSDSORVnext",
+                                            "referenceName": "IRSDSOR",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "body": {
@@ -4015,7 +3968,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IRSDSORVnext",
+                                            "referenceName": "IRSDSOR",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "body": {
@@ -4063,17 +4016,17 @@
                     }
                 },
                 "folder": {
-                    "name": "OR_to_SDS_Vnext/Vnext Sub Pipelines"
+                    "name": "OR_to_SDS/Sub Pipelines"
                 },
                 "annotations": [],
                 "lastPublishTime": "2024-05-22T09:23:37Z"
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/integrationRuntimes/IRSDSORVnext')]"
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRSDSOR')]"
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/Upload_to_SDS_Vnext')]",
+            "name": "[concat(parameters('Data Factory Name'), '/Upload_to_SDS')]",
             "type": "Microsoft.DataFactory/factories/pipelines",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -4107,7 +4060,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IRSDSORVnext",
+                                "referenceName": "IRSDSOR",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "body": {
@@ -4200,7 +4153,7 @@
                         },
                         "inputs": [
                             {
-                                "referenceName": "SDS_Vnext_Files",
+                                "referenceName": "SDS_Files",
                                 "type": "DatasetReference",
                                 "parameters": {
                                     "directory": "na"
@@ -4209,7 +4162,7 @@
                         ],
                         "outputs": [
                             {
-                                "referenceName": "SDS_Vnext_storage",
+                                "referenceName": "SDS_storage",
                                 "type": "DatasetReference",
                                 "parameters": {
                                     "sasUriParam": {
@@ -4265,7 +4218,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IRSDSORVnext",
+                                "referenceName": "IRSDSOR",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "body": {}
@@ -4291,7 +4244,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IRSDSORVnext",
+                                "referenceName": "IRSDSOR",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "authentication": {
@@ -4332,7 +4285,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IRSDSORVnext",
+                                "referenceName": "IRSDSOR",
                                 "type": "IntegrationRuntimeReference"
                             }
                         }
@@ -4453,7 +4406,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IRSDSORVnext",
+                                            "referenceName": "IRSDSOR",
                                             "type": "IntegrationRuntimeReference"
                                         }
                                     }
@@ -4463,7 +4416,7 @@
                         }
                     },
                     {
-                        "name": "GetInblundFlows",
+                        "name": "GetInboundFlows",
                         "type": "WebActivity",
                         "dependsOn": [
                             {
@@ -4494,7 +4447,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IRSDSORVnext",
+                                "referenceName": "IRSDSOR",
                                 "type": "IntegrationRuntimeReference"
                             }
                         }
@@ -4504,7 +4457,7 @@
                         "type": "IfCondition",
                         "dependsOn": [
                             {
-                                "activity": "GetInblundFlows",
+                                "activity": "GetInboundFlows",
                                 "dependencyConditions": [
                                     "Succeeded"
                                 ]
@@ -4513,7 +4466,7 @@
                         "userProperties": [],
                         "typeProperties": {
                             "expression": {
-                                "value": "@empty(activity('GetInblundFlows').output.value)",
+                                "value": "@empty(activity('GetInboundFlows').output.value)",
                                 "type": "Expression"
                             },
                             "ifFalseActivities": [
@@ -4542,7 +4495,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IRSDSORVnext",
+                                            "referenceName": "IRSDSOR",
                                             "type": "IntegrationRuntimeReference"
                                         }
                                     }
@@ -4590,7 +4543,7 @@
                                     "typeProperties": {
                                         "variableName": "inboundFlowId",
                                         "value": {
-                                            "value": "@{if(contains(activity('GetInblundFlows').output.value,pipeline().globalParameters.sdsInboundFlowId),pipeline().globalParameters.sdsInboundFlowId,activity('GetInblundFlows').output.value[0].id)}",
+                                            "value": "@{if(contains(activity('GetInboundFlows').output.value,pipeline().globalParameters.sdsInboundFlowId),pipeline().globalParameters.sdsInboundFlowId,activity('GetInboundFlows').output.value[0].id)}",
                                             "type": "Expression"
                                         }
                                     }
@@ -4623,7 +4576,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IRSDSORVnext",
+                                            "referenceName": "IRSDSOR",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "body": {
@@ -4665,7 +4618,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IRSDSORVnext",
+                                            "referenceName": "IRSDSOR",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "body": {
@@ -4707,7 +4660,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IRSDSORVnext",
+                                            "referenceName": "IRSDSOR",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "body": {
@@ -4749,7 +4702,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IRSDSORVnext",
+                                            "referenceName": "IRSDSOR",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "body": {
@@ -4852,7 +4805,7 @@
                                             "type": "Expression"
                                         },
                                         "connectVia": {
-                                            "referenceName": "IRSDSORVnext",
+                                            "referenceName": "IRSDSOR",
                                             "type": "IntegrationRuntimeReference"
                                         }
                                     }
@@ -4898,15 +4851,15 @@
                     }
                 },
                 "folder": {
-                    "name": "OR_to_SDS_Vnext/Vnext Sub Pipelines"
+                    "name": "OR_to_SDS/Sub Pipelines"
                 },
                 "annotations": [],
                 "lastPublishTime": "2024-05-22T09:23:37Z"
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/integrationRuntimes/IRSDSORVnext')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Files')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_storage')]"
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRSDSOR')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_Files')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_storage')]"
             ]
         },
         {
@@ -4944,7 +4897,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IRSDSORVnext",
+                                "referenceName": "IRSDSOR",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "body": {
@@ -4985,7 +4938,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IRSDSORVnext",
+                                "referenceName": "IRSDSOR",
                                 "type": "IntegrationRuntimeReference"
                             }
                         }
@@ -5181,7 +5134,7 @@
                                 "type": "Expression"
                             },
                             "connectVia": {
-                                "referenceName": "IRSDSORVnext",
+                                "referenceName": "IRSDSOR",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "authentication": {
@@ -5221,13 +5174,13 @@
                     }
                 },
                 "folder": {
-                    "name": "OR_to_SDS_Vnext/Vnext Sub Pipelines"
+                    "name": "OR_to_SDS/Sub Pipelines"
                 },
                 "annotations": [],
                 "lastPublishTime": "2024-05-31T14:50:06Z"
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/integrationRuntimes/IRSDSORVnext')]",
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRSDSOR')]",
                 "[concat(variables('factoryId'), '/datasets/OR_API_New_source')]",
                 "[concat(variables('factoryId'), '/datasets/OR_API_New_json_sink')]"
             ]
@@ -5275,7 +5228,7 @@
                                 }
                             },
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Files",
+                                "referenceName": "SDS_Files",
                                 "type": "DatasetReference",
                                 "parameters": {
                                     "directory": "na"
@@ -5351,7 +5304,7 @@
                             ],
                             "ifTrueActivities": [
                                 {
-                                    "name": "Upload_to_SDS_Vnext",
+                                    "name": "Upload_to_SDS",
                                     "type": "ExecutePipeline",
                                     "dependsOn": [],
                                     "policy": {
@@ -5360,7 +5313,7 @@
                                     "userProperties": [],
                                     "typeProperties": {
                                         "pipeline": {
-                                            "referenceName": "Upload_to_SDS_Vnext",
+                                            "referenceName": "Upload_to_SDS",
                                             "type": "PipelineReference"
                                         },
                                         "waitOnCompletion": true,
@@ -5377,7 +5330,7 @@
                                     "type": "ExecutePipeline",
                                     "dependsOn": [
                                         {
-                                            "activity": "Upload_to_SDS_Vnext",
+                                            "activity": "Upload_to_SDS",
                                             "dependencyConditions": [
                                                 "Succeeded"
                                             ]
@@ -5430,7 +5383,7 @@
                                     "type": "ExecutePipeline",
                                     "dependsOn": [
                                         {
-                                            "activity": "Upload_to_SDS_Vnext",
+                                            "activity": "Upload_to_SDS",
                                             "dependencyConditions": [
                                                 "Failed"
                                             ]
@@ -5559,7 +5512,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IRSDSORVnext",
+                                            "referenceName": "IRSDSOR",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -5634,7 +5587,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IRSDSORVnext",
+                                            "referenceName": "IRSDSOR",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -5662,7 +5615,7 @@
                             },
                             "ifFalseActivities": [
                                 {
-                                    "name": "Validate_Required_SDS_Vnext_CSV",
+                                    "name": "Validate_Required_SDS_CSV",
                                     "type": "ExecuteDataFlow",
                                     "dependsOn": [],
                                     "policy": {
@@ -5675,7 +5628,7 @@
                                     "userProperties": [],
                                     "typeProperties": {
                                         "dataflow": {
-                                            "referenceName": "validateSdsVnextRequiredCsv",
+                                            "referenceName": "validateSdsRequiredCsv",
                                             "type": "DataFlowReference",
                                             "parameters": {
                                                 "sdsStorageFolder": {
@@ -5768,7 +5721,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IRSDSORVnext",
+                                            "referenceName": "IRSDSOR",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -5779,7 +5732,7 @@
                                     "type": "Lookup",
                                     "dependsOn": [
                                         {
-                                            "activity": "Validate_Required_SDS_Vnext_CSV",
+                                            "activity": "Validate_Required_SDS_CSV",
                                             "dependencyConditions": [
                                                 "Succeeded"
                                             ]
@@ -5811,7 +5764,7 @@
                                             }
                                         },
                                         "dataset": {
-                                            "referenceName": "SDS_Vnext_Files",
+                                            "referenceName": "SDS_Files",
                                             "type": "DatasetReference",
                                             "parameters": {
                                                 "directory": "na"
@@ -5825,7 +5778,7 @@
                                     "type": "Lookup",
                                     "dependsOn": [
                                         {
-                                            "activity": "Validate_Required_SDS_Vnext_CSV",
+                                            "activity": "Validate_Required_SDS_CSV",
                                             "dependencyConditions": [
                                                 "Succeeded"
                                             ]
@@ -5857,7 +5810,7 @@
                                             }
                                         },
                                         "dataset": {
-                                            "referenceName": "SDS_Vnext_Files",
+                                            "referenceName": "SDS_Files",
                                             "type": "DatasetReference",
                                             "parameters": {
                                                 "directory": "na"
@@ -5871,7 +5824,7 @@
                                     "type": "Lookup",
                                     "dependsOn": [
                                         {
-                                            "activity": "Validate_Required_SDS_Vnext_CSV",
+                                            "activity": "Validate_Required_SDS_CSV",
                                             "dependencyConditions": [
                                                 "Succeeded"
                                             ]
@@ -5903,7 +5856,7 @@
                                             }
                                         },
                                         "dataset": {
-                                            "referenceName": "SDS_Vnext_Files",
+                                            "referenceName": "SDS_Files",
                                             "type": "DatasetReference",
                                             "parameters": {
                                                 "directory": "na"
@@ -5951,7 +5904,7 @@
                             ],
                             "ifTrueActivities": [
                                 {
-                                    "name": "validate_SDS_Vnext_All_CSVs",
+                                    "name": "validate_SDS_All_CSVs",
                                     "type": "ExecuteDataFlow",
                                     "dependsOn": [],
                                     "policy": {
@@ -5964,7 +5917,7 @@
                                     "userProperties": [],
                                     "typeProperties": {
                                         "dataflow": {
-                                            "referenceName": "validateSdsVnextAllCsv",
+                                            "referenceName": "validateSdsAllCsv",
                                             "type": "DataFlowReference",
                                             "parameters": {
                                                 "sdsStorageFolder": {
@@ -6237,7 +6190,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IRSDSORVnext",
+                                            "referenceName": "IRSDSOR",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -6248,7 +6201,7 @@
                                     "type": "Lookup",
                                     "dependsOn": [
                                         {
-                                            "activity": "validate_SDS_Vnext_All_CSVs",
+                                            "activity": "validate_SDS_All_CSVs",
                                             "dependencyConditions": [
                                                 "Succeeded"
                                             ]
@@ -6280,7 +6233,7 @@
                                             }
                                         },
                                         "dataset": {
-                                            "referenceName": "SDS_Vnext_Files",
+                                            "referenceName": "SDS_Files",
                                             "type": "DatasetReference",
                                             "parameters": {
                                                 "directory": "na"
@@ -6294,7 +6247,7 @@
                                     "type": "Lookup",
                                     "dependsOn": [
                                         {
-                                            "activity": "validate_SDS_Vnext_All_CSVs",
+                                            "activity": "validate_SDS_All_CSVs",
                                             "dependencyConditions": [
                                                 "Succeeded"
                                             ]
@@ -6326,7 +6279,7 @@
                                             }
                                         },
                                         "dataset": {
-                                            "referenceName": "SDS_Vnext_Files",
+                                            "referenceName": "SDS_Files",
                                             "type": "DatasetReference",
                                             "parameters": {
                                                 "directory": "na"
@@ -6340,7 +6293,7 @@
                                     "type": "Lookup",
                                     "dependsOn": [
                                         {
-                                            "activity": "validate_SDS_Vnext_All_CSVs",
+                                            "activity": "validate_SDS_All_CSVs",
                                             "dependencyConditions": [
                                                 "Succeeded"
                                             ]
@@ -6372,7 +6325,7 @@
                                             }
                                         },
                                         "dataset": {
-                                            "referenceName": "SDS_Vnext_Files",
+                                            "referenceName": "SDS_Files",
                                             "type": "DatasetReference",
                                             "parameters": {
                                                 "directory": "na"
@@ -6386,7 +6339,7 @@
                                     "type": "Lookup",
                                     "dependsOn": [
                                         {
-                                            "activity": "validate_SDS_Vnext_All_CSVs",
+                                            "activity": "validate_SDS_All_CSVs",
                                             "dependencyConditions": [
                                                 "Succeeded"
                                             ]
@@ -6418,7 +6371,7 @@
                                             }
                                         },
                                         "dataset": {
-                                            "referenceName": "SDS_Vnext_Files",
+                                            "referenceName": "SDS_Files",
                                             "type": "DatasetReference",
                                             "parameters": {
                                                 "directory": "na"
@@ -6432,7 +6385,7 @@
                                     "type": "Lookup",
                                     "dependsOn": [
                                         {
-                                            "activity": "validate_SDS_Vnext_All_CSVs",
+                                            "activity": "validate_SDS_All_CSVs",
                                             "dependencyConditions": [
                                                 "Succeeded"
                                             ]
@@ -6464,7 +6417,7 @@
                                             }
                                         },
                                         "dataset": {
-                                            "referenceName": "SDS_Vnext_Files",
+                                            "referenceName": "SDS_Files",
                                             "type": "DatasetReference",
                                             "parameters": {
                                                 "directory": "na"
@@ -6478,7 +6431,7 @@
                                     "type": "Lookup",
                                     "dependsOn": [
                                         {
-                                            "activity": "validate_SDS_Vnext_All_CSVs",
+                                            "activity": "validate_SDS_All_CSVs",
                                             "dependencyConditions": [
                                                 "Succeeded"
                                             ]
@@ -6510,7 +6463,7 @@
                                             }
                                         },
                                         "dataset": {
-                                            "referenceName": "SDS_Vnext_Files",
+                                            "referenceName": "SDS_Files",
                                             "type": "DatasetReference",
                                             "parameters": {
                                                 "directory": "na"
@@ -6524,7 +6477,7 @@
                                     "type": "Lookup",
                                     "dependsOn": [
                                         {
-                                            "activity": "validate_SDS_Vnext_All_CSVs",
+                                            "activity": "validate_SDS_All_CSVs",
                                             "dependencyConditions": [
                                                 "Succeeded"
                                             ]
@@ -6556,7 +6509,7 @@
                                             }
                                         },
                                         "dataset": {
-                                            "referenceName": "SDS_Vnext_Files",
+                                            "referenceName": "SDS_Files",
                                             "type": "DatasetReference",
                                             "parameters": {
                                                 "directory": "na"
@@ -6570,7 +6523,7 @@
                                     "type": "Lookup",
                                     "dependsOn": [
                                         {
-                                            "activity": "validate_SDS_Vnext_All_CSVs",
+                                            "activity": "validate_SDS_All_CSVs",
                                             "dependencyConditions": [
                                                 "Succeeded"
                                             ]
@@ -6602,7 +6555,7 @@
                                             }
                                         },
                                         "dataset": {
-                                            "referenceName": "SDS_Vnext_Files",
+                                            "referenceName": "SDS_Files",
                                             "type": "DatasetReference",
                                             "parameters": {
                                                 "directory": "na"
@@ -6616,7 +6569,7 @@
                                     "type": "Lookup",
                                     "dependsOn": [
                                         {
-                                            "activity": "validate_SDS_Vnext_All_CSVs",
+                                            "activity": "validate_SDS_All_CSVs",
                                             "dependencyConditions": [
                                                 "Succeeded"
                                             ]
@@ -6648,7 +6601,7 @@
                                             }
                                         },
                                         "dataset": {
-                                            "referenceName": "SDS_Vnext_Files",
+                                            "referenceName": "SDS_Files",
                                             "type": "DatasetReference",
                                             "parameters": {
                                                 "directory": "na"
@@ -6762,24 +6715,24 @@
                     }
                 },
                 "folder": {
-                    "name": "OR_to_SDS_Vnext/Vnext Sub Pipelines"
+                    "name": "OR_to_SDS/Sub Pipelines"
                 },
                 "annotations": [],
                 "lastPublishTime": "2024-05-22T09:23:38Z"
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Files')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_Files')]",
                 "[concat(variables('factoryId'), '/pipelines/Send_email_reports')]",
-                "[concat(variables('factoryId'), '/pipelines/Upload_to_SDS_Vnext')]",
+                "[concat(variables('factoryId'), '/pipelines/Upload_to_SDS')]",
                 "[concat(variables('factoryId'), '/dataflows/validateOldUsersCsv')]",
-                "[concat(variables('factoryId'), '/integrationRuntimes/IRSDSORVnext')]",
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRSDSOR')]",
                 "[concat(variables('factoryId'), '/dataflows/validateNewUsersCsv')]",
-                "[concat(variables('factoryId'), '/dataflows/validateSdsVnextRequiredCsv')]",
-                "[concat(variables('factoryId'), '/dataflows/validateSdsVnextAllCsv')]"
+                "[concat(variables('factoryId'), '/dataflows/validateSdsRequiredCsv')]",
+                "[concat(variables('factoryId'), '/dataflows/validateSdsAllCsv')]"
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/Transform_to_SDS_Vnext_csv')]",
+            "name": "[concat(parameters('Data Factory Name'), '/Transform_to_SDS_csv')]",
             "type": "Microsoft.DataFactory/factories/pipelines",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -6833,7 +6786,7 @@
                             },
                             "staging": {},
                             "integrationRuntime": {
-                                "referenceName": "IRSDSORVnext",
+                                "referenceName": "IRSDSOR",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "traceLevel": "Fine"
@@ -6888,7 +6841,7 @@
                             },
                             "staging": {},
                             "integrationRuntime": {
-                                "referenceName": "IRSDSORVnext",
+                                "referenceName": "IRSDSOR",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "traceLevel": "Fine"
@@ -6954,7 +6907,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IRSDSORVnext",
+                                            "referenceName": "IRSDSOR",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -7004,7 +6957,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IRSDSORVnext",
+                                            "referenceName": "IRSDSOR",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -7032,7 +6985,7 @@
                             },
                             "ifTrueActivities": [
                                 {
-                                    "name": "Transfrom_SDS_Vnext_OptionalFiles",
+                                    "name": "Transfrom_SDS_OptionalFiles",
                                     "type": "ExecutePipeline",
                                     "dependsOn": [],
                                     "policy": {
@@ -7041,7 +6994,7 @@
                                     "userProperties": [],
                                     "typeProperties": {
                                         "pipeline": {
-                                            "referenceName": "Transform_to_Optionals_SDS_Vnext_csv",
+                                            "referenceName": "Transform_to_Optionals_SDS_csv",
                                             "type": "PipelineReference"
                                         },
                                         "waitOnCompletion": true,
@@ -7074,7 +7027,7 @@
                         "userProperties": [],
                         "typeProperties": {
                             "dataset": {
-                                "referenceName": "SDS_Vnext_Files",
+                                "referenceName": "SDS_Files",
                                 "type": "DatasetReference",
                                 "parameters": {
                                     "directory": {
@@ -7112,23 +7065,23 @@
                     }
                 },
                 "folder": {
-                    "name": "OR_to_SDS_Vnext/Vnext Sub Pipelines"
+                    "name": "OR_to_SDS/Sub Pipelines"
                 },
                 "annotations": [],
                 "lastPublishTime": "2024-05-22T09:23:38Z"
             },
             "dependsOn": [
                 "[concat(variables('factoryId'), '/dataflows/createOrgsCsv')]",
-                "[concat(variables('factoryId'), '/integrationRuntimes/IRSDSORVnext')]",
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRSDSOR')]",
                 "[concat(variables('factoryId'), '/dataflows/createRolesCsv')]",
-                "[concat(variables('factoryId'), '/datasets/SDS_Vnext_Files')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_Files')]",
                 "[concat(variables('factoryId'), '/dataflows/createOldUsersCsv')]",
                 "[concat(variables('factoryId'), '/dataflows/createUsersCsv')]",
-                "[concat(variables('factoryId'), '/pipelines/Transform_to_Optionals_SDS_Vnext_csv')]"
+                "[concat(variables('factoryId'), '/pipelines/Transform_to_Optionals_SDS_csv')]"
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/Transform_to_Optionals_SDS_Vnext_csv')]",
+            "name": "[concat(parameters('Data Factory Name'), '/Transform_to_Optionals_SDS_csv')]",
             "type": "Microsoft.DataFactory/factories/pipelines",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -7187,7 +7140,7 @@
                             },
                             "staging": {},
                             "integrationRuntime": {
-                                "referenceName": "IRSDSORVnext",
+                                "referenceName": "IRSDSOR",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "traceLevel": "Fine"
@@ -7234,7 +7187,7 @@
                             },
                             "staging": {},
                             "integrationRuntime": {
-                                "referenceName": "IRSDSORVnext",
+                                "referenceName": "IRSDSOR",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "traceLevel": "Fine"
@@ -7289,7 +7242,7 @@
                             },
                             "staging": {},
                             "integrationRuntime": {
-                                "referenceName": "IRSDSORVnext",
+                                "referenceName": "IRSDSOR",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "traceLevel": "Fine"
@@ -7337,7 +7290,7 @@
                             },
                             "staging": {},
                             "integrationRuntime": {
-                                "referenceName": "IRSDSORVnext",
+                                "referenceName": "IRSDSOR",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "traceLevel": "Fine"
@@ -7439,7 +7392,7 @@
                                         },
                                         "staging": {},
                                         "integrationRuntime": {
-                                            "referenceName": "IRSDSORVnext",
+                                            "referenceName": "IRSDSOR",
                                             "type": "IntegrationRuntimeReference"
                                         },
                                         "traceLevel": "Fine"
@@ -7507,7 +7460,7 @@
                             },
                             "staging": {},
                             "integrationRuntime": {
-                                "referenceName": "IRSDSORVnext",
+                                "referenceName": "IRSDSOR",
                                 "type": "IntegrationRuntimeReference"
                             },
                             "traceLevel": "Fine"
@@ -7628,14 +7581,14 @@
                     }
                 },
                 "folder": {
-                    "name": "OR_to_SDS_Vnext/Vnext Sub Pipelines"
+                    "name": "OR_to_SDS/Sub Pipelines"
                 },
                 "annotations": [],
                 "lastPublishTime": "2024-05-22T09:23:37Z"
             },
             "dependsOn": [
                 "[concat(variables('factoryId'), '/dataflows/createCoursesCsv')]",
-                "[concat(variables('factoryId'), '/integrationRuntimes/IRSDSORVnext')]",
+                "[concat(variables('factoryId'), '/integrationRuntimes/IRSDSOR')]",
                 "[concat(variables('factoryId'), '/dataflows/createEnrollmentsCsv')]",
                 "[concat(variables('factoryId'), '/dataflows/createRelationshipsCsv')]",
                 "[concat(variables('factoryId'), '/dataflows/createAcademicSessionsCsv')]",
