@@ -14,10 +14,6 @@
             "type": "string",
             "defaultValue": "https://partnertest.infinitecampus.org/campus/oneroster/microsofttest/ims/oneroster/v1p1"
         },
-        "factories_externalid": {
-            "defaultValue": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/Microsoft.DataFactory/factories/*')]",
-            "type": "String"
-        },
         "Data Factory Name": {
             "type": "string",
             "defaultValue": "adf-ORtoSDS",
