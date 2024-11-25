@@ -1,4 +1,4 @@
-# Solution Guide: Canvas API Provisiong Reports Data extract and Upload to SDS
+# Solution Guide: OneRoster API Data extract and Upload to SDS
 
 [Introduction](#introduction)
 
@@ -36,7 +36,7 @@ This solution leverages Azure Data Factory (ADF) to handle the daily orchestrati
 
 - Send an execution notice to designated admins via email. 
 
-This document provides a summary of the solution setup and operational info for Canvas.
+This document provides a summary of the solution setup and operational info for OneRoster.
 
 # Solution Summary
 
@@ -46,10 +46,10 @@ The Azure resources for this solution consist of the following:
 
 | Resource Name     | Resource          | Description                                                                                                                                                                                                                                                                                                                                              |
 | ----------------- | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| rg-CanvasAPItoSDS | Resource group    | Serves as a container for the resources in this solution                                                                                                                                                                                                                                                                                                 |
-| adf-CanvastoSds   | Data Factory (V2) | The data factory instance, containing the scheduled integration pipelines.                                                                                                                                                                                                                                                                               |
-| kv-canvas-sds     | Key vault         | Contains 2 keys: <br/>1) ClientSecretForSdsCsvADF— The client secret created via the App Registration for the ADF instance (details further down) <br/>2) CanvasToken– The token to access the Canvas REST API for your instance. [OAuth2 - Canvas LMS REST API Documentation (instructure.com)](https://canvas.instructure.com/doc/api/file.oauth.html) |
-| stcanvassds       | Storage account   | V2 storage account, Read-access geo-redundant storage, Encryption type: Microsoft-managed keys                                                                                                                                                                                                                                                           |
+| rg-OneRosterAPItoSDS | Resource group    | Serves as a container for the resources in this solution                                                                                                                                                                                                                                                                                                 |
+| adf-OneRostertoSDS   | Data Factory (V2) | The data factory instance, containing the scheduled integration pipelines.                                                                                                                                                                                                                                                                               |
+| kv-oneroster-sds     | Key vault         | Contains 2 keys: <br/>1) ClientSecretForSdsCsvADF— The client secret created via the App Registration for the ADF instance (details further down) <br/>2) CanvasToken– The token to access the Canvas REST API for your instance. [OAuth2 - Canvas LMS REST API Documentation (instructure.com)](https://canvas.instructure.com/doc/api/file.oauth.html) |
+| stonerostersds       | Storage account   | V2 storage account, Read-access geo-redundant storage, Encryption type: Microsoft-managed keys                                                                                                                                                                                                                                                           |
 
 The setup within the Azure
 subscription consists of provisioning and configuring the above resources with
@@ -61,31 +61,33 @@ following steps:
 2) On the Custom Deployment page, click "Build your own template in the
    editor" to open the template editor. 
 
-3) Load the Canvas_to_SDS_ADF_template.json file by clicking "Load
+3) Load the OR_to_SDS_ADF_Template.json file by clicking "Load
    file" in the template editor and selecting the appropriate file to
    upload.  Create a resource group where to place the resources if not
-   already done. (suggested name rg-CanvasAPItoSDS). Note: The optional parameters on the confirmation screen can be filled in later during the ADF setup.
+   already done. (suggested name rg-OneRosterAPItoSDS). Note: The optional parameters on the confirmation screen can be filled in later during the ADF setup.
 
-4) Modify the storage account access to enable managed identity adf-CanvastoSds (ADF instance) to read and modify contents. (“Storage Blob Data Contributor” role). 
+4)	Add the mandatory parameters value to create resources (Key vault name, Storage account name, Data Factory name).
 
-5) Do the same for authorized users who need to modify data in storage. Also, the user’s IP address should only be temporarily added in the firewall in the networking tab before updating the storage contents. This must be done even if the user has access control privileges.
+5)	Remaining parameter values can be added after deployment (refer to Data Factory setup/Global parameters).
 
-6) Modify key vault access to enable managed identity adf-CanvastoSds (ADF
+6) Modify key vault access to enable managed identity adf-OneRostertoSDS (ADF
    instance) to retrieve secrets from the key vault (Assign “Key Vault Secrets
    User” role). [Grant permission to applications to access an Azure key vault using Azure RBAC |
    Microsoft Learn](https://learn.microsoft.com/en-us/azure/key-vault/general/rbac-guide?tabs=azure-portal)
 
 7) Modify the key vault to provide access to users who need to update the secret values. (At least “Key Vault Secrets Officer” role for creating). Also, the user’s IP address should only be temporarily added in the firewall in the networking tab before updating the key vault secrets. This must be done even if the user has access control privileges.
 
-8) Create an app registration in Entra to allow the ADF resource to call the Graph API’s needed then create a secret for the app registration. [Quickstart:
+8) Do the same for authorized users who need to modify data in storage. Also, the user’s IP address should only be temporarily added in the firewall in the networking tab before updating the storage contents. This must be done even if the user has access control privileges.
+
+9) Create an app registration in Entra to allow the ADF resource to call the Graph API’s needed then create a secret for the app registration. [Quickstart:
    Register an app in the Microsoft identity platform - Microsoft identity
    platform | Microsoft Learn](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app)
 
-9) Add the key vault secret values needed from the above table (Existing values were created as dummies and can be disabled). [Azure
+10) Add the key vault secret values needed from the above table (Existing values were created as dummies and can be disabled). [Azure
    Quickstart - Set and retrieve a secret from Key Vault using Azure portal |
    Microsoft Learn](https://learn.microsoft.com/en-us/azure/key-vault/secrets/quick-create-portal)
 
-10) Add the Graph API application permissions from the table below to the app
+11) Add the Graph API application permissions from the table below to the app
     registration.  Remember to grant admin consent for the added permissions. [Quickstart: Configure an app to access a web API - Microsoft identity platform | Microsoft
     Learn](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-configure-app-access-web-apis)
 
@@ -97,33 +99,34 @@ following steps:
 | IndustryData-DataConnector.ReadWrite.All | Upload files to SDS                                     |
 | IndustryData-DataConnector.Upload        | Upload files to SDS                                     |
 | Mail.Send                                | Email file validation run report                        |
+| Group.ReadWrite.All                      | Updating groups with LTI data                        |
 
 ## Data Factory setup
 
-1) Go to “Private endpoint connections” in the networking tab for both the key vault and storage account and approve each.  (Also verify that public access is disabled
-   and there are no exceptions in “Firewalls and virtual networks”)
+1) Go to “Private endpoint connections” in the networking tab for both the key vault and storage account and approve each. (Also verify that public access is disabled and there are no exceptions in “Firewalls and virtual networks”)
 
-2) Go to the Data Factory named adf-CanvastoSds in Azure Portal and
-   click ‘Launch studio’ to make changes. Once inside, go to the Manage tab on the left menu. 
+2) Go to the Data Factory named adf-OneRostertoSDS in Azure Portal and click ‘Launch studio’ to make changes. Once inside, go to the Manage tab on the left menu. 
 
-3) The final step in the ADF setup is to configure the global parameters in the Manage
-   menu as shown below, and further described in the table following.
+3) The final step in the ADF setup is to configure the global parameters in the Manage menu as shown below, and further described in the table following.
 
 | **Global parameter name**        | **Type** | **Description**                                                                                                                                                                                                                                                                                                              |
 | -------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| canvasAPIBaseUrl                 | string   | Canvas API URL needed for retrieving data from Canvas.                                                                                                                                                                                                                                                                 |
-| reportRecipientEmails            | string   | The list of email addresses to send email reports to. This needs to be entered as a json array in the following format: <br/><br/>[{"emailAddress":{"address":"admin@contosoisd3.onmicrosoft.com"}},{"emailAddress":{"address":"joe@contosoisd3.onmicrosoft.com"}}]                                                          |
-| clientSecretForSdsApiKeyVaultUrl | string   | The key vault access URL for the client secret for SDS API access. <br/>Found in the key vault resource under Secrets -> ClientSecretForSdsCsvADF -> Current Version -> Secret Identifier                                                                                                                                    |
-| canvasApiKeyVaultUrl             | string   | Store the customer canvasToken in key vault secrets and use that secret URL for this parameter.                                                                                                                                                                                                                              |
-| canvasAccountId                  | string   | Canvas Customer Account Id                                                                                                                                                                                                                                                                                                   |
-| entraAppClientId                 | string   | The clientId for the app registration. <br/>Found at Azure Active Directory -> App registrations -> *AppName*-> Overview -> Application (client) ID                                                                                                                                                                          |
+| oneRosterClientId                 | string   | OneRoster API client Id                                                                                                                                                                                                                                                                         |
+| oneRosterClientSecretKeyVaultUrl                 | string   | The key vault access URL for the client secret for OneRoster API access. Found in the key vault resource under Secrets -> ORClientSecret -> Current Version -> Secret Identifier                                                                                                                                                                                 |
+| oneRosterBaseURL                 | string   | OneRoaster API Base URL needed for retrieving data from OneRoster.                                                                                                                                                                                                                                                                 |
+| entraAppClientId                 | string   | The clientId for the app registration. 
+Found at Azure Active Directory -> App registrations -> <AppName>-> Overview -> Application (client) ID                                                                                                                                                                                                                                                                  |
+| oneRosterOAuthTokenUrl                 | string   | The OneRoster Url used to get the Oauth token                                                                                                                                                                                                                                                                 |
 | validationErrorThreshold         | Int      | If the number of total validation errors for a single profile exceeds this value, the data will not be sent to SDS for that profile. <br/>[Note that the record count function has a max value of 5000, so entering a value of 5000 or greater for this setting will effectively turn off the validation threshold entirely] |
+| reportRecipientEmails            | string   | The list of email addresses to send email reports to. This needs to be entered as a json array in the following format: <br/><br/>[{"emailAddress":{"address":"admin@contosoisd3.onmicrosoft.com"}},{"emailAddress":{"address":"joe@contosoisd3.onmicrosoft.com"}}]                                                          |
 | checkForEmptyFilesBeforeSending  | Bool     | This validation protects against empty files being inadvertently sent to SDS as the result of a data issue (such as an invalid header in the inbound data file). <br/>If set to true, this validation will cause the pipeline to stop if any of the required files or All files to be sent to SDS have no records.           |
+| limit                  | string   | OneRoster API limit parameter value, used for pagination                                                                                                                                                                                                                                                                                                   |
 | tenantid                         | String   | The tenant id.                                                                                                                                                                                                                                                                                                               |
-| subscriptionId                   | String   | The subscription where the ADF assets are located.                                                                                                                                                                                                                                                                           |
-| reportSendAsUPN                  | String   | School Data Sync Admin userPrincipalName                                                                                                                                                                                                                                                                                     |
+| userPrincipalName                         | String   | School Data Sync Admin userPrincipalName                                                                                                                                                                                                                                                                                                               |
+| clientSecretForSdsApiKeyVaultUrl | string   | The key vault access URL for the client secret for SDS API access. <br/>Found in the key vault resource under Secrets -> ClientSecretForSdsCsvADF -> Current Version -> Secret Identifier                                                                                                                                    |
 | sdsInboundFlowId                 | String   | Existing SDS inbound flow id found in Sync > Configuration screen on the SDS left menu pane. <br/>Note: Parameter value can be left as is if no sync exists.                                                                                                                                                                 |
 | useFamilyAndGivenNames           | Bool     | Will send familyName and givenName as required for users if the option to ''Create unmatched users' is chosen in SDS (otherwise optional).  A value of false will not send familyName and givenName.                                                                                                                         |
+| optionalFilesRequired            | Bool     | This is a pipeline parameter, if customer want to use all the files for the sync process, they must pass the value as “true.”<br/>If customer want to use only Required Files for the sync process, then have to set value as “false.”                                                                                       |
 | staffSourceIdentifier            | String   | Staff attribute based on data that is coming from your SIS / SMS. Valid values are username, email, or activeDirectory. This can be left as is if using a sync that has already been created in SDS.                                                                                                                         |
 | staffMatchTarget                 | String   | Property in Microsoft Entra ID to match to staff. Valid values are userPrincipalName or mail. This can be left as is if using a sync that has already been created in SDS.                                                                                                                                                   |
 | staffDomainAddon                 | String   | A valid tenant domain to append to the source value if your staff data doesn't include the @domain value. (Example: contoso.onmicrosoft.com) This can be left as is if not using appending a domain or using a sync that has already been created in SDS.                                                                |
@@ -133,20 +136,24 @@ following steps:
 | yearStartDate                    | String   | Start of the academic year in yyyy-mm-dd format. This can be left as is if using a sync that has already been created in SDS.                                                                                                                                                                                                |
 | yearEndDate                      | String   | End of the academic year in yyyy-mm-dd format. This can be left as is if using a sync that has already been created in SDS.                                                                                                                                                                                                  |
 | expirationDateTime               | String   | The date when SDS should stop syncing data based on the defined academic year for this source. It must not exceed the year end date. This can be left as is if using a sync that has already been created in SDS.                                                                                                            |
-| optionalFilesRequired            | Bool     | This is a pipeline parameter, if customer want to use all the files for the sync process, they must pass the value as “true.”<br/>If customer want to use only Required Files for the sync process, then have to set value as “false.”                                                                                       |
+| subscriptionId                   | String   | The subscription where the ADF assets are located.                                                                                                                                                                                                                                                                           |
+
+Once the ADF and storage accounts got created Under stonerostersds create a container name it as refcodes to import refCodes.csv used for subject in classes.  (If using optionalFilesRequired parameter values as “true”) 
+
+![](./img/refcode_storage.png)
 
 # Details of the pipelines and data flows
 
-The main integration pipeline is Master_Canvas_to_SDS_Vnext
+The main integration pipeline is Master_OR_to_SDS
 
 ![](./img/main_pipeline.png)
 
 This pipeline utilizes sub pipelines to execute the following
 steps:
 
-1) Get data from Canvas API Data and store to Azure storage.
+1) Get data from OneRoster API Data and store to stonerostersds storage account.
 
-2) Transform Canvas Data to SDS CSV v2.1 format and validate the data.
+2) Transform OneRoster Data to SDS CSV v2.1 format and validate the data.
 
 3) Upload to SDS:
    
@@ -215,7 +222,9 @@ To debug a data flow such as the SDSVnext_All_Files_Validation
 or SDSVnext_Required_Files_Validation data flows, you have to first turn on the
 “Data flow debug” setting.
 
-More info is available here: [Mapping data flow debug mode](https://docs.microsoft.com/en-us/azure/data-factory/concepts-data-flow-debug-mode#:~:text=%20Mapping%20data%20flow%20Debug%20Mode%20%201,a%20data%20flow%20previews%20data.%20Debug...%20More%20)![](./img/debug_dataFlow.png)
+More info is available here: [Mapping data flow debug mode](https://docs.microsoft.com/en-us/azure/data-factory/concepts-data-flow-debug-mode#:~:text=%20Mapping%20data%20flow%20Debug%20Mode%20%201,a%20data%20flow%20previews%20data.%20Debug...%20More%20)!
+
+[](./img/debug_dataFlow.png)
 
 # Reference Materials
 
