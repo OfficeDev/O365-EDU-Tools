@@ -3,20 +3,20 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Keyvault name": {
-            "defaultValue": "kv-or-sds",
+            "defaultValue": "kv-oneroster-sds",
             "type": "String"
         },
         "Storage account name": {
-            "defaultValue": "storsds",
+            "defaultValue": "stonerostersds",
             "type": "String"
         },
         "IMSOneRosterValidator_properties_typeProperties_url": {
             "type": "string",
-            "defaultValue": "https://partnertest.infinitecampus.org/campus/oneroster/microsofttest/ims/oneroster/v1p1"
+            "defaultValue": ""
         },
         "Data Factory Name": {
             "type": "string",
-            "defaultValue": "adf-ORtoSDS",
+            "defaultValue": "adf-OneRostertoSDS",
             "metadata": {
                 "description": "The name of the Data Factory instance."
             }
@@ -6990,7 +6990,7 @@
                                     "userProperties": [],
                                     "typeProperties": {
                                         "pipeline": {
-                                            "referenceName": "Transform_to_Optionals_SDS_csv",
+                                            "referenceName": "Transform_to_Optional_SDS_csv",
                                             "type": "PipelineReference"
                                         },
                                         "waitOnCompletion": true,
@@ -7073,11 +7073,11 @@
                 "[concat(variables('factoryId'), '/datasets/SDS_Files')]",
                 "[concat(variables('factoryId'), '/dataflows/createOldUsersCsv')]",
                 "[concat(variables('factoryId'), '/dataflows/createUsersCsv')]",
-                "[concat(variables('factoryId'), '/pipelines/Transform_to_Optionals_SDS_csv')]"
+                "[concat(variables('factoryId'), '/pipelines/Transform_to_Optional_SDS_csv')]"
             ]
         },
         {
-            "name": "[concat(parameters('Data Factory Name'), '/Transform_to_Optionals_SDS_csv')]",
+            "name": "[concat(parameters('Data Factory Name'), '/Transform_to_Optional_SDS_csv')]",
             "type": "Microsoft.DataFactory/factories/pipelines",
             "apiVersion": "2018-06-01",
             "properties": {
