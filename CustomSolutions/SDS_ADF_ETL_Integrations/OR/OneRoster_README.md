@@ -71,25 +71,21 @@ following steps:
 6) Modify key vault access to enable managed identity adf-OneRostertoSDS (ADF
    instance) to retrieve secrets from the key vault (Assign “Key Vault Secrets
    User” role).
-   [Grant permission to applications to access an Azure key vault using Azure RBAC |
-   Microsoft Learn](https://learn.microsoft.com/en-us/azure/key-vault/general/rbac-guide?tabs=azure-portal)
+   [Grant permission to applications to access an Azure key vault using Azure RBAC | Microsoft Learn](https://learn.microsoft.com/en-us/azure/key-vault/general/rbac-guide?tabs=azure-portal)
+
    Alt: https://learn.microsoft.com/en-us/azure/data-factory/store-credentials-in-key-vault#steps
 
 7) Modify the key vault to provide access to users who need to update the secret values. (At least “Key Vault Secrets Officer” role for creating). Also, the user’s IP address should only be temporarily added in the firewall in the networking tab before updating the key vault secrets. This must be done even if the user has access control privileges.
 
 8) Do the same for authorized users who need to modify data in storage. Also, the user’s IP address should only be temporarily added in the firewall in the networking tab before updating the storage contents. This must be done even if the user has access control privileges.
 
-9) Create an app registration in Entra to allow the ADF resource to call the Graph API’s needed then create a secret for the app registration. [Quickstart:
-   Register an app in the Microsoft identity platform - Microsoft identity
-   platform | Microsoft Learn](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app)
+9) Create an app registration in Entra to allow the ADF resource to call the Graph API’s needed then create a secret for the app registration. [Quickstart: Register an app in the Microsoft identity platform - Microsoft identity platform | Microsoft Learn](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app)
 
-10) Add the key vault secret values needed from the above table (Existing values were created as dummies and can be disabled). [Azure
-   Quickstart - Set and retrieve a secret from Key Vault using Azure portal |
-   Microsoft Learn](https://learn.microsoft.com/en-us/azure/key-vault/secrets/quick-create-portal)
+10) Add the key vault secret values needed from the above table (Existing values were created as dummies and can be disabled).
+[Azure Quickstart - Set and retrieve a secret from Key Vault using Azure portal | Microsoft Learn](https://learn.microsoft.com/en-us/azure/key-vault/secrets/quick-create-portal)
 
 11) Add the Graph API application permissions from the table below to the app
-    registration.  Remember to grant admin consent for the added permissions. [Quickstart: Configure an app to access a web API - Microsoft identity platform | Microsoft
-    Learn](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-configure-app-access-web-apis)
+    registration.  Remember to grant admin consent for the added permissions. [Quickstart: Configure an app to access a web API - Microsoft identity platform | Microsoft Learn](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-configure-app-access-web-apis)
 
 | **Permission**                           | **Purpose**                                             |
 | ---------------------------------------- | ------------------------------------------------------- |
@@ -180,7 +176,9 @@ To get a specific list of which records were excluded due to validation, perform
 
 ## Scheduling via triggers
 
-Pipelines in ADF can be triggered manually as needed, or scheduled to execute based on a configured trigger ([more info on triggers here](https://docs.microsoft.com/en-us/azure/data-factory/concepts-pipeline-execution-triggers)). Triggers are managed in Manage -> Triggers and can be associated with multiple pipelines. (If triggering manually, recommend enabling “Interactive authoring” by going to Manage -> Integration runtimes -> IRSDSOR -> Virtual Network)![](./img/new_trigger.png)
+Pipelines in ADF can be triggered manually as needed, or scheduled to execute based on a configured trigger ([more info on triggers here](https://docs.microsoft.com/en-us/azure/data-factory/concepts-pipeline-execution-triggers)). Triggers are managed in Manage -> Triggers and can be associated with multiple pipelines. (If triggering manually, recommend enabling “Interactive authoring” by going to Manage -> Integration runtimes -> IRSDSOR -> Virtual Network)
+
+![](./img/new_trigger.png)
 
 To assign a pipeline to a trigger, open the pipeline and click Add trigger -> New/Edit
 
