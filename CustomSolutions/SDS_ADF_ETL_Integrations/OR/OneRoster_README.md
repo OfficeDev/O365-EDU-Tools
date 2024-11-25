@@ -28,7 +28,7 @@
 
 This solution leverages Azure Data Factory (ADF) to handle the daily orchestration of activities necessary to: 
 
-- Extract data from Canvas API Provisioning Reports and convert to SDS CSV v2.1 format.
+- Extract data from OneRoster import files and convert to SDS CSV v2.1 format.
 
 - Run validation on the CSV’s and remove records that don’t have required fields. 
 
@@ -37,6 +37,7 @@ This solution leverages Azure Data Factory (ADF) to handle the daily orchestrati
 - Send an execution notice to designated admins via email. 
 
 This document provides a summary of the solution setup and operational info for OneRoster.
+Note: Creating a SDS flow is a prerequisite.
 
 # Solution Summary
 
@@ -48,7 +49,7 @@ The Azure resources for this solution consist of the following:
 | ----------------- | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | rg-OneRosterAPItoSDS | Resource group    | Serves as a container for the resources in this solution                                                                                                                                                                                                                                                                                                 |
 | adf-OneRostertoSDS   | Data Factory (V2) | The data factory instance, containing the scheduled integration pipelines.                                                                                                                                                                                                                                                                               |
-| kv-oneroster-sds     | Key vault         | Contains 2 keys: <br/>1) ClientSecretForSdsCsvADF— The client secret created via the App Registration for the ADF instance (details further down) <br/>2) CanvasToken– The token to access the Canvas REST API for your instance. [OAuth2 - Canvas LMS REST API Documentation (instructure.com)](https://canvas.instructure.com/doc/api/file.oauth.html) |
+| kv-oneroster-sds     | Key vault         | Contains 2 keys: <br/>1) ClientSecretForSdsApiKeyVaultUrl— The client secret created via the App Registration for the ADF instance (details further down) <br/>2) ORClientSecret– The OneRoster API client secret |
 | stonerostersds       | Storage account   | V2 storage account, Read-access geo-redundant storage, Encryption type: Microsoft-managed keys                                                                                                                                                                                                                                                           |
 
 The setup within the Azure
@@ -61,10 +62,7 @@ following steps:
 2) On the Custom Deployment page, click "Build your own template in the
    editor" to open the template editor. 
 
-3) Load the OR_to_SDS_ADF_Template.json file by clicking "Load
-   file" in the template editor and selecting the appropriate file to
-   upload.  Create a resource group where to place the resources if not
-   already done. (suggested name rg-OneRosterAPItoSDS). Note: The optional parameters on the confirmation screen can be filled in later during the ADF setup.
+3) Load the OR_to_SDS_ADF_Template.json file by clicking "Load file" in the template editor and selecting the appropriate file to upload.  Create a resource group where to place the resources if not already done. (suggested name rg-OneRosterAPItoSDS).
 
 4)	Add the mandatory parameters value to create resources (Key vault name, Storage account name, Data Factory name).
 
@@ -72,8 +70,10 @@ following steps:
 
 6) Modify key vault access to enable managed identity adf-OneRostertoSDS (ADF
    instance) to retrieve secrets from the key vault (Assign “Key Vault Secrets
-   User” role). [Grant permission to applications to access an Azure key vault using Azure RBAC |
+   User” role).
+   [Grant permission to applications to access an Azure key vault using Azure RBAC |
    Microsoft Learn](https://learn.microsoft.com/en-us/azure/key-vault/general/rbac-guide?tabs=azure-portal)
+   Alt: https://learn.microsoft.com/en-us/azure/data-factory/store-credentials-in-key-vault#steps
 
 7) Modify the key vault to provide access to users who need to update the secret values. (At least “Key Vault Secrets Officer” role for creating). Also, the user’s IP address should only be temporarily added in the firewall in the networking tab before updating the key vault secrets. This must be done even if the user has access control privileges.
 
@@ -114,16 +114,15 @@ following steps:
 | oneRosterClientId                 | string   | OneRoster API client Id                                                                                                                                                                                                                                                                         |
 | oneRosterClientSecretKeyVaultUrl                 | string   | The key vault access URL for the client secret for OneRoster API access. Found in the key vault resource under Secrets -> ORClientSecret -> Current Version -> Secret Identifier                                                                                                                                                                                 |
 | oneRosterBaseURL                 | string   | OneRoaster API Base URL needed for retrieving data from OneRoster.                                                                                                                                                                                                                                                                 |
-| entraAppClientId                 | string   | The clientId for the app registration. 
-Found at Azure Active Directory -> App registrations -> <AppName>-> Overview -> Application (client) ID                                                                                                                                                                                                                                                                  |
+| entraAppClientId                 | string   | The clientId for the app registration. Found at Azure Active Directory -> App registrations -> <AppName>-> Overview -> Application (client) ID                                                                                                                                                                                                                                                                  |
 | oneRosterOAuthTokenUrl                 | string   | The OneRoster Url used to get the Oauth token                                                                                                                                                                                                                                                                 |
 | validationErrorThreshold         | Int      | If the number of total validation errors for a single profile exceeds this value, the data will not be sent to SDS for that profile. <br/>[Note that the record count function has a max value of 5000, so entering a value of 5000 or greater for this setting will effectively turn off the validation threshold entirely] |
 | reportRecipientEmails            | string   | The list of email addresses to send email reports to. This needs to be entered as a json array in the following format: <br/><br/>[{"emailAddress":{"address":"admin@contosoisd3.onmicrosoft.com"}},{"emailAddress":{"address":"joe@contosoisd3.onmicrosoft.com"}}]                                                          |
 | checkForEmptyFilesBeforeSending  | Bool     | This validation protects against empty files being inadvertently sent to SDS as the result of a data issue (such as an invalid header in the inbound data file). <br/>If set to true, this validation will cause the pipeline to stop if any of the required files or All files to be sent to SDS have no records.           |
 | limit                  | string   | OneRoster API limit parameter value, used for pagination                                                                                                                                                                                                                                                                                                   |
-| tenantid                         | String   | The tenant id.                                                                                                                                                                                                                                                                                                               |
+| tenantid                         | String   | The tenant id of the Client.                                                                                                                                                                                                                                                                                                               |
 | userPrincipalName                         | String   | School Data Sync Admin userPrincipalName                                                                                                                                                                                                                                                                                                               |
-| clientSecretForSdsApiKeyVaultUrl | string   | The key vault access URL for the client secret for SDS API access. <br/>Found in the key vault resource under Secrets -> ClientSecretForSdsCsvADF -> Current Version -> Secret Identifier                                                                                                                                    |
+| clientSecretForSdsApiKeyVaultUrl | string   | The key vault access URL for the client secret for SDS API access. <br/>Found in the key vault resource under Secrets -> ClientSecretForSdsApiKeyVaultUrl -> Current Version -> Secret Identifier                                                                                                                                    |
 | sdsInboundFlowId                 | String   | Existing SDS inbound flow id found in Sync > Configuration screen on the SDS left menu pane. <br/>Note: Parameter value can be left as is if no sync exists.                                                                                                                                                                 |
 | useFamilyAndGivenNames           | Bool     | Will send familyName and givenName as required for users if the option to ''Create unmatched users' is chosen in SDS (otherwise optional).  A value of false will not send familyName and givenName.                                                                                                                         |
 | optionalFilesRequired            | Bool     | This is a pipeline parameter, if customer want to use all the files for the sync process, they must pass the value as “true.”<br/>If customer want to use only Required Files for the sync process, then have to set value as “false.”                                                                                       |
@@ -151,7 +150,7 @@ The main integration pipeline is Master_OR_to_SDS
 This pipeline utilizes sub pipelines to execute the following
 steps:
 
-1) Get data from OneRoster API Data and store to stonerostersds storage account.
+1) Get data from OneRoster API Data and import to stonerostersds storage account.
 
 2) Transform OneRoster Data to SDS CSV v2.1 format and validate the data.
 
@@ -181,7 +180,7 @@ To get a specific list of which records were excluded due to validation, perform
 
 ## Scheduling via triggers
 
-Pipelines in ADF can be triggered manually as needed, or scheduled to execute based on a configured trigger ([more info on triggers here](https://docs.microsoft.com/en-us/azure/data-factory/concepts-pipeline-execution-triggers)). Triggers are managed in Manage -> Triggers and can be associated with multiple pipelines. (If triggering manually, recommend enabling “Interactive authoring” by going to Manage -> Integration runtimes -> IREastUSVNet -> Virtual Network)![](./img/new_trigger.png)
+Pipelines in ADF can be triggered manually as needed, or scheduled to execute based on a configured trigger ([more info on triggers here](https://docs.microsoft.com/en-us/azure/data-factory/concepts-pipeline-execution-triggers)). Triggers are managed in Manage -> Triggers and can be associated with multiple pipelines. (If triggering manually, recommend enabling “Interactive authoring” by going to Manage -> Integration runtimes -> IRSDSOR -> Virtual Network)![](./img/new_trigger.png)
 
 To assign a pipeline to a trigger, open the pipeline and click Add trigger -> New/Edit
 
@@ -189,7 +188,9 @@ To assign a pipeline to a trigger, open the pipeline and click Add trigger -> Ne
 
 Note that when adding a trigger to a pipeline, you must publish the pipeline for the change to take effect.
 
-Activities (i.e. Send_email_report) can be disabled by clicking on them and selecting Deactivated then publishing. ![](./img/deactivate_activity.png)
+Activities (i.e. Send_email_report) can be disabled by clicking on them and selecting Deactivated then publishing.
+
+![](./img/deactivate_activity.png)
 
 ## Monitoring and Alerts
 
@@ -218,13 +219,14 @@ For pipelines which do not include a data flow activity, such as the Send_email_
 
 ![](./img/pipeline_run_results.png)
 
-To debug a data flow such as the SDSVnext_All_Files_Validation
-or SDSVnext_Required_Files_Validation data flows, you have to first turn on the
+To debug a data flow such as the SDS_All_Files_Validation
+or SDS_Required_Files_Validation data flows, you have to first turn on the
 “Data flow debug” setting.
+
+![](./img/debug_dataFlow.png)
 
 More info is available here: [Mapping data flow debug mode](https://docs.microsoft.com/en-us/azure/data-factory/concepts-data-flow-debug-mode#:~:text=%20Mapping%20data%20flow%20Debug%20Mode%20%201,a%20data%20flow%20previews%20data.%20Debug...%20More%20)!
 
-[](./img/debug_dataFlow.png)
 
 # Reference Materials
 
