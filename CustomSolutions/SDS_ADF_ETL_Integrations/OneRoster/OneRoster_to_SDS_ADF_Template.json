@@ -4398,7 +4398,7 @@
                                         },
                                         "turnOffAsync": false,
                                         "url": {
-                                            "value": "VerifyUpload",
+                                            "value": "@activity('VerifyUpload').output.ADFWebActivityResponseHeaders.location",
                                             "type": "Expression"
                                         },
                                         "connectVia": {
