@@ -2137,7 +2137,7 @@
                             }
                         ],
                         "policy": {
-                            "timeout": "0.12:00:00",
+                            "timeout": "0.00:10:00",
                             "retry": 0,
                             "retryIntervalInSeconds": 30,
                             "secureOutput": true,
@@ -2393,7 +2393,7 @@
                             }
                         ],
                         "policy": {
-                            "timeout": "0.12:00:00",
+                            "timeout": "0.00:10:00",
                             "retry": 0,
                             "retryIntervalInSeconds": 30,
                             "secureOutput": true,
@@ -2431,7 +2431,7 @@
                             }
                         ],
                         "policy": {
-                            "timeout": "0.12:00:00",
+                            "timeout": "0.00:10:00",
                             "retry": 0,
                             "retryIntervalInSeconds": 30,
                             "secureOutput": true,
@@ -2564,7 +2564,7 @@
                             }
                         ],
                         "policy": {
-                            "timeout": "0.12:00:00",
+                            "timeout": "0.00:10:00",
                             "retry": 0,
                             "retryIntervalInSeconds": 30,
                             "secureOutput": true,
@@ -2655,7 +2655,7 @@
                             }
                         ],
                         "policy": {
-                            "timeout": "0.12:00:00",
+                            "timeout": "0.00:10:00",
                             "retry": 0,
                             "retryIntervalInSeconds": 30,
                             "secureOutput": true,
@@ -2705,7 +2705,7 @@
                                     "type": "WebActivity",
                                     "dependsOn": [],
                                     "policy": {
-                                        "timeout": "0.12:00:00",
+                                        "timeout": "0.00:10:00",
                                         "retry": 0,
                                         "retryIntervalInSeconds": 30,
                                         "secureOutput": true,
@@ -2731,7 +2731,7 @@
                                     }
                                 }
                             ],
-                            "timeout": "0.12:00:00"
+                            "timeout": "0.00:03:00"
                         }
                     },
                     {
@@ -2746,7 +2746,7 @@
                             }
                         ],
                         "policy": {
-                            "timeout": "0.12:00:00",
+                            "timeout": "0.00:10:00",
                             "retry": 0,
                             "retryIntervalInSeconds": 30,
                             "secureOutput": true,
@@ -2818,7 +2818,7 @@
                                     "type": "WebActivity",
                                     "dependsOn": [],
                                     "policy": {
-                                        "timeout": "0.12:00:00",
+                                        "timeout": "0.00:10:00",
                                         "retry": 0,
                                         "retryIntervalInSeconds": 30,
                                         "secureOutput": true,
@@ -2874,7 +2874,7 @@
                                     "type": "WebActivity",
                                     "dependsOn": [],
                                     "policy": {
-                                        "timeout": "0.12:00:00",
+                                        "timeout": "0.00:10:00",
                                         "retry": 0,
                                         "retryIntervalInSeconds": 30,
                                         "secureOutput": true,
@@ -2916,7 +2916,7 @@
                                         }
                                     ],
                                     "policy": {
-                                        "timeout": "0.12:00:00",
+                                        "timeout": "0.00:10:00",
                                         "retry": 0,
                                         "retryIntervalInSeconds": 30,
                                         "secureOutput": true,
@@ -2958,7 +2958,7 @@
                                         }
                                     ],
                                     "policy": {
-                                        "timeout": "0.12:00:00",
+                                        "timeout": "0.00:10:00",
                                         "retry": 0,
                                         "retryIntervalInSeconds": 30,
                                         "secureOutput": true,
@@ -3000,7 +3000,7 @@
                                         }
                                     ],
                                     "policy": {
-                                        "timeout": "0.12:00:00",
+                                        "timeout": "0.00:10:00",
                                         "retry": 0,
                                         "retryIntervalInSeconds": 30,
                                         "secureOutput": true,
@@ -3104,7 +3104,7 @@
                                     "type": "WebActivity",
                                     "dependsOn": [],
                                     "policy": {
-                                        "timeout": "0.12:00:00",
+                                        "timeout": "0.00:10:00",
                                         "retry": 0,
                                         "retryIntervalInSeconds": 30,
                                         "secureOutput": true,
@@ -3130,7 +3130,7 @@
                                     }
                                 }
                             ],
-                            "timeout": "0.12:00:00"
+                            "timeout": "0.00:03:00"
                         }
                     }
                 ],
