@@ -4039,7 +4039,7 @@
                             }
                         ],
                         "policy": {
-                            "timeout": "7.00:00:00",
+                            "timeout": "0.00:10:00",
                             "retry": 0,
                             "retryIntervalInSeconds": 30,
                             "secureOutput": true,
@@ -4102,7 +4102,7 @@
                             }
                         ],
                         "policy": {
-                            "timeout": "7.00:00:00",
+                            "timeout": "0.00:10:00",
                             "retry": 0,
                             "retryIntervalInSeconds": 30,
                             "secureOutput": true,
@@ -4182,7 +4182,7 @@
                         ]
                     },
                     {
-                        "name": "VerifyUploadAndStartSync",
+                        "name": "VerifyUpload",
                         "type": "WebActivity",
                         "dependsOn": [
                             {
@@ -4193,7 +4193,7 @@
                             }
                         ],
                         "policy": {
-                            "timeout": "7.00:00:00",
+                            "timeout": "0.00:10:00",
                             "retry": 0,
                             "retryIntervalInSeconds": 30,
                             "secureOutput": false,
@@ -4225,7 +4225,7 @@
                         "type": "WebActivity",
                         "dependsOn": [],
                         "policy": {
-                            "timeout": "7.00:00:00",
+                            "timeout": "0.00:10:00",
                             "retry": 0,
                             "retryIntervalInSeconds": 30,
                             "secureOutput": true,
@@ -4261,7 +4261,7 @@
                             }
                         ],
                         "policy": {
-                            "timeout": "7.00:00:00",
+                            "timeout": "0.00:10:00",
                             "retry": 0,
                             "retryIntervalInSeconds": 30,
                             "secureOutput": false,
@@ -4363,7 +4363,7 @@
                         "type": "Until",
                         "dependsOn": [
                             {
-                                "activity": "VerifyUploadAndStartSync",
+                                "activity": "VerifyUpload",
                                 "dependencyConditions": [
                                     "Succeeded"
                                 ]
@@ -4381,7 +4381,7 @@
                                     "type": "WebActivity",
                                     "dependsOn": [],
                                     "policy": {
-                                        "timeout": "0.12:00:00",
+                                        "timeout": "0.00:10:00",
                                         "retry": 0,
                                         "retryIntervalInSeconds": 30,
                                         "secureOutput": false,
@@ -4398,7 +4398,7 @@
                                         },
                                         "turnOffAsync": false,
                                         "url": {
-                                            "value": "@activity('VerifyUploadAndStartSync').output.ADFWebActivityResponseHeaders.location",
+                                            "value": "@activity('VerifyUpload').output.ADFWebActivityResponseHeaders.location",
                                             "type": "Expression"
                                         },
                                         "connectVia": {
@@ -4423,7 +4423,7 @@
                             }
                         ],
                         "policy": {
-                            "timeout": "0.12:00:00",
+                            "timeout": "0.00:10:00",
                             "retry": 0,
                             "retryIntervalInSeconds": 30,
                             "secureOutput": true,
@@ -4471,7 +4471,7 @@
                                     "type": "WebActivity",
                                     "dependsOn": [],
                                     "policy": {
-                                        "timeout": "0.12:00:00",
+                                        "timeout": "0.00:10:00",
                                         "retry": 0,
                                         "retryIntervalInSeconds": 30,
                                         "secureOutput": true,
@@ -4551,7 +4551,7 @@
                                     "type": "WebActivity",
                                     "dependsOn": [],
                                     "policy": {
-                                        "timeout": "0.12:00:00",
+                                        "timeout": "0.00:10:00",
                                         "retry": 0,
                                         "retryIntervalInSeconds": 30,
                                         "secureOutput": true,
@@ -4593,7 +4593,7 @@
                                         }
                                     ],
                                     "policy": {
-                                        "timeout": "0.12:00:00",
+                                        "timeout": "0.00:10:00",
                                         "retry": 0,
                                         "retryIntervalInSeconds": 30,
                                         "secureOutput": true,
@@ -4635,7 +4635,7 @@
                                         }
                                     ],
                                     "policy": {
-                                        "timeout": "0.12:00:00",
+                                        "timeout": "0.00:10:00",
                                         "retry": 0,
                                         "retryIntervalInSeconds": 30,
                                         "secureOutput": true,
@@ -4677,7 +4677,7 @@
                                         }
                                     ],
                                     "policy": {
-                                        "timeout": "0.12:00:00",
+                                        "timeout": "0.00:10:00",
                                         "retry": 0,
                                         "retryIntervalInSeconds": 30,
                                         "secureOutput": true,
@@ -4781,7 +4781,7 @@
                                     "type": "WebActivity",
                                     "dependsOn": [],
                                     "policy": {
-                                        "timeout": "0.12:00:00",
+                                        "timeout": "0.00:10:00",
                                         "retry": 0,
                                         "retryIntervalInSeconds": 30,
                                         "secureOutput": true,
@@ -4807,7 +4807,7 @@
                                     }
                                 }
                             ],
-                            "timeout": "0.12:00:00"
+                            "timeout": "0.00:03:00"
                         }
                     }
                 ],
