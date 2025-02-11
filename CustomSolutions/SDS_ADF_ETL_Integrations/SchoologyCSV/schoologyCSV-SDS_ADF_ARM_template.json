@@ -10,6 +10,10 @@
             "defaultValue": "stschoologycsvsds",
             "type": "String"
         },
+        "blobContainer_schoologyimportcsvs_name": {
+            "defaultValue": "schoologyimportcsvs",
+            "type": "String"
+        },
         "factoryName": {
             "type": "string",
             "metadata": "Data Factory name",
@@ -202,6 +206,22 @@
                 },
                 "accessTier": "Hot"
             }
+        },
+        {
+          "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+          "apiVersion": "2023-01-01",
+          "name": "[format('{0}/{1}/{2}', parameters('storageAccounts_stschoologycsvsds_name'), 'default', parameters('blobContainer_schoologyimportcsvs_name'))]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_stschoologycsvsds_name'), 'default')]"
+          ]
+        },
+        {
+          "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+          "apiVersion": "2023-01-01",
+          "name": "[format('{0}/{1}/{2}', parameters('storageAccounts_stschoologycsvsds_name'), 'default', 'resources')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_stschoologycsvsds_name'), 'default')]"
+          ]
         },
         {
             "type": "Microsoft.KeyVault/vaults/secrets",
@@ -986,6 +1006,47 @@
                     },
                     {
                         "name": "SDS_Subject_Description",
+                        "type": "String"
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/stsdsvnext')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/SDS_Enum_Map_CSV')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "stsdsvnext",
+                    "type": "LinkedServiceReference"
+                },
+                "annotations": [],
+                "type": "DelimitedText",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobFSLocation",
+                        "fileName": "enumMap.csv",
+                        "fileSystem": "resources"
+                    },
+                    "columnDelimiter": ",",
+                    "escapeChar": "\\",
+                    "firstRowAsHeader": true,
+                    "quoteChar": "\""
+                },
+                "schema": [
+                    {
+                        "name": "customValue",
+                        "type": "String"
+                    },
+                    {
+                        "name": "sdsValue",
+                        "type": "String"
+                    },
+                    {
+                        "name": "type",
                         "type": "String"
                     }
                 ]
@@ -6085,6 +6146,7 @@
                                             "type": "Expression"
                                         }
                                     },
+                                    "enumMap": {},
                                     "SDSVnextRoles": {
                                         "sdsStorageContainer": "@pipeline().parameters.sdsStorageContainer",
                                         "sdsStorageFolder": {
@@ -8461,6 +8523,13 @@
                                 "type": "DatasetReference"
                             },
                             "name": "SchoologyUsers"
+                        },
+                        {
+                            "dataset": {
+                                "referenceName": "SDS_Enum_Map_CSV",
+                                "type": "DatasetReference"
+                            },
+                            "name": "enumMap"
                         }
                     ],
                     "sinks": [
@@ -8481,7 +8550,10 @@
                             "name": "selectRequiredColumns"
                         },
                         {
-                            "name": "lowerCaseRole"
+                            "name": "lookupOrgUserRoles"
+                        },
+                        {
+                            "name": "filterOrgUserRoles"
                         }
                     ],
                     "scriptLines": [
@@ -8499,6 +8571,14 @@
                         "     allowSchemaDrift: true,",
                         "     validateSchema: false,",
                         "     ignoreNoFilesFound: false) ~> SchoologyUsers",
+                        "source(output(",
+                        "          customValue as string,",
+                        "          sdsValue as string,",
+                        "          type as string",
+                        "     ),",
+                        "     allowSchemaDrift: true,",
+                        "     validateSchema: false,",
+                        "     ignoreNoFilesFound: false) ~> enumMap",
                         "SchoologyUsers select(mapColumn(",
                         "          userSourcedId = {Unique User ID},",
                         "          orgSourcedId = School,",
@@ -8507,8 +8587,11 @@
                         "     ),",
                         "     skipDuplicateMapInputs: true,",
                         "     skipDuplicateMapOutputs: true) ~> selectRequiredColumns",
-                        "selectRequiredColumns derive(role = lower(role)) ~> lowerCaseRole",
-                        "lowerCaseRole sink(allowSchemaDrift: true,",
+                        "selectRequiredColumns, filterOrgUserRoles lookup(role == customValue,",
+                        "     multiple: true,",
+                        "     broadcast: 'both')~> lookupOrgUserRoles",
+                        "enumMap filter(equals(type, 'OrganizationUserRoles')) ~> filterOrgUserRoles",
+                        "lookupOrgUserRoles sink(allowSchemaDrift: true,",
                         "     validateSchema: false,",
                         "     input(",
                         "          userSourcedId as string,",
@@ -8529,7 +8612,7 @@
                         "     mapColumn(",
                         "          userSourcedId,",
                         "          orgSourcedId,",
-                        "          role,",
+                        "          role = sdsValue,",
                         "          grade",
                         "     ),",
                         "     partitionBy('hash', 1)) ~> SDSVnextRoles"
@@ -8538,6 +8621,7 @@
             },
             "dependsOn": [
                 "[concat(variables('factoryId'), '/datasets/Schoology_Users_CSV')]",
+                "[concat(variables('factoryId'), '/datasets/SDS_Enum_Map_CSV')]",
                 "[concat(variables('factoryId'), '/datasets/SDSVnext_Roles')]",
                 "[concat(variables('factoryId'), '/linkedServices/stsdsvnext')]"
             ]
