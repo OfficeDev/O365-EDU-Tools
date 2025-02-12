@@ -65,33 +65,25 @@ following steps:
    upload.  Create a resource group where to place the resources if not
    already done. (suggested name rg-SchoologyCSVtoSDS). Note: The optional parameters on the confirmation screen can be filled in later during the ADF setup.
 
-4) Modify the storage account access to enable managed identity adf-SchoologyCSVtoSDS (ADF instance) to read and modify contents. (“Storage Blob Data Contributor” role). 
+4) Modify the storage account access to enable authorized users to read and modify contents. (“Storage Blob Data Contributor” role).  Also, the user’s IP address should only be temporarily added in the firewall in the networking tab before updating the storage contents. This must be done even if the user has access control privileges.  [Assign Azure roles using the Azure portal - Azure RBAC | Microsoft Learn](https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal)
 
-5) Do the same for authorized users who need to modify data in storage. Also, the user’s IP address should only be temporarily added in the firewall in the networking tab before updating the storage contents. This must be done even if the user has access control privileges.
-
-6) If you want to use SFTP, modify the storage account access to enable managed
+5) If you want to use SFTP, modify the storage account access to enable managed
    identity adf-SchoologyCSVtoSDS (ADF instance) to toggle SFTP. (“Storage Account Contributor” role). The incoming IP address should also be added to firewall in the storage account.
 
-7) Modify key vault access to enable managed identity adf-SchoologyCSVtoSDS (ADF
-   instance) to retrieve secrets from the key vault (Assign “Key Vault Secrets
-   User” role). [Grant
-   permission to applications to access an Azure key vault using Azure RBAC |
-   Microsoft Learn](https://learn.microsoft.com/en-us/azure/key-vault/general/rbac-guide?tabs=azure-portal)
+6) Modify key vault access to provide access to users who need to update the secret values. (At least “Key Vault Secrets Officer” role for creating). Also, the user’s IP address should only be temporarily added in the firewall in the networking tab before updating the key vault secrets. This must be done even if the user has access control privileges.
 
-8) Modify the key vault to provide access to users who need to update the secret values. (At least “Key Vault Secrets Officer” role for creating). Also, the user’s IP address should only be temporarily added in the firewall in the networking tab before updating the key vault secrets. This must be done even if the user has access control privileges.
-
-9) Create an app registration in Entra to allow the ADF resource to call the Graph API’s needed then create a secret for the app registration. [Quickstart:
+7) Create an app registration in Entra to allow the ADF resource to call the Graph API’s needed then create a secret for the app registration. [Quickstart:
    Register an app in the Microsoft identity platform - Microsoft identity
    platform | Microsoft Learn](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app)
 
-10) Add the key vault secret values needed from the above table (Existing values were created as dummies and can be disabled). [Azure
-    Quickstart - Set and retrieve a secret from Key Vault using Azure portal |
-    Microsoft Learn](https://learn.microsoft.com/en-us/azure/key-vault/secrets/quick-create-portal)
+8) Add the key vault secret values needed from the above table (Existing values were created as dummies and can be disabled). [Azure
+   Quickstart - Set and retrieve a secret from Key Vault using Azure portal |
+   Microsoft Learn](https://learn.microsoft.com/en-us/azure/key-vault/secrets/quick-create-portal)
 
-11) Add the Graph API application permissions from the table below to the app
-    registration.  Remember to grant admin consent for the added permissions. [Quickstart:
-    Configure an app to access a web API - Microsoft identity platform | Microsoft
-    Learn](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-configure-app-access-web-apis)
+9) Add the Graph API application permissions from the table below to the app
+   registration.  Remember to grant admin consent for the added permissions. [Quickstart:
+   Configure an app to access a web API - Microsoft identity platform | Microsoft
+   Learn](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-configure-app-access-web-apis)
 
 | **Permission**                           | **Purpose**                                             |
 | ---------------------------------------- | ------------------------------------------------------- |
@@ -104,15 +96,13 @@ following steps:
 
 ## Data Factory setup
 
-1) If not already done, create a container where the Schoology import files for the ADF instance will reside (Suggest naming it "schoologyimportcsvs" within the same storage account in the newly created resource group).
-
-2) Go to “Private endpoint connections” in the networking tab for both the key vault and storage account and approve each.  (Also verify that public access is disabled
+1) Go to “Private endpoint connections” in the networking tab for both the key vault and storage account and approve each.  (Also verify that public access is disabled
    and there are no exceptions in “Firewalls and virtual networks”)
 
-3) Go to the Data Factory named adf-SchoologyCSVtoSDS in Azure Portal and
+2) Go to the Data Factory named adf-SchoologyCSVtoSDS in Azure Portal and
    click ‘Launch studio’ to make changes. Once inside, go to the Manage tab on the left menu. 
 
-4) The final step in the ADF setup is to configure the global parameters in the Manage
+3) The final step in the ADF setup is to configure the global parameters in the Manage
    menu as shown below, and further described in the table following.
 
 | **Global parameter name**        | **Type** | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
