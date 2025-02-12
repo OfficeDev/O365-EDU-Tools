@@ -12,6 +12,7 @@
         },
         "blobContainer_schoologyimportcsvs_name": {
             "defaultValue": "schoologyimportcsvs",
+            "metadata": "Blob container for Schoology CSVs",
             "type": "String"
         },
         "factoryName": {
@@ -137,6 +138,8 @@
 	"stschoologycsvsds_properties_privateLinkResourceId":"[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Storage/storageAccounts/', parameters('storageAccounts_stschoologycsvsds_name'))]",
 	"stschoologycsvsds_properties_groupId":"dfs",
 	"stschoologycsvsds_properties_fqdns":"[concat(parameters('storageAccounts_stschoologycsvsds_name'), '.dfs.core.windows.net')]",
+        "kv-adf_roleAssignmentId":"[guid(concat(resourceGroup().id, 'Key Vault Secrets User'))]",
+        "st-adf_roleAssignmentId":"[guid(concat(resourceGroup().id, 'Storage Blob Data Contributor'))]",
         "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
     },
     "resources": [
@@ -315,13 +318,43 @@
             }
         },
         {
+          "type": "Microsoft.Authorization/roleAssignments",
+          "apiVersion": "2022-04-01",
+          "name": "[variables('st-adf_roleAssignmentId')]",
+          "scope": "[concat('Microsoft.Storage/storageAccounts', '/', parameters('storageAccounts_stschoologycsvsds_name'))]",
+          "properties": {
+              "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
+              "principalId": "[reference(concat('Microsoft.DataFactory/factories', '/', parameters('factoryName')), '2018-06-01', 'Full').identity.principalId]",
+              "principalType": "ServicePrincipal"
+          },
+          "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stschoologycsvsds_name'))]",
+                "[resourceId('Microsoft.DataFactory/factories', parameters('factoryName'))]"
+          ]
+        },
+        {
+          "type": "Microsoft.Authorization/roleAssignments",
+          "apiVersion": "2022-04-01",
+          "name": "[variables('kv-adf_roleAssignmentId')]",
+          "scope": "[concat('Microsoft.KeyVault/vaults', '/', parameters('vaults_kv_schoology_sds_name'))]",
+          "properties": {
+              "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/4633458b-17de-408a-b874-0445c86b69e6')]",
+              "principalId": "[reference(concat('Microsoft.DataFactory/factories', '/', parameters('factoryName')), '2018-06-01', 'Full').identity.principalId]",
+              "principalType": "ServicePrincipal"
+          },
+          "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_kv_schoology_sds_name'))]",
+                "[resourceId('Microsoft.DataFactory/factories', parameters('factoryName'))]"
+          ]
+        },
+        {
             "name": "[concat(parameters('factoryName'), '/default')]",
             "type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
             "apiVersion": "2018-06-01",
             "properties": {},
             "dependsOn": [
 		"[resourceId('Microsoft.DataFactory/factories', parameters('factoryName'))]"
-	]
+            ]
         },
         {
             "name": "[concat(parameters('factoryName'), '/AutoResolveIntegrationRuntime')]",
