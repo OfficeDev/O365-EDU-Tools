@@ -49,6 +49,7 @@ The Azure resources for this solution consist of the following:
 | kv-schoology-sds      | Key vault         | Contains the ClientSecretForSdsCsvADF key which should have the client secret created via the App Registration for the ADF instance (details further down)                                                           |
 | stschoologycsvsds     | Storage account   | V2 storage account, Read-access geo-redundant storage, Encryption type: Microsoft-managed keys                                                                                                                       |
 | schoologyimportcsvs   | Blob storage      | The container where the Schoology import files reside.  SFTP can be enabled on the storage account if transferring source files from outside the Azure tenant. (Note: The name is a suggestion and can be any name.) |
+| resources             | Blob storage      | The container which has files used by this ADF solution.                                                                                                                                                             |
 
 The setup within the Azure
 subscription consists of provisioning and configuring the above resources with
@@ -70,20 +71,22 @@ following steps:
 5) If you want to use SFTP, modify the storage account access to enable managed
    identity adf-SchoologyCSVtoSDS (ADF instance) to toggle SFTP. (“Storage Account Contributor” role). The incoming IP address should also be added to firewall in the storage account.
 
-6) Modify key vault access to provide access to users who need to update the secret values. (At least “Key Vault Secrets Officer” role for creating). Also, the user’s IP address should only be temporarily added in the firewall in the networking tab before updating the key vault secrets. This must be done even if the user has access control privileges.
+6) Upload the file in the repo named enumMap.csv in the resources container.  This modify the file to include any values that are in your files that are not supported by SDS.  The default SDS values are at the following link: [Default list of values - School Data Sync | Microsoft Learn](https://learn.microsoft.com/en-us/schooldatasync/default-list-of-values)
 
-7) Create an app registration in Entra to allow the ADF resource to call the Graph API’s needed then create a secret for the app registration. [Quickstart:
+7) Modify key vault access to provide access to users who need to update the secret values. (At least “Key Vault Secrets Officer” role for creating). Also, the user’s IP address should only be temporarily added in the firewall in the networking tab before updating the key vault secrets. This must be done even if the user has access control privileges.
+
+8) Create an app registration in Entra to allow the ADF resource to call the Graph API’s needed then create a secret for the app registration. [Quickstart:
    Register an app in the Microsoft identity platform - Microsoft identity
    platform | Microsoft Learn](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app)
 
-8) Add the key vault secret values needed from the above table (Existing values were created as dummies and can be disabled). [Azure
+9) Add the key vault secret values needed from the above table (Existing values were created as dummies and can be disabled). [Azure
    Quickstart - Set and retrieve a secret from Key Vault using Azure portal |
    Microsoft Learn](https://learn.microsoft.com/en-us/azure/key-vault/secrets/quick-create-portal)
 
-9) Add the Graph API application permissions from the table below to the app
-   registration.  Remember to grant admin consent for the added permissions. [Quickstart:
-   Configure an app to access a web API - Microsoft identity platform | Microsoft
-   Learn](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-configure-app-access-web-apis)
+10) Add the Graph API application permissions from the table below to the app
+    registration.  Remember to grant admin consent for the added permissions. [Quickstart:
+    Configure an app to access a web API - Microsoft identity platform | Microsoft
+    Learn](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-configure-app-access-web-apis)
 
 | **Permission**                           | **Purpose**                                             |
 | ---------------------------------------- | ------------------------------------------------------- |
@@ -96,13 +99,10 @@ following steps:
 
 ## Data Factory setup
 
-1) Go to “Private endpoint connections” in the networking tab for both the key vault and storage account and approve each.  (Also verify that public access is disabled
-   and there are no exceptions in “Firewalls and virtual networks”)
-
-2) Go to the Data Factory named adf-SchoologyCSVtoSDS in Azure Portal and
+1) Go to the Data Factory named adf-SchoologyCSVtoSDS in Azure Portal and
    click ‘Launch studio’ to make changes. Once inside, go to the Manage tab on the left menu. 
 
-3) The final step in the ADF setup is to configure the global parameters in the Manage
+2) The final step in the ADF setup is to configure the global parameters in the Manage
    menu as shown below, and further described in the table following.
 
 | **Global parameter name**        | **Type** | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
