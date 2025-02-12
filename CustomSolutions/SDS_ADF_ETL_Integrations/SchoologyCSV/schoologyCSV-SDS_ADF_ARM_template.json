@@ -9498,6 +9498,50 @@
                 "principalId": "",
                 "tenantId": ""
             }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "[concat(deployment().name, '_ADF_MPE_Approve')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints', parameters('factoryName'), 'default', parameters('vaults_kv_schoology_sds_name'))]",
+                "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints', parameters('factoryName'), 'default', parameters('storageAccounts_stschoologycsvsds_name'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        {
+                            "type": "Microsoft.KeyVault/vaults/privateEndpointConnections",
+                            "apiVersion": "2024-11-01",
+                            "name": "[concat(parameters('vaults_kv_schoology_sds_name') ,'/', parameters('factoryName') ,'.', parameters('vaults_kv_schoology_sds_name'), '-conn')]",
+                            "properties": {
+                                "privateEndpoint": {},
+                                "privateLinkServiceConnectionState": {
+                                    "status": "Approved",
+                                    "description": "ARM - AutoApproved",
+                                    "actionRequired": "None"
+                                }
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Storage/storageAccounts/privateEndpointConnections",
+                            "apiVersion": "2023-05-01",
+                            "name": "[concat(parameters('storageAccounts_stschoologycsvsds_name') ,'/', reference(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stschoologycsvsds_name')), '2023-04-01', 'Full').properties.privateEndpointConnections[0].name)]",
+                            "properties": {
+                                "privateEndpoint": {},
+                                "privateLinkServiceConnectionState": {
+                                    "status": "Approved",
+                                    "description": "ARM - AutoApproved",
+                                    "actionRequired": "None"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
         }
     ]
 }
