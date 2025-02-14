@@ -99,10 +99,12 @@ following steps:
 
 ## Data Factory setup
 
-1) Go to the Data Factory named adf-SchoologyCSVtoSDS in Azure Portal and
+1) Go to “Private endpoint connections” in the networking tab for both the key vault and storage account, and ensure that each is approved.  (Also verify that public access is disabled and there are no exceptions in “Firewalls and virtual networks”)
+
+2) Go to the Data Factory named adf-SchoologyCSVtoSDS in Azure Portal and
    click ‘Launch studio’ to make changes. Once inside, go to the Manage tab on the left menu. 
 
-2) The final step in the ADF setup is to configure the global parameters in the Manage
+3) The final step in the ADF setup is to configure the global parameters in the Manage
    menu as shown below, and further described in the table following.
 
 | **Global parameter name**        | **Type** | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
