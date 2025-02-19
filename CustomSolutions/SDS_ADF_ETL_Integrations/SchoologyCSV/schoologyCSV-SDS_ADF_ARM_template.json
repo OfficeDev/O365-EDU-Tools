@@ -340,7 +340,7 @@
           "name": "[variables('kv-adf_roleAssignmentId')]",
           "scope": "[concat('Microsoft.KeyVault/vaults', '/', parameters('vaults_kv_schoology_sds_name'))]",
           "properties": {
-              "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/b86a8fe4-44ce-4948-aee5-eccb2c155cd7')]",
+              "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/4633458b-17de-408a-b874-0445c86b69e6')]",
               "principalId": "[reference(concat('Microsoft.DataFactory/factories', '/', parameters('factoryName')), '2018-06-01', 'Full').identity.principalId]",
               "principalType": "ServicePrincipal"
           },
