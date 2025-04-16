@@ -140,9 +140,7 @@
 	"stschoologycsvsds_properties_fqdns":"[concat(parameters('storageAccounts_stschoologycsvsds_name'), '.dfs.core.windows.net')]",
         "kv-adf_roleAssignmentId":"[guid(concat(resourceGroup().id, 'Key Vault Secrets User'))]",
         "st-adf_roleAssignmentId":"[guid(concat(resourceGroup().id, 'Storage Blob Data Contributor'))]",
-        "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]",
-        "factoryName": "[parameters('factoryName')]",
-        "stName": "[parameters('storageAccounts_stschoologycsvsds_name')]"
+        "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
     },
     "resources": [
         {
@@ -9522,7 +9520,7 @@
             "apiVersion": "2019-10-01",
             "name": "[concat(deployment().name, '_ADF_MPE_ST_Approve')]",
             "dependsOn": [
-                "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints', variables('factoryName'), 'default', variables('stName'))]"
+                "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints', parameters('factoryName'), 'default', parameters('storageAccounts_stschoologycsvsds_name'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -9531,10 +9529,7 @@
                 },
                 "parameters": {
                     "ST-MPEs-ToApprove": {
-                        "value": "[filter(reference(resourceId('Microsoft.Storage/storageAccounts', variables('stName')), '2023-04-01').privateEndpointConnections, lambda('pe', not(equals(lambdaVariables('pe').properties.privateLinkServiceConnectionState.status, 'Approved'))))]"
-                    },
-                    "stName": {
-                        "value": "[variables('stName')]"
+                        "value": "[filter(reference(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_stschoologycsvsds_name')), '2023-04-01').privateEndpointConnections, lambda('pe', not(equals(lambdaVariables('pe').properties.privateLinkServiceConnectionState.status, 'Approved'))))]"
                     }
                 },
                 "template": {
@@ -9543,9 +9538,6 @@
                     "parameters": {
                         "ST-MPEs-ToApprove": {
                             "type": "array"
-                        },
-                        "stName": {
-                            "type": "String"
                         }
                     },
                     "resources": [
@@ -9556,7 +9548,7 @@
                             },
                             "type": "Microsoft.Storage/storageAccounts/privateEndpointConnections",
                             "apiVersion": "2023-05-01",
-                            "name": "[concat(parameters('stName') ,'/', parameters('ST-MPEs-ToApprove')[copyIndex('Copy_ST-PE-Approval')].name)]",
+                            "name": "[concat(parameters('storageAccounts_stschoologycsvsds_name') ,'/', parameters('ST-MPEs-ToApprove')[copyIndex('Copy_ST-PE-Approval')].name)]",
                             "properties": {
                                 "privateEndpoint": {},
                                 "privateLinkServiceConnectionState": {
