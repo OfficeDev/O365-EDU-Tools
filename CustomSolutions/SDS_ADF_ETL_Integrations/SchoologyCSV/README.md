@@ -24,13 +24,13 @@
 
 # Introduction
 
-[Microsoft School Data Sync](https://sds.microsoft.com/) is a free service in Office 365 for Education that reads the school and roster data from a school's Student Information System (SIS). It creates Office 365 Groups for Exchange Online and SharePoint Online, class teams for Microsoft Teams and OneNote Class notebooks, school groups for Intune for Education, and rostering and SSO integration for many other third-party applications. This solution leverages Azure Data Factory (ADF) to handle the daily orchestration of activities necessary to: 
+[Microsoft School Data Sync](https://sds.edu.cloud.microsoft) is a free service in Office 365 for Education that reads the school and roster data from a school's Student Information System (SIS). It creates Office 365 Groups for Exchange Online and SharePoint Online, class teams for Microsoft Teams and OneNote Class notebooks, school groups for Intune for Education, and rostering and SSO integration for many other third-party applications. This solution leverages Azure Data Factory (ADF) to handle the daily orchestration of activities necessary to: 
 
 - Extract data from Schoology import files and convert to SDS CSV v2.1 format. 
 
 - Run validation on the CSV’s and remove records that don’t have required fields. 
 
-- Upload the CSV’s to SDS and start the sync. **Note: The ADF integration will use an existing inbound flow or create a new one for you in SDS. Turn on SDS by going to** https://sds.microsoft.com **, click ‘Get Started’ then ‘Continue’ before running the ADF integration if no inbound flow exists.** 
+- Upload the CSV’s to SDS and start the sync. **Note: The ADF integration will use an existing inbound flow or create a new one for you in SDS. Turn on SDS by going to** https://sds.edu.cloud.microsoft **, click ‘Get Started’ then ‘Continue’ before running the ADF integration if no inbound flow exists.** 
 
 - Send an execution notice to designated admins via email. 
 

@@ -5409,7 +5409,7 @@
                                                 "type": "Expression"
                                             },
                                             "bodyHeader": {
-                                                "value": "ADF upload to SDS for @{pipeline().parameters.sdsStorageFolder}/valid sent successfully.\\n\nCheck sds.microsoft.com for updates on the status of the sync.",
+                                                "value": "ADF upload to SDS for @{pipeline().parameters.sdsStorageFolder}/valid sent successfully.\\n\nCheck https://sds.edu.cloud.microsoft for updates on the status of the sync.",
                                                 "type": "Expression"
                                             }
                                         }
