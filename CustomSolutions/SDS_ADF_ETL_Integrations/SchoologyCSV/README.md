@@ -24,13 +24,13 @@
 
 # Introduction
 
-[Microsoft School Data Sync](https://sds.microsoft.com/) is a free service in Office 365 for Education that reads the school and roster data from a school's Student Information System (SIS). It creates Office 365 Groups for Exchange Online and SharePoint Online, class teams for Microsoft Teams and OneNote Class notebooks, school groups for Intune for Education, and rostering and SSO integration for many other third-party applications. This solution leverages Azure Data Factory (ADF) to handle the daily orchestration of activities necessary to: 
+[Microsoft School Data Sync](https://sds.edu.cloud.microsoft) is a free service in Office 365 for Education that reads the school and roster data from a school's Student Information System (SIS). It creates Office 365 Groups for Exchange Online and SharePoint Online, class teams for Microsoft Teams and OneNote Class notebooks, school groups for Intune for Education, and rostering and SSO integration for many other third-party applications. This solution leverages Azure Data Factory (ADF) to handle the daily orchestration of activities necessary to: 
 
 - Extract data from Schoology import files and convert to SDS CSV v2.1 format. 
 
 - Run validation on the CSV’s and remove records that don’t have required fields. 
 
-- Upload the CSV’s to SDS and start the sync. **Note: The ADF integration will use an existing inbound flow or create a new one for you in SDS. Turn on SDS by going to** https://sds.microsoft.com **, click ‘Get Started’ then ‘Continue’ before running the ADF integration if no inbound flow exists.** 
+- Upload the CSV’s to SDS and start the sync. **Note: The ADF integration will use an existing inbound flow or create a new one for you in SDS. Turn on SDS by going to** https://sds.edu.cloud.microsoft **, click ‘Get Started’ then ‘Continue’ before running the ADF integration if no inbound flow exists.** 
 
 - Send an execution notice to designated admins via email. 
 
@@ -49,6 +49,7 @@ The Azure resources for this solution consist of the following:
 | kv-schoology-sds      | Key vault         | Contains the ClientSecretForSdsCsvADF key which should have the client secret created via the App Registration for the ADF instance (details further down)                                                           |
 | stschoologycsvsds     | Storage account   | V2 storage account, Read-access geo-redundant storage, Encryption type: Microsoft-managed keys                                                                                                                       |
 | schoologyimportcsvs   | Blob storage      | The container where the Schoology import files reside.  SFTP can be enabled on the storage account if transferring source files from outside the Azure tenant. (Note: The name is a suggestion and can be any name.) |
+| resources             | Blob storage      | The container which has files used by this ADF solution.                                                                                                                                                             |
 
 The setup within the Azure
 subscription consists of provisioning and configuring the above resources with
@@ -65,30 +66,24 @@ following steps:
    upload.  Create a resource group where to place the resources if not
    already done. (suggested name rg-SchoologyCSVtoSDS). Note: The optional parameters on the confirmation screen can be filled in later during the ADF setup.
 
-4) Modify the storage account access to enable managed identity adf-SchoologyCSVtoSDS (ADF instance) to read and modify contents. (“Storage Blob Data Contributor” role). 
+4) Modify the storage account access to enable authorized users to read and modify contents. (“Storage Blob Data Contributor” role).  Also, the user’s IP address should only be temporarily added in the firewall in the networking tab before updating the storage contents. This must be done even if the user has access control privileges.  [Assign Azure roles using the Azure portal - Azure RBAC | Microsoft Learn](https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal)
 
-5) Do the same for authorized users who need to modify data in storage. Also, the user’s IP address should only be temporarily added in the firewall in the networking tab before updating the storage contents. This must be done even if the user has access control privileges.
-
-6) If you want to use SFTP, modify the storage account access to enable managed
+5) If you want to use SFTP, modify the storage account access to enable managed
    identity adf-SchoologyCSVtoSDS (ADF instance) to toggle SFTP. (“Storage Account Contributor” role). The incoming IP address should also be added to firewall in the storage account.
 
-7) Modify key vault access to enable managed identity adf-SchoologyCSVtoSDS (ADF
-   instance) to retrieve secrets from the key vault (Assign “Key Vault Secrets
-   User” role). [Grant
-   permission to applications to access an Azure key vault using Azure RBAC |
-   Microsoft Learn](https://learn.microsoft.com/en-us/azure/key-vault/general/rbac-guide?tabs=azure-portal)
+6) Upload the file in the repo named enumMap.csv in the resources container.  This modify the file to include any values that are in your files that are not supported by SDS.  The default SDS values are at the following link: [Default list of values - School Data Sync | Microsoft Learn](https://learn.microsoft.com/en-us/schooldatasync/default-list-of-values)
 
-8) Modify the key vault to provide access to users who need to update the secret values. (At least “Key Vault Secrets Officer” role for creating). Also, the user’s IP address should only be temporarily added in the firewall in the networking tab before updating the key vault secrets. This must be done even if the user has access control privileges.
+7) Modify key vault access to provide access to users who need to update the secret values. (At least “Key Vault Secrets Officer” role for creating). Also, the user’s IP address should only be temporarily added in the firewall in the networking tab before updating the key vault secrets. This must be done even if the user has access control privileges.
 
-9) Create an app registration in Entra to allow the ADF resource to call the Graph API’s needed then create a secret for the app registration. [Quickstart:
+8) Create an app registration in Entra to allow the ADF resource to call the Graph API’s needed then create a secret for the app registration. [Quickstart:
    Register an app in the Microsoft identity platform - Microsoft identity
    platform | Microsoft Learn](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app)
 
-10) Add the key vault secret values needed from the above table (Existing values were created as dummies and can be disabled). [Azure
-    Quickstart - Set and retrieve a secret from Key Vault using Azure portal |
-    Microsoft Learn](https://learn.microsoft.com/en-us/azure/key-vault/secrets/quick-create-portal)
+9) Add the key vault secret values needed from the above table (Existing values were created as dummies and can be disabled). [Azure
+   Quickstart - Set and retrieve a secret from Key Vault using Azure portal |
+   Microsoft Learn](https://learn.microsoft.com/en-us/azure/key-vault/secrets/quick-create-portal)
 
-11) Add the Graph API application permissions from the table below to the app
+10) Add the Graph API application permissions from the table below to the app
     registration.  Remember to grant admin consent for the added permissions. [Quickstart:
     Configure an app to access a web API - Microsoft identity platform | Microsoft
     Learn](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-configure-app-access-web-apis)
@@ -104,15 +99,12 @@ following steps:
 
 ## Data Factory setup
 
-1) If not already done, create a container where the Schoology import files for the ADF instance will reside (Suggest naming it "schoologyimportcsvs" within the same storage account in the newly created resource group).
+1) Go to “Private endpoint connections” in the networking tab for both the key vault and storage account, and ensure that each is approved.  (Also verify that public access is disabled and there are no exceptions in “Firewalls and virtual networks”)
 
-2) Go to “Private endpoint connections” in the networking tab for both the key vault and storage account and approve each.  (Also verify that public access is disabled
-   and there are no exceptions in “Firewalls and virtual networks”)
-
-3) Go to the Data Factory named adf-SchoologyCSVtoSDS in Azure Portal and
+2) Go to the Data Factory named adf-SchoologyCSVtoSDS in Azure Portal and
    click ‘Launch studio’ to make changes. Once inside, go to the Manage tab on the left menu. 
 
-4) The final step in the ADF setup is to configure the global parameters in the Manage
+3) The final step in the ADF setup is to configure the global parameters in the Manage
    menu as shown below, and further described in the table following.
 
 | **Global parameter name**        | **Type** | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
@@ -126,7 +118,7 @@ following steps:
 | subscriptionId                   | String   | The subscription where the ADF assets are located.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | resourceGroupName                | String   | Name of the resource group which contains resources used for the ADF instance.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | reportSendAsUPN                  | String   | School Data Sync Admin userPrincipalName                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| sdsInboundFlowId                 | String   | Existing SDS inbound flow id found in Sync > Configuration screen on the SDS left menu pane. <br/>Note: Parameter value can be left as is if no sync exists.  Populate the value with the inbound <br/> flow id from SDS after the ADF integration creates an inbound flow.                                                                                                                                                                                                                                                                                      |
+| sdsInboundFlowId                 | String   | Existing SDS inbound flow id found in Sync > Configuration screen on the SDS left menu pane.  The parameter value can be left as is if no sync exists.  Populate the value with the inbound flow id from SDS after the ADF integration creates an inbound flow.  <br/>[Note: ADF will generate an error if the flow in use expires.  Update the inbound flow id after generating a new inbound flow in SDS.]                                                                                                                                                     |
 | useFamilyAndGivenNames           | Bool     | Will send familyName and givenName as required for users if the option to ''Create unmatched users' is chosen in SDS (otherwise optional).  A value of false will not send familyName and givenName.                                                                                                                                                                                                                                                                                                                                                             |
 | schoologyImportFileNames         | Object   | The is a mapping of the uploaded filenames used as the Schoology import files to the SDS entities. <br/><br/>Example: <br><br> {"orgs":"SCHOOLOGY_SCHOOLS.csv","users":"SCHOOLOGY_USERS.csv","parents":"SCHOOLOGY_PARENTS.csv","roles":"SCHOOLOGY_USERS.csv","courses":"SCHOOLOGY_COURSES.csv","classes":"SCHOOLOGY_COURSES.csv","enrollments":"SCHOOLOGY_ENROLLMENTS.csv","relationships":"PARENT_ASSOCIATIONS.csv"} Note: The value of any entity not used can be cleared from inside parenthesis (i.e. separate parents file from users, optional SDS files). |
 | staffSourceIdentifier            | String   | Staff attribute based on data that is coming from your SIS / SMS. Valid values are username, email, or activeDirectory. This can be left as is if using a sync that has already been created in SDS.                                                                                                                                                                                                                                                                                                                                                             |
