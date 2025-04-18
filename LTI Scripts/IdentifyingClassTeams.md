@@ -22,7 +22,8 @@ To identify groups created via LTI, we will filter looking for groups where ltiC
 
 **Graph Permissions Required**: `Directory.Read.All`, `Group.Read.All`
 
-**User/Application Content**: If using delegated permissions with a particular user context, the query will only return Groups that user has owner access to - if run as a Global Administrator, or with Admin consented context then all Groups meeting the criteria can be viewed.
+**User/Application Context**: If using delegated permissions with a particular user context, the query will only return Groups that user has owner access to - if run as a Global Administrator, or with Admin consented context then all Groups meeting the criteria can be viewed.
+
 
 This will return the total count, and a list of all LMS associated groups including  _id_, _displayName_, _mail_ (upn), and the _microsoft_EducationClassLmsExt_ extension properties. To see [more properties](https://docs.microsoft.com/en-us/graph/api/resources/group?view=graph-rest-1.0#properties), add them to the select statement in the request.
 
