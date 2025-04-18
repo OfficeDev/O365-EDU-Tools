@@ -14,7 +14,7 @@ In the above query, you will replace **Canvas** with the issuerName of your LMS 
 **Graph Permissions Required**: `Directory.Read.All`, `Group.Read.All`
 
 
-This will return the total count, and a list of all OneDrive LTI groups including _displayName_, _id_, _mail_ (upn), and _description_ properties. To return [additional property values](https://docs.microsoft.com/en-us/graph/api/resources/group?view=graph-rest-1.0#properties), add them to the comma delimited $select statement in the request.
+This will return the total count, and a list of all OneDrive LTI groups including _id_, _displayName_, _mail_ (upn), and _description_ properties. To return [additional property values](https://docs.microsoft.com/en-us/graph/api/resources/group?view=graph-rest-1.0#properties), add them to the comma delimited $select statement in the request.
 
 More than likely, you will see an `@odata.nextLink` property at the beginning of the response. This means you are not getting a full list, and you will need to [page the data](https://docs.microsoft.com/en-us/graph/paging).  
 
