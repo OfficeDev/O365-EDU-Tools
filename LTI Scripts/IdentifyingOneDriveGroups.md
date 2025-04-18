@@ -14,7 +14,7 @@ In the above API call you must replace **Canvas** with the issuerName of your LM
 
 **Graph Permissions Required**: `Directory.Read.All`, `Group.Read.All`
 
-**User/Application Context**: If using delegated permissions with a particular user context, the query will only return Groups that user has owner access to - if run as a Global Administrator, or with Admin consented context then all Groups meeting the criteria can be viewed.
+**User/Application Context**: If using delegated permissions with a particular user context, the query will only return Groups that the user is a member of. If run as a Global Administrator, or with Admin consented context then all Groups meeting the criteria can be viewed.
 
 
 This will return the total count, and a list of all OneDrive LTI groups including _id_, _displayName_, _mail_ (upn), and _description_ properties. To return [additional property values](https://docs.microsoft.com/en-us/graph/api/resources/group?view=graph-rest-1.0#properties), add them to the comma delimited $select statement in the request.
