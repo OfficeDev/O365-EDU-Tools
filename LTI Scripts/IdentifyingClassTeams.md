@@ -26,7 +26,3 @@ This will return a list of all LTI created groups, with _displayName_, _id_, _ma
 
 More than likely, you will see an `@odata.nextLink` property at the beginning of the response. This means you are not getting a full list, and you will need to [page the data](https://docs.microsoft.com/en-us/graph/paging).  
 
-### Powershell Method (*coming soon*)
-
-## Identify ALL Class Teams
-_[Instructions to be created. Seperate article coming soon]_
