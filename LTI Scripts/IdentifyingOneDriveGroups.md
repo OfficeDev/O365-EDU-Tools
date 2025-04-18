@@ -11,9 +11,13 @@ To identify groups created via the OneDrive LTI, we will filter looking for grou
 In the above query, you will replace the issuerName of your LMS in the $search expression for the description. Possible values for issuerName are:   
   
   Canvas
+  
   Schoology
+  
   Blackboard
-  Generic  
+  
+  Generic
+  
 
 These values are case sensitive.
 
