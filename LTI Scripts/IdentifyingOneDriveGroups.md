@@ -7,7 +7,7 @@ To identify groups created via the OneDrive LTI, we will filter looking for grou
 
 **Graph API Request**: `GET https://graph.microsoft.com/v1.0/groups?$filter=startsWith(displayName,'Course:')&$search="description:issuerName: Canvas"&$select=id,displayName,email,description`
 
-In the above query, you will replace the issuerName of your LMS in the $search expression for the description. Possible values for issuerName are: **Canvas**, **Schoology**, **Blackboard**, and **Generic**. These values are case sensitive.
+In the above query, you will replace **Canvas** with the issuerName of your LMS in the $search expression for the description. Possible values for issuerName are: **Canvas**, **Schoology**, **Blackboard**, and **Generic**. These values are case sensitive.
 
 **Graph API Request headers** (_required_): `ConsistencyLevel:eventual` ([more info](https://docs.microsoft.com/en-us/graph/aad-advanced-queries?view=graph-rest-1.0&tabs=http)) 
 
