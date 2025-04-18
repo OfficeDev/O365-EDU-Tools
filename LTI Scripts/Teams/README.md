@@ -18,7 +18,3 @@ It is highly recommended that you familiarize yourself with the Microsoft Graph 
 - [Graph Explorer - Test/Try Graph APIs](https://developer.microsoft.com/en-us/graph/graph-explorer)
 
 ## [Identify Class Teams created by Teams Classes LTI](/LMSIntegrations/IdentifyingClassTeams.md)
-
-## Identify Meetings created through the Teams Meetings LTI (*coming soon*)
-
-## Manually create a Meeting to appear in the Teams Meetings LTI (*coming soon*)
