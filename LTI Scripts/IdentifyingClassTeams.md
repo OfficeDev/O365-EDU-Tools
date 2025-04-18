@@ -22,7 +22,7 @@ To identify groups created via LTI, we will filter looking for groups where ltiC
 **Graph Permissions Required**: `Directory.Read.All`, `Group.Read.All`
 
 
-This will return a list of all LTI created groups, with _displayName_, _id_, _mail_ (upn), and the above _microsoft_EducationClassLmsExt_ properties. To see [more properties](https://docs.microsoft.com/en-us/graph/api/resources/group?view=graph-rest-1.0#properties), add them to the select statement in the request.
+This will return a list of all LMS associated groups, with _displayName_, _id_, _mail_ (upn), and the above _microsoft_EducationClassLmsExt_ properties. To see [more properties](https://docs.microsoft.com/en-us/graph/api/resources/group?view=graph-rest-1.0#properties), add them to the select statement in the request.
 
 More than likely, you will see an `@odata.nextLink` property at the beginning of the response. This means you are not getting a full list, and you will need to [page the data](https://docs.microsoft.com/en-us/graph/paging).  
 
