@@ -1,4 +1,3 @@
-# Identify M365 Groups created by the Microsoft OneDrive LTI
 Groups created to support the OneDrive LTI have a few specific property values that other Groups do not have.
 
 ## Find M365 Groups created by the OneDrive LTI
