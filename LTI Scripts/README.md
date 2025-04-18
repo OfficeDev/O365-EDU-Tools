@@ -13,5 +13,6 @@ It is highly recommended that you familiarize yourself with the Microsoft Graph 
 - [Explore Microsoft Graph - Microsoft Learn Course](https://docs.microsoft.com/en-us/learn/modules/microsoft-graph/)
 - [Graph Explorer - Test/Try Graph APIs](https://developer.microsoft.com/en-us/graph/graph-explorer)
 
-## [Identify Class Teams created by Teams Classes LTI](IdentifyingClassTeams.md)
+## [Identify Class Teams visualized by Teams Classes LTI](IdentifyingClassTeams.md)
+## [Identify M365 Groups created by the Microsoft OneDrive LTI](IdentifyingOneDriveGroups.md)
 
