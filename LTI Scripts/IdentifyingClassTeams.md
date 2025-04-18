@@ -1,7 +1,7 @@
-# Identify Teams visualized by Teams Classes LTI
+# Identify Teams visualized by the Teams Classes LTI
 Teams created through the Canvas Teams sync, Blackboard Ultra Teams sync, D2L Course Connector for Class Teams, or connected to an LMS course using the Connect Teams UX have a specific extension property set that other Teams and underlying M365 Groups do not have. These special extension properties can be found on Group entity in Graph.
 
-## Find 'Groups' visualized by Teams Classes LTI
+## Find 'Groups' visualized by the Teams LTI
 We will be using the [groups](https://docs.microsoft.com/en-us/graph/api/group-list?view=graph-rest-1.0&tabs=http) endpoint. A underlying M365 Group object exists for each Team, and when created by the LMS sync mechanisms the schemaExtension of _microsoft_EducationClassLmsExt_ is populated and the [LTI Context ID](https://www.imsglobal.org/spec/lti/v1p3/#lti-context-variable) that the LMS uses to identfy the course or section associated with the team is written in the ltiContextId property of that extension.
 
 _Microsoft_EducationClassLmsExt_ has several properties, not all of which are used, depending on your LMS:
