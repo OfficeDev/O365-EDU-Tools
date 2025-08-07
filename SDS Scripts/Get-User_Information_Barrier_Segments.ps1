@@ -97,8 +97,8 @@ foreach($user in $users) {
     $userObj | Add-Member NoteProperty -Name DisplayName -Value $dn
     $userObj | Add-Member NoteProperty -Name UPN -Value $upn
     $userObj | Add-Member NoteProperty -Name ObjectID -Value $guid
-    $userObj | Add-Member NoteProperty -Name InformationBarriers -Value (Join-String -Separator ", " -InputObject $ibs)
-    $userObj | Add-Member NoteProperty -Name IBNames -Value (Join-String -Separator ", "  -InputObject $segmentNames)
+    $userObj | Add-Member NoteProperty -Name InformationBarriers -Value ($ibs -join ", ")
+    $userObj | Add-Member NoteProperty -Name IBNames -Value ($segmentNames -join ", ")
 
     #Add this persons PS Object to the output array
     $outputArray += $userObj

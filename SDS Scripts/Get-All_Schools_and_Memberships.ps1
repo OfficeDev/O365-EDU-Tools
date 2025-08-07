@@ -11,7 +11,7 @@ Path where to put the log and csv file with the fetched users.
 .PARAMETER graphVersion
 The version of the Graph API. 
 
-.EXAMPLE    
+.EXAMPLE
 .\Get-All_Schools_and_Memberships.ps1
 
 .NOTES
@@ -81,24 +81,23 @@ if ($skipDownloadCommonFunctions -eq $false) {
 . .\common.ps1
 
 function Get-AdministrativeUnitMemberships($refreshToken, $graphscopes, $logFilePath) {
-
+ 
     #Preparing uri string
-    $auSelectClause = "`$select=id,displayName,description"
-    $auMemberSelectClause = "`$select=id,displayName,mail,@data.type,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId"
+    $auMemberAllSelectClause = "`$select=id,displayName,@data.type,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
 
-    $initialSDSSchoolAUsUri = "$graphEndPoint/$graphVersion/directory/administrativeUnits?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'School'&$auSelectClause"
-    
+    $initialSDSSchoolAUsUri = "$graphEndPoint/$graphVersion/directory/administrativeUnits?$auMemberAllSelectClause"
+
     #Getting AUs for all schools
     $checkedSDSSchoolAUsUri = TokenSkipCheck $initialSDSSchoolAUsUri $logFilePath
     $allSchoolAUs = PageAll-GraphRequest $checkedSDSSchoolAUsUri $refreshToken 'GET' $graphscopes $logFilePath
-
+ 
     #Write to school AU count to log
     Write-Output "[$(get-date -Format G)] Retrieve school AUs." | out-file $logFilePath -Append
-
+   
     $schoolAUMemberships = @() #Array of objects for memberships
-
+ 
     $i = 0 #Counter for progress
-    
+   
     #Looping through all school Aus
     foreach($au in $allSchoolAUs)
     {
@@ -109,23 +108,21 @@ function Get-AdministrativeUnitMemberships($refreshToken, $graphscopes, $logFile
             $auMembershipUri = $graphEndPoint + '/' + $graphVersion + '/directory/administrativeUnits/' + $au.id + '/members'
             $checkedAUMembershipUri = TokenSkipCheck $auMembershipUri $logFilePath
             $schoolAUMembers = PageAll-GraphRequest $checkedAUMembershipUri $refreshToken 'GET' $graphscopes $logFilePath
-
+ 
             #Getting info for each au member
             foreach ($auMember in $schoolAUMembers)
             {
                 $auMemberType = $auMember.'@odata.type' #Some members are users and some are groups
-                
-                if ($auMemberType -eq '#microsoft.graph.user')
+               
+                if ($auMemberType -eq '#microsoft.graph.user' -or $auMemberType -eq '#microsoft.graph.group')
                 {
-                    $userUri = $graphEndPoint + "/$graphVersion/users/" + $auMember.Id + "?$auMemberSelectClause"
-                    $user = invoke-graphrequest -Method GET -Uri $userUri -ContentType "application/json"
-
+                    
                     #Users created by sds have this extension
-                    if ($user.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource_SchoolId -ne $null)
-                    {                        
-                        #Create object required for export-csv and add to array
-                        $obj = [pscustomobject]@{"DisplayName"=$au.displayName;"Description"=$au.description;"AUObjectID"=$au.id;"MemberEmailAddress"=$user.mail;"MemberObjectID"=$user.id;}
-                        $schoolAUMemberships += $obj
+                    if ($auMember.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType -ne $null)
+                    {  
+                            #Create object required for export-csv and add to array
+                            $obj = [pscustomobject]@{"DisplayName"=$au.displayName;"Description"=$au.description;"AUObjectId"=$au.Id;"MemberObjectID"=$auMember.Id; "MemberDisplayName"=$auMember.displayName;"MemberEmailAddress"=$auMember.mail}
+                            $schoolAUMemberships += $obj
                     }
                 }
             }
@@ -133,7 +130,7 @@ function Get-AdministrativeUnitMemberships($refreshToken, $graphscopes, $logFile
         $i++
         Write-Progress -Activity "Retrieving school AU memberships" -Status "Progress ->" -PercentComplete ($i/$allSchoolAUs.count*100)
     }
-
+ 
     return $schoolAUMemberships
 }
 

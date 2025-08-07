@@ -39,8 +39,8 @@ Param (
     [switch] $downloadCommonFNs = $false
 )
 
-$graphEndpointProd = "https://graph.windows.net"
-$graphEndpointPPE = "https://graph.ppe.windows.net"
+$GraphEndpointProd = "https://graph.microsoft.com"
+$GraphEndpointPPE = "https://graph.microsoft-ppe.com"
 
 $logFilePath = "$outFolder\StudentsTeachersExport.log"
 

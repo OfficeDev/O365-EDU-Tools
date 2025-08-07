@@ -1,7 +1,7 @@
 <#
 .SYNOPSIS
-This script is designed to remove all School SG Memberships created by SDS from an O365 tenant. The script sets up the connection to Azure, and then confirm you want to run the script with a "y". 
-Once the script completes, a file will be created in the same directory as the script itself, and contain an output file which details the school SG memberships removed.
+This script is designed to remove all School Security Group (SG) memberships created by SDS from an O365 tenant. The script connects to Microsoft Graph, retrieves all school SG memberships, exports them to a CSV file in the output folder, and then prompts for confirmation before removing the memberships. Users can edit the CSV file to exclude specific memberships before confirming deletion.
+Once the script completes, CSV and log files will be created in the specified output folder detailing the school SG memberships that were removed.
 
 .EXAMPLE
 .\Remove-SchoolSG_Memberships.ps1
@@ -61,20 +61,7 @@ if ($downloadFcns -ieq "y" -or $downloadFcns -ieq "yes"){
 function Get-SecurityGroupMemberships($refreshToken, $graphscopes, $logFilePath) {
 
     # Preparing uri string
-    $grpMemberTeacherSelectClause = "?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'SchoolTeachersSG'&`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
-    $grpMemberStudentSelectClause = "?`$filter=extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType%20eq%20'SchoolStudentsSG'&`$select=id,displayName,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
-    $grpMemberSelectClause = "?`$select=id,displayName,@data.type,extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource"
-
-    Write-Host "`nTarget students or teachers in SDS school created SGs (teachers/students)?.  Default: students" -ForegroundColor White
-    $choice = Read-Host
-    if ($choice -ieq "teachers")
-    {
-        $grpSelectClause = $grpMemberTeacherSelectClause
-    }
-    else
-    {
-        $grpSelectClause = $grpMemberStudentSelectClause
-    }
+    $grpMemberSelectClause = "?`$select=id,securityEnabled,displayName,@data.type,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
 
     $initialSDSSchoolSGsUri = "$graphEndPoint/beta/groups$grpSelectClause"
     
@@ -91,8 +78,8 @@ function Get-SecurityGroupMemberships($refreshToken, $graphscopes, $logFilePath)
 
     # Looping through all school SGs
     foreach($grp in $schoolSGs)
-    {
-        if ($grp.id -ne $null)
+    {      
+        if ($grp.id -ne $null -and $grp.securityEnabled -eq $true)
         {
 
             # Getting members of each school SG
@@ -105,10 +92,10 @@ function Get-SecurityGroupMemberships($refreshToken, $graphscopes, $logFilePath)
             {
                 $grpMemberType = $grpMember.'@odata.type' # Some members are users and some are groups
                 
-                if ($grpMemberType -eq '#microsoft.graph.user')
+                if ($grpMemberType -eq '#microsoft.graph.user' -or $grpMemberType -eq '#microsoft.graph.group')
                 {
                     # Users created by sds have this extension
-                    if ($grpMember.extension_fe2174665583431c953114ff7268b7b3_Education_SyncSource -ne $null)
+                    if ($grpMember.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType -ne $null)
                     {
                         # Create object required for export-csv and add to array
                         $obj = [pscustomobject]@{"SGObjectId"=$grp.id;"SGDisplayName"=$grp.displayName;"SGMemberObjectId"=$grpMember.id; "SGMemberDisplayName"=$grpMember.displayName}
@@ -156,6 +143,7 @@ function Remove-SecurityGroupMemberships
             Write-Output "[$(Get-Date -Format G)] [$index/$grpMemberCount] Removing SG Member id [$($grpm.SGMemberObjectId)] of `"$($grpm.SGDisplayName)`" [$($grpm.SGObjectId)] from directory" | Out-File $logFilePath -Append 
             $removeUrl = $graphEndPoint + '/beta/groups/' + $grpm.SGObjectId + '/members/' + $grpm.SGMemberObjectId +'/$ref'
             PageAll-GraphRequest $removeUrl $refreshToken 'DELETE' $graphscopes $logFilePath | Out-Null
+            Write-Progress -Activity "Deleting Security Group Memberships" -Status "Progress ->" -PercentComplete ($index/$grpMemberCount*100)
             $index++
         }
     }

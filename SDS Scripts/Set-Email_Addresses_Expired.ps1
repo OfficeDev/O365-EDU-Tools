@@ -15,12 +15,30 @@ Bill Sluss
 Change Log:
 Version 1.0, 8/6/2018 - First Draft
 
+========================
+ Required Prerequisites
+========================
+
+1. Install current PowerShell version.
+
+2. Install the Exchange Online Management Module with command 'Install-Module ExchangeOnlineManagement'
+
+3. Check that you can connect to your tenant directory from the PowerShell module to make sure everything is set up correctly.
+
+    a. Open a separate PowerShell session
+
+    b. Type "Connect-ExchangeOnline"
+
+    c. Sign in with any tenant administrator credentials.
+
+    d. If you are returned to the PowerShell session without error, you are correctly set up
+
+4. Retry this script. If you still get an error about failing to load the Exchange Online Management module, troubleshoot why 'Install-Module ExchangeOnlineManagement' isn't working.
+
 #>
 
-#Connect to ExO
-$Cred = Get-Credential
-$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://ps.outlook.com/powershell/ -Credential $Cred -Authentication Basic -AllowRedirection
-Import-PSSession $Session
+#Connect to Exchange Online
+Connect-ExchangeOnline
 
 #Get all Exp Groups
 $ExpGroups = Get-UnifiedGroup -ResultSize unlimited | ? {$_.alias -like "Exp*"}
@@ -43,7 +61,8 @@ Set-UnifiedGroup $Alias -PrimarySMTPAddress $New
 }
 
 #Export the Expired Group with the updated addresses
-Write-Host " "
 Write-Host -ForegroundColor Red “Generating a report to show all Exp Groups and their new PrimarySMTPAddresses”
 $ExpGroups = Get-UnifiedGroup -ResultSize unlimited | ? {$_.alias -like "Exp*"} | select DisplayName, Alias, PrimarySmtpAddress
 $ExpGroups | Export-CSV c:\temp\Expired_Groups.csv -notype
+
+Write-Output "Please run 'Disconnect-ExchangeOnline' if you are finished making changes.`n"
