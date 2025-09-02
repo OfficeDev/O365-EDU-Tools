@@ -81,23 +81,16 @@ if ($skipDownloadCommonFunctions -eq $false) {
 . .\common.ps1
 
 function Get-AdministrativeUnitMemberships($refreshToken, $graphscopes, $logFilePath) {
- 
     #Preparing uri string
     $auMemberAllSelectClause = "`$select=id,displayName,@data.type,extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType"
-
     $initialSDSSchoolAUsUri = "$graphEndPoint/$graphVersion/directory/administrativeUnits?$auMemberAllSelectClause"
-
     #Getting AUs for all schools
     $checkedSDSSchoolAUsUri = TokenSkipCheck $initialSDSSchoolAUsUri $logFilePath
     $allSchoolAUs = PageAll-GraphRequest $checkedSDSSchoolAUsUri $refreshToken 'GET' $graphscopes $logFilePath
- 
     #Write to school AU count to log
     Write-Output "[$(get-date -Format G)] Retrieve school AUs." | out-file $logFilePath -Append
-   
     $schoolAUMemberships = @() #Array of objects for memberships
- 
     $i = 0 #Counter for progress
-   
     #Looping through all school Aus
     foreach($au in $allSchoolAUs)
     {
@@ -108,18 +101,15 @@ function Get-AdministrativeUnitMemberships($refreshToken, $graphscopes, $logFile
             $auMembershipUri = $graphEndPoint + '/' + $graphVersion + '/directory/administrativeUnits/' + $au.id + '/members'
             $checkedAUMembershipUri = TokenSkipCheck $auMembershipUri $logFilePath
             $schoolAUMembers = PageAll-GraphRequest $checkedAUMembershipUri $refreshToken 'GET' $graphscopes $logFilePath
- 
             #Getting info for each au member
             foreach ($auMember in $schoolAUMembers)
             {
                 $auMemberType = $auMember.'@odata.type' #Some members are users and some are groups
-               
                 if ($auMemberType -eq '#microsoft.graph.user' -or $auMemberType -eq '#microsoft.graph.group')
                 {
-                    
-                    #Users created by sds have this extension
-                    if ($auMember.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType -ne $null)
-                    {  
+                    #Users,Groups and objects created by csv,roster api have this extension
+                    if ($auMember.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType -match 'school')
+                    {
                             #Create object required for export-csv and add to array
                             $obj = [pscustomobject]@{"DisplayName"=$au.displayName;"Description"=$au.description;"AUObjectId"=$au.Id;"MemberObjectID"=$auMember.Id; "MemberDisplayName"=$auMember.displayName;"MemberEmailAddress"=$auMember.mail}
                             $schoolAUMemberships += $obj
@@ -130,7 +120,6 @@ function Get-AdministrativeUnitMemberships($refreshToken, $graphscopes, $logFile
         $i++
         Write-Progress -Activity "Retrieving school AU memberships" -Status "Progress ->" -PercentComplete ($i/$allSchoolAUs.count*100)
     }
- 
     return $schoolAUMemberships
 }
 

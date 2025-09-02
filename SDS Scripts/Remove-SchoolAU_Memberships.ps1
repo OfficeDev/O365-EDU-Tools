@@ -95,7 +95,7 @@ function Get-AdministrativeUnitMemberships($refreshToken, $graphscopes, $logFile
                 if ($auMemberType -eq '#microsoft.graph.user' -or $auMemberType -eq '#microsoft.graph.group')
                 {
  
-                    if ($auMember.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType -ne $null)
+                    if ($auMember.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType -match 'school')
                     {        
                             # Create object required for export-csv and add to array
                             $obj = [pscustomobject]@{"AUObjectId"=$au.Id;"AUDisplayName"=$au.DisplayName;"AUMemberObjectId"=$auMember.Id; "AUMemberDisplayName"=$auMember.DisplayName;}
