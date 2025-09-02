@@ -107,7 +107,7 @@ function Get-AdministrativeUnitMemberships($refreshToken, $graphscopes, $logFile
                 $auMemberType = $auMember.'@odata.type' #Some members are users and some are groups
                 if ($auMemberType -eq '#microsoft.graph.user' -or $auMemberType -eq '#microsoft.graph.group')
                 {
-                    #Users,Groups and objects created by csv,roster api have this extension
+                    #Users and Groups created using either CSV or OneRoster API will have this extension attribute.
                     if ($auMember.extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType -match 'school')
                     {
                             #Create object required for export-csv and add to array
