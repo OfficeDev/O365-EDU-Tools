@@ -1,0 +1,7 @@
+userSourcedId,sex,birthDate,birthCity,birthState,birthCountry,ethnicityCodes,raceCodes
+114001,male,2001-07-02,Woodenville,WA,USA,hispanicOrLatinoEthnicity,
+114003,male,2002-03-02,Woodenville,WA,USA,,asian
+114004,female,2001-09-02,Woodenville,WA,USA,,white
+114006,male,1980-02-12,Seattle,WA,USA,,nativeHawaiianOrOtherPacificIslander
+114007,female,1973-10-26,Sammamish,WA,USA,,demographicRaceTwoOrMoreRaces
+114008,male,2001-06-06,Redmond,WA,USA,,blackOrAfricanAmerican

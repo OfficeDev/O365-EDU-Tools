@@ -1,0 +1,5 @@
+sourcedId,name,type,parentSourcedId
+110001,College of Engineering,college,
+110002,Computer Science Department,department,110001
+110003,School of TwoDotOne,school,110004
+110004,Ministry of TwoDotOne,ministryOfEducation,

@@ -1,0 +1,6 @@
+sourcedId,name,type,parentSourcedId
+10000,K12 Ministry of Education,ministryofeducation,
+10001,Contoso Middle School,school,10000
+10002,Fabrikam High School,school,10000
+10003,College of Higher Learning,college,10004
+10004,University of Global Ed,university,

@@ -1,0 +1,532 @@
+{
+	"info": {
+		"_postman_id": "dab19dea-e8f6-4094-a6bd-ccaa74ad9917",
+		"name": "EDU Graph - SDS Classic",
+		"description": "These endpoints are for creatingand monitoring synchronization profiles in School Data Sync (SDS) Classic.\n\nThese endpoints can use either Application or Delegated permissions.\n\nMany of these endpoints also support Update and Delete.\n\n**synchronizationProfile, synchronizationProfileStatus, errors**\n\n\\[Application\\]\n\n_EduAdministration.Read.All_\n\n_EduAdministration.ReadWrite.All_\n\n\\[Delegated\\]\n\n_EduAdministration.Read.All_\n\n_EduAdministration.ReadWrite.All_\n\n_**start, pause, resume, reset**_\n\n\\[Application\\]\n\n_EduAdministration.ReadWrite.All_\n\n\\[Delegated\\]\n\n_EduAdministration.ReadWrite.All_\n\nReference: [educationSynchronizationProfile resource type - Microsoft Graph beta | Microsoft Learn](https://learn.microsoft.com/en-us/graph/api/resources/educationsynchronizationprofile?view=graph-rest-beta)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20841326"
+	},
+	"item": [
+		{
+			"name": "SDS Classic - Profiles",
+			"item": [
+				{
+					"name": "SynchronizationProfiles All",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var valueArray = undefined;\r",
+									"var value0 = undefined;\r",
+									"var json = JSON.parse(responseBody);\r",
+									"\r",
+									"// value must be an array\r",
+									"if (Array.isArray(json.value)) {\r",
+									"\tvalueArray = json.value;\r",
+									"}\r",
+									"else {\r",
+									"\tpm.test(\"Require array of values\", function () {\r",
+									"\t\tpm.expect(valueArray).to.be.an('array');\r",
+									"\t});\r",
+									"}\r",
+									"\r",
+									"//array must have at least one value\r",
+									"// array must have values\r",
+									"\tif (valueArray != undefined) {\r",
+									"\t\tif (valueArray.length >= 0)\r",
+									"\t\t\tvalue0 = valueArray[0]\r",
+									"\r",
+									"            // assign object id to env variable\r",
+									"            if (value0 != undefined) {\r",
+									"                postman.setEnvironmentVariable(\"syncProfileId\", value0.id);\r",
+									"            }\r",
+									"\r",
+									"\t\tpm.test(\"Value Array is not empty\", function () {\r",
+									"\t\t\tpm.expect(valueArray).to.be.an('array').that.is.not.empty;\r",
+									"\t\t});\r",
+									"\t}\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "userName",
+									"value": "{{UserName}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "{{UserPassword}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "scope",
+									"value": "https://graph.microsoft.com/.default",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_id",
+									"value": "{{ClientID}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_secret",
+									"value": "{{ClientSecret}}",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "https://graph.microsoft.com/beta/education/synchronizationProfiles",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"microsoft",
+								"com"
+							],
+							"path": [
+								"beta",
+								"education",
+								"synchronizationProfiles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Synchronization Profile by Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://graph.microsoft.com/beta/education/synchronizationProfiles/{{syncProfileId}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"microsoft",
+								"com"
+							],
+							"path": [
+								"beta",
+								"education",
+								"synchronizationProfiles",
+								"{{syncProfileId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sync profile Pause",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://graph.microsoft.com/beta/education/synchronizationProfiles/{{ProfileId}}/pause",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"microsoft",
+								"com"
+							],
+							"path": [
+								"beta",
+								"education",
+								"synchronizationProfiles",
+								"{{ProfileId}}",
+								"pause"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sync profile Resume",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://graph.microsoft.com/beta/education/synchronizationProfiles/{{syncProfileId}}/resume",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"microsoft",
+								"com"
+							],
+							"path": [
+								"beta",
+								"education",
+								"synchronizationProfiles",
+								"{{syncProfileId}}",
+								"resume"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Synchronization Profiles - UploadUrl by Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://graph.microsoft.com/beta/education/synchronizationProfiles/{{syncProfileId}}/uploadUrl",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"microsoft",
+								"com"
+							],
+							"path": [
+								"beta",
+								"education",
+								"synchronizationProfiles",
+								"{{syncProfileId}}",
+								"uploadUrl"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SDS Classic - Validation and Monitoring",
+			"item": [
+				{
+					"name": "Synchronization Profile Errors",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://graph.microsoft.com/beta/education/synchronizationProfiles/{{syncProfileId}}/errors",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"microsoft",
+								"com"
+							],
+							"path": [
+								"beta",
+								"education",
+								"synchronizationProfiles",
+								"{{syncProfileId}}",
+								"errors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Synchronization Profile Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://graph.microsoft.com/beta/education/synchronizationProfiles/{{syncProfileId}}/profileStatus",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"microsoft",
+								"com"
+							],
+							"path": [
+								"beta",
+								"education",
+								"synchronizationProfiles",
+								"{{syncProfileId}}",
+								"profileStatus"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "_GET Token (Delegated)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    if (responseBody.indexOf(\"InvalidAuthenticationToken\") !== -1) {\r",
+							"        console.log(\"You need to run *On behalf of a User | Get User Access Token* request first.\");\r",
+							"    }\r",
+							"    else {\r",
+							"        if (pm.response.status === \"Forbidden\") {\r",
+							"            console.log(\"You need to add user delegated permissions in your application to at least *User.Read* in portal.azure.com and then consent as user or Grant admin consent in portal. And re-run *On behalf of a User | Get User Access Token* request to update access token. \");\r",
+							"        }\r",
+							"        else {\r",
+							"            var json = JSON.parse(responseBody);\r",
+							"            postman.setEnvironmentVariable(\"userBearerToken\", json.access_token);\r",
+							"            postman.setEnvironmentVariable(\"bearerToken\", json.access_token);\r",
+							"        }\r",
+							"    }\r",
+							"}\r",
+							"catch (e) {\r",
+							"    console.log(e);\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "SdkVersion",
+						"type": "text",
+						"value": "postman-graph/v1.0"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "userName",
+							"value": "{{UserName}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{UserPassword}}",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "https://graph.microsoft.com/.default",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{ClientID}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{ClientSecret}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/{{TenantID}}/oauth2/v2.0/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"{{TenantID}}",
+						"oauth2",
+						"v2.0",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "_ GET Token (Application)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    if (pm.environment.get(\"SecretId\") === \"\")\r",
+							"    {\r",
+							"        console.log(\"You need to enter *SecretId* environment variable first.\");\r",
+							"    }\r",
+							"    if (pm.environment.get(\"SecretValue\") === \"\")\r",
+							"    {\r",
+							"        console.log(\"You need to enter *SecretValue* environment variable first.\");\r",
+							"    }\r",
+							"    if (pm.environment.get(\"TenantID\") === \"\")\r",
+							"    {\r",
+							"        console.log(\"You need to enter *TenantID* environment variable first.\");\r",
+							"    }\r",
+							"    else\r",
+							"    {\r",
+							"        var json = JSON.parse(responseBody);\r",
+							"        postman.setEnvironmentVariable(\"bearerToken\", json.access_token);\r",
+							"        postman.setEnvironmentVariable(\"appBearerToken\", json.access_token);\r",
+							"    }\r",
+							"}\r",
+							"catch (e) {\r",
+							"    console.log(e);\r",
+							"}\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "SdkVersion",
+						"value": "postman-graph/v1.0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{ClientID}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{ClientSecret}}",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "https://graph.microsoft.com/.default",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/{{TenantID}}/oauth2/v2.0/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"{{TenantID}}",
+						"oauth2",
+						"v2.0",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
