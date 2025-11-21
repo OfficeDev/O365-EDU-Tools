@@ -1,6 +1,6 @@
 Groups created to support the OneDrive LTI have a few specific property values that other Groups do not have.
 
-## Find M365 Groups created by the OneDrive LTI
+## Find M365 Groups created by the Classic OneDrive LTI
 We will be using the [groups](https://docs.microsoft.com/en-us/graph/api/group-list?view=graph-rest-1.0&tabs=http) endpoint.
 
 To identify groups created via the OneDrive LTI, we will filter looking for groups where the displayName starts with 'Course:' and the description contains the issuerName tag matching the name of the LMS.
