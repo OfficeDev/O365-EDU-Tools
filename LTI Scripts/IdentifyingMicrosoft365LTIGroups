@@ -4,6 +4,7 @@ Groups created to support the Microsoft 365 LTI have a few specific property val
 We will be using the [groups](https://docs.microsoft.com/en-us/graph/api/group-list?view=graph-rest-1.0&tabs=http) endpoint.
 
 To identify groups created via the Microsoft 365 LTI, we will filter looking for groups where the displayName does Not start with 'Course:' and the description contains the issuerName tag matching the name of the LMS.
+**Important Note**: This script will only identify groups created by the Microsoft 365 LTI, for groups created by the classic OneDrive LTI, you will need to modify this script to include groups with the 'Course:' prefix.
 
 **Graph API Request**: 
 <pre>GET https://graph.microsoft.com/v1.0/groups?$count=true&$filter=NOT(startsWith(displayName,'Course:'))&$search="description:issuerName: Canvas"&$select=id,displayName,email,description</pre>
