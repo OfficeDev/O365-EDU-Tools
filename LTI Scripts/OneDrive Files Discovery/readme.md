@@ -12,7 +12,7 @@ This script requires Microsoft Graph App-only scopes in order to read all of the
 
 The following steps must be completed by an M365/Entra Global Administrator.
 
-Creating the App registration:
+**Creating the App registration:**
 1) Log into the Microsoft Entra admin center at https://entra.microsoft.com/ using an account that has the Global Admin role
 2) Click App registrations on the left side menu
 3) Click the + New registration button in the header toolbar
@@ -35,11 +35,11 @@ Creating the App registration:
 8) Choose the “Grant admin consent for …”  in the header toolbar, and click Yes in the confirmation popup
 
 **Creating a secret for the app to use to authenticate and obtain priviledeges:**
-18) From the left side menu of the app registration, choose Certificates & secrets
-19) Click the + New Client Secret button in the header toolbar
-20) In the Add a client secret right side panel, enter a description like "OneDriveLTIDiscoverySecret" and set an expiration date (you will need to create a new secret after this date and update the value in your app to continue to access the APIs)
-21) Clck Add to create secret
-22) Copy the Value from the new Client secret and save it (securely) - you will need to provide this to run the script
+1) From the left side menu of the app registration, choose Certificates & secrets
+2) Click the + New Client Secret button in the header toolbar
+3) In the Add a client secret right side panel, enter a description like "OneDriveLTIDiscoverySecret" and set an expiration date (you will need to create a new secret after this date and update the value in your app to continue to access the APIs)
+4) Clck Add to create secret
+5) Copy the Value from the new Client secret and save it (securely) - you will need to provide this to run the script
 
 
 
