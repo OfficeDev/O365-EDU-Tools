@@ -20,24 +20,24 @@ Creating the App registration:
 5) For Supported Account Types, choose the “Single tenant only – *“ option that references your primary tenant domain
 6) Click the Register button at the bottom of the page to save your new app registration
 7) On the App registration Overview page, cop the Application (client) ID value  - you will need to provide this to run the script
-Adding permissions and providing consent to the app to call Graph APIs:
-8) From the left side menu of your new app registration, choose API permissions
-9) Choose + Add permission from the header toolbar
-10) From the left side menu of your new app registration, choose API permissions
-11) Choose + Add permission button in the header toolbar
-12) From the Request API permissions pane on the right, click the Microsoft Graph tile at the top
-13) Select Application permissions.  Search for and select the following permissions:
+**Adding permissions and providing consent to the app to call Graph APIs:**
+9) From the left side menu of your new app registration, choose API permissions
+10) Choose + Add permission from the header toolbar
+11) From the left side menu of your new app registration, choose API permissions
+12) Choose + Add permission button in the header toolbar
+13) From the Request API permissions pane on the right, click the Microsoft Graph tile at the top
+14) Select Application permissions.  Search for and select the following permissions:
         Group.Read.All
         Sites.Read.All
         Files.Read.All
-14) After selecting the permissions, click the Add permission button
-15) Choose the “Grant admin consent for …”  in the header toolbar, and click Yes in the confirmation popup
-Creating a secret for the app to use to authenticate and obtain priviledeges:
-16) From the left side menu of the app registration, choose Certificates & secrets
-17) Click the + New Client Secret button in the header toolbar
-18) In the Add a client secret right side panel, enter a description like "OneDriveLTIDiscoverySecret" and set an expiration date (you will need to create a new secret after this date and update the value in your app to continue to access the APIs)
-19) Clck Add to create secret
-20) Copy the Value from the new Client secret and save it (securely) - you will need to provide this to run the script
+15) After selecting the permissions, click the Add permission button
+16) Choose the “Grant admin consent for …”  in the header toolbar, and click Yes in the confirmation popup
+**Creating a secret for the app to use to authenticate and obtain priviledeges:**
+17) From the left side menu of the app registration, choose Certificates & secrets
+18) Click the + New Client Secret button in the header toolbar
+19) In the Add a client secret right side panel, enter a description like "OneDriveLTIDiscoverySecret" and set an expiration date (you will need to create a new secret after this date and update the value in your app to continue to access the APIs)
+20) Clck Add to create secret
+21) Copy the Value from the new Client secret and save it (securely) - you will need to provide this to run the script
 
 
 
