@@ -15,7 +15,6 @@ It is highly recommended that you familiarize yourself with the Microsoft Graph 
 
 ## [Identify M365 Groups created by Microsoft 365 LTI](IdentifyingMicrosoft365LTIGroups.md)
 ## [Identify M365 Groups created by the classic Microsoft OneDrive LTI](IdentifyingOneDriveGroups.md)
-## [Idenify Groups, Sites, and Files create by the classic Microsoft OneDrive LTI](OneDrive Files Discovery
-/readme.md)
+## [Idenify Groups, Sites, and Files create by the classic Microsoft OneDrive LTI](OneDrive Files Discovery/readme.md)
 ## [Identify Class Teams visualized by the classic Teams Classes LTI](IdentifyingClassTeams.md)
 
