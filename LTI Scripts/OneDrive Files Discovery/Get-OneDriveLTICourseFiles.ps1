@@ -77,7 +77,7 @@ else {
     if ($LMS -eq "Other") {
         $issuer = "Generic"
     }
-    $groups = Get-MgGroup -Filter $filter -Search "Description:issuerName: " -ConsistencyLevel eventual -All | Select-Object Id, Description, DisplayName, CreatedDateTime
+    $groups = Get-MgGroup -Filter $filter -Search "Description:issuerName: $($issuer)" -ConsistencyLevel eventual -All | Select-Object Id, Description, DisplayName, CreatedDateTime
 }
 
 if (-not $groups -or $groups.Count -eq 0) {
