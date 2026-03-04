@@ -7,7 +7,7 @@ The script produces a CSV format file that contains details of the folders and f
 
 If you have multiple LMSs, you can choose to search for all files createdd by any LMS, or by each specific LMS. Note: In the classic OneDrive LTI, we only recognized Canvas, Blackboard and Schoology as unique Issuer LMSs ... other LMSs will be labeled as 'Generic" (Other). 
 
-**How to run the script in your M365 tenant**: 
+**How to run the script in your M365 tenant**:
 This script requires Microsoft Graph App-only scopes in order to read all of the Groups, Sites, Drives, and DriveItems in your M365 Tenant. You will need to create an app registration and provide Admin Consent (as a Global Administrator) to allow the app to use these scopes.
 
 The following steps must be completed by an M365/Entra Global Administrator.
@@ -33,11 +33,11 @@ Creating the App registration:
 15) After selecting the permissions, click the Add permission button
 16) Choose the “Grant admin consent for …”  in the header toolbar, and click Yes in the confirmation popup
 **Creating a secret for the app to use to authenticate and obtain priviledeges:**
-17) From the left side menu of the app registration, choose Certificates & secrets
-18) Click the + New Client Secret button in the header toolbar
-19) In the Add a client secret right side panel, enter a description like "OneDriveLTIDiscoverySecret" and set an expiration date (you will need to create a new secret after this date and update the value in your app to continue to access the APIs)
-20) Clck Add to create secret
-21) Copy the Value from the new Client secret and save it (securely) - you will need to provide this to run the script
+18) From the left side menu of the app registration, choose Certificates & secrets
+19) Click the + New Client Secret button in the header toolbar
+20) In the Add a client secret right side panel, enter a description like "OneDriveLTIDiscoverySecret" and set an expiration date (you will need to create a new secret after this date and update the value in your app to continue to access the APIs)
+21) Clck Add to create secret
+22) Copy the Value from the new Client secret and save it (securely) - you will need to provide this to run the script
 
 
 
