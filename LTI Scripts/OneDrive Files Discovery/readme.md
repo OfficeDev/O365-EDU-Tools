@@ -6,8 +6,8 @@ To identify groups created via the OneDrive LTI, we will filter looking for grou
 The script produces a CSV format file that contains details of the folders and files connected to classic OneDrive LTI links in the LMS. The script only reads data - you could extent this script to tale action on groups, Sites, Drives or Files (ex: Archive the Group, Delete the Site or File, or move file(s) selectivley) - Please reference [Microsoft Graph documentation](https://learn.microsoft.com/en-us/graph/) for how to take additional actions on objects returned in this script.  
 
 If you have multiple LMSs, you can choose to search for all files created by any LMS, or by each specific LMS. 
-[!NOTE]
-In the classic OneDrive LTI, we only recognized Canvas, Blackboard and Schoology as unique Issuer LMSs ... other LMSs will be labeled as 'Generic" (Other). 
+>[!NOTE]
+>In the classic OneDrive LTI, we only recognized Canvas, Blackboard and Schoology as unique Issuer LMSs ... other LMSs will be labeled as 'Generic" (Other). 
 
 **How to run the script in your M365 tenant**:
 This script requires Microsoft Graph App-only scopes in order to read all of the Groups, Sites, Drives, and DriveItems in your M365 Tenant. You will need to create an app registration and provide Admin Consent (as a Global Administrator) to allow the app to use these scopes.
