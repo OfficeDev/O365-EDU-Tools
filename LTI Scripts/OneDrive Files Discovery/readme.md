@@ -22,17 +22,17 @@ Creating the App registration:
 7) On the App registration Overview page, cop the Application (client) ID value  - you will need to provide this to run the script
 
 **Adding permissions and providing consent to the app to call Graph APIs:**
-9) From the left side menu of your new app registration, choose API permissions
-10) Choose + Add permission from the header toolbar
-11) From the left side menu of your new app registration, choose API permissions
-12) Choose + Add permission button in the header toolbar
-13) From the Request API permissions pane on the right, click the Microsoft Graph tile at the top
-14) Select Application permissions.  Search for and select the following permissions:
+1) From the left side menu of your new app registration, choose API permissions
+2) Choose + Add permission from the header toolbar
+3) From the left side menu of your new app registration, choose API permissions
+4) Choose + Add permission button in the header toolbar
+5) From the Request API permissions pane on the right, click the Microsoft Graph tile at the top
+6) Select Application permissions.  Search for and select the following permissions:
         Group.Read.All
         Sites.Read.All
         Files.Read.All
-15) After selecting the permissions, click the Add permission button
-16) Choose the “Grant admin consent for …”  in the header toolbar, and click Yes in the confirmation popup
+7) After selecting the permissions, click the Add permission button
+8) Choose the “Grant admin consent for …”  in the header toolbar, and click Yes in the confirmation popup
 
 **Creating a secret for the app to use to authenticate and obtain priviledeges:**
 18) From the left side menu of the app registration, choose Certificates & secrets
