@@ -17,7 +17,7 @@ To identify groups created via LTI, we will filter looking for groups where ltiC
 
 **Graph API Request**: 
 ```
-GET https://graph.microsoft.com/v1.0/groups?$count=true&$filter=microsoft_EducationClassLmsExt/ltiContextId ne null&$select=id,displayname,mail,microsoft_EducationClassLmsExt</pre>
+GET https://graph.microsoft.com/v1.0/groups?$count=true&$filter=microsoft_EducationClassLmsExt/ltiContextId ne null&$select=id,displayname,mail,microsoft_EducationClassLmsExt
 ```
 **Graph API Request headers** (_required_): `ConsistencyLevel:eventual` ([more info](https://docs.microsoft.com/en-us/graph/aad-advanced-queries?view=graph-rest-1.0&tabs=http))
 
