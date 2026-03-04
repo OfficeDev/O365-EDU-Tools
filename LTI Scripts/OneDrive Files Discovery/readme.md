@@ -47,7 +47,7 @@ The following steps must be completed by an M365/Entra Global Administrator.
 5) Copy the Value from the new Client secret and save it (securely) - you will need to provide this as an input to run the script
 
 **Executing the PowerShell Script**
-'''
+```
 Get-OneDriveLTICourseFiles.ps1 -TenantId "your-domain.edu" -AppId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -ClientSecret "your-secret" -LMS "Canvas"
-'''
+```
 
