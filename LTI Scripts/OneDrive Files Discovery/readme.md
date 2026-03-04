@@ -52,4 +52,5 @@ The following steps must be completed by an M365/Entra Global Administrator.
 ```
 Get-OneDriveLTICourseFiles.ps1 -TenantId "your-domain.edu" -AppId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -ClientSecret "your-secret" -LMS "Canvas"
 ```
-
+**CSV Output Example**
+[Schoology_OneDriveLTI_Group_Files_20260303_153823.csv](Schoology_OneDriveLTI_Group_Files_20260303_153823.csv)
