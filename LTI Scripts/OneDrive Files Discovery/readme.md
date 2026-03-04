@@ -12,14 +12,19 @@ This script requires Microsoft Graph App-only scopes in order to read all of the
 
 The following steps must be completed by an M365/Entra Global Administrator.
 
+**Finding your Entra tenant ID**
+1) Browse to https://entra.microsoft.com/ using an acount that has Global Administrator role
+2) Click Overview on the left side menu
+3) Copy the Tenant ID value displayed - you will need to provide this as an input to run the script
+
 **Creating the App registration:**
-1) Log into the Microsoft Entra admin center at https://entra.microsoft.com/ using an account that has the Global Admin role
+1) Log into the Microsoft Entra admin center at https://entra.microsoft.com/ using an account that has Global Administrator role
 2) Click App registrations on the left side menu
 3) Click the + New registration button in the header toolbar
 4) Choose a name for your application like “OneDrive LTI File Discovery Script”
 5) For Supported Account Types, choose the “Single tenant only – *“ option that references your primary tenant domain
 6) Click the Register button at the bottom of the page to save your new app registration
-7) On the App registration Overview page, cop the Application (client) ID value  - you will need to provide this to run the script
+7) On the App registration Overview page, cop the Application (client) ID value  - you will need to provide this as an input to run the script
 
 **Adding permissions and providing consent to the app to call Graph APIs:**
 1) From the left side menu of your new app registration, choose API permissions
@@ -39,7 +44,7 @@ The following steps must be completed by an M365/Entra Global Administrator.
 2) Click the + New Client Secret button in the header toolbar
 3) In the Add a client secret right side panel, enter a description like "OneDriveLTIDiscoverySecret" and set an expiration date (you will need to create a new secret after this date and update the value in your app to continue to access the APIs)
 4) Clck Add to create secret
-5) Copy the Value from the new Client secret and save it (securely) - you will need to provide this to run the script
+5) Copy the Value from the new Client secret and save it (securely) - you will need to provide this as an input to run the script
 
 
 
