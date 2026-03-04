@@ -20,6 +20,7 @@ Creating the App registration:
 5) For Supported Account Types, choose the “Single tenant only – *“ option that references your primary tenant domain
 6) Click the Register button at the bottom of the page to save your new app registration
 7) On the App registration Overview page, cop the Application (client) ID value  - you will need to provide this to run the script
+
 **Adding permissions and providing consent to the app to call Graph APIs:**
 9) From the left side menu of your new app registration, choose API permissions
 10) Choose + Add permission from the header toolbar
@@ -32,6 +33,7 @@ Creating the App registration:
         Files.Read.All
 15) After selecting the permissions, click the Add permission button
 16) Choose the “Grant admin consent for …”  in the header toolbar, and click Yes in the confirmation popup
+
 **Creating a secret for the app to use to authenticate and obtain priviledeges:**
 18) From the left side menu of the app registration, choose Certificates & secrets
 19) Click the + New Client Secret button in the header toolbar
