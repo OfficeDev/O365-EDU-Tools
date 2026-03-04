@@ -3,7 +3,7 @@ This script will find all of the Groups, Sites, and Drive Items (folders and fil
 
 To identify groups created via the OneDrive LTI, we will filter looking for groups where the displayName starts with 'Course:' and the description contains the issuerName tag matching the name of the LMS (when available).  
 
-The script produces a CSV format file that contains details of the folders and files connected to classic OneDrive LTI links in the LMS. The script only reads data - you may use this script as a starting point for taking action on groups, Sites, Drives or Files (ex: Archive the Group, Delete the Site or File, or move file(s) selectivley) - Please reference [Microsoft Graph documentation](https://learn.microsoft.com/en-us/graph/) for how to take additional actions on objects returned in this script.  
+The script produces a CSV format file that contains details of the folders and files connected to classic OneDrive LTI links in the LMS. The script only reads data - you could extent this script to tale action on groups, Sites, Drives or Files (ex: Archive the Group, Delete the Site or File, or move file(s) selectivley) - Please reference [Microsoft Graph documentation](https://learn.microsoft.com/en-us/graph/) for how to take additional actions on objects returned in this script.  
 
 If you have multiple LMSs, you can choose to search for all files createdd by any LMS, or by each specific LMS. Note: In the classic OneDrive LTI, we only recognized Canvas, Blackboard and Schoology as unique Issuer LMSs ... other LMSs will be labeled as 'Generic" (Other). 
 
