@@ -8,9 +8,9 @@ To identify groups created via the Microsoft 365 LTI, we will filter looking for
 
 **Graph API Request**: 
 ```
-GET https://graph.microsoft.com/v1.0/groups?$count=true&$filter=NOT(startsWith(displayName,'Course:'))&$search="description:issuerName: Canvas"&$select=id,displayName,email,description
+GET https://graph.microsoft.com/v1.0/groups?$count=true&$filter=NOT(startsWith(displayName,'Course:'))&$search="description:issuerName: https://canvas.instructure.com"&$select=id,displayName,email,description
 ```
-In the above API call you must replace **Canvas** with the issuerName of your LMS in the $search expression. Possible values for issuerName are: **Canvas**, **Schoology**, **Blackboard**, and **Generic**. These values are case sensitive.
+In the above API call you must replace **https://canvas.instructure.com** with the issuerName of your LMS in the $search expression. Possible values for issuerName are: **https://canvas.instructure.com**, **https://schoology.schoology.com**, **https://blackboard.com** or the LMS Issuer URL used in your LMS registration in the **[Microsoft LTI portal](https://lti.edu.cloud.microsoft)**. These values are case sensitive.
 
 **Graph API Request headers** (_required_): `ConsistencyLevel:eventual` ([more info](https://docs.microsoft.com/en-us/graph/aad-advanced-queries?view=graph-rest-1.0&tabs=http)) 
 
