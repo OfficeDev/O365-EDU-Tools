@@ -7,10 +7,16 @@ To identify groups created via the Microsoft 365 LTI, we will filter looking for
 **Important Note**: This script will only identify groups created by the Microsoft 365 LTI, for groups created by the classic OneDrive LTI, you will need to modify this script to include groups with the 'Course:' prefix.
 
 **Graph API Request**: 
+
+To find all groups created by the Microsoft 365 LTI deployed in any LMS, you can use the following Graph GET request
+```
+GET https://graph.microsoft.com/v1.0/groups?$count=true&$filter=NOT(startsWith(displayName,'Course:'))&$search="description:issuerName:"&$select=id,displayName,email,description
+```
+To find groups created by the Microsoft 365 LTI for a specific LMS, you can include the specific LMS Issuer URL in the $search expression to find groups connected with a specific LMS (if you have multiple LMS platforms connected to the same M365/Entra tenant). 
 ```
 GET https://graph.microsoft.com/v1.0/groups?$count=true&$filter=NOT(startsWith(displayName,'Course:'))&$search="description:issuerName: https://canvas.instructure.com"&$select=id,displayName,email,description
 ```
-In the above API call you must replace **https://canvas.instructure.com** with the issuerName of your LMS in the $search expression. Possible values for issuerName are: **https://canvas.instructure.com**, **https://schoology.schoology.com**, **https://blackboard.com** or the LMS Issuer URL used in your LMS registration in the **[Microsoft LTI portal](https://lti.edu.cloud.microsoft)**. These values are case sensitive.
+Replace **https://canvas.instructure.com** in the sample query above with the Issuer Name of your LMS in the $search expression. Some possible values for issuerName are: **https://canvas.instructure.com**, **https://schoology.schoology.com**, **https://blackboard.com**. For LMSs other than Canvas, Schoology, and Blackboard (without a custom domain) the value required is the LMS Issuer URL used in your LMS registration in the **[Microsoft LTI portal](https://lti.edu.cloud.microsoft)**. These values are case sensitive.
 
 **Graph API Request headers** (_required_): `ConsistencyLevel:eventual` ([more info](https://docs.microsoft.com/en-us/graph/aad-advanced-queries?view=graph-rest-1.0&tabs=http)) 
 
