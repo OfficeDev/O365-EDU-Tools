@@ -1,5 +1,5 @@
-## Find M365 objects created by the classic Microsoft OneDrive LTI and/or the Microsoft 365 LTI
-This script will find all of the Groups, Sites, Drives, and Drive Items (folders and files) created by Microsoft LTI tools to support your LMS courses.
+## Find M365 objects created by Microsoft LTI tools
+This script will find all of the Groups, Sites, Drives, and Drive Items (folders and files) created by the classic Microsoft OneDrive LTI and/or Microsoft 365 LTI tools supporting your LMS courses.
 
 To identify groups created via Microsoft LTI tools, we will look for M365 groups with specific metatdata written in the title/description, including the issuerName tag matching the LMS (when available).  
 
