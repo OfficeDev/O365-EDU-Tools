@@ -66,7 +66,7 @@ Microsoft.Graph.Sites
 Microsoft.Graph.Beta.Sites
 Microsoft.Graph.Files
 
-Intall-Module >moduleName>  is the basic syntax to do this in PowerShell
+Intall-Module <moduleName>  is the basic syntax to do this in PowerShell
 
 **Executing the PowerShell Script**
 ```
