@@ -59,12 +59,13 @@ The following steps must be completed by an M365/Entra Global Administrator.
 **PowerShell modules required**
 You must install and load the latest versions of these modules to run the script.
 
-Microsoft.Graph.Authentication
-Microsoft.Graph.Groups
-Microsoft.Graph.Teams
-Microsoft.Graph.Sites
-Microsoft.Graph.Beta.Sites
-Microsoft.Graph.Files
+        Microsoft.Graph.Authentication
+        Microsoft.Graph.Groups
+        Microsoft.Graph.Teams
+        Microsoft.Graph.Sites
+        Microsoft.Graph.Beta.Sites
+        Microsoft.Graph.Files
+
 
 Intall-Module <moduleName>  is the basic syntax to do this in PowerShell
 
