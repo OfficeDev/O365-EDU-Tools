@@ -68,6 +68,7 @@
 #Requires -Modules Microsoft.Graph.Authentication, Microsoft.Graph.Groups, Microsoft.Graph.Teams, Microsoft.Graph.Sites, Microsoft.Graph.Beta.Sites, Microsoft.Graph.Files
 
 param(
+
     [Parameter(Mandatory = $true)]
     [string]$TenantId,
 
@@ -182,6 +183,7 @@ function Get-OldGroups {
     $filter = $commonFilter
     if ($FilterGroupId) {
         $filter = $filter + $groupIdFilter
+        $search = ""
     }
 
     Get-MgGroup -Filter $filter -Search $search `
@@ -202,7 +204,7 @@ function Get-NewGroups {
     $filter = "NOT($commonFilter)"
     if ($FilterGroupId) {
         $filter = $filter + $groupIdFilter
-        $searchQuoted = ""
+        $search = ""
     }
 
     Get-MgGroup -Filter $filter -Search $search `
@@ -301,6 +303,8 @@ function New-CsvRow {
         CourseName    = $Values['CourseName']
         SiteId        = $Values['SiteId']
         SiteWebUrl    = $Values['SiteWebUrl']
+        SiteStorageQuota = $Values['SiteStorageQuota']
+        SiteStorageUsage = $Values['SiteStorageUsage']
         SiteArchiveStatus = $Values['SiteArchiveStatus']
         DriveCount    = $Values['DriveCount']   
         DriveId       = $Values['DriveId']
@@ -335,6 +339,8 @@ function New-GroupOnlyCsvRow {
         CourseName    = $Values['CourseName']
         SiteId        = $Values['SiteId']
         SiteWebUrl    = $Values['SiteWebUrl']
+        SiteStorageQuota = $Values['SiteStorageQuota']
+        SiteStorageUsage = $Values['SiteStorageUsage']
         SiteArchiveStatus = $Values['SiteArchiveStatus']
         DriveCount    = $Values['DriveCount']
     }
@@ -379,6 +385,8 @@ function Write-DriveItemsRecursive {
         $itemPath = if ($CurrentPath) { "$CurrentPath/$($child.Name)" } else { $child.Name }
         $isFolder = $null -ne $child.Folder.ChildCount
 
+        $size = if ($child.size) { $child.size } else { 0 }
+
         $rows.Add((New-CsvRow -Values @{
             AppName      = $GroupMeta.AppName
             GroupId      = $GroupMeta.GroupId
@@ -394,6 +402,8 @@ function Write-DriveItemsRecursive {
             CourseName   = $GroupMeta.CourseName
             SiteId       = $GroupMeta.SiteId
             SiteWebUrl   = $GroupMeta.SiteWebUrl
+            SiteStorageQuota = $GroupMeta.SiteStorageQuota
+            SiteStorageUsage = $GroupMeta.SiteStorageUsage
             SiteArchiveStatus = $GroupMeta.SiteArchiveStatus
             DriveCount   = $GroupMeta.DriveCount
             DriveId      = $GroupMeta.DriveId
@@ -401,7 +411,7 @@ function Write-DriveItemsRecursive {
             ItemName     = $child.Name
             ItemPath     = $itemPath
             ItemType     = if ($isFolder) { 'Folder' } else { 'File' }
-            ItemSize     = if ($child.size) { $child.size } else { 0 }
+            ItemSize     = $size
             ItemCreated  = $child.CreatedDateTime
             ItemModified = $child.LastModifiedDateTime
             ItemWebUrl   = $child.WebUrl
@@ -410,13 +420,16 @@ function Write-DriveItemsRecursive {
         if ($isFolder -and $child.Folder.ChildCount -gt 0) {
             $foldersToRecurse.Add([PSCustomObject]@{ Id = $child.Id; Path = $itemPath })
         }
+        else {
+            $script:totalItemsSize += $size
+        }
     }
 
 
     # Stream to CSV
     $rows | Export-Csv -Path $CsvPath -Append -NoTypeInformation -Encoding UTF8
     $script:totalItemsWritten += $rows.Count
-    $script:totalItemsSize += ($rows | Measure-Object -Property ItemSize -Sum).Sum
+    #$script:totalItemsSize += ($rows | Measure-Object -Property ItemSize -Sum).Sum
 
     if ($Rows.Count -gt 1000) {
         $rows | Format-Table ItemPath, ItemType, ItemSize, ItemCreated, ItemModified -AutoSize
@@ -552,6 +565,8 @@ foreach ($group in $groups) {
             CourseName   = $parsed.CourseName
             SiteId       = ''
             SiteWebUrl   = ''
+            SiteStorageQuota = ''
+            SiteStorageUsage = ''
             SiteArchiveStatus = ''
             DriveCount   = ''
             DriveId      = ''
@@ -625,8 +640,11 @@ foreach ($group in $groups) {
         Write-Host "Site Url : $($siteUrl)" -ForegroundColor Gray
 
         if ($GroupsOnly) {
-            # Get the drive count without enumerating items
-            $driveCount = @(Get-MgSiteDrive -SiteId $siteId -All -Property Id).Count
+            # Get the drive count and site storage quota
+            $drives = @(Get-MgSiteDrive -SiteId $siteId -All -Property Id, Quota)
+            $driveCount = $drives.Count
+            $baseMeta.SiteStorageQuota = if ($drives.Count -gt 0 -and $drives[0].Quota) { $drives[0].Quota.Total } else { '' }
+            $baseMeta.SiteStorageUsage = if ($drives.Count -gt 0 -and $drives[0].Quota) { $drives[0].Quota.Used } else { '' }
             $baseMeta.DriveCount = $driveCount
             New-GroupOnlyCsvRow -Values $baseMeta | Export-Csv -Path $CsvPath -Append -NoTypeInformation -Encoding UTF8
             $script:totalItemsWritten++
@@ -635,7 +653,9 @@ foreach ($group in $groups) {
         }
 
         # Get ALL document libraries (drives) on the site using SDK cmdlet with -All
-        $allDrives = @(Get-MgSiteDrive -SiteId $siteId -All -Property Id, Name, WebUrl)
+        $allDrives = @(Get-MgSiteDrive -SiteId $siteId -All -Property Id, Name, WebUrl, Quota)
+        $baseMeta.SiteStorageQuota = if ($allDrives.Count -gt 0 -and $allDrives[0].Quota) { $allDrives[0].Quota.Total } else { '' }
+        $baseMeta.SiteStorageUsage = if ($allDrives.Count -gt 0 -and $allDrives[0].Quota) { $allDrives[0].Quota.Used } else { '' }
         $baseMeta.DriveCount = $allDrives.Count
 
         # This should never happen since every site should have at least a Documents library, but handle just in case
