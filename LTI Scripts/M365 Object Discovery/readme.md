@@ -56,6 +56,9 @@ The following steps must be completed by an M365/Entra Global Administrator.
 4) Clck Add to create secret
 5) Copy the Value from the new Client secret and save it (securely) - you will need to provide this as an input to run the script
 
+**PowerShell vesion required**
+This script requires PowerShell version 7 or higher.
+
 **PowerShell modules required**
 You must install and load the latest versions of these modules to run the script.
 
@@ -71,5 +74,7 @@ Intall-Module <moduleName>  is the basic syntax to do this in PowerShell
 
 **Executing the PowerShell Script**
 ```
-Get-MicrosoftLTIObjects.ps1 -TenantId "your-domain.edu" -AppId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -Secret "your-secret" -LMS "Canvas" -LTIApp "OneDrive" -CsvFile "c:\temp\microsoftLTIobjects.csv"
+Get-MicrosoftLTIObjects.ps1 -TenantId "your-domain.edu" -AppId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -Secret "your-secret" -LMS "Canvas" -LTIApp "OneDrive" -CsvFile "c:\temp\microsoftLTIobjects.csv" -GroupsOnly $false
 ```
+**CSV Output Example**
+[Schoology_AllLTI_Objects_20260311_102819.csv](Schoology_AllLTI_Objects_20260311_102819.csv)
