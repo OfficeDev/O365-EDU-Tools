@@ -58,5 +58,5 @@ The following steps must be completed by an M365/Entra Global Administrator.
 
 **Executing the PowerShell Script**
 ```
-Get-MicrosoftLTIObjects.ps1 -TenantId "your-domain.edu" -AppId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -ClientSecret "your-secret" -LMS "Canvas"
+Get-MicrosoftLTIObjects.ps1 -TenantId "your-domain.edu" -AppId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -Secret "your-secret" -LMS "Canvas"
 ```
