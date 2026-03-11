@@ -70,5 +70,5 @@ Intall-Module >moduleName>  is the basic syntax to do this in PowerShell
 
 **Executing the PowerShell Script**
 ```
-Get-MicrosoftLTIObjects.ps1 -TenantId "your-domain.edu" -AppId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -Secret "your-secret" -LMS "Canvas"
+Get-MicrosoftLTIObjects.ps1 -TenantId "your-domain.edu" -AppId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -Secret "your-secret" -LMS "Canvas" -LTIApp "OneDrive" -CsvFile "c:\temp\microsoftLTIobjects.csv"
 ```
