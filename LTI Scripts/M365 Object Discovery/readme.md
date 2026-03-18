@@ -77,7 +77,11 @@ Intall-Module <moduleName>  is the basic syntax to do this in PowerShell
 .\Get-MicrosoftLTIObjects.ps1 -TenantId "your-domain.edu" -AppId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -Secret "your-secret" -LMS "Canvas" -LTIApp "OneDrive" -CsvFile "c:\temp\microsoftLTIobjects.csv" -GroupsOnly $false
 ```
 **CSV Output Example**
+
 With GroupsOnly set to $false:
+
     [Microsoft_Schoology_AllLTI_Objects_20260311_102819.csv](Microsoft_Schoology_AllLTI_Objects_20260311_102819.csv)
+    
 With GroupsOnly set to $true:
-    [Microsoft_Blackboard_AllLTI_Objects_20260311_104621.csv](Microsoft_Blackoard_AllLTI_Objects_20260311_104621.csv)
+
+    [Microsoft_Blackboard_AllLTI_Objects_20260311_104621.csv](Microsoft_Blackboard_AllLTI_Objects_20260311_104621.csv)
