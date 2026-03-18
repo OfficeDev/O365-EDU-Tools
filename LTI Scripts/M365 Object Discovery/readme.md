@@ -80,8 +80,8 @@ Intall-Module <moduleName>  is the basic syntax to do this in PowerShell
 
 With GroupsOnly set to $false:
 
-    [Microsoft_Schoology_AllLTI_Objects_20260311_102819.csv](Microsoft_Schoology_AllLTI_Objects_20260311_102819.csv)
+[Microsoft_Schoology_AllLTI_Objects_20260311_102819.csv](Microsoft_Schoology_AllLTI_Objects_20260311_102819.csv)
     
 With GroupsOnly set to $true:
 
-    [Microsoft_Blackboard_AllLTI_Objects_20260311_104621.csv](Microsoft_Blackboard_AllLTI_Objects_20260311_104621.csv)
+[Microsoft_Blackboard_AllLTI_Objects_20260311_104621.csv](Microsoft_Blackboard_AllLTI_Objects_20260311_104621.csv)
