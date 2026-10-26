@@ -4,6 +4,8 @@ Getting a handle on your organization’s Microsoft 365 licensing and usage help
 
 This repo includes a PowerShell-powered tool that can help educational organizations like yours more easily gather and analyze important license and usage information. Plus, in this doc, we explain how you can use the Microsoft 365 admin center to further explore your organization’s licensing, usage, and adoption patterns.
 
+***Please make sure you’ve thoroughly reviewed the prerequisites listed in the “How to run” section before attempting to run the tool for the first time.***
+
 **Jump to:**
 
 -   [What information do you need?](#what-information-do-you-need)
@@ -54,6 +56,12 @@ Have your tenant administrator perform the following check:
 3.  Open the **Services** tab, and choose **Reports**.
 4.  Locate the option **Conceal user, group, and site names in all reports**. In some tenants, this reads **In all reports, display de-identified names**.
 5.  Make sure that the checkbox is **cleared**. If the checkbox is selected, clear it and then select **Save**.
+
+#### Local computer administrative access
+
+The tool needs to run with elevated administrative privileges, which are required to install and configure the PowerShell modules it uses to interact with your Microsoft 365 tenant.
+
+To successfully run the tool, make sure you have an administrative role on your local machine. If your local machine is managed by your organization, also ensure that your organization’s Group Policy rules or Intune configuration settings don’t prevent your machine from executing PowerShell scripts with elevated permissions.
 
 #### Local computer configuration
 
